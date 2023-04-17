@@ -18,24 +18,20 @@ import Dashboard from "./pages/Dashboard";
 // Styling
 import "./App.css";
 
-
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
-  <Route path="/" element={<Dashboard />}></Route>
-        <Route path="/Login" element={<Login />}></Route>
-
+      <Route path="/" element={<Dashboard />}></Route>
+      <Route path="/Login" element={<Login />}></Route>
     </Route>
   )
-)
-
+);
 
 function App() {
   return (
     <Provider store={store}>
       <div className="App">
         <RouterProvider router={router} />
-      
       </div>
     </Provider>
   );
