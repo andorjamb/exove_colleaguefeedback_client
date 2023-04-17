@@ -11,7 +11,10 @@ async function printPDF() {
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
     await page.goto(`${reportURL}`, { waitUntil: 'networkidle0' });
-//protected page:
+//protected page: can only be viewed by managers and HR
+//served by own server, needs authenication values in the options?
+
+//or viewable in React if authenticated correctly by LDAP?
 
 
 
