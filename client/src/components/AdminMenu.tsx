@@ -1,12 +1,8 @@
-import React from 'react';
+import React from "react";
 
-/**Essi's Dashboard Menu */
+/* Essi's Dashboard Menu */
 const AdminMenu = () => {
-    return (
-        <div>
-            
-        </div>
-    );
+  return <div></div>;
 };
 
 export default AdminMenu;
