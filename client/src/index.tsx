@@ -1,12 +1,21 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { Provider } from 'react-redux';
-import { store } from './app/store';
-import App from './App';
-import './translations/i18next';
-import './index.css';
+// React
+import React from "react";
+import { createRoot } from "react-dom/client";
 
-const container = document.getElementById('root')!;
+// Redux
+import { Provider } from "react-redux";
+import { store } from "./app/store";
+
+// Components
+import App from "./App";
+
+// Translations
+import "./translations/i18next";
+
+// Styling
+import "./index.css";
+
+const container = document.getElementById("root")!;
 const root = createRoot(container);
 
 root.render(
@@ -16,5 +25,3 @@ root.render(
     </Provider>
   </React.StrictMode>
 );
-
-

@@ -1,5 +1,4 @@
-import React from 'react';
-import { Provider } from 'react-redux';
+// React
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -7,20 +6,24 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-import './App.css';
-import Layout from './components/Layout'
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
+// Redux
+import { Provider } from "react-redux";
+import { store } from "./app/store";
 
+// Components and pages
+import Layout from "./components/Layout";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
 
-import { store } from './app/store';
+// Styling
+import "./App.css";
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
   <Route path="/" element={<Dashboard />}></Route>
         <Route path="/Login" element={<Login />}></Route>
-  
 
     </Route>
   )
@@ -28,7 +31,6 @@ const router = createBrowserRouter(
 
 
 function App() {
-
   return (
     <Provider store={store}>
       <div className="App">
@@ -38,6 +40,5 @@ function App() {
     </Provider>
   );
 }
-
 
 export default App;
