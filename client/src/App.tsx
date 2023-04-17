@@ -19,13 +19,7 @@ import Dashboard from "./pages/Dashboard";
 import "./App.css";
 
 const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path="/" element={<Layout />}>
-      <Route index element={<Dashboard />} />
-      <Route path="/" element={<Login />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-    </Route>
-  )
+  createRoutesFromElements(<Route path="/" element={<Layout />}></Route>)
 );
 
 function App() {
