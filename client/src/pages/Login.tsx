@@ -27,6 +27,7 @@ const Login = () => {
                     <input name="email" id="email"></input>
                     <label htmlFor='password'>{t('password')}</label>
                     <input name="password" id="password"></input>
+                    <button></button>
                 </form>
 
             </div>

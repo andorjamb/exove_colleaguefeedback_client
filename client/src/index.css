@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* rgb(101,27,222)*/
+@layer base {
+  button {
+    @apply bg-exovepurple;
+    @apply h-14;
+    
+  }
+  a {
+    @apply cursor-pointer;
+    @apply items-center;
+  }
+}
