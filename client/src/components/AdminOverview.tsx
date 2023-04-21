@@ -1,12 +1,8 @@
-import React from 'react';
+import React from "react";
 
-/** Essi's Dashboard overview */
+/** Essi's Dashboard overview, component will be inside Dashboard page */
 const AdminOverview = () => {
-    return (
-        <div>
-            
-        </div>
-    );
+  return <div></div>;
 };
 
 export default AdminOverview;

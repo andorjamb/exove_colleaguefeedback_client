@@ -61,7 +61,9 @@ const Sidebar = () => {
             <a
               href="/"
               className="flex h-12 items-center truncate rounded-[5px] px-6 py-4"
-            ></a>
+            >
+              Link4
+            </a>
             <ul
               className="show !visible relative m-0 hidden list-none p-0 data-[te-collapse-show]:block "
               data-te-sidenav-collapse-ref
