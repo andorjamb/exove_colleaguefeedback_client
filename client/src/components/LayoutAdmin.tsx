@@ -8,7 +8,7 @@ import "../styles/Layout.css";
 
 /** Layout for feedback pages, containing sidebar nav */
 
-const LayoutB = () => {
+const LayoutAdmin = () => {
   return (
     <div className="layout">
       <Header />
@@ -18,4 +18,4 @@ const LayoutB = () => {
   );
 };
 
-export default LayoutB;
+export default LayoutAdmin;
