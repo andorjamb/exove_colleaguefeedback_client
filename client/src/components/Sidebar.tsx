@@ -5,7 +5,7 @@ const Sidebar = () => {
     <div>
       <nav
         id="sidenav"
-        className="absolute left-0 top-0 h-full w-60 -translate-x-full overflow-hidden"
+        className="absolute left-0 top-0 h-full w-60 -translate-x-full overflow-hidden bg-medblack"
       >
         <ul className="relative m-0 list-none px-[0.2rem]">
           <li className="relative">

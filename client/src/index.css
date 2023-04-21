@@ -4,13 +4,7 @@
 
 /* rgb(101,27,222)*/
 @layer base {
-  button {
-    @apply bg-exovepurple;
-    @apply h-14;
-    
-  }
-  a {
-    @apply cursor-pointer;
-    @apply items-center;
-  }
+  button { @apply bg-exovegreen}
+ 
+
 }

@@ -2,7 +2,6 @@
 import {
   createBrowserRouter,
   createRoutesFromElements,
-  MemoryRouter,
   Route,
   RouterProvider,
 } from "react-router-dom";
@@ -12,8 +11,8 @@ import { Provider } from "react-redux";
 import { store } from "./app/store";
 
 // Components and pages
-import LayoutA from "./components/LayoutA";
-import LayoutB from "./components/LayoutB";
+import LayoutUser from "./components/LayoutUser";
+import LayoutAdmin from "./components/LayoutAdmin";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Template from "./pages/Template";
@@ -25,13 +24,19 @@ import "./App.css";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<LayoutA />}>
-        <Route path="/Dashboard" element={<Dashboard />}></Route>
-        <Route path="/Login" element={<Login />}></Route>
-        <Route path="/Feedback" element={<Feedback />}></Route>
+      <Route path="/" element={<Login />}></Route>
+      <Route path="/user" element={<LayoutUser />}>
+        <Route path="/user/dashboard" element={<Dashboard />}></Route>
+
+        <Route path="/user/feedback" element={<Feedback />}></Route>
       </Route>
-      <Route path="/admin" element={<LayoutB />}>
-        <Route path="/admin/templates" element={<Template />}></Route>
+      <Route path="/admin" element={<LayoutAdmin />}>
+        <Route path="/admin/templates" element={<Template />}>
+          Template
+        </Route>
+        <Route path="/admin/dashboard" element={<Template />}>
+          Dashboard
+        </Route>
         <Route></Route>
       </Route>
     </>
