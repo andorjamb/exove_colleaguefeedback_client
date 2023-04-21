@@ -13,7 +13,7 @@ import { store } from "./app/store";
 // Components and pages
 import LayoutUser from "./components/LayoutUser";
 import LayoutAdmin from "./components/LayoutAdmin";
-import Login from "./pages/Login";
+import Login from "./components/Login/Login";
 import Dashboard from "./pages/Dashboard";
 import Template from "./pages/Template";
 import Feedback from "./pages/Feedback";

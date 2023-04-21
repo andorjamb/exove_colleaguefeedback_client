@@ -1,18 +1,17 @@
 import React from "react";
 
 // Components and pages
-import Header from "./Header";
-import Main from "./Main";
-import Sidebar from "./Sidebar";
+import Header from "./Header/Header";
+import Main from "./Main/Main";
+
 import "../styles/Layout.css";
 
-/** Layout for feedback pages, containing sidebar nav */
+/** Layout for Admin view  */
 
 const LayoutAdmin = () => {
   return (
     <div className="layout">
       <Header />
-      <Sidebar />
       <Main />
     </div>
   );
