@@ -1,25 +1,23 @@
 import React from "react";
 
-//
+//Styling
+import styles from "./Sidebar.module.css";
 
 const Sidebar = () => {
   return (
     <div>
-      <div className="container bg-medblack col-span-1 h-full">
+      <div className={styles.container}>
         <nav
           id="sidenav"
           className="absolute left-0 top-0 h-full w-60 -translate-x-full overflow-hidden bg-medblack"
         >
-          <ul className={StyleS}>
-            <li className="relative">
-              <a
-                href="/"
-                className="flex h-12 truncate rounded-[5px] px-6 py-4"
-              >
+          <ul className={styles.ul}>
+            <li className={styles.li}>
+              <a href="/" className={styles.li}>
                 <span>Link 1</span>
               </a>
             </li>
-            <li className="relative">
+            <li className={styles.li}>
               <a
                 href="/"
                 className="flex h-12 truncate rounded-[5px] px-6 py-4 text-[0.875rem]"
@@ -45,40 +43,27 @@ const Sidebar = () => {
               </a>
               <ul className="!visible relative m-0 hidden list-none p-0">
                 <li className="relative">
-                  <a
-                    href="/"
-                    className="flex h-6 items-center truncate rounded-[5px] py-4"
-                  >
+                  <a href="/" className={styles.a}>
                     Link 2
                   </a>
                 </li>
-                <li className="relative">
-                  <a
-                    href="/"
-                    className="flex h-6 items-center truncate rounded-[5px] py-4"
-                    data-te-sidenav-link-ref
-                  >
+                <li className={styles.li}>
+                  <a href="/" className={styles.a} data-te-sidenav-link-ref>
                     Link 3
                   </a>
                 </li>
               </ul>
             </li>
-            <li className="relative">
-              <a
-                href="/"
-                className="flex h-12 items-center truncate rounded-[5px] px-6 py-4"
-              >
+            <li className={styles.li}>
+              <a href="/" className={styles.a}>
                 Link4
               </a>
               <ul
                 className="show !visible relative m-0 hidden list-none p-0 data-[te-collapse-show]:block "
                 data-te-sidenav-collapse-ref
               >
-                <li className="relative">
-                  <a
-                    href="/"
-                    className="flex h-6 items-center truncate rounded-[5px] py-4"
-                  >
+                <li className={styles.li}>
+                  <a href="/" className={styles.a}>
                     Link 4
                   </a>
                 </li>

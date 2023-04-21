@@ -1,5 +1,6 @@
 {
-    "template": "Lomakemallit",
+    "templates": "Lomakemallit",
     "dashboard": "Hallintapaneeli",
-    "userview": "To user view"
+    "userView": "Käytäjäntiliin",
+    "signout": "Kirjaudu ulos"
 }

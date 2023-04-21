@@ -1,10 +1,12 @@
 import React from "react";
 
 // Components and pages
-import Header from "./Header/Header";
-import Main from "./Main/Main";
-import Sidebar from "./Sidebar/Sidebar";
-import "../styles/Layout.css";
+import Header from "../Header/Header";
+import Main from "../Main/Main";
+import Sidebar from "../Sidebar/Sidebar";
+
+///Styling
+import styles from "./LayoutUser.module.css";
 
 /** Layout for feedback pages, containing sidebar nav */
 

@@ -1,5 +1,6 @@
 {
-    "template": "Template",
+    "templates": "Template",
     "dashboard": "Dashboard",
-    "userview": "To user view"
+    "userView": "To user view",
+    "signout": "Sign Out"
 }
