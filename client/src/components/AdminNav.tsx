@@ -1,11 +1,7 @@
-import React from 'react';
+import React from "react";
 
 const AdminNav = () => {
-    return (
-        <nav>
-            
-        </nav>
-    );
+  return <nav>Admin navbar will be here</nav>;
 };
 
 export default AdminNav;

@@ -7,7 +7,7 @@ import "../styles/Layout.css";
 
 /** Layout for Admin view  */
 
-const Layout = () => {
+const LayoutA = () => {
   return (
     <div className="layout">
       <Header />
@@ -16,4 +16,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default LayoutA;
