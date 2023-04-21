@@ -1,6 +1,11 @@
 import React from "react";
-import "../translations/i18next";
+
+//Translations
+import "../../translations/i18next";
 import { useTranslation } from "react-i18next";
+
+// Styling
+import styles from "./Login.module.css";
 
 //connects with LDAP server to check login details and assign privileges
 
@@ -15,8 +20,8 @@ const Login = () => {
   };
 
   return (
-    <section className="h-screen">
-      <div className="container h-full px-6 py-24 bg-darkblack ">
+    <section className={styles.loginContainer}>
+      <div className={styles.login}>
         <h1 className="text-[#50d71e]">{t("loginTitle")}</h1>
 
         <div>

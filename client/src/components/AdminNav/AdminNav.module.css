@@ -1,0 +1,21 @@
+.nav {
+    justify-content: space-between;
+    flex-wrap: wrap;
+    display: flex;
+align-items: center;
+    
+}
+
+.ul {
+    display: flex;
+}
+
+.li {
+    padding: 0 1rem;
+   
+}
+
+.a {
+ 
+
+}

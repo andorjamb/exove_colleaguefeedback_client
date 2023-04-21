@@ -1,0 +1,22 @@
+.container {
+    width: 100%;
+    height: 100vh;
+    background-color: var(--medblack);
+    color: white;
+}
+
+.ul {
+    padding: 0.5rem;
+}
+
+.li {
+    padding: 0.5rem;
+    display: flex;
+    height: 0.75rem;
+}
+
+.a {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+}
