@@ -12,7 +12,7 @@ import styles from "./LayoutUser.module.css";
 
 const LayoutUser = () => {
   return (
-    <div className="container h-screen grid grid-cols-4">
+    <div className={styles.container}>
       <Header />
       <Sidebar />
       <Main />

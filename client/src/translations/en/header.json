@@ -2,5 +2,5 @@
     "templates": "Template",
     "dashboard": "Dashboard",
     "userView": "To user view",
-    "signout": "Sign Out"
+    "logout": "Logout"
 }

@@ -2,5 +2,5 @@
     "templates": "Lomakemallit",
     "dashboard": "Hallintapaneeli",
     "userView": "Käytäjäntiliin",
-    "signout": "Kirjaudu ulos"
+    "logout": "Kirjaudu ulos"
 }

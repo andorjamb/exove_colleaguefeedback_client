@@ -1,8 +1,9 @@
 .container {
-    width: 100%;
+    width: 20%;
     height: 100vh;
-    background-color: var(--medblack);
+    background-color: var(--medBlack);
     color: white;
+  
 }
 
 .ul {
@@ -13,10 +14,12 @@
     padding: 0.5rem;
     display: flex;
     height: 0.75rem;
+    color: white;
 }
 
 .a {
     display: flex;
     align-items: center;
     padding: 0.5rem 0;
+    color: white;
 }

@@ -30,7 +30,10 @@ const Header = () => {
     <div className={styles.container}>
       <AdminNav />
       <div className={styles.langButtonDiv}>
-        <button className={styles.button} onClick={selectEng}>
+        <button
+          className={[styles.button, styles.langButton].join(" ")}
+          onClick={selectEng}
+        >
           EN
         </button>
         <button
@@ -41,7 +44,7 @@ const Header = () => {
         </button>
       </div>
 
-      <button className={styles.signout}> {t("signOut")}</button>
+      <button className={styles.signout}> {t("logout")}</button>
     </div>
   );
 };

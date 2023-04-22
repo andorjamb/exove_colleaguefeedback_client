@@ -7,9 +7,6 @@ import { useTranslation } from "react-i18next";
 // Styling
 import styles from "./Login.module.css";
 
-//Pages and Components
-import Header from "../Header/Header";
-
 //connects with LDAP server to check login details and assign privileges
 
 const Login = () => {
@@ -25,7 +22,6 @@ const Login = () => {
   return (
     <>
       <section className={styles.loginContainer}>
-        <Header />
         <div className={styles.login}>
           <h1 className={styles.h1}>{t("loginTitle")}</h1>
 

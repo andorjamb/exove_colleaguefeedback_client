@@ -1,9 +1,12 @@
 import React from "react";
 
+//Styling
+import styles from "./Dashboard.module.css";
+
 const Dashboard = () => {
   return (
-    <div>
-      <h1 className="text-blue-600">Dashboard</h1>
+    <div className={styles.container}>
+      <h1>Dashboard</h1>
       <table>
         <thead></thead>
         <tbody></tbody>
