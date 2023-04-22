@@ -19,18 +19,32 @@ const Header = () => {
   const lang = useSelector((state: any) => state.header.lang);
   const { t, i18n } = useTranslation(["header"]);
 
-  /*   const selectEng = () => {
+  const selectEng = () => {
     i18n.changeLanguage("en");
   };
   const selectFi = () => {
     i18n.changeLanguage("fi");
-  }; */
+  };
 
   return (
     <div className={styles.container}>
       <AdminNav />
+      <div className={styles.langButtonDiv}>
+        <button
+          className={[styles.button, styles.langButton].join(" ")}
+          onClick={selectEng}
+        >
+          EN
+        </button>
+        <button
+          className={[styles.button, styles.langButton].join(" ")}
+          onClick={selectFi}
+        >
+          FI
+        </button>
+      </div>
 
-      <button className={styles.signout}> {t("signOut")}</button>
+      <button className={styles.signout}> {t("logout")}</button>
     </div>
   );
 };

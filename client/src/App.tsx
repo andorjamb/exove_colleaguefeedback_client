@@ -11,10 +11,11 @@ import { Provider } from "react-redux";
 import { store } from "./app/store";
 
 // Components and pages
+import Layout from "./components/Layout/Layout";
 import LayoutUser from "./components/LayoutUser/LayoutUser";
 import LayoutAdmin from "./components/LayoutAdmin/LayoutAdmin";
 import Login from "./components/Login/Login";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/Dashboard/Dashboard";
 import Template from "./pages/Template";
 import Feedback from "./pages/Feedback";
 
@@ -24,13 +25,15 @@ import "./App.css";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<Login />}></Route>
-      <Route path="/user" element={<LayoutUser />}>
-        <Route path="/user/dashboard" element={<Dashboard />}></Route>
-
-        <Route path="/user/feedback" element={<Feedback />}></Route>
+      <Route element={<Layout />}>
+        <Route path="/" element={<Login />}></Route>
       </Route>
-      <Route path="/admin" element={<LayoutAdmin />}>
+      <Route element={<LayoutUser />}>
+        <Route path="/dashboard" element={<Dashboard />}></Route>
+
+        <Route path="/feedback" element={<Feedback />}></Route>
+      </Route>
+      <Route element={<LayoutAdmin />}>
         <Route path="/admin/template" element={<Template />}>
           Template
         </Route>

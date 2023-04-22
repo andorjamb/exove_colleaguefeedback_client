@@ -1,6 +1,6 @@
 {
-    "loginTitle": "Welcome, please sign in",
-    "signIn": "sign in",
+    "loginTitle": "Login",
+    "signIn": "Login",
     "email": "Email",
     "password": "Password"
 }

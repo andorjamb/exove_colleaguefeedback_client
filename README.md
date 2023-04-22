@@ -1,6 +1,6 @@
 # Exove Colleague Feedback Project - Frontend
 
-React-Redux frontend built with TypeScript.
+Repository for project's React-Redux frontend, built with TypeScript.
 
 
 # Backend

@@ -1,7 +1,7 @@
 .container {
-    display: grid;
-    height: 100vh;
-    grid-template-columns: repeat(4, 1fr);
+display: grid;
+margin: 0;
+padding: 0;
 
 }
 
