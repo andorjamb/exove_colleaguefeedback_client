@@ -3,11 +3,13 @@
 :root {
   /*custom colors*/
   font-family: Jost, sans-serif;
---exovepurple: '#651BDE';/*rgb(101,27,222) */
---medblack: '#292929';
---darkblack: '#1D1D1D';
---exovegreen: '#63AD7B';/*rgb(99,173,123) */
---exoveorange: '#F19C5B';/**rgb(241,156,91) */
+--exovePurple: #651BDE;/*rgb(101,27,222) */
+--medBlack: #292929;
+--darkBlack: #1D1D1D;
+--exoveGreen: #63AD7B;/*rgb(99,173,123) */
+--exoveOrange: #F19C5B;/**rgb(241,156,91) */
+--medGray: rgb(216,216,215);
+--paleGray: rgb(242,242,242);
 
 }
 
