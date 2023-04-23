@@ -9,21 +9,9 @@ const Sidebar = () => {
       <div>
         <nav id="sidebar" className={styles.sidebar}>
           <ul className={styles.ul}>
-            <li className={styles.li}>
-              <a href="/" className={styles.a}>
-                link
-              </a>
-            </li>
-            <li className={styles.li}>
-              <a className={styles.a} href="/">
-                link
-              </a>
-            </li>
-            <li className={styles.li}>
-              <a href="/" className={styles.a}>
-                link
-              </a>
-            </li>
+            <li className={styles.li}>Request feedback</li>
+            <li className={styles.li}>List item</li>
+            <li className={styles.li}>List item</li>
           </ul>
         </nav>
       </div>

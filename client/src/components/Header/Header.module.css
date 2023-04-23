@@ -8,13 +8,12 @@
 
 .signout {
 position: absolute;
-right: 0;
+color: white;
+border:none;
+background-color: var(--medBlack);
+right: 2rem;
 height: 2.5rem;
 width: 6rem;
-margin-right: 2rem;
-display: flex;
-align-items: center;
-padding: 0 1rem;
 cursor: pointer;
 }
 
@@ -22,7 +21,6 @@ cursor: pointer;
     width: 5rem;
     height: 2rem;
     cursor: pointer;
-    
 }
 
 

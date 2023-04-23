@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Template = () => {
+const DashboardAdmin = () => {
     return (
         <div>
             
@@ -8,4 +8,4 @@ const Template = () => {
     );
 };
 
-export default Template;
+export default DashboardAdmin;
