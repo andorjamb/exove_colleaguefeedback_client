@@ -1,0 +1,18 @@
+.container {
+    height: 100%;
+    width: 100%;
+}
+
+.searchBar {
+    width: 80%;
+
+}
+
+.done {
+    background-color: var(--exovePurple);
+}
+
+.grid {
+    display: grid;
+
+}

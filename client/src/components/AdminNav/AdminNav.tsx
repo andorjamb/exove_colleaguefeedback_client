@@ -15,7 +15,7 @@ const AdminNav = () => {
     <nav className={styles.nav}>
       <ul className={styles.ul}>
         <li className={styles.li}>
-          <a className={styles.a} href="/admin/dashboard">
+          <a className={styles.a} href="/dashboard">
             {t("dashboard")}
           </a>
         </li>
@@ -25,7 +25,7 @@ const AdminNav = () => {
           </a>
         </li>
         <li className={styles.li}>
-          <a className={styles.a} href="/user/">
+          <a className={styles.a} href="/">
             {t("userView")}
           </a>
         </li>
