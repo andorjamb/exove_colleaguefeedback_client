@@ -16,11 +16,12 @@ import LayoutUser from "./components/LayoutUser/LayoutUser";
 import LayoutAdmin from "./components/LayoutAdmin/LayoutAdmin";
 import Login from "./components/Login/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
-import Template from "./pages/Template";
-import Feedback from "./pages/Feedback";
+import Template from "./pages/Template/Template";
+import Feedback from "./pages/Feedback/Feedback";
 
 // Styling
 import "./App.css";
+import FeedbackForm from "./components/FeedbackForm/FeedbackForm";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,6 +31,7 @@ const router = createBrowserRouter(
       </Route>
       <Route element={<LayoutUser />}>
         <Route path="/dashboard" element={<Dashboard />}></Route>
+        <Route path="/feedback" element={<Feedback />}></Route>
 
         <Route path="/feedback" element={<Feedback />}></Route>
       </Route>

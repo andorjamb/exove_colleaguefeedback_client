@@ -1,0 +1,39 @@
+.container {
+    width: 60vw;
+    margin: auto;
+}
+
+.form {
+    width: 100%;
+}
+
+.h3 {
+    text-align: left;
+}
+
+.formRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.select {
+    height: 2rem;
+    width: 16rem;
+    background-color: var(--paleGray);
+    border: none;
+    padding: 0.5rem 0.5rem;
+}
+
+.input {
+    width: 100%;
+    background-color: var(--paleGray);
+    border: none;
+    padding: 0.5rem 0.5rem;
+}
+
+.accordion {
+    border: 1px solid black;
+    height: 2rem;
+    margin: 0.5rem 0;
+}
