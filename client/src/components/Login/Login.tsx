@@ -1,4 +1,7 @@
-import React from "react";
+//React
+import React, { useState, useEffect } from "react";
+
+import axios from "axios";
 
 //Translations
 import "../../translations/i18next";
@@ -9,15 +12,48 @@ import styles from "./Login.module.css";
 
 //connects with LDAP server to check login details and assign privileges
 
+interface ILoginParams {
+  userName: string;
+  password: string;
+}
+
 const Login = () => {
   const { t, i18n } = useTranslation(["login"]);
+  const loginEndpoint = process.env.REACT_APP_LOGIN_ENDPOINT as string;
 
-  const selectEng = () => {
-    i18n.changeLanguage("en");
+  const [loginParams, setLoginParams] = useState<ILoginParams>({
+    userName: "",
+    password: "",
+  });
+  const [submitReady, setSubmitReady] = useState<boolean>(false);
+
+  const handleChange = (e: any) => {
+    setLoginParams({
+      ...loginParams,
+      [e.target.name]: e.target.value,
+    });
   };
-  const selectFi = () => {
-    i18n.changeLanguage("fi");
+
+  const submitLogin = (e: any) => {
+    e.preventDefault();
+    console.log("login parameters:", loginParams);
+    setSubmitReady(true);
   };
+
+  async function ldapQuery() {
+    try {
+      await axios
+        .post(loginEndpoint, { loginParams })
+        .then((res) => console.log(res.data()));
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    ldapQuery();
+    //eslint-disable-next-line
+  }, [submitReady]);
 
   return (
     <>
@@ -30,14 +66,15 @@ const Login = () => {
           <div className={styles.formContainer}>
             <form className={styles.form}>
               <div className={styles.formElements}>
-                <label className={styles.label} htmlFor="email">
-                  {t("email")}
+                <label className={styles.label} htmlFor="userName">
+                  {t("userName")}
                 </label>
                 <input
-                  type="email"
+                  type="text"
                   className={styles.input}
-                  name="email"
-                  id="email"
+                  name="userName"
+                  id="userName"
+                  onChange={handleChange}
                 ></input>
               </div>
               <div className={styles.formElements}>
@@ -49,11 +86,14 @@ const Login = () => {
                   className={styles.input}
                   name="password"
                   id="password"
+                  onChange={handleChange}
                 ></input>
               </div>
               <div className={styles.formElements}>
                 <button
                   className={[styles.button, styles.loginButton].join(" ")}
+                  type="submit"
+                  onClick={(e) => submitLogin(e)}
                 >
                   {t("signIn")}
                 </button>

@@ -1,6 +1,6 @@
 {
     "loginTitle": "Kirjaudu sisään",
     "signIn": "Kirjaudu",
-    "email": "Sähköposti",
+    "userName": "käyttäjätunnus",
     "password": "Salasana"
 }

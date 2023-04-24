@@ -9,6 +9,7 @@ import login_fi from './fi/login.json';
 import header_en from './en/header.json';
 import header_fi from './fi/header.json';
 import dashboardUser_en  from './en/dashboardUser.json';
+import dashboardUser_fi  from './fi/dashboardUser.json';
 
 
 export const defaultNS = "ns1";
@@ -20,13 +21,14 @@ export const resources = {
     },
     fi: {
         login: login_fi,
-        header: header_fi
+        header: header_fi,
+        dashboardUser: dashboardUser_fi,
     }
 };
 
 i18next.use(initReactI18next).init({
     fallbackLng: "en",
-    ns: ["login_en", "login_fi", "header_en", "header_fi", "dashboardUser_en"],
+    ns: ["login_en", "login_fi", "header_en", "header_fi", "dashboardUser_en", "dashboardUser_fi"],
     defaultNS,
     resources,
     react: {
