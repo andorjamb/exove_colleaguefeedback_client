@@ -35,12 +35,26 @@ const Template = () => {
         "The person shows awareness and respect of colleagues",
       ],
     },
-    { category: "Self Guidance", questions: [""] },
+    {
+      category: "Self Guidance",
+      questions: ["The person is able to effectively direct their own work"],
+    },
   ];
 
   async function getTemplates() {
     await axios.get(templateEndpoint).then((res) => console.log(res.data()));
   }
+
+  const renderQuestions = (questions: string[]) => {
+    questions.map((item) => {
+      return (
+        <>
+          <input type="checkbox" />
+          {item}
+        </>
+      );
+    });
+  };
 
   function toggleAccordion(e: any, i: number) {
     setAccordion((accordion) => [...accordion, (accordion[i] = !accordion[i])]);
@@ -94,9 +108,10 @@ const Template = () => {
             </option>
           </select>
         </div>
+        {/* ACCORDION */}
         {questionData.map((item, i) => (
-          <div className={styles.accordionContainer}>
-            <div className="accordion-item" key={i}>
+          <div className={styles.accordionContainer} key={i}>
+            <div className={styles.accordionItem}>
               <div className={styles.accordionTitle}>
                 <span
                   className={styles.materialIcons}
@@ -106,7 +121,21 @@ const Template = () => {
                 </span>
                 {item.category}
               </div>
-              <div className={styles.accordionContent}></div>
+
+              {accordion[i] ? (
+                <ul className={styles.accordionContent}>
+                  {questionData[i].questions.map((q) => (
+                    <li>
+                      <label>
+                        <input type="checkbox" />
+                        {q}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         ))}

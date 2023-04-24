@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 .container {
     width: 60vw;
     margin: auto;
@@ -35,16 +39,9 @@
 
 .accordionContainer {
     border: 1px solid black;
-    height: 2.5rem;
-    line-height: 2.5rem;
+ line-height:2.5rem;
     margin: 1rem 0;
-  /*  padding: 0.5rem 1rem; */
     text-align: center;
-}
-
-.accordionContainer.expand {
-    height: 12rem;
-
 }
 
 .accordionTitle {
@@ -56,6 +53,10 @@
     
 }
 
+.accordionItem {
+    height: auto;
+}
+
 .materialIcons {
     font-family: 'Material Symbols Outlined';
     font-size: 1.75rem;
@@ -63,7 +64,13 @@
     margin : 0 1rem; 
 }
 
-.accordionItem {
+.accordionContent {
+    margin-top: 0;
+    padding: 1rem;
+    min-height: 4rem;
+    display: block;
+    line-height: normal;
+    text-align: left;
 
 }
 
