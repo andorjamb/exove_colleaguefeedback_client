@@ -1,0 +1,24 @@
+.card {
+    box-sizing: border-box;
+    justify-content: space-evenly;
+    height: 6rem;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    width: 18rem;
+    background-color: var(--exovePurple);
+    color: white;
+    cursor: pointer;
+}
+
+.avatar {
+    height: 80%;
+    width: auto;
+    clip-path: circle();
+    border-radius: 50%;
+    border: 2px solid var(--exoveGreen);
+}
+
+.h3, .h5 {
+margin: 0;
+}

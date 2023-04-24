@@ -7,6 +7,8 @@
 
 .mainContent {
     background-color: white;
+    display: flex;
+    flex-direction: column;
 }
 
 .searchBar {
@@ -27,17 +29,14 @@
 .selectionGrid {
     display: grid;
     width: 100%;
+    padding: 1rem;
     grid-gap: 2rem;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: auto;
+    background-color: white;
 
 }
 
-.box {
-    color: white;
-    display: flex;
-    background-color: var(--exovePurple);
-}
 
 @media screen and (max-width: 680px) {
 
