@@ -11,18 +11,34 @@
 
 .searchBar {
     width: 80%;
+    height: 2rem;
 
 }
 
 .done {
     background-color: var(--exovePurple);
+    color: white;
 }
 
-.grid {
+.submit {
+    background-color: var(--exoveGreen);
+    color: white;
+}
+.selectionGrid {
     display: grid;
+    width: 100%;
+    grid-gap: 2rem;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
 
+}
+
+.box {
+    color: white;
+    display: flex;
+    background-color: var(--exovePurple);
 }
 
 @media screen and (max-width: 680px) {
-    
+
 }

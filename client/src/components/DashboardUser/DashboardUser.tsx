@@ -3,6 +3,7 @@ import React, { useState } from "react";
 
 //Pages and Components
 import Sidebar from "../Sidebar/Sidebar";
+import Card from "../Card/Card";
 
 //Styling
 import styles from "./DashboardUser.module.css";
@@ -11,8 +12,14 @@ import styles from "./DashboardUser.module.css";
 import "../../translations/i18next";
 import { useTranslation } from "react-i18next";
 
+//Types
+import { IUser } from "../../types/users";
+
 const DashboardUser = () => {
   const { t, i18n } = useTranslation(["dashboardUser"]);
+
+  const employees: IUser[] = [];
+  /** fetch employees list form db  */
 
   const [selection, setSelection] = useState([]);
 
@@ -29,7 +36,11 @@ const DashboardUser = () => {
         </div>
       </div>
 
-      <div className={styles.grid}></div>
+      <div className={styles.selectionGrid}>
+        {employees?.map((item) => (
+          <Card />
+        ))}
+      </div>
     </div>
   );
 };
