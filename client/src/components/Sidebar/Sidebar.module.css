@@ -24,6 +24,9 @@
     padding: 0.5rem 0;
     color: white;
 }
+.material-symbols {
+    font-family: 'Material Symbols Outlined';
+}
 
 
 @media screen and (max-width: 680px) {

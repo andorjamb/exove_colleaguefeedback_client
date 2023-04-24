@@ -32,8 +32,27 @@
     padding: 0.5rem 0.5rem;
 }
 
+.accordionTitle {
+    background-color: var(--paleGray);
+}
+
+.accordionIcon {
+    height: 3rem;
+}
+
 .accordion {
     border: 1px solid black;
     height: 2rem;
     margin: 0.5rem 0;
 }
+
+.spin {
+    transform:  rotate(360deg); 
+    -webkit-transform: rotate(360deg); 
+    -moz-transform:    rotate(360deg); 
+    -ms-transform:     rotate(360deg); 
+    -o-transform:      rotate(360deg);  
+    transition: transform 0.5s ease-in-out;
+     
+}
+
