@@ -1,6 +1,12 @@
 .container {
     height: 100%;
     width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+}
+
+.mainContent {
+    background-color: white;
 }
 
 .searchBar {
@@ -15,4 +21,8 @@
 .grid {
     display: grid;
 
+}
+
+@media screen and (max-width: 680px) {
+    
 }

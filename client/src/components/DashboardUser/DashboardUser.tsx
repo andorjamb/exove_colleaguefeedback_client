@@ -1,6 +1,9 @@
 //React
 import React, { useState } from "react";
 
+//Pages and Components
+import Sidebar from "../Sidebar/Sidebar";
+
 //Styling
 import styles from "./DashboardUser.module.css";
 
@@ -15,13 +18,17 @@ const DashboardUser = () => {
 
   return (
     <div className={styles.container}>
-      <div>
-        <h3>{t("title")}</h3>
+      <Sidebar />
+      <div className={styles.mainContent}>
+        <div>
+          <h3>{t("title")}</h3>
+        </div>
+        <div>
+          <input type="search" className={styles.searchBar} />
+          <button className={styles.done}>{t("done")}</button>
+        </div>
       </div>
-      <div>
-        <input type="search" className={styles.searchBar} />
-        <button>{t("done")}</button>
-      </div>
+
       <div className={styles.grid}></div>
     </div>
   );

@@ -12,8 +12,6 @@ import { store } from "./app/store";
 
 // Components and pages
 import Layout from "./components/Layout/Layout";
-import LayoutUser from "./components/LayoutUser/LayoutUser";
-import LayoutAdmin from "./components/LayoutAdmin/LayoutAdmin";
 import Login from "./components/Login/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Template from "./pages/Template/Template";
@@ -28,22 +26,13 @@ const router = createBrowserRouter(
     <>
       <Route element={<Layout />}>
         <Route path="/" element={<Login />}></Route>
-      </Route>
-      <Route element={<LayoutUser />}>
         <Route path="/dashboard" element={<Dashboard />}></Route>
         <Route path="/feedback" element={<Feedback />}></Route>
-      </Route>
-      <Route element={<LayoutAdmin />}>
-        <Route path="/admin/template" element={<Template />}>
-          Template
-        </Route>
-        <Route path="/admin/profiles/:id" element={<Profile/>}>
-          Template
-        </Route>
+        <Route path="/admin/template" element={<Template />}></Route>
+        <Route path="/admin/profiles/:id" element={<Profile />}></Route>
         <Route path="/dashboard" element={<Dashboard />}>
           Dashboard
         </Route>
-        <Route></Route>
       </Route>
     </>
   )
