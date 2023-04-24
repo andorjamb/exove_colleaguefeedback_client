@@ -15,6 +15,8 @@
     height: 80%;
     width: auto;
     clip-path: circle();
+    border-radius: 50%;
+    border: 2px solid var(--exoveGreen);
 }
 
 .h3, .h5 {

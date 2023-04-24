@@ -32,18 +32,39 @@
     padding: 0.5rem 0.5rem;
 }
 
-.accordionTitle {
-    background-color: var(--paleGray);
-}
 
-.accordionIcon {
-    height: 3rem;
-}
-
-.accordion {
+.accordionContainer {
     border: 1px solid black;
-    height: 2rem;
-    margin: 0.5rem 0;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    margin: 1rem 0;
+  /*  padding: 0.5rem 1rem; */
+    text-align: center;
+}
+
+.accordionContainer.expand {
+    height: 12rem;
+
+}
+
+.accordionTitle {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    background-color: var(--paleGray);
+    text-transform: uppercase;
+    
+}
+
+.materialIcons {
+    font-family: 'Material Symbols Outlined';
+    font-size: 1.75rem;
+    cursor: pointer;
+    margin : 0 1rem; 
+}
+
+.accordionItem {
+
 }
 
 .spin {
@@ -55,4 +76,3 @@
     transition: transform 0.5s ease-in-out;
      
 }
-

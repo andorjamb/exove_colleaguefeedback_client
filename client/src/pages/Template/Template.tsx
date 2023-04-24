@@ -11,8 +11,13 @@ import styles from "./Template.module.css";
 const Template = () => {
   let templates: ITemplates[] = []; /** fetch templates:ITemplates[] from db  */
   const templateEndpoint: string = "";
-  const plus: string = "../../assets/plus.png";
-  const minus: string = "../../assets/minus.png";
+
+  const [accordion, setAccordion] = useState<boolean[]>([
+    false,
+    false,
+    false,
+    false,
+  ]);
 
   const questionData: ICat_Quest[] = [
     /** sample data for testing */
@@ -23,22 +28,28 @@ const Template = () => {
         "The person aims to improve the quality of the end result beyond expressed requirements (1 - 5)",
       ],
     },
-    { category: "People Skills", questions: [""] },
+    {
+      category: "People Skills",
+      questions: [
+        "The person communicates effectively",
+        "The person shows awareness and respect of colleagues",
+      ],
+    },
+    { category: "Self Guidance", questions: [""] },
   ];
 
   async function getTemplates() {
     await axios.get(templateEndpoint).then((res) => console.log(res.data()));
   }
 
-  function expandAccordion(){
-    
+  function toggleAccordion(e: any, i: number) {
+    setAccordion((accordion) => [...accordion, (accordion[i] = !accordion[i])]);
+    console.log("current accordion index:", i, accordion[i]); //debugging
   }
 
   useEffect(() => {
     getTemplates();
   }, []);
-
-  const [accordion, setAccordion] = useState([false, false, false, false]);
 
   return (
     <div className={styles.container}>
@@ -78,28 +89,27 @@ const Template = () => {
           <h3 className={styles.h3}>Select questions</h3>
           <label>Prefill with:</label>
           <select className={styles.select}>
-            {" "}
             <option value="" disabled selected>
               select template
             </option>
           </select>
         </div>
-
-        <div className={styles.accordion}>
-          <div className="accordion-item">
-            <div className="accordion-title">
-              <div></div>
-              <div>
-                <img src={accordion[0] ? minus : plus} alt="" />
+        {questionData.map((item, i) => (
+          <div className={styles.accordionContainer}>
+            <div className="accordion-item" key={i}>
+              <div className={styles.accordionTitle}>
+                <span
+                  className={styles.materialIcons}
+                  onClick={(e) => toggleAccordion(e, i)}
+                >
+                  {accordion[i] ? "remove" : "add"}
+                </span>
+                {item.category}
               </div>
+              <div className={styles.accordionContent}></div>
             </div>
-            <div className="accordion-content"></div>
           </div>
-        </div>
-
-        <div className={styles.accordion}></div>
-        <div className={styles.accordion}></div>
-        <div className={styles.accordion}></div>
+        ))}
       </form>
     </div>
   );
