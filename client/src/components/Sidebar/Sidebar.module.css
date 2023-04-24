@@ -1,9 +1,7 @@
 .container {
-    width: 20%;
     height: 100vh;
     background-color: var(--medBlack);
-    color: white;
-  
+    color: white; 
 }
 
 .ul {
@@ -25,4 +23,16 @@
     align-items: center;
     padding: 0.5rem 0;
     color: white;
+}
+
+
+@media screen and (max-width: 680px) {
+    .container {
+        height: 10vh;
+        width: 100vw;
+    }
+
+    .ul {
+        display: flex;
+    }
 }
