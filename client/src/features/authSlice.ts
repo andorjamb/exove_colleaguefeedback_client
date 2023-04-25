@@ -44,26 +44,27 @@ export const authSlice = createSlice({
         loggedIn: false,
         error: null,
         success: false,
+        loading: false,
+        user: {}
     },
     reducers: {
         setLoggedIn: (state, action: PayloadAction<boolean>)=>{state.loggedIn = action.payload},
     },
-        /*     extraReducers:(builder) => {
+        extraReducers:(builder) => {
         builder.addCase(loginUser.pending, (state:any) => {
             state.loading = true;
-            state.error = null;
-        }),
+        }); 
         builder.addCase(loginUser.fulfilled,(state:any, {payload})=> {
             state.loading = false;
             state.success = true; 
-        }),
+        });
         builder.addCase(loginUser.rejected,(state:any, {payload})=>{
                  state.loading = false;
-                 if(action.payload) { state.error = action.payload.errorMessage;}
+                 if(payload) { state.error = payload;} 
                 
-                })
+                });
             
-            } */
+            } 
             
 
 

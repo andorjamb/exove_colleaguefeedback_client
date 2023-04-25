@@ -3,7 +3,6 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
-  Routes,
   RouterProvider,
   Navigate,
 } from "react-router-dom";
@@ -25,7 +24,7 @@ import Profile from "./pages/Profile/Profile";
 // Styling
 import "./App.css";
 
-const user: any = false; //Replace with auth
+const user: any = true; //Replace with auth
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -37,8 +36,9 @@ const router = createBrowserRouter(
           <Route path="/feedback" element={<Feedback />}></Route>
           <Route path="/admin/template" element={<Template />}></Route>
           <Route path="/admin/profiles/:id" element={<Profile />}></Route>
+
+          <Route path="/*" element={<Navigate to="/" replace />}></Route>
         </Route>
-        <Route path="*" element={<Navigate to="/" replace />}></Route>
       </Route>
     </>
   )

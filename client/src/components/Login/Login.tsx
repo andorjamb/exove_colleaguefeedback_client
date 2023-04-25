@@ -1,6 +1,7 @@
 //React
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
@@ -14,6 +15,7 @@ import { loginUser } from "../../features/authSlice";
 
 // Styling
 import styles from "./Login.module.css";
+import { AppDispatch } from "../../app/store";
 
 interface ILoginParams {
   userName: string;
@@ -22,8 +24,9 @@ interface ILoginParams {
 
 const Login = () => {
   const { t, i18n } = useTranslation(["login"]);
-  const dispatch = useDispatch();
-  const {error } = useSelector((state:any)=>state.auth);
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const { error } = useSelector((state: any) => state.auth);
   const loginEndpoint =
     `${process.env.REACT_APP_SERVER_ENDPOINT}/ldap` as string;
 
@@ -31,7 +34,6 @@ const Login = () => {
     userName: "",
     password: "",
   });
-  const [submitReady, setSubmitReady] = useState<boolean>(false);
 
   const handleChange = (e: any) => {
     setLoginParams({
@@ -49,27 +51,17 @@ const Login = () => {
   const login = (e: any) => {
     /** use when LDAP endpoint is ready */
     e.preventDefault();
-    console.log("login parameters:", loginParams);
-   //dispatch(loginUser(loginParams));
-   //setSubmitReady(true);
+    console.log("login parameters:", { loginParams });
+    dispatch(loginUser(loginParams));
   };
 
-  /*   async function ldapQuery() {
-    try {
-      await axios
-        .post(loginEndpoint, { loginParams })
-        .then((res) => console.log(res.data()));
-      dispatch(setLoggedIn(true));
-    } catch (err) {
-      console.log(err);
-    }
-  } */
 
-  useEffect(() => {
-    // ldapQuery();
-    loginUser(loginParams);
-    //eslint-disable-next-line
-  }, [submitReady]);
+  /* 
+ useEffect(() => {
+    if (loggedIn) {
+      navigate("/dashboard");
+    }
+  }, [loggedIn]);  */
 
   return (
     <>
