@@ -12,12 +12,12 @@
 }
 
 .login {
-    height: 40%;
+    height: auto;
     width: 35%; 
     padding: 2rem;
     background-color: white;
     background-color: var(--medGray);
-    box-shadow: 3px 3px var(--exovePurple);
+    box-shadow: 4px 4px var(--exovePurple);
 }
 
 .formContainer {
@@ -64,11 +64,18 @@
 
 .loginButton {
     background-color: var(--exovePurple);
+    box-shadow: 4px 4px black;
     color: white;
     position: absolute;
     border: none;
     bottom: 0;
     right: 0;
+}
+
+.loginButton:active {
+    background-color: black;
+    transform: translate(4px, 4px);
+    box-shadow: none;
 }
 
 

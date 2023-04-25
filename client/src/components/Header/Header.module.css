@@ -1,21 +1,24 @@
 .container {
     display: flex;
     align-items: center;
-    height: 4.5rem;
-    width:100vw;
-   border-bottom: 1px solid gray;
+    justify-content: space-evenly;
+    height: 3.5rem;
+    width: 100vw;
+    border-bottom: 1px solid gray;
 }
 
-.signout {
-position: absolute;
-color: white;
-border:none;
-background-color: var(--medBlack);
-right: 2rem;
-height: 2.5rem;
-width: 6rem;
-cursor: pointer;
+.loginButton {
+    border: 1px solid black;
+    background-color: white;
+    height: 2rem;
+    width:  5rem;
+    cursor: pointer;
 }
+
+.loginButton:active {
+    color: white;
+    background-color: var(--medBlack);
+    }
 
 .button {
     width: 5rem;
