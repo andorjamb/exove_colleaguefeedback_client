@@ -3,14 +3,16 @@ import { setupListeners } from '@reduxjs/toolkit/dist/query';
 
 import headerSlice from '../features/headerSlice';
 import authSlice from '../features/authSlice';
+import { userApi } from '../features/userApi';
 
 export const store = configureStore({
   reducer: {
     header: headerSlice,
     auth: authSlice,
+    [userApi.reducerPath]:userApi.reducer,
    
   },
-  middleware: (getDefaultMiddleware)=>getDefaultMiddleware()
+  middleware: (getDefaultMiddleware)=>getDefaultMiddleware().concat(userApi.middleware)
 });
 
 setupListeners(store.dispatch);

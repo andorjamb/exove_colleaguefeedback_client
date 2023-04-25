@@ -45,7 +45,7 @@ const Template = () => {
     await axios.get(templateEndpoint).then((res) => console.log(res.data()));
   }
 
-  const renderQuestions = (questions: string[]) => {
+  /*   const renderQuestions = (questions: string[]) => {
     questions.map((item) => {
       return (
         <>
@@ -54,9 +54,9 @@ const Template = () => {
         </>
       );
     });
-  };
+  }; */
 
-  function toggleAccordion(e: any, i: number) {
+  function toggleAccordion(i: number) {
     setAccordion((accordion) => [...accordion, (accordion[i] = !accordion[i])]);
     console.log("current accordion index:", i, accordion[i]); //debugging
   }
@@ -72,12 +72,9 @@ const Template = () => {
         <div className={styles.formRow}>
           <h3 className={styles.h3}>Template title</h3>
           <label>Prefill with:</label>
-          <select className={styles.select}>
-            <option value="" disabled selected>
-              select template
-            </option>
+          <select className={styles.select} defaultValue="select template">
             {templates?.map((item) => (
-              <option>{item.templateTitle}</option>
+              <option key={item._id}>{item.templateTitle}</option>
             ))}
           </select>
         </div>
@@ -115,7 +112,7 @@ const Template = () => {
               <div className={styles.accordionTitle}>
                 <span
                   className={styles.materialIcons}
-                  onClick={(e) => toggleAccordion(e, i)}
+                  onClick={() => toggleAccordion(i)}
                 >
                   {accordion[i] ? "remove" : "add"}
                 </span>
