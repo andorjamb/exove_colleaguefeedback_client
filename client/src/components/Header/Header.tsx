@@ -1,10 +1,13 @@
 //React
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 // Components and pages
 import AdminNav from "../AdminNav/AdminNav";
 import Nav from "../Nav/Nav";
+
+import { setLoggedIn } from "../../features/headerSlice";
 
 //Styling
 import styles from "./Header.module.css";
@@ -16,14 +19,25 @@ import { useTranslation } from "react-i18next";
 /** if user == admin, return AdminNav, else return Nav */
 
 const Header = () => {
-  const lang = useSelector((state: any) => state.header.lang);
   const { t, i18n } = useTranslation(["header"]);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const lang = useSelector((state: any) => state.header.lang);
+  const loggedIn = useSelector((state: any) => state.header.loggedIn);
 
   const selectEng = () => {
     i18n.changeLanguage("en");
   };
   const selectFi = () => {
     i18n.changeLanguage("fi");
+  };
+
+  const logout = () => {
+    //sessionStorage.clear();   if using session storage
+    dispatch(setLoggedIn(false));
+    navigate("/");
+    document.location.reload();
   };
 
   return (
@@ -43,8 +57,13 @@ const Header = () => {
           FI
         </button>
       </div>
-
-      <button className={styles.signout}> {t("logout")}</button>
+      {loggedIn ? (
+        <button className={styles.loginButton} onClick={logout}>
+          {t("logout")}
+        </button>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

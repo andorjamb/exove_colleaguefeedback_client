@@ -1,5 +1,7 @@
 //React
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
@@ -7,10 +9,13 @@ import axios from "axios";
 import "../../translations/i18next";
 import { useTranslation } from "react-i18next";
 
+//
+import { setLoggedIn } from "../../features/headerSlice";
+import { loginUser } from "../../features/authSlice";
+
 // Styling
 import styles from "./Login.module.css";
-
-//connects with LDAP server to check login details and assign privileges
+import { AppDispatch } from "../../app/store";
 
 interface ILoginParams {
   userName: string;
@@ -19,13 +24,16 @@ interface ILoginParams {
 
 const Login = () => {
   const { t, i18n } = useTranslation(["login"]);
-  const loginEndpoint = process.env.REACT_APP_LOGIN_ENDPOINT as string;
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const { error } = useSelector((state: any) => state.auth);
+  const loginEndpoint =
+    `${process.env.REACT_APP_SERVER_ENDPOINT}/ldap` as string;
 
   const [loginParams, setLoginParams] = useState<ILoginParams>({
     userName: "",
     password: "",
   });
-  const [submitReady, setSubmitReady] = useState<boolean>(false);
 
   const handleChange = (e: any) => {
     setLoginParams({
@@ -34,35 +42,32 @@ const Login = () => {
     });
   };
 
-  const submitLogin = (e: any) => {
+  const fakeLogin = (e: any) => {
+    // temporary placeholder for ui testing
     e.preventDefault();
-    console.log("login parameters:", loginParams);
-    setSubmitReady(true);
+    dispatch(setLoggedIn(true));
   };
 
-  async function ldapQuery() {
-    try {
-      await axios
-        .post(loginEndpoint, { loginParams })
-        .then((res) => console.log(res.data()));
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  const login = (e: any) => {
+    /** use when LDAP endpoint is ready */
+    e.preventDefault();
+    console.log("login parameters:", { loginParams });
+    dispatch(loginUser(loginParams));
+  };
 
-  useEffect(() => {
-    ldapQuery();
-    //eslint-disable-next-line
-  }, [submitReady]);
+
+  /* 
+ useEffect(() => {
+    if (loggedIn) {
+      navigate("/dashboard");
+    }
+  }, [loggedIn]);  */
 
   return (
     <>
       <section className={styles.loginContainer}>
         <div className={styles.login}>
           <h1 className={styles.h1}>{t("loginTitle")}</h1>
-
-          <div></div>
-
           <div className={styles.formContainer}>
             <form className={styles.form}>
               <div className={styles.formElements}>
@@ -93,7 +98,7 @@ const Login = () => {
                 <button
                   className={[styles.button, styles.loginButton].join(" ")}
                   type="submit"
-                  onClick={(e) => submitLogin(e)}
+                  onClick={(e) => fakeLogin(e)} //replace with real function
                 >
                   {t("signIn")}
                 </button>
