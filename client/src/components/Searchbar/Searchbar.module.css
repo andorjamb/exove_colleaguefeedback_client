@@ -9,7 +9,7 @@
     width: 80vw;
     height: 2rem;
     background-color: var(--paleGray);
-    border: none;
+    border: 2px solid black;
     padding: 0.5rem;
 
 }
@@ -32,3 +32,19 @@
     transform: translate(4px, 4px);
     box-shadow: none;
 }
+
+.materialIcons {
+    font-family: 'Material Symbols Outlined';
+    font-size: 1.75rem;
+    margin : 0 1rem; 
+    color: white;
+}
+
+.searchIconDiv {
+    background-color: black;
+    height: 2rem;
+    width: 2.5rem;
+    display: flex;
+    justify-content: center;
+    
+} 

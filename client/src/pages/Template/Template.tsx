@@ -126,6 +126,7 @@ const Template = () => {
             </div>
           </div>
         ))}
+        <button>Save</button>
       </form>
     </div>
   );

@@ -22,9 +22,11 @@ import { testEmployeeData } from "../../testdata/testEmployeeData";
 
 const DashboardUser = () => {
   const { t, i18n } = useTranslation(["dashboardUser"]);
+  const serverEndpoint = process.env.REACT_APP_SERVER_ENDPOINT; //
+  const emp_id = ""; //replace with actual uid when available
 
   const employees: IUserData[] = [];
-  /** fetch employees list from db  */
+  /** this will be fetched using RTK Query */
 
   const [selected, setSelected] = useState<string[]>([]);
 
@@ -36,6 +38,11 @@ const DashboardUser = () => {
 
   function submitHandler() {
     console.log(selected); //debugging
+    axios.patch(`${serverEndpoint}/picks/${emp_id}`, {});
+  }
+
+  function changeHandler(e: React.ChangeEvent<HTMLInputElement>) {
+    console.log(e.target.value); //debugging
   }
 
   return (
@@ -44,7 +51,7 @@ const DashboardUser = () => {
         <div>
           <h3>{t("title")}</h3>
         </div>
-        <Searchbar />
+        <Searchbar onChange={(e: any) => changeHandler(e)} />
         <div className={styles.selectionGrid}>
           {testEmployeeData?.map((item) => (
             <Card
