@@ -19,6 +19,9 @@
     float: right;
     height: 2rem;
     width: 5rem; 
+    text-transform: uppercase;
+    font-weight: 800;
+    border: none;
 }
 .selectionGrid {
     display: grid;
