@@ -7,11 +7,12 @@ import styles from "./Card.module.css";
 import { IUserData } from "../../types/users";
 interface Props {
   employee: IUserData;
+  clickHandler: React.MouseEventHandler<HTMLDivElement>;
 }
 
-const Card = ({ employee }: Props) => {
+const Card = ({ employee, clickHandler }: Props) => {
   return (
-    <div className={styles.card}>
+    <div className={styles.card} onClick={clickHandler}>
       <img className={styles.avatar} src={employee.about.avatar} alt="avatar" />
       <div>
         <h3 className={styles.h3}>{employee.displayName}</h3>

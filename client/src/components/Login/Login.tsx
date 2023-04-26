@@ -9,9 +9,10 @@ import axios from "axios";
 import "../../translations/i18next";
 import { useTranslation } from "react-i18next";
 
-//
+//Functions and Hooks
 import { setLoggedIn } from "../../features/headerSlice";
 import { loginUser } from "../../features/authSlice";
+import { useGetUserDataQuery } from "../../features/userApi";
 
 // Styling
 import styles from "./Login.module.css";
@@ -54,7 +55,6 @@ const Login = () => {
     console.log("login parameters:", { loginParams });
     dispatch(loginUser(loginParams));
   };
-
 
   /* 
  useEffect(() => {

@@ -1,0 +1,32 @@
+.container {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin: 3rem auto;
+}
+
+.searchBar {
+    width: 80vw;
+    height: 2rem;
+    background-color: var(--paleGray);
+    border: none;
+    padding: 0.5rem;
+
+}
+
+.doneButton {
+    background-color: var(--exovePurple);
+    color: white;
+    height: 2rem;
+    width: 5rem;
+    border: none;
+    box-shadow: 4px 4px black;
+    margin-right: 2rem;
+}
+
+
+.doneButton:active {
+    background-color: black;
+    transform: translate(4px, 4px);
+    box-shadow: none;
+}
