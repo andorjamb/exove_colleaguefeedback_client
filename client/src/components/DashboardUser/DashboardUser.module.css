@@ -33,7 +33,23 @@
 
 }
 
+@media screen and (max-width: 940px) {
+    .selectionGrid {
+        grid-gap: 1.5rem;
+    }
+}
 
-@media screen and (max-width: 680px) {
 
+@media screen and (max-width: 840px) {
+    .selectionGrid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 1rem;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .selectionGrid {
+        grid-template-columns: 1fr;
+        justify-content: center;
+    }
 }

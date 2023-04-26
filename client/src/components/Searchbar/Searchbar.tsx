@@ -7,11 +7,20 @@ import styles from "./Searchbar.module.css";
 import "../../translations/i18next";
 import { useTranslation } from "react-i18next";
 
-const Searchbar = () => {
+interface Props {
+  onChange: any;
+}
+
+const Searchbar = ({ onChange }: Props) => {
   const { t, i18n } = useTranslation(["dashboardUser"]);
   return (
     <div className={styles.container}>
-      <input type="search" className={styles.searchBar} />
+      <label style={{ display: "flex", width: "75vw" }}>
+        <input type="search" className={styles.searchBar} onChange={onChange} />
+        <div className={styles.searchIconDiv}>
+          <span className={styles.materialIcons}>search</span>
+        </div>
+      </label>
       <button className={styles.doneButton}>{t("done")}</button>
     </div>
   );
