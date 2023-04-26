@@ -4,6 +4,7 @@ import axios from "axios";
 
 //Types
 import { ITemplates, ICat_Quest } from "../../types/templates";
+import { IQuestionLang, IQCategory, IQuestion } from "../../types/questions";
 
 //Styling
 import styles from "./Template.module.css";
@@ -44,17 +45,6 @@ const Template = () => {
   async function getTemplates() {
     await axios.get(templateEndpoint).then((res) => console.log(res.data()));
   }
-
-  /*   const renderQuestions = (questions: string[]) => {
-    questions.map((item) => {
-      return (
-        <>
-          <input type="checkbox" />
-          {item}
-        </>
-      );
-    });
-  }; */
 
   function toggleAccordion(i: number) {
     setAccordion((accordion) => [...accordion, (accordion[i] = !accordion[i])]);

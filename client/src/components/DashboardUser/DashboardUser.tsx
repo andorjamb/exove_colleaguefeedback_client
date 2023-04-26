@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next";
 //Types
 import { IUserData } from "../../types/users";
 
+//Testing data
 import { testEmployeeData } from "../../testdata/testEmployeeData";
 
 const DashboardUser = () => {
@@ -25,11 +26,14 @@ const DashboardUser = () => {
   const employees: IUserData[] = [];
   /** fetch employees list from db  */
 
-  const [selection, setSelection] = useState([]);
+  const [selected, setSelected] = useState<string[]>([]);
 
-  function clickHandler(event: React.MouseEvent) {
+  function clickHandler(e: React.MouseEvent) {
     console.log("clicked");
+    e.currentTarget.classList.toggle("selectedClass");
   }
+
+  function submitHandler() {}
 
   return (
     <div className={styles.container}>
@@ -46,6 +50,13 @@ const DashboardUser = () => {
               clickHandler={(e: any) => clickHandler(e)}
             />
           ))}
+        </div>
+        <div>
+          <button
+            type="button"
+            className={styles.submitButton}
+            onClick={submitHandler}
+          ></button>
         </div>
       </div>
     </div>

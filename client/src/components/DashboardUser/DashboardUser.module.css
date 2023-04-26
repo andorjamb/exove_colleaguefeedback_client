@@ -1,8 +1,6 @@
 .container {
     height: 100%;
     width: 100%;
-   
-    
 }
 
 .mainContent {
@@ -15,9 +13,12 @@
 }
 
 
-.submit {
+.submitButton {
     background-color: var(--exoveGreen);
     color: white;
+    float: right;
+    height: 2rem;
+    width: 5rem; 
 }
 .selectionGrid {
     display: grid;

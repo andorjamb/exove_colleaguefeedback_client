@@ -3,12 +3,17 @@
     justify-content: space-evenly;
     height: 6rem;
     display: flex;
+    border: 2px solid black;
     align-items: center;
     padding: 0.5rem;
     width: 18rem;
-    background-color: var(--exovePurple);
-    color: white;
     cursor: pointer;
+}
+
+.selected {
+    background-color: var(--exovePurple);
+    color: white;   
+    border: none;
 }
 
 .avatar {
