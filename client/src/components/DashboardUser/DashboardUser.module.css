@@ -1,26 +1,19 @@
 .container {
     height: 100%;
     width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 4fr;
+   
+    
 }
 
 .mainContent {
     background-color: white;
+    width: 100vw;
+    margin: auto;
     display: flex;
     flex-direction: column;
+    padding: 2rem;
 }
 
-.searchBar {
-    width: 80%;
-    height: 2rem;
-
-}
-
-.done {
-    background-color: var(--exovePurple);
-    color: white;
-}
 
 .submit {
     background-color: var(--exoveGreen);
@@ -29,7 +22,6 @@
 .selectionGrid {
     display: grid;
     width: 100%;
-    padding: 1rem;
     grid-gap: 2rem;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: auto;
