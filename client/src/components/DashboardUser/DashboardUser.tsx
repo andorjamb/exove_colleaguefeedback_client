@@ -28,12 +28,15 @@ const DashboardUser = () => {
 
   const [selected, setSelected] = useState<string[]>([]);
 
-  function clickHandler(e: React.MouseEvent) {
-    console.log("clicked");
-    e.currentTarget.classList.toggle("selectedClass");
+  function clickHandler(e: React.MouseEvent<HTMLDivElement>, id: string) {
+    console.log(e.currentTarget); //debugging
+    console.log(id); //debugging
+    setSelected((selected) => [...selected, id]);
   }
 
-  function submitHandler() {}
+  function submitHandler() {
+    console.log(selected); //debugging
+  }
 
   return (
     <div className={styles.container}>
@@ -47,7 +50,7 @@ const DashboardUser = () => {
             <Card
               key={item.id}
               employee={item}
-              clickHandler={(e: any) => clickHandler(e)}
+              clickCallback={(e: any) => clickHandler(e, item.id)}
             />
           ))}
         </div>
@@ -56,7 +59,9 @@ const DashboardUser = () => {
             type="button"
             className={styles.submitButton}
             onClick={submitHandler}
-          ></button>
+          >
+            {t("submit")}
+          </button>
         </div>
       </div>
     </div>

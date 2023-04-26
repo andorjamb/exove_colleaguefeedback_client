@@ -7,10 +7,15 @@ import styles from "./Card.module.css";
 import { IUserData } from "../../types/users";
 interface Props {
   employee: IUserData;
-  clickHandler: React.MouseEventHandler<HTMLDivElement>;
+  clickCallback: React.MouseEventHandler<HTMLDivElement>;
 }
 
-const Card = ({ employee, clickHandler }: Props) => {
+const Card = ({ employee, clickCallback }: Props) => {
+  function clickHandler(e: any) {
+    e.currentTarget.classList.toggle(`${styles.selected}`);
+    clickCallback(e);
+  }
+
   return (
     <div className={styles.card} onClick={clickHandler}>
       <img className={styles.avatar} src={employee.about.avatar} alt="avatar" />
