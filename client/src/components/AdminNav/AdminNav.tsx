@@ -20,6 +20,11 @@ const AdminNav = () => {
           </a>
         </li>
         <li className={styles.li}>
+          <a className={styles.a} href="/admin_dashboard">
+            {t("Admin dashboard")}
+          </a>
+        </li>
+        <li className={styles.li}>
           <a className={styles.a} href="/admin/template">
             {t("templates")}
           </a>

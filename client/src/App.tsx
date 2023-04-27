@@ -17,6 +17,7 @@ import ProtectedRoutes from "./routing/ProtectedRoutes";
 import Layout from "./components/Layout/Layout";
 import Login from "./components/Login/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
+import DashboardAdmin from "./components/DashboardAdmin/DashboardAdmin";
 import Template from "./pages/Template/Template";
 import Feedback from "./pages/Feedback/Feedback";
 import Profile from "./pages/Profile/Profile";
@@ -33,10 +34,10 @@ const router = createBrowserRouter(
         <Route path="/" element={<Login />}></Route>
         <Route element={<ProtectedRoutes />}>
           <Route path="/dashboard" element={<Dashboard />}></Route>
+          <Route path="/admin_dashboard" element={<DashboardAdmin />}></Route>
           <Route path="/feedback" element={<Feedback />}></Route>
           <Route path="/admin/template" element={<Template />}></Route>
           <Route path="/admin/profiles/:id" element={<Profile />}></Route>
-
           <Route path="/*" element={<Navigate to="/" replace />}></Route>
         </Route>
       </Route>
