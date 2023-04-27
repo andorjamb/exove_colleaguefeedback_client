@@ -1,21 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,700,0,0&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Jost:wght@400;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,700,0,0&display=swap");
 
 :root {
   /*custom colors*/
   font-family: Jost, sans-serif;
---exovePurple: #651BDE;/*rgb(101,27,222) */
---medBlack: #292929;
---darkBlack: #1D1D1D;
---exoveGreen: #63AD7B;/*rgb(99,173,123) */
---exoveOrange: #F19C5B;/**rgb(241,156,91) */
---medGray: rgb(216,216,215);
---paleGray: rgb(242,242,242);
-
+  --exovePurple: #651bde; /*rgb(101,27,222) */
+  --exovePink: #f9dcea;
+  --medBlack: #292929;
+  --darkBlack: #1d1d1d;
+  --exoveGreen: #63ad7b; /*rgb(99,173,123) */
+  --exoveOrange: #f19c5b; /**rgb(241,156,91) */
+  --medGray: rgb(216, 216, 215);
+  --paleGray: rgb(242, 242, 242);
 }
 
 * {
   scroll-behavior: smooth;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -26,3 +30,10 @@ li {
   list-style-type: none;
 }
 
+select,
+textarea,
+input,
+button {
+  font-family: inherit;
+  font-size: inherit;
+}
