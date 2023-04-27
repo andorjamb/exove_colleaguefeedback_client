@@ -1,5 +1,6 @@
 //React
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
 //Types
@@ -11,7 +12,10 @@ import styles from "./Template.module.css";
 
 const Template = () => {
   let templates: ITemplates[] = []; /** fetch templates:ITemplates[] from db  */
-  const templateEndpoint: string = "";
+  const templateEndpoint: string = "http://localhost:4000/templates";
+
+  const loggedIn = useSelector((state: any) => state.header.loggedIn);
+  console.log(loggedIn);
 
   const [accordion, setAccordion] = useState<boolean[]>([
     false,
@@ -43,7 +47,7 @@ const Template = () => {
   ];
 
   async function getTemplates() {
-    await axios.get(templateEndpoint).then((res) => console.log(res.data()));
+    await axios.get(templateEndpoint).then((res) => console.log(res));
   }
 
   function toggleAccordion(i: number) {
