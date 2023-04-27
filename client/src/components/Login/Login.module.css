@@ -1,88 +1,84 @@
 .loginContainer {
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .h1 {
-    font-weight: 800;
+  font-weight: 800;
 }
 
 .login {
-    height: auto;
-    width: 35%; 
-    padding: 2rem;
-    background-color: white;
-    background-color: var(--medGray);
-    box-shadow: 4px 4px var(--exovePurple);
+  height: auto;
+  width: 50%;
+  max-width: 450px;
+  padding: 2rem;
+  background-color: white;
+  background-color: var(--medGray);
+  box-shadow: 4px 4px var(--exovePurple);
 }
 
 .formContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .form {
-    width: 90%;
-    display: grid;
-    grid-template-columns: auto;
-    grid-template-rows: 1fr 1fr 1fr;
+  width: 90%;
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: 1fr 1fr 1fr;
 }
 
 .formElements {
-    display: block;
-    position: relative;
+  display: block;
+  position: relative;
 }
 
 .input {
-    display: inline-block;
-    border: none;
-    width: 100%;
-    height: 2rem;
+  display: inline-block;
+  border: none;
+  width: 100%;
+  height: 2.5rem;
+  padding: 0 1rem;
 }
 
 .label {
-    display: block;
-    font-size: smaller;
-    width: 100%;
-    text-align: left;
-    margin-top: 1rem;
+  display: block;
+  font-size: smaller;
+  width: 100%;
+  text-align: left;
+  margin-top: 1rem;
 }
-
 
 .button {
-    width: 5rem;
-    height: 2rem;
-    cursor: pointer;
-   
+  width: 5rem;
+  height: 2.5rem;
+  cursor: pointer;
 }
 
-
 .loginButton {
-    background-color: var(--exovePurple);
-    box-shadow: 4px 4px black;
-    color: white;
-    position: absolute;
-    border: none;
-    bottom: 0;
-    right: 0;
+  background-color: var(--exovePurple);
+  box-shadow: 4px 4px black;
+  color: white;
+  position: absolute;
+  border: none;
+  bottom: 0;
+  right: 0;
 }
 
 .loginButton:active {
-    background-color: black;
-    transform: translate(4px, 4px);
-    box-shadow: none;
+  background-color: black;
+  transform: translate(4px, 4px);
+  box-shadow: none;
 }
 
-
 @media screen and (max-width: 680px) {
-    .login {
-        height: 60%;
-        width: 80%; 
-    }
-
+  .login {
+    width: 80%;
+  }
 }

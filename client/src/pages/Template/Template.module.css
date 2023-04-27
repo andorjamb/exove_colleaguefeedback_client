@@ -1,85 +1,82 @@
-* {
-    box-sizing: border-box;
+.container {
+  width: 60vw;
+  margin: auto;
+  margin-top: 3rem;
 }
 
-.container {
-    width: 60vw;
-    margin: auto;
+.container h1 {
+  margin: 2rem 0;
 }
 
 .form {
-    width: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .h3 {
-    text-align: left;
+  text-align: left;
 }
 
 .formRow {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .select {
-    height: 2rem;
-    width: 16rem;
-    background-color: var(--paleGray);
-    border: none;
-    padding: 0.5rem 0.5rem;
+  width: 16rem;
+  background-color: var(--paleGray);
+  border: none;
+  padding: 0.5rem;
 }
 
 .input {
-    width: 100%;
-    background-color: var(--paleGray);
-    border: none;
-    padding: 0.5rem 0.5rem;
+  width: 100%;
+  background-color: var(--paleGray);
+  border: none;
+  padding: 0.5rem;
 }
 
-
 .accordionContainer {
-    border: 1px solid black;
- line-height:2.5rem;
-    margin: 1rem 0;
-    text-align: center;
+  border: 1px solid black;
+  line-height: 2.5rem;
+
+  text-align: center;
 }
 
 .accordionTitle {
-    display: flex;
-    margin: 0;
-    padding: 0;
-    background-color: var(--paleGray);
-    text-transform: uppercase;
-    
+  display: flex;
+  background-color: var(--paleGray);
+  text-transform: uppercase;
 }
 
 .accordionItem {
-    height: auto;
+  height: auto;
 }
 
 .materialIcons {
-    font-family: 'Material Symbols Outlined';
-    font-size: 1.75rem;
-    cursor: pointer;
-    margin : 0 1rem; 
+  font-family: "Material Symbols Outlined";
+  font-size: 1.75rem;
+  cursor: pointer;
+  margin: 0 1rem;
 }
 
 .accordionContent {
-    margin-top: 0;
-    padding: 1rem;
-    min-height: 4rem;
-    display: block;
-    line-height: normal;
-    text-align: left;
-
+  margin-top: 0;
+  padding: 1rem;
+  min-height: 4rem;
+  display: block;
+  line-height: normal;
+  text-align: left;
 }
 
 .spin {
-    transform:  rotate(360deg); 
-    -webkit-transform: rotate(360deg); 
-    -moz-transform:    rotate(360deg); 
-    -ms-transform:     rotate(360deg); 
-    -o-transform:      rotate(360deg);  
-    transition: transform 0.5s ease-in-out;
-     
+  transform: rotate(360deg);
+  -webkit-transform: rotate(360deg);
+  -moz-transform: rotate(360deg);
+  -ms-transform: rotate(360deg);
+  -o-transform: rotate(360deg);
+  transition: transform 0.5s ease-in-out;
 }
