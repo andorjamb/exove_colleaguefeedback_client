@@ -27,9 +27,11 @@ const Login = () => {
   const { t, i18n } = useTranslation(["login"]);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const loggedIn = useSelector((state: any) => state.header.loggedIn);
   const { error } = useSelector((state: any) => state.auth);
-  const loginEndpoint =
-    `${process.env.REACT_APP_SERVER_ENDPOINT}/ldap` as string;
+
+  /*   const loginEndpoint =
+    `${process.env.REACT_APP_SERVER_ENDPOINT}/ldap` as string; */
 
   const [loginParams, setLoginParams] = useState<ILoginParams>({
     userName: "",
@@ -43,25 +45,26 @@ const Login = () => {
     });
   };
 
-  const fakeLogin = (e: any) => {
+  const fakeLogin = async (e: any) => {
     // temporary placeholder for ui testing
     e.preventDefault();
-    dispatch(setLoggedIn(true));
+    console.log({ loginParams });
+
+    try {
+      await axios
+        .post("http://localhost:4000/testpost", loginParams)
+        .then((res) => console.log(res));
+      dispatch(setLoggedIn(true));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const login = (e: any) => {
-    /** use when LDAP endpoint is ready */
-    e.preventDefault();
-    console.log("login parameters:", { loginParams });
-    dispatch(loginUser(loginParams));
-  };
-
-  /* 
- useEffect(() => {
+  useEffect(() => {
     if (loggedIn) {
       navigate("/dashboard");
     }
-  }, [loggedIn]);  */
+  }, [loggedIn]);
 
   return (
     <>
