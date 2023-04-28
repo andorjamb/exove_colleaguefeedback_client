@@ -7,8 +7,7 @@ import { useNavigate } from "react-router-dom";
 import AdminNav from "../AdminNav/AdminNav";
 import Nav from "../Nav/Nav";
 
-//import { setLoggedIn } from "../../features/headerSlice";
-import { setLoggedIn, setUser } from "../../features/authSlice";
+import { setLoggedIn } from "../../features/headerSlice";
 
 //Styling
 import styles from "./Header.module.css";
@@ -17,8 +16,6 @@ import styles from "./Header.module.css";
 import "../../translations/i18next";
 import { useTranslation } from "react-i18next";
 
-//
-import { useGetUserDataQuery } from "../../features/userApi";
 /** if user == admin, return AdminNav, else return Nav */
 
 const Header = () => {
@@ -28,9 +25,6 @@ const Header = () => {
 
   const lang = useSelector((state: any) => state.header.lang);
   const loggedIn = useSelector((state: any) => state.header.loggedIn);
-  const { data, isFetching } = useGetUserDataQuery("userDetails", {
-    pollingInterval: 900000,
-  });
 
   const selectEng = () => {
     i18n.changeLanguage("en");

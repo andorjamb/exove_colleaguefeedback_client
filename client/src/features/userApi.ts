@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 //Types
 import {IUserData} from '../types/users';
 
-const serverUrl = "http://localhost:4000/employee"
+const serverUrl = ""
 
 /** for fetching profile data of loggedIn user */
 export const userApi = createApi({
