@@ -20,12 +20,12 @@ const AdminNav = () => {
           </a>
         </li>
         <li className={styles.li}>
-          <a className={styles.a} href="/admin/template">
+          <a className={styles.a} href="/template">
             {t("templates")}
           </a>
         </li>
         <li className={styles.li}>
-          <a className={styles.a} href="/">
+          <a className={styles.a} href="/dashboard">
             {t("userView")}
           </a>
         </li>

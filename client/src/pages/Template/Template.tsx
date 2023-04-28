@@ -1,6 +1,7 @@
 //React
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Navigate } from "react-router-dom";
 import axios from "axios";
 
 //Types
@@ -16,8 +17,9 @@ const Template = () => {
   let templates: ITemplate[] = []; /** fetch templates:ITemplates[] from db  */
   const templateEndpoint: string = "http://localhost:4000/template";
 
-  const loggedIn = useSelector((state: any) => state.header.loggedIn);
-  console.log(loggedIn);
+  const loggedIn = useSelector((state: any) => state.auth.loggedIn);
+  const isAdmin = useSelector((state: any) => state.auth.loggedIn);
+
   const [currentTemplate, setCurrentTemplate] = useState<ITemplate>();
 
   const [accordion, setAccordion] = useState<boolean[]>([
@@ -31,9 +33,7 @@ const Template = () => {
     await axios.get(templateEndpoint).then((res) => console.log(res));
   }
 
-  function changeHandler(e:any){
-
-  }
+  function changeHandler(e: any) {}
 
   function submitHandler() {
     const body = currentTemplate;
@@ -49,20 +49,35 @@ const Template = () => {
     getTemplates();
   }, []);
 
+  /*   if (!isAdmin)
+    return (
+      <>
+        <Navigate to="/dashboard" replace />
+      </>
+    ); */
+
   return (
     <div className={styles.container}>
       <h1>New feedback template</h1>
       <form className={styles.form}>
         <div className={styles.formRow}>
-          <h3 className={styles.h3}>Template title</h3>
+          <label htmlFor="title">
+            <h3 className={styles.h3}>Template title</h3>
+          </label>
         </div>
         <div className={styles.formRow}>
-          <input className={styles.input} />
+          <input
+            className={styles.input}
+            name="title"
+            onChange={changeHandler}
+          />
         </div>
         <div className={styles.formRow}>
-          <h3 className={styles.h3}>Instruction text</h3>
+          <label htmlFor="intruction">
+            <h3 className={styles.h3}>Instruction text</h3>
+          </label>
           <label>Prefill with:</label>
-          <select className={styles.select}>
+          <select className={styles.select} name="instruction">
             <option value="" disabled selected>
               select template
             </option>
