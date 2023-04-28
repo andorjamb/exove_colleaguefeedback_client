@@ -10,6 +10,8 @@ import { IQuestionLang, IQCategory, IQuestion } from "../../types/questions";
 //Styling
 import styles from "./Template.module.css";
 
+import { questionData } from "../../testdata/testQuestionData";
+
 const Template = () => {
   let templates: ITemplates[] = []; /** fetch templates:ITemplates[] from db  */
   const templateEndpoint: string = "http://localhost:4000/templates";
@@ -23,28 +25,6 @@ const Template = () => {
     false,
     false,
   ]);
-
-  const questionData: ICat_Quest[] = [
-    /** sample data for testing */
-    {
-      category: "Quality Focus",
-      questions: [
-        "The person produces high quality product",
-        "The person aims to improve the quality of the end result beyond expressed requirements (1 - 5)",
-      ],
-    },
-    {
-      category: "People Skills",
-      questions: [
-        "The person communicates effectively",
-        "The person shows awareness and respect of colleagues",
-      ],
-    },
-    {
-      category: "Self Guidance",
-      questions: ["The person is able to effectively direct their own work"],
-    },
-  ];
 
   async function getTemplates() {
     await axios.get(templateEndpoint).then((res) => console.log(res));
