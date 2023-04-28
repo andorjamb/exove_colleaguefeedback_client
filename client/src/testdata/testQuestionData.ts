@@ -1,4 +1,4 @@
-import { ICat_Quest } from "../types/templates";
+import { ICat_Quest } from "../types/template";
 
 export const questionData: ICat_Quest[] = [
     /** sample data for testing */

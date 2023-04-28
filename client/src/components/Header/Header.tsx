@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import AdminNav from "../AdminNav/AdminNav";
 import Nav from "../Nav/Nav";
 
-import { setLoggedIn } from "../../features/headerSlice";
+import { setLoggedIn } from "../../features/authSlice";
 
 //Styling
 import styles from "./Header.module.css";

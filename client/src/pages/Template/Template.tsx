@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
 //Types
-import { ITemplates, ICat_Quest } from "../../types/templates";
+import { ITemplate, ICat_Quest } from "../../types/template";
 import { IQuestionLang, IQCategory, IQuestion } from "../../types/questions";
 
 //Styling
@@ -13,11 +13,12 @@ import styles from "./Template.module.css";
 import { questionData } from "../../testdata/testQuestionData";
 
 const Template = () => {
-  let templates: ITemplates[] = []; /** fetch templates:ITemplates[] from db  */
+  let templates: ITemplate[] = []; /** fetch templates:ITemplates[] from db  */
   const templateEndpoint: string = "http://localhost:4000/templates";
 
   const loggedIn = useSelector((state: any) => state.header.loggedIn);
   console.log(loggedIn);
+  const [currentTemplate, setCurrentTemplate] = useState<ITemplate>();
 
   const [accordion, setAccordion] = useState<boolean[]>([
     false,
@@ -28,6 +29,11 @@ const Template = () => {
 
   async function getTemplates() {
     await axios.get(templateEndpoint).then((res) => console.log(res));
+  }
+
+  function submitHandler() {
+    const body = currentTemplate;
+    axios.post(templateEndpoint, body);
   }
 
   function toggleAccordion(i: number) {
@@ -45,12 +51,6 @@ const Template = () => {
       <form className={styles.form}>
         <div className={styles.formRow}>
           <h3 className={styles.h3}>Template title</h3>
-          <label>Prefill with:</label>
-          <select className={styles.select} defaultValue="select template">
-            {templates?.map((item) => (
-              <option key={item._id}>{item.templateTitle}</option>
-            ))}
-          </select>
         </div>
         <div className={styles.formRow}>
           <input className={styles.input} />
@@ -110,7 +110,9 @@ const Template = () => {
             </div>
           </div>
         ))}
-        <button>Save</button>
+        <button type="submit" onClick={submitHandler}>
+          Save
+        </button>
       </form>
     </div>
   );
