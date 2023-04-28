@@ -12,6 +12,17 @@ import { IQuestionLang, IQCategory, IQuestion } from "../../types/questions";
 import styles from "./Template.module.css";
 
 import { questionData } from "../../testdata/testQuestionData";
+import { useGetAllTemplatesQuery } from "../../features/templateApi";
+
+/**
+ * API ROUTES
+  get('/template', getTemplates); //Get all templates
+  get('/template/active', getTemplate); // get current active template
+  post('/template', addTemplate);
+  patch('/template/:id', setDefaultTemplate); // set template as default setting all other not default
+ * 
+ * 
+ */
 
 const Template = () => {
   let templates: ITemplate[] = []; /** fetch templates:ITemplates[] from db  */
@@ -19,6 +30,8 @@ const Template = () => {
 
   const loggedIn = useSelector((state: any) => state.auth.loggedIn);
   const isAdmin = useSelector((state: any) => state.auth.loggedIn);
+
+  const { data, isLoading } = useGetAllTemplatesQuery();
 
   const [currentTemplate, setCurrentTemplate] = useState<ITemplate>();
 
@@ -28,10 +41,6 @@ const Template = () => {
     false,
     false,
   ]);
-
-  async function getTemplates() {
-    await axios.get(templateEndpoint).then((res) => console.log(res));
-  }
 
   function changeHandler(e: any) {}
 
@@ -45,9 +54,7 @@ const Template = () => {
     console.log("current accordion index:", i, accordion[i]); //debugging
   }
 
-  useEffect(() => {
-    getTemplates();
-  }, []);
+  useEffect(() => {}, []);
 
   /*   if (!isAdmin)
     return (
