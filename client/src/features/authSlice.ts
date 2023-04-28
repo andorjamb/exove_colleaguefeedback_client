@@ -42,6 +42,7 @@ export const authSlice = createSlice({
     name:'auth',
     initialState: {
         loggedIn: false,
+        isAdmin: false,
         error: null,
         success: false,
         loading: false,
@@ -49,6 +50,7 @@ export const authSlice = createSlice({
     },
     reducers: {
         setLoggedIn: (state, action: PayloadAction<boolean>)=>{state.loggedIn = action.payload},
+        setIsAdmin: (state, action: PayloadAction<boolean>)=>{state.loggedIn = action.payload},
     },
         extraReducers:(builder) => {
         builder.addCase(loginUser.pending, (state:any) => {
@@ -70,6 +72,6 @@ export const authSlice = createSlice({
 
 })
 
-export const {setLoggedIn} = authSlice.actions;
+export const {setLoggedIn, setIsAdmin} = authSlice.actions;
 
 export default authSlice.reducer;

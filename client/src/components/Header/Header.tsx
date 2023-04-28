@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import AdminNav from "../AdminNav/AdminNav";
 import Nav from "../Nav/Nav";
 
-import { setLoggedIn } from "../../features/headerSlice";
+import { setLoggedIn } from "../../features/authSlice";
 
 //Styling
 import styles from "./Header.module.css";
@@ -24,7 +24,8 @@ const Header = () => {
   const dispatch = useDispatch();
 
   const lang = useSelector((state: any) => state.header.lang);
-  const loggedIn = useSelector((state: any) => state.header.loggedIn);
+  const loggedIn = useSelector((state: any) => state.auth.loggedIn);
+  const isAdmin = useSelector((state: any) => state.auth.isAdmin)
 
   const selectEng = () => {
     i18n.changeLanguage("en");
@@ -42,7 +43,8 @@ const Header = () => {
 
   return (
     <div className={styles.container}>
-      <AdminNav />
+      {loggedIn && isAdmin ?  <AdminNav />:(<></>)}
+    
       <div className={styles.langButtonDiv}>
         <button
           className={[styles.button, styles.langButton].join(" ")}

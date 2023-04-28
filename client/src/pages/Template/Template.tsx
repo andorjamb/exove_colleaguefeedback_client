@@ -4,18 +4,21 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
 //Types
-import { ITemplates, ICat_Quest } from "../../types/templates";
+import { ITemplate, ICat_Quest } from "../../types/template";
 import { IQuestionLang, IQCategory, IQuestion } from "../../types/questions";
 
 //Styling
 import styles from "./Template.module.css";
 
+import { questionData } from "../../testdata/testQuestionData";
+
 const Template = () => {
-  let templates: ITemplates[] = []; /** fetch templates:ITemplates[] from db  */
-  const templateEndpoint: string = "http://localhost:4000/templates";
+  let templates: ITemplate[] = []; /** fetch templates:ITemplates[] from db  */
+  const templateEndpoint: string = "http://localhost:4000/template";
 
   const loggedIn = useSelector((state: any) => state.header.loggedIn);
   console.log(loggedIn);
+  const [currentTemplate, setCurrentTemplate] = useState<ITemplate>();
 
   const [accordion, setAccordion] = useState<boolean[]>([
     false,
@@ -24,30 +27,17 @@ const Template = () => {
     false,
   ]);
 
-  const questionData: ICat_Quest[] = [
-    /** sample data for testing */
-    {
-      category: "Quality Focus",
-      questions: [
-        "The person produces high quality product",
-        "The person aims to improve the quality of the end result beyond expressed requirements (1 - 5)",
-      ],
-    },
-    {
-      category: "People Skills",
-      questions: [
-        "The person communicates effectively",
-        "The person shows awareness and respect of colleagues",
-      ],
-    },
-    {
-      category: "Self Guidance",
-      questions: ["The person is able to effectively direct their own work"],
-    },
-  ];
-
   async function getTemplates() {
     await axios.get(templateEndpoint).then((res) => console.log(res));
+  }
+
+  function changeHandler(e:any){
+
+  }
+
+  function submitHandler() {
+    const body = currentTemplate;
+    axios.post(templateEndpoint, body);
   }
 
   function toggleAccordion(i: number) {
@@ -65,12 +55,6 @@ const Template = () => {
       <form className={styles.form}>
         <div className={styles.formRow}>
           <h3 className={styles.h3}>Template title</h3>
-          <label>Prefill with:</label>
-          <select className={styles.select} defaultValue="select template">
-            {templates?.map((item) => (
-              <option key={item._id}>{item.templateTitle}</option>
-            ))}
-          </select>
         </div>
         <div className={styles.formRow}>
           <input className={styles.input} />
@@ -130,7 +114,9 @@ const Template = () => {
             </div>
           </div>
         ))}
-        <button>Save</button>
+        <button type="submit" onClick={submitHandler}>
+          Save
+        </button>
       </form>
     </div>
   );

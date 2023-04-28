@@ -1,4 +1,4 @@
-export interface ITemplates {
+export interface ITemplate {
     _id: string,
     templateTitle: string,
     instructions: string,
