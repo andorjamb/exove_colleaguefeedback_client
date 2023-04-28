@@ -24,8 +24,6 @@ import Profile from "./pages/Profile/Profile";
 // Styling
 import "./App.css";
 
-const user: any = true; //Replace with auth
-
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -34,8 +32,8 @@ const router = createBrowserRouter(
         <Route element={<ProtectedRoutes />}>
           <Route path="/dashboard" element={<Dashboard />}></Route>
           <Route path="/feedback" element={<Feedback />}></Route>
-          <Route path="/admin/template" element={<Template />}></Route>
-          <Route path="/admin/profiles/:id" element={<Profile />}></Route>
+          <Route path="/template" element={<Template />}></Route>
+          <Route path="/profiles/:id" element={<Profile />}></Route>
 
           <Route path="/*" element={<Navigate to="/" replace />}></Route>
         </Route>

@@ -42,7 +42,7 @@ export const authSlice = createSlice({
     name:'auth',
     initialState: {
         loggedIn: false,
-        isAdmin: false,
+        isAdmin: true, //will be set to false 
         error: null,
         success: false,
         loading: false,

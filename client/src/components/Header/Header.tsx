@@ -16,6 +16,8 @@ import styles from "./Header.module.css";
 import "../../translations/i18next";
 import { useTranslation } from "react-i18next";
 
+import axios from "axios";
+
 /** if user == admin, return AdminNav, else return Nav */
 
 const Header = () => {
@@ -25,7 +27,7 @@ const Header = () => {
 
   const lang = useSelector((state: any) => state.header.lang);
   const loggedIn = useSelector((state: any) => state.auth.loggedIn);
-  const isAdmin = useSelector((state: any) => state.auth.isAdmin)
+  const isAdmin = useSelector((state: any) => state.auth.isAdmin);
 
   const selectEng = () => {
     i18n.changeLanguage("en");
@@ -38,13 +40,14 @@ const Header = () => {
     //sessionStorage.clear();   if using session storage
     dispatch(setLoggedIn(false));
     navigate("/");
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/api/logout`);
     document.location.reload();
   };
 
   return (
     <div className={styles.container}>
-      {loggedIn && isAdmin ?  <AdminNav />:(<></>)}
-    
+      {loggedIn ? isAdmin ? <AdminNav /> : <Nav /> : <></>}
+
       <div className={styles.langButtonDiv}>
         <button
           className={[styles.button, styles.langButton].join(" ")}
