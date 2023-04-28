@@ -14,7 +14,7 @@ import { questionData } from "../../testdata/testQuestionData";
 
 const Template = () => {
   let templates: ITemplate[] = []; /** fetch templates:ITemplates[] from db  */
-  const templateEndpoint: string = "http://localhost:4000/templates";
+  const templateEndpoint: string = "http://localhost:4000/template";
 
   const loggedIn = useSelector((state: any) => state.header.loggedIn);
   console.log(loggedIn);
@@ -29,6 +29,10 @@ const Template = () => {
 
   async function getTemplates() {
     await axios.get(templateEndpoint).then((res) => console.log(res));
+  }
+
+  function changeHandler(e:any){
+
   }
 
   function submitHandler() {
