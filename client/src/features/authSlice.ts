@@ -48,8 +48,10 @@ export const authSlice = createSlice({
         user: {}
     },
     reducers: {
-        setLoggedIn: (state, action: PayloadAction<boolean>)=>{state.loggedIn = action.payload},
+        setLoggedIn: (state, action: PayloadAction<boolean>)=>{state.loggedIn = action.payload},    
+        setUser: (state, action)=>{state.user=action.payload}
     },
+
         extraReducers:(builder) => {
         builder.addCase(loginUser.pending, (state:any) => {
             state.loading = true;
@@ -70,6 +72,6 @@ export const authSlice = createSlice({
 
 })
 
-export const {setLoggedIn} = authSlice.actions;
+export const {setLoggedIn, setUser} = authSlice.actions;
 
 export default authSlice.reducer;
