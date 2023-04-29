@@ -11,9 +11,6 @@ export const testTemplateData:ITemplate = {
         questions: [
             {question: "The person produces high quality product",
             isFreeForm: false}, 
-            {question: "",
-            isFreeForm: false
-            },
             {question: "The person aims to improve the quality of the end result beyond expressed requirements",
             isFreeForm: false
             },
