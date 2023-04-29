@@ -1,7 +1,7 @@
 //React
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 //Types
@@ -13,7 +13,9 @@ import styles from "./Template.module.css";
 
 import { questionData } from "../../testdata/testQuestionData";
 import { useGetAllTemplatesQuery } from "../../features/templateApi";
-
+import { preface } from "./preface";
+import { gradingGuidance } from "./instructions";
+import { prefilledQuestionText } from "./instructions";
 /**
  * API ROUTES
   get('/template', getTemplates); //Get all templates
@@ -33,6 +35,8 @@ const Template = () => {
 
   const { data, isLoading } = useGetAllTemplatesQuery();
 
+  const navigate = useNavigate();
+
   const [currentTemplate, setCurrentTemplate] = useState<ITemplate>();
 
   const [accordion, setAccordion] = useState<boolean[]>([
@@ -42,7 +46,9 @@ const Template = () => {
     false,
   ]);
 
-  function changeHandler(e: any) {}
+  function changeHandler(e: any) {
+    console.log(e.target.value);
+  }
 
   function submitHandler() {
     const body = currentTemplate;
@@ -54,64 +60,86 @@ const Template = () => {
     console.log("current accordion index:", i, accordion[i]); //debugging
   }
 
+  function addQuestion() {}
+
   useEffect(() => {
     if (isAdmin) {
       return console.log("test isAdmin");
-    } else {
-      /*   <>
-        <Navigate to="/dashboard" replace />
-      </> */
-    }
+    } /* else {
+      navigate("/"); 
+    }*/
   }, [isAdmin]);
 
   return (
     <div className={styles.container}>
       <h1>New feedback template</h1>
-      <form className={styles.form}>
+      <form className={styles.form} onChange={changeHandler}>
         <div className={styles.formRow}>
           <label htmlFor="title">
             <h3 className={styles.h3}>Template title</h3>
           </label>
         </div>
         <div className={styles.formRow}>
+          <input className={styles.input} name="title" />
+        </div>
+        <section>
+          <div className={styles.formRow}>
+            <label htmlFor="intruction">
+              <h3 className={styles.h3}>Instruction text</h3>
+            </label>
+          </div>
+          <div className={styles.formRow}>
+            <textarea
+              className={`${styles.input} ${styles.preface}`}
+              defaultValue={preface.join("\r\n")}
+            />
+          </div>
+        </section>
+        <section>
+          <div className={styles.formRow}>
+            <label htmlFor="prefilledQuestions">
+              <h3 className={styles.h3}>Prefilled Questions</h3>
+            </label>
+          </div>
+          <textarea
+            className={styles.input}
+            defaultValue={prefilledQuestionText}
+          ></textarea>
+
           <input
             className={styles.input}
-            name="title"
-            onChange={changeHandler}
-          />
-        </div>
-        <div className={styles.formRow}>
-          <label htmlFor="intruction">
-            <h3 className={styles.h3}>Instruction text</h3>
+            defaultValue="Who are you providing feedback for?"
+          ></input>
+          <input className={styles.input} defaultValue="Checksum:"></input>
+          <input
+            className={styles.input}
+            defaultValue="You are providing feedback as:"
+          ></input>
+          <button type="button" onClick={addQuestion}>
+            Add Question Here
+          </button>
+        </section>
+        <section>
+          <label htmlFor="gradingGuidance">
+            <h3 className={styles.h3}>Grading Guidance</h3>
           </label>
-          <label>Prefill with:</label>
-          <select
-            className={styles.select}
-            name="instruction"
-            defaultValue="select template"
+          <textarea
+            className={`${styles.input} ${styles.preface}`}
+            defaultValue={gradingGuidance.join("\r\n")}
+            name="gradingGuidance"
+          />
+        </section>
 
-          >
-            <option value="select template"></option>
-            {templates?.map((item) => (
-              <option>{item.templateTitle}</option>
-            ))}
-          </select>
-        </div>
         <div className={styles.formRow}>
-          <textarea className={styles.input} />
-        </div>
-        <div className={styles.formRow}>
-          <h3 className={styles.h3}>Select questions</h3>
+          <h3 className={styles.h3}>Feedback Questions</h3>
           <label>Prefill with:</label>
           <select className={styles.select}>
-            <option>
-select template
-            </option>
+            <option>select template</option>
           </select>
         </div>
         {/* ACCORDION */}
         {questionData.map((item, i) => (
-          <div className={styles.accordionContainer} key={i}>
+          <div className={styles.accordionContainer} key={i + item.category}>
             <div className={styles.accordionItem}>
               <div className={styles.accordionTitle}>
                 <span
@@ -143,6 +171,7 @@ select template
         <button type="submit" onClick={submitHandler}>
           Save
         </button>
+        <button type="button">Preview</button>
       </form>
     </div>
   );
