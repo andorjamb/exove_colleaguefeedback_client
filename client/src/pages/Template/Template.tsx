@@ -6,7 +6,6 @@ import axios from "axios";
 
 //Types
 import { ITemplate } from "../../types/template";
-import { IQuestionLang, IQCategory, IQuestion } from "../../types/questions";
 
 //Styling
 import styles from "./Template.module.css";
@@ -38,7 +37,13 @@ const Template = () => {
 
   const navigate = useNavigate();
 
-  const [currentTemplate, setCurrentTemplate] = useState<ITemplate>();
+  const [currentTemplate, setCurrentTemplate] = useState<ITemplate>({
+    templateTitle: "",
+    preface: [""],
+    prefilledQuestions: [""],
+    gradingGuidance: [""],
+    sections: [{ name: "", questions: [{ question: "", isFreeForm: false }] }],
+  });
 
   const [accordion, setAccordion] = useState<boolean[]>([
     false,
@@ -49,11 +54,17 @@ const Template = () => {
 
   function changeHandler(e: any) {
     console.log(e.target.value);
+    setCurrentTemplate((currentTemplate) => ({
+      ...currentTemplate,
+      [e.target.name]: e.target.value,
+    }));
   }
 
-  async function submitHandler() {
+  async function submitHandler(e: any) {
+    e.preventDefault();
     const body = currentTemplate;
-    await axios.post(devEndpoint, body);
+    console.log(currentTemplate); //debugging
+    //await axios.post(devEndpoint, body);
   }
 
   function toggleAccordion(i: number) {
@@ -76,25 +87,26 @@ const Template = () => {
       <h1>New feedback template</h1>
       <form className={styles.form} onChange={changeHandler}>
         <div className={styles.formRow}>
-          <label htmlFor="title">
+          <label htmlFor="templateTitle">
             <h3 className={styles.h3}>Template title</h3>
           </label>
         </div>
         <div className={styles.formRow}>
           <input
             className={styles.input}
-            name="title"
+            name="templateTitle"
             defaultValue={testTemplateData.templateTitle}
           />
         </div>
         <section>
           <div className={styles.formRow}>
-            <label htmlFor="intruction">
+            <label htmlFor="preface">
               <h3 className={styles.h3}>Instruction text</h3>
             </label>
           </div>
           <div className={styles.formRow}>
             <textarea
+              name="preface"
               className={`${styles.input} ${styles.preface}`}
               defaultValue={preface.join("\r\n")}
             />
@@ -107,6 +119,7 @@ const Template = () => {
             </label>
           </div>
           <textarea
+            name="prefilledQuestions"
             className={styles.input}
             defaultValue={prefilledQuestionText}
           ></textarea>
@@ -123,9 +136,9 @@ const Template = () => {
             <h3 className={styles.h3}>Grading Guidance</h3>
           </label>
           <textarea
+            name="gradingGuidance"
             className={`${styles.input} ${styles.preface}`}
             defaultValue={gradingGuidance.join("\r\n")}
-            name="gradingGuidance"
           />
         </section>
         {/* END SECTION */}
@@ -155,10 +168,21 @@ const Template = () => {
                 <ul className={styles.accordionContent}>
                   {testTemplateData?.sections[i].questions?.map((q) => (
                     <li>
-                      <label>
-                        <input type="checkbox" />
-                        {q.question}
-                      </label>
+                      {!q.isFreeForm ? (
+                        <label>
+                          <input type="checkbox" />
+                          {q.question}
+                        </label>
+                      ) : (
+                        <>
+                          <div>
+                            <label> {q.question}</label>
+                          </div>
+                          <div>
+                            <input className={styles.input} type="text" />
+                          </div>
+                        </>
+                      )}
                     </li>
                   ))}
                 </ul>
