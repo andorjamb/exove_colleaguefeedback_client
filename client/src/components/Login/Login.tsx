@@ -10,7 +10,7 @@ import "../../translations/i18next";
 import { useTranslation } from "react-i18next";
 
 //Functions and Hooks
-import { setLoggedIn } from "../../features/authSlice";
+import { setIsAdmin, setLoggedIn } from "../../features/authSlice";
 import { loginUser } from "../../features/authSlice";
 import { useGetUserDataQuery } from "../../features/userApi";
 
@@ -28,6 +28,7 @@ const Login = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const loggedIn = useSelector((state: any) => state.auth.loggedIn);
+  const isAdmin = useSelector((state: any) => state.auth.isAdmin);
   //const { error } = useSelector((state: any) => state.auth);
 
   const devLoginEndpoint = "http://localhost:4000/testpost";
@@ -63,8 +64,17 @@ const Login = () => {
         .post(prodLoginEndpoint, loginParams, {
           withCredentials: true,
         })
-        .then((res) => console.log(res))
-        .then(() => dispatch(setLoggedIn(true)));
+        .then((res) => {
+          console.log(res);
+          if (res.data?.rolesId?.roleLevel < 3) {
+            sessionStorage.setItem("isAdmin", "true");
+            dispatch(setIsAdmin(true));
+          }
+        })
+        .then(() => {
+          sessionStorage.setItem("loggedIn", "true");
+          dispatch(setLoggedIn(true));
+        });
       // setLoginParams({ username: "", password: "" });
     } catch (err) {
       console.log(err);

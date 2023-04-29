@@ -26,10 +26,10 @@ import { useGetAllTemplatesQuery } from "../../features/templateApi";
 
 const Template = () => {
   let templates: ITemplate[] = []; /** fetch templates:ITemplates[] from db  */
-  const templateEndpoint: string = "http://localhost:4000/template";
+  const devEndpoint: string = "http://localhost:4000/template";
 
   const loggedIn = useSelector((state: any) => state.auth.loggedIn);
-  const isAdmin = useSelector((state: any) => state.auth.loggedIn);
+  const isAdmin = useSelector((state: any) => state.auth.isAdmin);
 
   const { data, isLoading } = useGetAllTemplatesQuery();
 
@@ -46,7 +46,7 @@ const Template = () => {
 
   function submitHandler() {
     const body = currentTemplate;
-    axios.post(templateEndpoint, body);
+    axios.post(devEndpoint, body);
   }
 
   function toggleAccordion(i: number) {
@@ -54,14 +54,15 @@ const Template = () => {
     console.log("current accordion index:", i, accordion[i]); //debugging
   }
 
-  useEffect(() => {}, []);
-
-  /*   if (!isAdmin)
-    return (
-      <>
+  useEffect(() => {
+    if (isAdmin) {
+      return console.log("test isAdmin");
+    } else {
+      /*   <>
         <Navigate to="/dashboard" replace />
-      </>
-    ); */
+      </> */
+    }
+  }, [isAdmin]);
 
   return (
     <div className={styles.container}>
@@ -84,10 +85,13 @@ const Template = () => {
             <h3 className={styles.h3}>Instruction text</h3>
           </label>
           <label>Prefill with:</label>
-          <select className={styles.select} name="instruction">
-            <option value="" disabled selected>
-              select template
-            </option>
+          <select
+            className={styles.select}
+            name="instruction"
+            defaultValue="select template"
+
+          >
+            <option value="select template"></option>
             {templates?.map((item) => (
               <option>{item.templateTitle}</option>
             ))}
@@ -100,8 +104,8 @@ const Template = () => {
           <h3 className={styles.h3}>Select questions</h3>
           <label>Prefill with:</label>
           <select className={styles.select}>
-            <option value="" disabled selected>
-              select template
+            <option>
+select template
             </option>
           </select>
         </div>

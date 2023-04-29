@@ -1,6 +1,5 @@
 //React
 import React from "react";
-import { Link } from "react-router-dom";
 
 //Styling
 import styles from "./AdminNav.module.css";
@@ -10,7 +9,7 @@ import "../../translations/i18next";
 import { useTranslation } from "react-i18next";
 
 const AdminNav = () => {
-  const { t, i18n } = useTranslation(["header"]);
+  const { t } = useTranslation(["header"]);
   return (
     <nav className={styles.nav}>
       <ul className={styles.ul}>

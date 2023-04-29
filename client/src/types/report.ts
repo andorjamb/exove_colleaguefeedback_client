@@ -2,7 +2,7 @@ export interface IReportData {
     _id: string,
     requestPicksId :string,
     feedbackTo: string,
-    dataGroups: [
+    dataGroups?: [
         {
         group1 : {
             question1: {
@@ -114,7 +114,7 @@ export interface IReportData {
         }
     }
 ],
-    textGroups: [{ //for text responses
+    textGroups?: [{ //for text responses
         group1: {
             colleagues: string[], 
             CM: string, 

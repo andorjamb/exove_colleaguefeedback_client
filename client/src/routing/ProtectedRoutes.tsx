@@ -7,7 +7,7 @@ const ProtectedRoutes = () => {
   const loggedIn = useSelector((state: any) => state.auth.loggedIn);
   const isAdmin = useSelector((state: any) => state.auth.loggedIn);
 
-  if (!loggedIn)
+  if (!loggedIn && sessionStorage.getItem("loggedIn") === "false")
     return (
       <>
         <Navigate to="/" replace />

@@ -8,7 +8,7 @@ import "../../translations/i18next";
 import { useTranslation } from "react-i18next";
 
 const Nav = () => {
-  const { t, i18n } = useTranslation(["header"]);
+  const { t } = useTranslation(["header"]);
   return (
     <nav className={styles.nav}>
       <ul className={styles.ul}>
