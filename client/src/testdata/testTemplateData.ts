@@ -3,6 +3,7 @@ import {ITemplate, ISection, IQuestion} from "../types/template";
 export const testTemplateData:ITemplate = {
     templateTitle: "Summer 2023",
     preface: [""],
+    prefilledQuestions: ["Who are you providing feedback for?", "You are providing feedback as:"],
     gradingGuidance: [""],
     sections: [
         {

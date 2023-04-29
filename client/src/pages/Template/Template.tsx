@@ -29,6 +29,7 @@ import { prefilledQuestionText } from "./instructions";
 const Template = () => {
   let templates: ITemplate[] = []; /** fetch templates:ITemplates[] from db  */
   const devEndpoint: string = "http://localhost:4000/template";
+  //const prodEndpoint: string = process.env.REACT_APP_SERVER_URL;
 
   const loggedIn = useSelector((state: any) => state.auth.loggedIn);
   const isAdmin = useSelector((state: any) => state.auth.isAdmin);
@@ -50,9 +51,9 @@ const Template = () => {
     console.log(e.target.value);
   }
 
-  function submitHandler() {
+  async function submitHandler() {
     const body = currentTemplate;
-    axios.post(devEndpoint, body);
+    await axios.post(devEndpoint, body);
   }
 
   function toggleAccordion(i: number) {
@@ -80,7 +81,11 @@ const Template = () => {
           </label>
         </div>
         <div className={styles.formRow}>
-          <input className={styles.input} name="title" />
+          <input
+            className={styles.input}
+            name="title"
+            defaultValue={testTemplateData.templateTitle}
+          />
         </div>
         <section>
           <div className={styles.formRow}>
@@ -105,20 +110,14 @@ const Template = () => {
             className={styles.input}
             defaultValue={prefilledQuestionText}
           ></textarea>
-
-          <input
-            className={styles.input}
-            defaultValue="Who are you providing feedback for?"
-          ></input>
-          <input className={styles.input} defaultValue="Checksum:"></input>
-          <input
-            className={styles.input}
-            defaultValue="You are providing feedback as:"
-          ></input>
+          {testTemplateData?.prefilledQuestions.map((item) => (
+            <input className={styles.input} defaultValue={item} />
+          ))}
           <button type="button" onClick={addQuestion}>
             Add Question Here
           </button>
         </section>
+        {/* END SECTION */}
         <section>
           <label htmlFor="gradingGuidance">
             <h3 className={styles.h3}>Grading Guidance</h3>
@@ -129,6 +128,7 @@ const Template = () => {
             name="gradingGuidance"
           />
         </section>
+        {/* END SECTION */}
 
         <div className={styles.formRow}>
           <h3 className={styles.h3}>Feedback Questions</h3>
@@ -138,8 +138,8 @@ const Template = () => {
           </select>
         </div>
         {/* ACCORDIONS */}
-        {testTemplateData.map((item, i) => (
-          <div className={styles.accordionContainer} key={i + item.category}>
+        {testTemplateData?.sections.map((item, i) => (
+          <div className={styles.accordionContainer} key={i + item.name}>
             <div className={styles.accordionItem}>
               <div className={styles.accordionTitle}>
                 <span
@@ -148,16 +148,16 @@ const Template = () => {
                 >
                   {accordion[i] ? "remove" : "add"}
                 </span>
-                {item.category}
+                {item.name}
               </div>
 
               {accordion[i] ? (
                 <ul className={styles.accordionContent}>
-                  {testTemplateData.[i].questions.map((q) => (
+                  {testTemplateData?.sections[i].questions?.map((q) => (
                     <li>
                       <label>
                         <input type="checkbox" />
-                        {q}
+                        {q.question}
                       </label>
                     </li>
                   ))}
