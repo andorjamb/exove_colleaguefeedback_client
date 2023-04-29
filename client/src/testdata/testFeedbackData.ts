@@ -159,7 +159,7 @@ export const testFeedbackData = {
     userId: 'anna01', //employee completing the survey instance
     requestpicksId: '456',
     feedbackTo: 'ivan01', //employee the feedback is about
-    progress: '',
+    progress: "",
     responseByDate: new Date(),
     responseDateLog: [],
     categories: [

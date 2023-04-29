@@ -17,6 +17,7 @@ interface ILoginParams {
 const serverEndpoint = process.env.REACT_APP_SERVER_ENDPOINT as string;
 
 
+//Thunk may not be needed
 export const loginUser = createAsyncThunk(
     'auth/login',
     async (loginParams:ILoginParams, {rejectWithValue})=>{
@@ -42,7 +43,7 @@ export const authSlice = createSlice({
     name:'auth',
     initialState: {
         loggedIn: false,
-        isAdmin: true, //will be set to false 
+        isAdmin: false, 
         error: null,
         success: false,
         loading: false,
@@ -50,7 +51,7 @@ export const authSlice = createSlice({
     },
     reducers: {
         setLoggedIn: (state, action: PayloadAction<boolean>)=>{state.loggedIn = action.payload},
-        setIsAdmin: (state, action: PayloadAction<boolean>)=>{state.loggedIn = action.payload},
+        setIsAdmin: (state, action: PayloadAction<boolean>)=>{state.isAdmin = action.payload},
     },
         extraReducers:(builder) => {
         builder.addCase(loginUser.pending, (state:any) => {

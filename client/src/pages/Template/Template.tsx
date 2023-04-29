@@ -54,14 +54,13 @@ const Template = () => {
     console.log("current accordion index:", i, accordion[i]); //debugging
   }
 
-  useEffect(() => {}, []);
-
-  /*   if (!isAdmin)
-    return (
-      <>
+  useEffect(() => {
+    if (!isAdmin)
+      return console.log("test isAdmin");
+      /*   <>
         <Navigate to="/dashboard" replace />
-      </>
-    ); */
+      </> */
+  }, [isAdmin]);
 
   return (
     <div className={styles.container}>

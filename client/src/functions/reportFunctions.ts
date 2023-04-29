@@ -6,11 +6,7 @@ import { IReportData } from "../types/report"
  * OR 
  * - automatically when reviewer submits form ?
  * add data to ReportData object:
- * 
- * CONVERTING FEEDBACK OBJECT TO REPORT OBJECT:
- * categories.forEach((item)=>{
- * })
- { 
+ 
     
     MAKING CHARTS from report object
 
@@ -29,9 +25,27 @@ export const makeCharts = (data:IReportData) =>{
 
 export const makeOneReport=(requestPickId:string) => {
     /**PSEUDOCODE
+     * 
+     * assume static number of categories
+     * assume dynamic number of questions per category
+     *  1. CONVERTING FEEDBACK OBJECT TO REPORT OBJECT:
+ Function will be triggered by onClick of 'generate report' button
      * assume 'progress' property of IFeedback object has possible values
      * [null, 'incomplete', 'submitted', 'approved']
      * get all feedbacks where feedback.requestPickId === currentRequestPickId && feedback.progress === 'approved';
+     *  const report = new Report();
+     * this.requestPickId = current.RequestPickId;
+     * this.feedbackTo = current.feedbackTo;
+     * feedbacks will be an array.
+     * for each feedback: 
+     * if (asRole = 'colleague'){
+     * 
+     * }
+     * if (asRole = 'CM) {
+     * }
+     * if (asRole = 'self') {}
+     * 
+     * set report.
      * 
      */
 }
