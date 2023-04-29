@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import AdminNav from "../AdminNav/AdminNav";
 import Nav from "../Nav/Nav";
 
-import { setLoggedIn } from "../../features/authSlice";
+import { setLoggedIn, setIsAdmin } from "../../features/authSlice";
 
 //Styling
 import styles from "./Header.module.css";
@@ -39,14 +39,24 @@ const Header = () => {
   const logout = () => {
     //sessionStorage.clear();   if using session storage
     dispatch(setLoggedIn(false));
+    dispatch(setIsAdmin(false));
+    sessionStorage.clear();
     navigate("/");
-    axios.get(`${process.env.REACT_APP_SERVER_URL}/api/logout`);
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/logout`);
     document.location.reload();
   };
 
   return (
     <div className={styles.container}>
-      {loggedIn ? isAdmin ? <AdminNav /> : <Nav /> : <></>}
+      {loggedIn || sessionStorage.getItem("loggedIn") === "true" ? (
+        isAdmin || sessionStorage.getItem("isAdmin") === "true" ? (
+          <AdminNav />
+        ) : (
+          <Nav />
+        )
+      ) : (
+        <></>
+      )}
 
       <div className={styles.langButtonDiv}>
         <button
@@ -62,7 +72,7 @@ const Header = () => {
           FI
         </button>
       </div>
-      {loggedIn ? (
+      {loggedIn || sessionStorage.getItem("loggedIn") === "true" ? (
         <button className={styles.loginButton} onClick={logout}>
           {t("logout")}
         </button>

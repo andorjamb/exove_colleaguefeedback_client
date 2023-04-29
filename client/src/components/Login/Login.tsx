@@ -67,10 +67,12 @@ const Login = () => {
         .then((res) => {
           console.log(res);
           if (res.data?.rolesId?.roleLevel < 3) {
+            sessionStorage.setItem("isAdmin", "true");
             dispatch(setIsAdmin(true));
           }
         })
         .then(() => {
+          sessionStorage.setItem("loggedIn", "true");
           dispatch(setLoggedIn(true));
         });
       // setLoginParams({ username: "", password: "" });
