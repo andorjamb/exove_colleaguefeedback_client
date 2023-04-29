@@ -1,19 +1,21 @@
 //React
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 //Types
-import { ITemplate, ICat_Quest } from "../../types/template";
+import { ITemplate } from "../../types/template";
 import { IQuestionLang, IQCategory, IQuestion } from "../../types/questions";
 
 //Styling
 import styles from "./Template.module.css";
 
-import { questionData } from "../../testdata/testQuestionData";
+import { testTemplateData } from "../../testdata/testTemplateData";
 import { useGetAllTemplatesQuery } from "../../features/templateApi";
-
+import { preface } from "./preface";
+import { gradingGuidance } from "./instructions";
+import { prefilledQuestionText } from "./instructions";
 /**
  * API ROUTES
   get('/template', getTemplates); //Get all templates
@@ -27,11 +29,14 @@ import { useGetAllTemplatesQuery } from "../../features/templateApi";
 const Template = () => {
   let templates: ITemplate[] = []; /** fetch templates:ITemplates[] from db  */
   const devEndpoint: string = "http://localhost:4000/template";
+  //const prodEndpoint: string = process.env.REACT_APP_SERVER_URL;
 
   const loggedIn = useSelector((state: any) => state.auth.loggedIn);
   const isAdmin = useSelector((state: any) => state.auth.isAdmin);
 
   const { data, isLoading } = useGetAllTemplatesQuery();
+
+  const navigate = useNavigate();
 
   const [currentTemplate, setCurrentTemplate] = useState<ITemplate>();
 
@@ -42,11 +47,13 @@ const Template = () => {
     false,
   ]);
 
-  function changeHandler(e: any) {}
+  function changeHandler(e: any) {
+    console.log(e.target.value);
+  }
 
-  function submitHandler() {
+  async function submitHandler() {
     const body = currentTemplate;
-    axios.post(devEndpoint, body);
+    await axios.post(devEndpoint, body);
   }
 
   function toggleAccordion(i: number) {
@@ -54,20 +61,20 @@ const Template = () => {
     console.log("current accordion index:", i, accordion[i]); //debugging
   }
 
+  function addQuestion() {}
+
   useEffect(() => {
     if (isAdmin) {
       return console.log("test isAdmin");
-    } else {
-      /*   <>
-        <Navigate to="/dashboard" replace />
-      </> */
-    }
+    } /* else {
+      navigate("/"); 
+    }*/
   }, [isAdmin]);
 
   return (
     <div className={styles.container}>
       <h1>New feedback template</h1>
-      <form className={styles.form}>
+      <form className={styles.form} onChange={changeHandler}>
         <div className={styles.formRow}>
           <label htmlFor="title">
             <h3 className={styles.h3}>Template title</h3>
@@ -77,41 +84,62 @@ const Template = () => {
           <input
             className={styles.input}
             name="title"
-            onChange={changeHandler}
+            defaultValue={testTemplateData.templateTitle}
           />
         </div>
-        <div className={styles.formRow}>
-          <label htmlFor="intruction">
-            <h3 className={styles.h3}>Instruction text</h3>
+        <section>
+          <div className={styles.formRow}>
+            <label htmlFor="intruction">
+              <h3 className={styles.h3}>Instruction text</h3>
+            </label>
+          </div>
+          <div className={styles.formRow}>
+            <textarea
+              className={`${styles.input} ${styles.preface}`}
+              defaultValue={preface.join("\r\n")}
+            />
+          </div>
+        </section>
+        <section>
+          <div className={styles.formRow}>
+            <label htmlFor="prefilledQuestions">
+              <h3 className={styles.h3}>Prefilled Questions</h3>
+            </label>
+          </div>
+          <textarea
+            className={styles.input}
+            defaultValue={prefilledQuestionText}
+          ></textarea>
+          {testTemplateData?.prefilledQuestions.map((item) => (
+            <input className={styles.input} defaultValue={item} />
+          ))}
+          <button type="button" onClick={addQuestion}>
+            Add Question Here
+          </button>
+        </section>
+        {/* END SECTION */}
+        <section>
+          <label htmlFor="gradingGuidance">
+            <h3 className={styles.h3}>Grading Guidance</h3>
           </label>
-          <label>Prefill with:</label>
-          <select
-            className={styles.select}
-            name="instruction"
-            defaultValue="select template"
+          <textarea
+            className={`${styles.input} ${styles.preface}`}
+            defaultValue={gradingGuidance.join("\r\n")}
+            name="gradingGuidance"
+          />
+        </section>
+        {/* END SECTION */}
 
-          >
-            <option value="select template"></option>
-            {templates?.map((item) => (
-              <option>{item.templateTitle}</option>
-            ))}
-          </select>
-        </div>
         <div className={styles.formRow}>
-          <textarea className={styles.input} />
-        </div>
-        <div className={styles.formRow}>
-          <h3 className={styles.h3}>Select questions</h3>
+          <h3 className={styles.h3}>Feedback Questions</h3>
           <label>Prefill with:</label>
           <select className={styles.select}>
-            <option>
-select template
-            </option>
+            <option>select template</option>
           </select>
         </div>
-        {/* ACCORDION */}
-        {questionData.map((item, i) => (
-          <div className={styles.accordionContainer} key={i}>
+        {/* ACCORDIONS */}
+        {testTemplateData?.sections.map((item, i) => (
+          <div className={styles.accordionContainer} key={i + item.name}>
             <div className={styles.accordionItem}>
               <div className={styles.accordionTitle}>
                 <span
@@ -120,16 +148,16 @@ select template
                 >
                   {accordion[i] ? "remove" : "add"}
                 </span>
-                {item.category}
+                {item.name}
               </div>
 
               {accordion[i] ? (
                 <ul className={styles.accordionContent}>
-                  {questionData[i].questions.map((q) => (
+                  {testTemplateData?.sections[i].questions?.map((q) => (
                     <li>
                       <label>
                         <input type="checkbox" />
-                        {q}
+                        {q.question}
                       </label>
                     </li>
                   ))}
@@ -143,6 +171,7 @@ select template
         <button type="submit" onClick={submitHandler}>
           Save
         </button>
+        <button type="button">Preview</button>
       </form>
     </div>
   );
