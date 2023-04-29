@@ -5,13 +5,13 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 //Types
-import { ITemplate, ICat_Quest } from "../../types/template";
+import { ITemplate } from "../../types/template";
 import { IQuestionLang, IQCategory, IQuestion } from "../../types/questions";
 
 //Styling
 import styles from "./Template.module.css";
 
-import { questionData } from "../../testdata/testQuestionData";
+import { testTemplateData } from "../../testdata/testTemplateData";
 import { useGetAllTemplatesQuery } from "../../features/templateApi";
 import { preface } from "./preface";
 import { gradingGuidance } from "./instructions";
@@ -137,8 +137,8 @@ const Template = () => {
             <option>select template</option>
           </select>
         </div>
-        {/* ACCORDION */}
-        {questionData.map((item, i) => (
+        {/* ACCORDIONS */}
+        {testTemplateData.map((item, i) => (
           <div className={styles.accordionContainer} key={i + item.category}>
             <div className={styles.accordionItem}>
               <div className={styles.accordionTitle}>
@@ -153,7 +153,7 @@ const Template = () => {
 
               {accordion[i] ? (
                 <ul className={styles.accordionContent}>
-                  {questionData[i].questions.map((q) => (
+                  {testTemplateData.[i].questions.map((q) => (
                     <li>
                       <label>
                         <input type="checkbox" />
