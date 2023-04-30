@@ -14,10 +14,10 @@ interface ILoginParams {
     password: string;
   }
 
-const serverEndpoint = process.env.REACT_APP_SERVER_ENDPOINT as string;
+const serverEndpoint = process.env.REACT_APP_SERVER_API as string;
 
 
-//Thunk may not be needed
+//Thunk may not be needed, currently not used
 export const loginUser = createAsyncThunk(
     'auth/login',
     async (loginParams:ILoginParams, {rejectWithValue})=>{
@@ -26,9 +26,7 @@ export const loginUser = createAsyncThunk(
               .post(`${serverEndpoint}/login`, loginParams )
               .then((res) => {
                 console.log(res.data()); 
-                return res.data()})
-             
-          
+                return res.data()}); 
           } catch (err:any) {
             if (err.response && err.response.data.message) {
                 return rejectWithValue(err.response.data.message)
@@ -42,8 +40,8 @@ export const loginUser = createAsyncThunk(
 export const authSlice = createSlice({
     name:'auth',
     initialState: {
-        loggedIn: false,
-        isAdmin: false, 
+        loggedIn: true, //set as needed when ldap server down
+        isAdmin: true,  //set as needed when ldap server down
         error: null,
         success: false,
         loading: false,
@@ -54,6 +52,7 @@ export const authSlice = createSlice({
         setIsAdmin: (state, action: PayloadAction<boolean>)=>{state.isAdmin = action.payload},
     },
         extraReducers:(builder) => {
+            /** for thunk only */
         builder.addCase(loginUser.pending, (state:any) => {
             state.loading = true;
         }); 

@@ -40,6 +40,7 @@ const Template = () => {
   const [currentTemplate, setCurrentTemplate] = useState<ITemplate>({
     templateTitle: "",
     preface: [""],
+    prefilledQuestionText: [""],
     prefilledQuestions: [""],
     gradingGuidance: [""],
     sections: [{ name: "", questions: [{ question: "", isFreeForm: false }] }],
@@ -108,7 +109,7 @@ const Template = () => {
             <textarea
               name="preface"
               className={`${styles.input} ${styles.preface}`}
-              defaultValue={preface.join("\r\n")}
+              defaultValue={testTemplateData.preface.join("\r\n")}
             />
           </div>
         </section>
@@ -126,7 +127,11 @@ const Template = () => {
           {testTemplateData?.prefilledQuestions.map((item) => (
             <input className={styles.input} defaultValue={item} />
           ))}
-          <button type="button" onClick={addQuestion}>
+          <button
+            type="button"
+            className={styles.addButton}
+            onClick={addQuestion}
+          >
             Add Question Here
           </button>
         </section>
@@ -165,27 +170,32 @@ const Template = () => {
               </div>
 
               {accordion[i] ? (
-                <ul className={styles.accordionContent}>
-                  {testTemplateData?.sections[i].questions?.map((q) => (
-                    <li>
-                      {!q.isFreeForm ? (
-                        <label>
-                          <input type="checkbox" />
-                          {q.question}
-                        </label>
-                      ) : (
-                        <>
-                          <div>
-                            <label> {q.question}</label>
-                          </div>
-                          <div>
-                            <input className={styles.input} type="text" />
-                          </div>
-                        </>
-                      )}
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <ul className={styles.accordionContent}>
+                    {testTemplateData?.sections[i].questions?.map((q) => (
+                      <li>
+                        {!q.isFreeForm ? (
+                          <label>
+                            <input type="checkbox" />
+                            {q.question + " (1-5)"}
+                          </label>
+                        ) : (
+                          <label>
+                            <input type="checkbox" />
+                            {q.question + " (free form)"}
+                          </label>
+                        )}
+                      </li>
+                    ))}
+                  </ul>{" "}
+                  <button
+                    type="button"
+                    className={styles.addButton}
+                    onClick={addQuestion}
+                  >
+                    Add Question Here
+                  </button>
+                </>
               ) : (
                 <></>
               )}

@@ -8,3 +8,7 @@ export const preface = [
   "If you haven't worked with the person in question at all, don't start guessing. Notify HR / CTO to find another respondent - and remember that suggestions of a more suitable respondent are always welcome. Don't forward the email to anyone yourself.",
   "Please notice that although your feedback will be anonymous, your open comments containing any identifying information (such as project speci(c data) might be recognisable. We won't actively dig up who might have answered to whom, nor do we ever reveal that information to anyone." 
 ]
+
+
+//for testing - large blocks of text will be stored this way in backend
+/* "We collect colleague feedback yearly. This is an essential tool for developing as a professional for all of us, so please fill this form carefully. Especially open comments are very appreciated./nA few reminders:/n1) You are also evaluating your competence manager with the same form. When evaluating, please consider him/her first and foremost as a manager, not through his/her specialist role. You can see the role from the preselected 'You are providing this feedback as' -question." */
