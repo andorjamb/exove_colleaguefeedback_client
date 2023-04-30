@@ -33,7 +33,7 @@ const Login = () => {
 
   const devLoginEndpoint = "http://localhost:4000/testpost";
   // `${process.env.REACT_APP_SERVER_URL}/api/login` as string;
-  const prodLoginEndpoint = `https://exove.vercel.app/api/login` as string;
+  const prodLoginEndpoint = "https://exove.vercel.app/api/login";
 
   const [loginParams, setLoginParams] = useState<ILoginParams>({
     username: "",
@@ -55,11 +55,11 @@ const Login = () => {
   };
 
   const userLogin = async (e: any) => {
-    // temporary placeholder for ui testing
     e.preventDefault();
-    console.log({ loginParams });
+    console.log({ loginParams }); //debugging
 
     try {
+      console.log(prodLoginEndpoint, loginParams); //debugging
       await axios
         .post(prodLoginEndpoint, loginParams, {
           withCredentials: true,
