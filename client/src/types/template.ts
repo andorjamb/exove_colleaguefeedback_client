@@ -20,6 +20,7 @@ export interface ICat_Quest {
 export interface ITemplate {
     templateTitle: string,
     preface: string[],
+    prefilledQuestionText : string[],
     prefilledQuestions: string[],
     gradingGuidance: string[],
     sections: ISection[]

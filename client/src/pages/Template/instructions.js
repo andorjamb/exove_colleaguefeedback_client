@@ -1,4 +1,4 @@
-export const prefilledQuestionText = "These three (elds are pre-(lled for you and you don't need to touch them. We'll make sure they stay untouched with the checksum and if we can't match it, we'll just remove the whole answer."
+export const prefilledQuestionText = "These three fields are pre-filled for you and you don't need to touch them. We'll make sure they stay untouched with the checksum and if we can't match it, we'll just remove the whole answer."
 
 export const gradingGuidance = ["Consider the person’s performance as compared to your expectations. The scale is as follows 1-5:",
     "1 Performing fully below your expectations in this area",

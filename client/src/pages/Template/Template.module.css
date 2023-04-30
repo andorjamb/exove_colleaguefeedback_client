@@ -78,6 +78,10 @@
   text-align: left;
 }
 
+.addButton {
+  width: 80%;
+}
+
 .spin {
   transform: rotate(360deg);
   -webkit-transform: rotate(360deg);

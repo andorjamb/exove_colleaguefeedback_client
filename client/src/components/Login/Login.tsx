@@ -24,7 +24,7 @@ interface ILoginParams {
 }
 
 const Login = () => {
-  const { t, i18n } = useTranslation(["login"]);
+  const { t } = useTranslation(["login"]);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const loggedIn = useSelector((state: any) => state.auth.loggedIn);

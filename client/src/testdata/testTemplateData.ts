@@ -11,8 +11,14 @@ export const testTemplateData:ITemplate = {
   "3) We have a new grading system. Please read the guide on grading carefully.",
   "If you haven't worked with the person in question at all, don't start guessing. Notify HR / CTO to find another respondent - and remember that suggestions of a more suitable respondent are always welcome. Don't forward the email to anyone yourself.",
   "Please notice that although your feedback will be anonymous, your open comments containing any identifying information (such as project speci(c data) might be recognisable. We won't actively dig up who might have answered to whom, nor do we ever reveal that information to anyone." ],
+  prefilledQuestionText: [],
     prefilledQuestions: ["Who are you providing feedback for?", "You are providing feedback as:"],
-    gradingGuidance: [""],
+    gradingGuidance: ["Consider the person’s performance as compared to your expectations. The scale is as follows 1-5:",
+    "1 Performing fully below your expectations in this area",
+   "2 Performing partially under your expectations in this area",
+  "3 Performing on the expected level in this area. This means there’s “nothing to complain” and you are content with the performance in this area.",
+   "4 The performance is exceeding expectations partially in this area. This means in your view the person is doing more than you think is rightly expected on the job type or level the person is currently working on.",
+  "5 The performance is exceeding your expectations fully in this area. This means the person is performing on the next level and thus should be promoted to a higher level or to a more demanding role."],
     sections: [
         {
         name: "Quality Focus",
