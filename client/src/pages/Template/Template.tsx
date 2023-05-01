@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 //Types
-import { ITemplate } from "../../types/template";
+import { ITemplate, IQuestion } from "../../types/template";
 
 //Styling
 import styles from "./Template.module.css";
@@ -85,26 +85,21 @@ const Template = () => {
 
   function toggleAccordion(e: any, i: number) {
     let currentValue = accordion[i].open;
-    setAccordion(
-      (accordion) => {
-        return accordion.map((item) => {
-          return accordion.indexOf(item) === i
-            ? { ...item, open: !currentValue }
-            : item;
-        });
-      }
-      /*   [
-      ...accordion,
-      (accordion[i] = { ...accordion[i], ...open = !currentValue}),
-    ]*/
-    );
-    let current = accordion[i];
-    console.log(current);
-
-    console.log("current accordion index:", i, accordion); //debugging
+    setAccordion((accordion) => {
+      return accordion.map((item) => {
+        return accordion.indexOf(item) === i
+          ? { ...item, open: !currentValue }
+          : item;
+      });
+    });
   }
 
-  function addQuestion() {}
+  function addQuestion() {
+    let newRow: IQuestion = {
+      question: "",
+      isFreeForm: false,
+    };
+  }
 
   useEffect(() => {
     if (loggedIn && isAdmin) {
@@ -119,10 +114,6 @@ const Template = () => {
     const activeTemplate = data?.filter((item) => item.active === true);
     console.log(activeTemplate); //debugging
   }, [data]);
-
-  useEffect(() => {
-    console.log(accordion);
-  }, [accordion]);
 
   return (
     <div className={styles.container}>
@@ -207,10 +198,11 @@ const Template = () => {
             addQuestion={addQuestion}
           />
         ))}
-        <button type="submit" onClick={submitHandler}>
+        <div className={styles.formRow}>  <button type="submit" onClick={submitHandler}>
           Save
         </button>
-        <button type="button">Preview</button>
+        <button type="button">Preview</button></div>
+      
       </form>
     </div>
   );

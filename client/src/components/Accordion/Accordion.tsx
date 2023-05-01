@@ -26,8 +26,8 @@ const Accordion = ({
     <div>
       <div className={styles.accordionContainer}>
         <div className={styles.accordionItem}>
-          <div className={styles.accordionTitle}>
-            <span className={styles.materialIcons} onClick={clickHandler}>
+          <div className={styles.accordionTitle} onClick={clickHandler}>
+            <span className={styles.materialIcons}>
               {isOpen ? "remove" : "add"}
             </span>
             {item?.name}
@@ -45,12 +45,12 @@ const Accordion = ({
                     <li>
                       {!q.isFreeForm ? (
                         <label>
-                          <input type="checkbox" />
+                          <input type="checkbox" className={styles.input} />
                           {q.question + " (1-5)"}
                         </label>
                       ) : (
                         <label>
-                          <input type="checkbox" />
+                          <input type="checkbox" className={styles.input} />
                           {q.question + " (free form)"}
                         </label>
                       )}
@@ -58,13 +58,23 @@ const Accordion = ({
                   ))}
                 </fieldset>
               </ul>
-              <button
-                type="button"
-                className={styles.addButton}
-                onClick={addQuestion}
+              <fieldset
+                className={`${styles.fieldset} ${styles.accordionContent}`}
               >
-                Add Question Here
-              </button>
+                <legend>Add new question</legend>
+                <input className={styles.input} />
+                <label>
+                  <input
+                    type="checkbox"
+                    value="freeForm"
+                    className={styles.input}
+                  />
+                  Check if question is free form
+                </label>
+                <button type="button" onClick={addQuestion} className={styles.addQuestionButton}>
+                  Add
+                </button>
+              </fieldset>
             </>
           ) : (
             <></>

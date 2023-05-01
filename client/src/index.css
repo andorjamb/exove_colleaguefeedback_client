@@ -22,6 +22,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+button {
+  height: 2rem;
+  width: 5.5rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  border: none;
+}
+
 a {
   text-decoration: none;
 }
