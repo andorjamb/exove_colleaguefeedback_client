@@ -54,6 +54,7 @@
   display: flex;
   background-color: var(--paleGray);
   text-transform: uppercase;
+  cursor: pointer;
 }
 
 .accordionItem {
@@ -76,8 +77,26 @@
   text-align: left;
 }
 
+.input[type="checkbox"] {
+  height: 1.2rem;
+  width: 1.2rem;
+  vertical-align: middle;
+  margin-right: 1rem;
+  accent-color: var(--exovePurple);
+}
+
+.fieldset {
+  border: none;
+}
+
 .addButton {
   width: 80%;
+}
+
+.addQuestionButton {
+  background-color: var(--exoveGreen);
+  color: white;
+  float: right;
 }
 
 .spin {
@@ -87,8 +106,4 @@
   -ms-transform: rotate(360deg);
   -o-transform: rotate(360deg);
   transition: transform 0.5s ease-in-out;
-}
-
-.fieldset {
-  border: none;
 }
