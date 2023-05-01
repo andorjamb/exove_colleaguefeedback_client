@@ -23,7 +23,9 @@ export interface ITemplate {
     prefilledQuestionText : string[],
     prefilledQuestions: string[],
     gradingGuidance: string[],
-    sections: ISection[]
+    sections: ISection[],
+    active: boolean
+
 
 }
 

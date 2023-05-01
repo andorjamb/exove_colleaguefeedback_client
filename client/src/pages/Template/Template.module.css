@@ -48,8 +48,6 @@
 .accordionContainer {
   border: 1px solid black;
   line-height: 2.5rem;
-
-  text-align: center;
 }
 
 .accordionTitle {
@@ -89,4 +87,8 @@
   -ms-transform: rotate(360deg);
   -o-transform: rotate(360deg);
   transition: transform 0.5s ease-in-out;
+}
+
+.fieldset {
+  border: none;
 }
