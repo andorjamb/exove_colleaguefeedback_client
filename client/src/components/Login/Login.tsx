@@ -127,7 +127,6 @@ const Login = () => {
                 >
                   {t("signIn")}
                 </button>
-                <button onClick={picksHandler}>get picks</button>
               </div>
             </form>
           </div>

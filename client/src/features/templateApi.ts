@@ -1,28 +1,27 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 //Types
-import {ITemplate} from '../types/template';
+import { ITemplate } from "../types/template";
 
 const serverUrl = process.env.REACT_APP_SERVER_API;
-const devServerUrl = "http://localhost:4000/template";
+const devServerUrl = "http://localhost:4000/";
 
 export const templateApi = createApi({
-  reducerPath: 'templateApi',
+  reducerPath: "templateApi",
   baseQuery: fetchBaseQuery({ baseUrl: serverUrl }),
-  tagTypes: ['Templates'],
+  tagTypes: ["Templates"],
   endpoints: (builder) => ({
-    
     /** for fetching all templates */
     getAllTemplates: builder.query<ITemplate[], void>({
-      query: ()=> `templates/`
+      query: () => `templates/`,
     }),
-      /** for fetching one template */
-    getPickByUserId: builder.query<ITemplate, string>({
-      query:(uid) => `template/${uid}`
-    })
+    /** for fetching active template */
+    getOneTemplate: builder.query<ITemplate, string>({
+      query: (id) => `template/${id}`,
+    }),
   }),
-})
+});
 
-export const { useGetAllTemplatesQuery } = templateApi
+export const { useGetAllTemplatesQuery } = templateApi;
 
 export default templateApi.reducer;

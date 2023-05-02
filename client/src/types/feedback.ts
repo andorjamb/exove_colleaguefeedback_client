@@ -14,7 +14,7 @@ export interface IFeedback {
 }
 
 export interface IFCategory {
-    category: string,
+    category: string, //id 
     questions: IQuestionLang
 }
 
