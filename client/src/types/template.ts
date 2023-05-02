@@ -1,4 +1,4 @@
-//mongodb schemas:
+//mongodb models:
 
 export interface ITemplate {
   _id: string;
@@ -11,13 +11,13 @@ export interface ITemplate {
 }
 
 export interface ICat_Quest {
-  category: string; //the category id
+  category: string; //id
   questions: IQuestion[];
 }
 
 export interface IQuestion {
   _id: string;
-  category: string;
+  category: string; //category id
   createdOn: Date;
   createdBy: string;
   active: boolean;
@@ -28,7 +28,7 @@ export interface IQuestion {
 export interface IQuestionLang {
   _id: string;
   lang: string;
-  question?: string;
+  question?: string; //actual question text
   answer?: string;
   answeredOn?: Date;
 }
@@ -79,17 +79,20 @@ EXPANDED VIEW OF ITemplate
  */
 
 export interface IConvertedTemplate {
+  id: string; //maps to database doc id
   templateTitle: string;
   sections: ISection[];
   active: boolean;
 }
 
 export interface ISection {
-  name: string; //id?
+  id: string; //maps to database doc id
+  name: string;
   questions: ITemplateQuestion[];
 }
 
 export interface ITemplateQuestion {
+  id: string; //maps to database doc id
   question: string;
   isFreeForm: boolean;
 }

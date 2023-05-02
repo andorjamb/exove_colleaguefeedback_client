@@ -2,84 +2,71 @@ import { ITemplate } from "../types/template";
 
 //form in db
 export const testTemplateData = {
-  "_id": "07a2d180-9a9f-48db-8b9b-2ac90e2f0a30",
-  "templateTitle": "Jesse Template 1",
-  "instructions": "instruction on picca si ccaso",
-  "createdOn": "2023-04-24T12:15:34.674Z",
-  "createdBy": "HR100",
-  "categories": [
-      {
-          "category": "f0a2ad09-0962-4343-a009-912d3dbf3db2",
-          "questions": [
-              {
-                  "_id": "055cf4ef-001d-4d64-898d-3c505c7c3e25",
-                  "category": "f0a2ad09-0962-4343-a009-912d3dbf3db2",
-                  "createdBy": "HR100",
-                  "createdOn": "2023-04-21T07:37:21.839Z",
-                  "active": true,
-                  "type": "Number",
-                  "question": [
-                      {
-                          "lang": "Eng",
-                          "question": "The person is willingly helping others!",
-                          "_id": "64423d32e1479cc7a8fbc87d"
-                      },
-                      {
-                          "lang": "Fin",
-                          "question": "The person is willingly helping others!",
-                          "_id": "64423d32e1479cc7a8fbc87e"
-                      },
-                      {
-                          "lang": "Ger",
-                          "question": "The person is willingly helping others!",
-                          "_id": "64423d32e1479cc7a8fbc87f"
-                      }
-                  ]
-              },
-              {
-                  "_id": "6ddc417c-05ee-4652-875c-045fc023ebe4",
-                  "category": "f0a2ad09-0962-4343-a009-912d3dbf3db2",
-                  "createdBy": "HR100",
-                  "createdOn": "2023-04-21T07:38:20.286Z",
-                  "active": true,
-                  "type": "String",
-                  "question": [
-                      {
-                          "lang": "Eng",
-                          "question": "Other feedback about the persons people skills",
-                          "_id": "64423d6de1479cc7a8fbc883"
-                      },
-                      {
-                          "lang": "Fin",
-                          "question": "Other feedback about the persons people skills",
-                          "_id": "64423d6de1479cc7a8fbc884"
-                      },
-                      {
-                          "lang": "Ger",
-                          "question": "Other feedback about the persons people skills",
-                          "_id": "64423d6de1479cc7a8fbc885"
-                      }
-                  ]
-              }
+  _id: "07a2d180-9a9f-48db-8b9b-2ac90e2f0a30",
+  templateTitle: "Jesse Template 1",
+  instructions: "",
+  createdOn: "2023-04-24T12:15:34.674Z",
+  createdBy: "HR100",
+  categories: [
+    {
+      category: "f0a2ad09-0962-4343-a009-912d3dbf3db2",
+      questions: [
+        {
+          _id: "055cf4ef-001d-4d64-898d-3c505c7c3e25",
+          category: "f0a2ad09-0962-4343-a009-912d3dbf3db2",
+          createdBy: "HR100",
+          createdOn: "2023-04-21T07:37:21.839Z",
+          active: true,
+          type: "Number",
+          question: [
+            {
+              lang: "Eng",
+              question: "The person is willingly helping others!",
+              _id: "64423d32e1479cc7a8fbc87d",
+            },
+            {
+              lang: "Fin",
+              question: "The person is willingly helping others!",
+              _id: "64423d32e1479cc7a8fbc87e",
+            },
+            {
+              lang: "Ger",
+              question: "The person is willingly helping others!",
+              _id: "64423d32e1479cc7a8fbc87f",
+            },
           ],
-          "_id": "644672e77fa63a870aa64e24"
-      }
+        },
+        {
+          _id: "6ddc417c-05ee-4652-875c-045fc023ebe4",
+          category: "f0a2ad09-0962-4343-a009-912d3dbf3db2",
+          createdBy: "HR100",
+          createdOn: "2023-04-21T07:38:20.286Z",
+          active: true,
+          type: "String",
+          question: [
+            {
+              lang: "Eng",
+              question: "Other feedback about the persons people skills",
+              _id: "64423d6de1479cc7a8fbc883",
+            },
+            {
+              lang: "Fin",
+              question: "Other feedback about the persons people skills",
+              _id: "64423d6de1479cc7a8fbc884",
+            },
+            {
+              lang: "Ger",
+              question: "Other feedback about the persons people skills",
+              _id: "64423d6de1479cc7a8fbc885",
+            },
+          ],
+        },
+      ],
+      _id: "644672e77fa63a870aa64e24",
+    },
   ],
-  "active": false
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
+  active: false,
+};
 
 /* 
 

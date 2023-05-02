@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 //Types
 import {
@@ -17,9 +17,14 @@ import styles from "./Template.module.css";
 
 //Internal imports
 import { testTemplateData } from "../../testdata/testTemplateData";
-import { useGetAllTemplatesQuery } from "../../features/templateApi";
 import { preface } from "./preface";
 import { gradingGuidance } from "./gradingGuidance";
+import {
+  convertTemplate,
+  fetchCategories,
+} from "../../functions/templateConverter";
+
+//Components
 import Accordion from "../../components/Accordion/Accordion";
 /**
  * API ROUTES
@@ -35,39 +40,26 @@ type accordion = {
 let convertedTemplateData: IConvertedTemplate;
 
 const Template = () => {
-  const { data, isLoading } = useGetAllTemplatesQuery();
-
   const loggedIn = useSelector((state: any) => state.auth.loggedIn);
   const isAdmin = useSelector((state: any) => state.auth.isAdmin);
   const navigate = useNavigate();
 
+  const [serverData, setServerData] = useState<ITemplate>();
   const [questionState, setQuestionState] = useState([]);
   const [accordion, setAccordion] = useState<accordion[]>([{ open: false }]);
 
-  const [currentTemplate, setCurrentTemplate] = useState<ITemplate>({
-    _id: "",
+  const [currentTemplate, setCurrentTemplate] = useState<IConvertedTemplate>({
+    id: "",
     templateTitle: "",
-    instructions: "",
-    createdOn: new Date(),
-    createdBy: "",
-    categories: [
+    sections: [
       {
-        category: "",
+        id: "",
+        name: "",
         questions: [
           {
-            _id: "",
-            category: "",
-            createdOn: new Date(),
-            createdBy: "",
-            active: false,
-            type: "",
-            question: [
-              {
-                _id: "",
-                lang: "",
-                question: "",
-              },
-            ],
+            id: "",
+            question: "",
+            isFreeForm: false,
           },
         ],
       },
@@ -127,14 +119,22 @@ const Template = () => {
 
   /* active template data loaded from db is set in state */
   useEffect(() => {
-    console.log("data:", data);
-    
-    const activeTemplate = data?.filter((item) => item.active === true)[0];
-    console.log("activeTemplate", activeTemplate); //debugging
-    if (activeTemplate) {
-      setCurrentTemplate((state) => activeTemplate);
+    axios
+      .get<ITemplate>(`${process.env.REACT_APP_SERVER_API}/template/active`)
+      .then((res: AxiosResponse) => {
+        console.log(res.data);
+        setServerData(res.data);
+        // const convertedTemplate: IConvertedTemplate = convertTemplate(res.data);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (serverData) {
+      console.log(serverData);
+
+      // setCurrentTemplate((state) => activeTemplate);
     }
-  }, [data]);
+  }, [serverData]);
 
   return (
     <div className={styles.container}>
