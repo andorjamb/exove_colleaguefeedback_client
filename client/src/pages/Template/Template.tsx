@@ -5,59 +5,74 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 //Types
-import { ITemplate, IQuestion } from "../../types/template";
+import {
+  ITemplate,
+  IQuestion,
+  IQuestionLang,
+  IConvertedTemplate,
+} from "../../types/template";
 
 //Styling
 import styles from "./Template.module.css";
 
+//Internal imports
 import { testTemplateData } from "../../testdata/testTemplateData";
 import { useGetAllTemplatesQuery } from "../../features/templateApi";
-import { gradingGuidance } from "./instructions";
-import { prefilledQuestionText } from "./instructions";
+import { preface } from "./preface";
+import { gradingGuidance } from "./gradingGuidance";
 import Accordion from "../../components/Accordion/Accordion";
 /**
  * API ROUTES
-  get('/template', getTemplates); //Get all templates
-  get('/template/active', getTemplate); // get current active template
-  post('/template', addTemplate);
-  patch('/template/:id', setDefaultTemplate); // set template as default setting all other not default 
+  get('/template', getTemplates); ------------------Get all templates
+  get('/template/active', getTemplate);  ----------------get current active template
+  post('/template', addTemplate);  ------------- save template to db
+  patch('/template/:id', setDefaultTemplate); ------ set template as default, all others as not default 
  */
 type accordion = {
   open: boolean;
 };
 
-const Template = () => {
-  let templates: ITemplate[] = []; /** fetch templates:ITemplates[] from db  */
+let convertedTemplateData: IConvertedTemplate;
 
-  //const prodEndpoint: string = process.env.REACT_APP_SERVER_API;
-  //should fetch 'active' template and use for default values?
-  //
+const Template = () => {
+  const { data, isLoading } = useGetAllTemplatesQuery();
 
   const loggedIn = useSelector((state: any) => state.auth.loggedIn);
   const isAdmin = useSelector((state: any) => state.auth.isAdmin);
-  const [questionState, setQuestionState] = useState([]);
-  const [accordion, setAccordion] = useState<accordion[]>([
-    { open: false },
-    { open: false },
-    { open: false },
-    { open: false },
-    { open: false },
-    { open: false },
-    { open: false },
-  ]);
-
-  const { data, isLoading } = useGetAllTemplatesQuery();
-
   const navigate = useNavigate();
 
+  const [questionState, setQuestionState] = useState([]);
+  const [accordion, setAccordion] = useState<accordion[]>([{ open: false }]);
+
   const [currentTemplate, setCurrentTemplate] = useState<ITemplate>({
+    _id: "",
     templateTitle: "",
-    preface: [""],
-    prefilledQuestionText: [""],
-    prefilledQuestions: [""],
-    gradingGuidance: [""],
-    sections: [{ name: "", questions: [{ question: "", isFreeForm: false }] }],
-    active: false,
+    instructions: "",
+    createdOn: new Date(),
+    createdBy: "",
+    categories: [
+      {
+        category: "",
+        questions: [
+          {
+            _id: "",
+            category: "",
+            createdOn: new Date(),
+            createdBy: "",
+            active: false,
+            type: "",
+            question: [
+              {
+                _id: "",
+                lang: "",
+                question: "",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    active: true,
   });
 
   function changeHandler(e: any) {
@@ -76,10 +91,9 @@ const Template = () => {
 
   async function submitHandler(e: any) {
     e.preventDefault();
-    const body = currentTemplate;
-    console.log(body); //debugging
     console.log(currentTemplate); //debugging
-    //await axios.post(devEndpoint, body);
+
+    //await axios.post(prodEndpoint, body);
     //converter(body)
   }
 
@@ -94,25 +108,32 @@ const Template = () => {
     });
   }
 
-  function addQuestion() {
-    let newRow: IQuestion = {
+  function createQuestion() {
+    let newRow: IQuestionLang = {
+      _id: "",
+      lang: "",
       question: "",
-      isFreeForm: false,
     };
   }
 
   useEffect(() => {
     if (loggedIn && isAdmin) {
-      return console.log("test isAdmin");
+      console.log("test isAdmin"); //debugging
     } /* else {
       navigate("/"); 
     }*/
     //eslint-disable-next-line
   }, [isAdmin]);
 
+  /* active template data loaded from db is set in state */
   useEffect(() => {
-    const activeTemplate = data?.filter((item) => item.active === true);
-    console.log(activeTemplate); //debugging
+    console.log("data:", data);
+    
+    const activeTemplate = data?.filter((item) => item.active === true)[0];
+    console.log("activeTemplate", activeTemplate); //debugging
+    if (activeTemplate) {
+      setCurrentTemplate((state) => activeTemplate);
+    }
   }, [data]);
 
   return (
@@ -134,38 +155,17 @@ const Template = () => {
         <section>
           <div className={styles.formRow}>
             <label htmlFor="preface">
-              <h3 className={styles.h3}>Instruction text</h3>
+              <h3 className={styles.h3}>Introductory text</h3>
             </label>
           </div>
           <div className={styles.formRow}>
             <textarea
               name="preface"
               className={`${styles.input} ${styles.preface}`}
-              defaultValue={testTemplateData.preface.join("\r\n")}
+              defaultValue={preface.join("\r\n")}
             />
           </div>
-        </section>
-        <section>
-          <div className={styles.formRow}>
-            <label htmlFor="prefilledQuestions">
-              <h3 className={styles.h3}>Prefilled Questions</h3>
-            </label>
-          </div>
-          <textarea
-            name="prefilledQuestions"
-            className={styles.input}
-            defaultValue={prefilledQuestionText}
-          ></textarea>
-          {testTemplateData?.prefilledQuestions.map((item) => (
-            <input className={styles.input} defaultValue={item} />
-          ))}
-          <button
-            type="button"
-            className={styles.addButton}
-            onClick={addQuestion}
-          >
-            Add Question Here
-          </button>
+          <button>Save</button>
         </section>
         {/* END SECTION */}
         <section>
@@ -177,9 +177,9 @@ const Template = () => {
             className={`${styles.input} ${styles.preface}`}
             defaultValue={gradingGuidance.join("\r\n")}
           />
+          <button>Save</button>
         </section>
         {/* END SECTION */}
-
         <div className={styles.formRow}>
           <h3 className={styles.h3}>Feedback Questions</h3>
           <label>Prefill with:</label>
@@ -188,21 +188,23 @@ const Template = () => {
           </select>
         </div>
         {/* ACCORDIONS */}
-        {testTemplateData?.sections.map((item, i) => (
+        {convertedTemplateData?.sections.map((item, i) => (
           <Accordion
             key={i}
             item={item}
             clickHandler={(e: any) => toggleAccordion(e, i)}
             isOpen={accordion[i].open}
             questionChangeHandler={questionChangeHandler}
-            addQuestion={addQuestion}
+            addQuestion={createQuestion}
           />
         ))}
-        <div className={styles.formRow}>  <button type="submit" onClick={submitHandler}>
-          Save
-        </button>
-        <button type="button">Preview</button></div>
-      
+        <div className={styles.formRow}>
+          {" "}
+          <button type="submit" onClick={submitHandler}>
+            Save
+          </button>
+          <button type="button">Preview</button>
+        </div>
       </form>
     </div>
   );
