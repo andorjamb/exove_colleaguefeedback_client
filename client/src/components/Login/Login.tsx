@@ -65,7 +65,7 @@ const Login = () => {
           withCredentials: true,
         })
         .then((res) => {
-          console.log(res);
+          console.log("login res", res);
           if (res.data?.rolesId?.roleLevel < 3) {
             sessionStorage.setItem("isAdmin", "true");
             dispatch(setIsAdmin(true));

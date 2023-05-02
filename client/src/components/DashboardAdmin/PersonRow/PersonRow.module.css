@@ -1,0 +1,32 @@
+.table_row {
+  border-bottom: 1px solid black;
+}
+
+.first_cell div {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.table_row button {
+  font-weight: 400;
+}
+
+.edit {
+  background-color: black;
+  width: 2rem;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.request {
+  background-color: var(--exovePurple);
+  color: white;
+  text-transform: none;
+}
+
+.not_available {
+  color: var(--darkGray);
+}

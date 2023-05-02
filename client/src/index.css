@@ -9,6 +9,7 @@
   --darkBlack: #1d1d1d;
   --exoveGreen: #63ad7b; /*rgb(99,173,123) */
   --exoveOrange: #f19c5b; /**rgb(241,156,91) */
+  --darkGray: rgb(168, 168, 168);
   --medGray: rgb(216, 216, 215);
   --paleGray: rgb(242, 242, 242);
 }
@@ -24,7 +25,7 @@
 
 button {
   height: 2rem;
-  width: 5.5rem;
+  padding: 0 1rem;
   text-transform: uppercase;
   font-weight: 700;
   border: none;
@@ -44,4 +45,11 @@ input,
 button {
   font-family: inherit;
   font-size: inherit;
+}
+
+input,
+textarea,
+select {
+  border: 1px solid black;
+  padding: 0 1rem;
 }
