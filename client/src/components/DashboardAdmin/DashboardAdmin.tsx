@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import SearchBar from "./SearchBar/SearchBar";
 import { IFeedback } from "../../types/feedback";
+import BulkButtons from "./BulkButtons/BulkButtons";
 
 interface IUser {
   _id: {
@@ -373,27 +374,15 @@ const DashboardAdmin = () => {
     }
   };
 
-  const newPick = {
-    requestedTo: "08eb67a7-91c9-4a9a-9498-8d621636531c",
-    SelectedList: [
-      {
-        userId: "ea6b21bb-f344-4108-b827-10730d7d32c1",
-        selectionStatus: true,
-        selectedBy: "Super_HR_180",
-        feedBackSubmitted: false,
-      },
-      {
-        userId: "ed9432c0-7a59-410d-9373-e49259cd73a0",
-        selectionStatus: true,
-        selectedBy: "08eb67a7-91c9-4a9a-9498-8d621636531c",
-        feedBackSubmitted: false,
-      },
-    ],
-    submitted: false,
-    submittedOn: null,
+  const newPick1 = {
+    requestedTo: "tempt",
   };
 
-  const postPick = async () => {
+  const newPick2 = {
+    requestedTo: "newton",
+  };
+
+  const postPick = async (newPick: { requestedTo: string }) => {
     try {
       const { data } = await axios.post(
         "https://exove.vercel.app/api/picks",
@@ -421,6 +410,7 @@ const DashboardAdmin = () => {
         inputValue={searchInput}
         onChangeHandler={searchChangeHandler}
       />
+      <BulkButtons />
       <table className={styles.table}>
         <thead>
           <tr>
@@ -441,17 +431,16 @@ const DashboardAdmin = () => {
                 key={currUser._id}
                 user={currUser}
                 userPicks={picks.find(
-                  (pick) => pick.requestedTo === currUser._id
+                  (pick) => pick.requestedTo === currUser.ldapUid
                 )}
                 userFeedbacks={feedbacks.filter(
-                  (feedback) => feedback.feedbackTo === currUser._id
+                  (feedback) => feedback.feedbackTo === currUser.ldapUid
                 )}
               />
             );
           })}
         </tbody>
       </table>
-      <button onClick={postPick}>Add pick</button>
     </div>
   );
 };
