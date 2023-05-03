@@ -94,7 +94,7 @@ export const convertTemplate = async (template: ITemplate) => {
     true
   );
 
-  const allCategories = await fetchCategories();
+  const allCategories: IQCategory[] = await fetchCategories();
 
   //get each question assigned to this question category in db
   const populateSection = (section: ISection) => {
@@ -127,6 +127,7 @@ export const convertTemplate = async (template: ITemplate) => {
       category.categoryName,
       []
     );
+    populateSection(newSection);
     newSectionArray.push(newSection);
   });
 };

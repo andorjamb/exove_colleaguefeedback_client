@@ -10,6 +10,7 @@ import {
   IQuestion,
   IQuestionLang,
   IConvertedTemplate,
+  ITemplateQuestion,
 } from "../../types/template";
 
 //Styling
@@ -19,10 +20,7 @@ import styles from "./Template.module.css";
 import { testTemplateData } from "../../testdata/testTemplateData";
 import { preface } from "./preface";
 import { gradingGuidance } from "./gradingGuidance";
-import {
-  convertTemplate,
-  fetchCategories,
-} from "../../functions/templateConverter";
+import { convertTemplate } from "../../functions/templateConverter";
 
 //Components
 import Accordion from "../../components/Accordion/Accordion";
@@ -101,10 +99,10 @@ const Template = () => {
   }
 
   function createQuestion() {
-    let newRow: IQuestionLang = {
-      _id: "",
-      lang: "",
+    let newRow: ITemplateQuestion = {
+      id: "",
       question: "",
+      isFreeForm: false,
     };
   }
 
@@ -124,22 +122,21 @@ const Template = () => {
       .then((res: AxiosResponse) => {
         console.log(res.data);
         setServerData(res.data);
-        // const convertedTemplate: IConvertedTemplate = convertTemplate(res.data);
       });
   }, []);
 
   useEffect(() => {
     if (serverData) {
       console.log(serverData);
-
-      // setCurrentTemplate((state) => activeTemplate);
+      //const convertedTemplate: IConvertedTemplate = convertTemplate(serverData);
+      //setCurrentTemplate((state) => convertedTemplate);
     }
   }, [serverData]);
 
   return (
     <div className={styles.container}>
       <h1>New feedback template</h1>
-      <form className={styles.form} onChange={changeHandler}>
+      <form className={styles.form}>
         <div className={styles.formRow}>
           <label htmlFor="templateTitle">
             <h3 className={styles.h3}>Template title</h3>
@@ -150,42 +147,36 @@ const Template = () => {
             className={styles.input}
             name="templateTitle"
             defaultValue={testTemplateData.templateTitle}
-          />
+            onChange={changeHandler}
+          />{" "}
+          <div className={styles.iconDiv}>
+            <span className={styles.materialIcons}>edit</span>
+          </div>
         </div>
         <section>
           <div className={styles.formRow}>
             <label htmlFor="preface">
               <h3 className={styles.h3}>Introductory text</h3>
             </label>
+            <span>Non editable text</span>
           </div>
-          <div className={styles.formRow}>
-            <textarea
-              name="preface"
-              className={`${styles.input} ${styles.preface}`}
-              defaultValue={preface.join("\r\n")}
-            />
-          </div>
-          <button>Save</button>
+          <div className={`${styles.noedit} ${styles.preface}`}>{preface}</div>
         </section>
         {/* END SECTION */}
         <section>
-          <label htmlFor="gradingGuidance">
-            <h3 className={styles.h3}>Grading Guidance</h3>
-          </label>
-          <textarea
-            name="gradingGuidance"
-            className={`${styles.input} ${styles.preface}`}
-            defaultValue={gradingGuidance.join("\r\n")}
-          />
-          <button>Save</button>
+          <div className={styles.formRow}>
+            <label htmlFor="gradingGuidance">
+              <h3 className={styles.h3}>Grading Guidance</h3>
+            </label>
+            <span>Non editable text</span>
+          </div>
+          <div className={`${styles.noedit} ${styles.preface}`}>
+            {gradingGuidance}
+          </div>
         </section>
         {/* END SECTION */}
         <div className={styles.formRow}>
           <h3 className={styles.h3}>Feedback Questions</h3>
-          <label>Prefill with:</label>
-          <select className={styles.select}>
-            <option>select template</option>
-          </select>
         </div>
         {/* ACCORDIONS */}
         {convertedTemplateData?.sections.map((item, i) => (
