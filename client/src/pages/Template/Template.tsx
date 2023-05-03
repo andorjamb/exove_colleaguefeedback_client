@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 //Types
 import {
@@ -10,6 +10,7 @@ import {
   IQuestion,
   IQuestionLang,
   IConvertedTemplate,
+  ITemplateQuestion,
 } from "../../types/template";
 
 //Styling
@@ -17,9 +18,11 @@ import styles from "./Template.module.css";
 
 //Internal imports
 import { testTemplateData } from "../../testdata/testTemplateData";
-import { useGetAllTemplatesQuery } from "../../features/templateApi";
 import { preface } from "./preface";
 import { gradingGuidance } from "./gradingGuidance";
+import { convertTemplate } from "../../functions/templateConverter";
+
+//Components
 import Accordion from "../../components/Accordion/Accordion";
 /**
  * API ROUTES
@@ -35,39 +38,26 @@ type accordion = {
 let convertedTemplateData: IConvertedTemplate;
 
 const Template = () => {
-  const { data, isLoading } = useGetAllTemplatesQuery();
-
   const loggedIn = useSelector((state: any) => state.auth.loggedIn);
   const isAdmin = useSelector((state: any) => state.auth.isAdmin);
   const navigate = useNavigate();
 
+  const [serverData, setServerData] = useState<ITemplate>();
   const [questionState, setQuestionState] = useState([]);
   const [accordion, setAccordion] = useState<accordion[]>([{ open: false }]);
 
-  const [currentTemplate, setCurrentTemplate] = useState<ITemplate>({
-    _id: "",
+  const [currentTemplate, setCurrentTemplate] = useState<IConvertedTemplate>({
+    id: "",
     templateTitle: "",
-    instructions: "",
-    createdOn: new Date(),
-    createdBy: "",
-    categories: [
+    sections: [
       {
-        category: "",
+        id: "",
+        name: "",
         questions: [
           {
-            _id: "",
-            category: "",
-            createdOn: new Date(),
-            createdBy: "",
-            active: false,
-            type: "",
-            question: [
-              {
-                _id: "",
-                lang: "",
-                question: "",
-              },
-            ],
+            id: "",
+            question: "",
+            isFreeForm: false,
           },
         ],
       },
@@ -109,10 +99,10 @@ const Template = () => {
   }
 
   function createQuestion() {
-    let newRow: IQuestionLang = {
-      _id: "",
-      lang: "",
+    let newRow: ITemplateQuestion = {
+      id: "",
       question: "",
+      isFreeForm: false,
     };
   }
 
@@ -127,19 +117,26 @@ const Template = () => {
 
   /* active template data loaded from db is set in state */
   useEffect(() => {
-    console.log("data:", data);
-    
-    const activeTemplate = data?.filter((item) => item.active === true)[0];
-    console.log("activeTemplate", activeTemplate); //debugging
-    if (activeTemplate) {
-      setCurrentTemplate((state) => activeTemplate);
+    axios
+      .get<ITemplate>(`${process.env.REACT_APP_SERVER_API}/template/active`)
+      .then((res: AxiosResponse) => {
+        console.log(res.data);
+        setServerData(res.data);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (serverData) {
+      console.log(serverData);
+      //const convertedTemplate: IConvertedTemplate = convertTemplate(serverData);
+      //setCurrentTemplate((state) => convertedTemplate);
     }
-  }, [data]);
+  }, [serverData]);
 
   return (
     <div className={styles.container}>
       <h1>New feedback template</h1>
-      <form className={styles.form} onChange={changeHandler}>
+      <form className={styles.form}>
         <div className={styles.formRow}>
           <label htmlFor="templateTitle">
             <h3 className={styles.h3}>Template title</h3>
@@ -150,42 +147,36 @@ const Template = () => {
             className={styles.input}
             name="templateTitle"
             defaultValue={testTemplateData.templateTitle}
-          />
+            onChange={changeHandler}
+          />{" "}
+          <div className={styles.iconDiv}>
+            <span className={styles.materialIcons}>edit</span>
+          </div>
         </div>
         <section>
           <div className={styles.formRow}>
             <label htmlFor="preface">
               <h3 className={styles.h3}>Introductory text</h3>
             </label>
+            <span>Non editable text</span>
           </div>
-          <div className={styles.formRow}>
-            <textarea
-              name="preface"
-              className={`${styles.input} ${styles.preface}`}
-              defaultValue={preface.join("\r\n")}
-            />
-          </div>
-          <button>Save</button>
+          <div className={`${styles.noedit} ${styles.preface}`}>{preface}</div>
         </section>
         {/* END SECTION */}
         <section>
-          <label htmlFor="gradingGuidance">
-            <h3 className={styles.h3}>Grading Guidance</h3>
-          </label>
-          <textarea
-            name="gradingGuidance"
-            className={`${styles.input} ${styles.preface}`}
-            defaultValue={gradingGuidance.join("\r\n")}
-          />
-          <button>Save</button>
+          <div className={styles.formRow}>
+            <label htmlFor="gradingGuidance">
+              <h3 className={styles.h3}>Grading Guidance</h3>
+            </label>
+            <span>Non editable text</span>
+          </div>
+          <div className={`${styles.noedit} ${styles.preface}`}>
+            {gradingGuidance}
+          </div>
         </section>
         {/* END SECTION */}
         <div className={styles.formRow}>
           <h3 className={styles.h3}>Feedback Questions</h3>
-          <label>Prefill with:</label>
-          <select className={styles.select}>
-            <option>select template</option>
-          </select>
         </div>
         {/* ACCORDIONS */}
         {convertedTemplateData?.sections.map((item, i) => (
