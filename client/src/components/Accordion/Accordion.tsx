@@ -9,9 +9,10 @@ interface Props {
   isOpen: boolean;
   questionChangeHandler: (
     event: React.MouseEventHandler<HTMLFieldSetElement>,
-    i: number
+    i: number, id:string
   ) => void;
-  addQuestion: () => void;
+  createQuestion: (event: React.MouseEventHandler<HTMLButtonElement>,
+    id:string) => void;
 }
 
 const Accordion = ({
@@ -19,7 +20,7 @@ const Accordion = ({
   clickHandler,
   isOpen,
   questionChangeHandler,
-  addQuestion,
+  createQuestion,
 }: Props) => {
   return (
     <div>
@@ -80,7 +81,7 @@ const Accordion = ({
                 </label>
                 <button
                   type="button"
-                  onClick={addQuestion}
+                  onClick={()=>createQuestion}
                   className={styles.addQuestionButton}
                 >
                   Add
