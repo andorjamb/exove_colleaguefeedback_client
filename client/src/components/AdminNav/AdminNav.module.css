@@ -1,4 +1,5 @@
 .nav {
+  margin-right: auto;
   justify-content: space-between;
   height: 100%;
   flex-wrap: wrap;

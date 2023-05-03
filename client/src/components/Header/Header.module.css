@@ -1,41 +1,42 @@
 .container {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    height: 3.5rem;
-    width: 100vw;
-    border-bottom: 1px solid gray;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 3.5rem;
+  width: 100%;
+  border-bottom: 1px solid black;
 }
 
 .loginButton {
-    border: 1px solid black;
-    background-color: white;
-    height: 2rem;
-    width:  5rem;
-    cursor: pointer;
+  color: white;
+  background-color: var(--darkBlack);
+  border: 1px solid black;
+  height: 2rem;
+  cursor: pointer;
+  margin: 0 1rem;
 }
 
 .loginButton:active {
-    color: white;
-    background-color: var(--medBlack);
-    }
-
-.button {
-    width: 5rem;
-    height: 2rem;
-    cursor: pointer;
+  color: white;
+  background-color: var(--medBlack);
 }
 
+.loginButton:hover {
+  background-color: white;
+  color: black;
+}
+
+.button {
+  height: 2rem;
+  cursor: pointer;
+}
 
 .langButtonDiv {
-    display: flex;
-    width: 12rem;
-    justify-content: space-between;
-    
+  display: flex;
+  gap: 1rem;
 }
 
 .langButton {
-    font-weight: 800;
-    align-items: center;
-   
+  font-weight: 800;
+  align-items: center;
 }
