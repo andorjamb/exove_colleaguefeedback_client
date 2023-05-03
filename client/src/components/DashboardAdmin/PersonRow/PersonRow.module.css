@@ -30,3 +30,29 @@
 .not_available {
   color: var(--darkGray);
 }
+
+.warning_text {
+  color: var(--exoveOrange);
+}
+
+.approve_text {
+  color: var(--exoveGreen);
+}
+
+.remind {
+  background-color: var(--darkGray);
+  color: white;
+  text-transform: none;
+}
+
+.approve {
+  background-color: var(--exoveGreen);
+  color: white;
+  text-transform: none;
+}
+
+.warning {
+  background-color: var(--exoveOrange);
+  color: white;
+  text-transform: none;
+}

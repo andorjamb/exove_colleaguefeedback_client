@@ -29,6 +29,7 @@ button {
   text-transform: uppercase;
   font-weight: 700;
   border: none;
+  cursor: pointer;
 }
 
 a {
