@@ -1,0 +1,27 @@
+.buttons_container button {
+  font-weight: 400;
+}
+
+.request {
+  background-color: var(--exovePurple);
+  color: white;
+  text-transform: none;
+}
+
+.remind {
+  background-color: var(--darkGray);
+  color: white;
+  text-transform: none;
+}
+
+.approve {
+  background-color: var(--exoveGreen);
+  color: white;
+  text-transform: none;
+}
+
+.warning {
+  background-color: var(--exoveOrange);
+  color: white;
+  text-transform: none;
+}

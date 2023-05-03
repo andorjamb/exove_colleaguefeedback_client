@@ -1,0 +1,26 @@
+.dashboard_container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.table {
+  width: 100%;
+  max-width: 1400px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th {
+  background-color: var(--exovePink);
+  padding: 0.7rem 0.3rem;
+}
+
+.table thead th:first-child {
+  padding-left: 2.2rem;
+}
+
+.table td {
+  padding: 0.3rem;
+}

@@ -18,7 +18,7 @@ const Questions = () => {
   const fetchData = async () => {
     try {
       const { data } = await axios.get(
-        "https://exove.onrender.com/api/category",
+        "https://exove.vercel.app/api/feedback",
         {
           withCredentials: true,
         }

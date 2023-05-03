@@ -22,6 +22,7 @@ export const loginUser = createAsyncThunk(
     try {
       await axios.post(`${serverEndpoint}/login`, loginParams).then((res) => {
         console.log(res.data());
+
         return res.data();
       });
     } catch (err: any) {
