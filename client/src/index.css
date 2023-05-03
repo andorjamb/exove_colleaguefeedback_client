@@ -50,9 +50,11 @@ button {
   font-size: inherit;
 }
 
+
 input,
 textarea,
 select {
   border: 1px solid black;
   padding: 0 1rem;
 }
+

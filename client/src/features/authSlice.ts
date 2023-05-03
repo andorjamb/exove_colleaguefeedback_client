@@ -19,10 +19,10 @@ const serverEndpoint = process.env.REACT_APP_SERVER_API as string;
 export const loginUser = createAsyncThunk(
   "auth/login",
   async (loginParams: ILoginParams, { rejectWithValue }) => {
-    console.log("login reducer");
     try {
       await axios.post(`${serverEndpoint}/login`, loginParams).then((res) => {
-        console.log("login data", res.data());
+        console.log(res.data());
+
         return res.data();
       });
     } catch (err: any) {
@@ -50,7 +50,6 @@ export const authSlice = createSlice({
       state.loggedIn = action.payload;
     },
     setIsAdmin: (state, action: PayloadAction<boolean>) => {
-      console.log("setting admin");
       state.isAdmin = action.payload;
     },
   },

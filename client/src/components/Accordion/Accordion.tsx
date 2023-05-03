@@ -1,12 +1,11 @@
 import React from "react";
-import { ISection } from "../../types/template";
+import { ICat_Quest, IQuestion, IQuestionLang, ITemplate, ISection } from "../../types/template";
 
 import styles from "../../pages/Template/Template.module.css";
 
 interface Props {
   item: ISection;
   clickHandler: any;
-  //(event:React.MouseEventHandler<HTMLSpanElement>, i:number) => void;
   isOpen: boolean;
   questionChangeHandler: (
     event: React.MouseEventHandler<HTMLFieldSetElement>,
@@ -45,12 +44,20 @@ const Accordion = ({
                     <li>
                       {!q.isFreeForm ? (
                         <label>
-                          <input type="checkbox" className={styles.input} />
+                          <input
+                            type="checkbox"
+                            defaultChecked={item.questions.indexOf(q) !== -1}
+                            className={styles.input}
+                          />
                           {q.question + " (1-5)"}
                         </label>
                       ) : (
                         <label>
-                          <input type="checkbox" className={styles.input} />
+                          <input
+                            type="checkbox"
+                            defaultChecked={item.questions.indexOf(q) !== -1}
+                            className={styles.input}
+                          />
                           {q.question + " (free form)"}
                         </label>
                       )}
@@ -71,7 +78,11 @@ const Accordion = ({
                   />
                   Check if question is free form
                 </label>
-                <button type="button" onClick={addQuestion} className={styles.addQuestionButton}>
+                <button
+                  type="button"
+                  onClick={addQuestion}
+                  className={styles.addQuestionButton}
+                >
                   Add
                 </button>
               </fieldset>

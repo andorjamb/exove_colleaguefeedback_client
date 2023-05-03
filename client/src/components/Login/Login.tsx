@@ -11,8 +11,6 @@ import { useTranslation } from "react-i18next";
 
 //Functions and Hooks
 import { setIsAdmin, setLoggedIn } from "../../features/authSlice";
-import { loginUser } from "../../features/authSlice";
-import { useGetUserDataQuery } from "../../features/userApi";
 
 // Styling
 import styles from "./Login.module.css";
@@ -39,13 +37,6 @@ const Login = () => {
     username: "",
     password: "",
   });
-
-  async function picksHandler(e: any) {
-    e.preventDefault();
-    await axios
-      .get("https://exove.vercel.app/api/picks", { withCredentials: true })
-      .then((res) => console.log(res));
-  }
 
   const handleChange = (e: any) => {
     setLoginParams({
@@ -127,7 +118,6 @@ const Login = () => {
                 >
                   {t("signIn")}
                 </button>
-                <button onClick={picksHandler}>get picks</button>
               </div>
             </form>
           </div>
