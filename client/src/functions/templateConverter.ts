@@ -147,3 +147,17 @@ export const fetchQuestion = async (id: string) => {
   );
   return result.data;
 };
+
+/* function saveTemplate(template) {
+  const body = {
+    templateTitle: template.templateTitle,
+    instructions: "",
+    createdOn: new Date(),
+    createdBy: "",
+    categories: [
+
+    ]
+
+
+  }
+} */

@@ -68,6 +68,15 @@ export const testTemplateData = {
   active: false,
 };
 
+const t1 = {
+  templateTitle: "Summer 2019",
+  instructions: "",
+  createdOn: new Date(),
+  createdBy: "HR",
+  categories: [],
+  active: true,
+};
+
 /* 
 
 export const testTemplateData: ITemplate = {

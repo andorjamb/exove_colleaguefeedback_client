@@ -33,7 +33,7 @@ export interface IQuestionLang {
   answeredOn?: Date;
 }
 
-/* export interface IQCategory {
+export interface IQCategory {
   _id: string;
   categoryName: string;
   description?: string;
@@ -41,7 +41,7 @@ export interface IQuestionLang {
   createdOn: Date;
   createdBy: string;
   categoryStatus: boolean;
-} */
+} 
 
 /* 
 EXPANDED VIEW OF ITemplate

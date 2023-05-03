@@ -3,12 +3,15 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios, { AxiosResponse } from "axios";
+import { v4 as uuidv4 } from "uuid";
 
 //Types
 import {
   ITemplate,
   IQuestion,
+  IQCategory,
   IQuestionLang,
+  ISection,
   IConvertedTemplate,
   ITemplateQuestion,
 } from "../../types/template";
@@ -20,7 +23,10 @@ import styles from "./Template.module.css";
 import { testTemplateData } from "../../testdata/testTemplateData";
 import { preface } from "./preface";
 import { gradingGuidance } from "./gradingGuidance";
-import { convertTemplate } from "../../functions/templateConverter";
+import {
+  convertTemplate,
+  /* fetchCategories, */
+} from "../../functions/templateConverter";
 
 //Components
 import Accordion from "../../components/Accordion/Accordion";
@@ -36,6 +42,7 @@ type accordion = {
 };
 
 let convertedTemplateData: IConvertedTemplate;
+const devServer = "http://localhost:4000";
 
 const Template = () => {
   const loggedIn = useSelector((state: any) => state.auth.loggedIn);
@@ -43,8 +50,12 @@ const Template = () => {
   const navigate = useNavigate();
 
   const [serverData, setServerData] = useState<ITemplate>();
-  const [questionState, setQuestionState] = useState([]);
+  const [questionState, setQuestionState] = useState({
+    newQuestion: "",
+    questionArray: [],
+  });
   const [accordion, setAccordion] = useState<accordion[]>([{ open: false }]);
+  const [sections, setSections] = useState<ISection[]>([]);
 
   const [currentTemplate, setCurrentTemplate] = useState<IConvertedTemplate>({
     id: "",
@@ -73,9 +84,9 @@ const Template = () => {
     }));
   }
 
-  function questionChangeHandler(e: any, i: number) {
-    let items = [...questionState];
-    //items[i][e.target.name] = e.target.value;
+  function questionChangeHandler(e: any, i: number, categoryId: string) {
+    let items = { ...questionState };
+    //items.questionArray = [...items.questionArray, e.target.value];
     setQuestionState(items);
   }
 
@@ -98,13 +109,26 @@ const Template = () => {
     });
   }
 
-  function createQuestion() {
-    let newRow: ITemplateQuestion = {
-      id: "",
-      question: "",
+  /* addQuestion request body sent to server:
+category: category_id,
+question: {lang: 'en', question: "questionText", ?id},
+createdBy: "user",
+type: "",
+*/
+  function createQuestion(categoryId: string) {
+    let newQuestion = {
+      id: categoryId,
+      question: { lang: "en", question: questionState.newQuestion, id: uuidv4 },
       isFreeForm: false,
     };
   }
+
+  const fetchCategories = async () => {
+    let result = await axios.get<IQCategory[]>(`${devServer}/category`);
+    let dbCategories = result.data;
+    console.log(dbCategories);
+    return dbCategories;
+  };
 
   useEffect(() => {
     if (loggedIn && isAdmin) {
@@ -117,11 +141,13 @@ const Template = () => {
 
   /* active template data loaded from db is set in state */
   useEffect(() => {
+    fetchCategories();
     axios
       .get<ITemplate>(`${process.env.REACT_APP_SERVER_API}/template/active`)
       .then((res: AxiosResponse) => {
         console.log(res.data);
-        setServerData(res.data);
+        // setServerData(res.data);
+        console.log(process.env.REACT_APP_SERVER_API);
       });
   }, []);
 
@@ -179,14 +205,14 @@ const Template = () => {
           <h3 className={styles.h3}>Feedback Questions</h3>
         </div>
         {/* ACCORDIONS */}
-        {convertedTemplateData?.sections.map((item, i) => (
+        {sections?.map((item, i) => (
           <Accordion
             key={i}
             item={item}
             clickHandler={(e: any) => toggleAccordion(e, i)}
             isOpen={accordion[i].open}
             questionChangeHandler={questionChangeHandler}
-            addQuestion={createQuestion}
+            createQuestion={() => createQuestion}
           />
         ))}
         <div className={styles.formRow}>
