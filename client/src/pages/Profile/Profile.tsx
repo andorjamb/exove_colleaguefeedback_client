@@ -4,6 +4,7 @@ import {
   useGetRequestPickByUserIdQuery,
 } from "../../features/requestPicksApi";
 import { useGetAllUsersQuery } from "../../features/userApi";
+import { useGetAllTemplatesQuery } from "../../features/templateApi";
 
 //Styling
 import styles from "./Profile.module.css";
@@ -11,7 +12,7 @@ import styles from "./Profile.module.css";
 /** this component currently used for testing purposes only  */
 
 const Profile = () => {
-  const { data, isFetching, error } = useGetAllRequestPicksQuery();
+  const { data, isFetching, error } = useGetAllTemplatesQuery();
 
   useEffect(() => {
     console.log("data:", "");

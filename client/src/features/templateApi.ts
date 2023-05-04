@@ -8,11 +8,11 @@ const devServerUrl = "http://localhost:4000/";
 
 export const templateApi = createApi({
   reducerPath: "templateApi",
-  baseQuery: fetchBaseQuery({ baseUrl: serverApi }),
+  baseQuery: fetchBaseQuery({ baseUrl: "https://exove.vercel.app/api/" }),
   tagTypes: ["Templates"],
   endpoints: (builder) => ({
     getAllTemplates: builder.query<ITemplate[], void>({
-      query: () => `templates/`,
+      query: () => `template/`,
     }),
     getTemplateById: builder.query<ITemplate, string>({
       query: (id) => `template/${id}`,
