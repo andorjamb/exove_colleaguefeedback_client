@@ -27,9 +27,11 @@ import {
   convertTemplate,
   /* fetchCategories, */
 } from "../../functions/templateConverter";
+import { useGetAllTemplatesQuery } from "../../features/templateApi";
 
 //Components
 import Accordion from "../../components/Accordion/Accordion";
+
 /**
  * API ROUTES
   get('/template', getTemplates); ------------------Get all templates
@@ -45,6 +47,8 @@ let convertedTemplateData: IConvertedTemplate;
 const devServer = "http://localhost:4000";
 
 const Template = () => {
+  const templateData = useGetAllTemplatesQuery();
+  const templates = templateData.data;
   const loggedIn = useSelector((state: any) => state.auth.loggedIn);
   const isAdmin = useSelector((state: any) => state.auth.isAdmin);
   const navigate = useNavigate();
@@ -152,6 +156,10 @@ type: "",
     fetchCategories().then((result) => setCategoriesState(result));
     getActiveTemplate();
   }, []);
+
+  useEffect(() => {
+    console.log(templateData, templates);
+  }, [templateData, templates]);
 
   useEffect(() => {
     if (serverData) {

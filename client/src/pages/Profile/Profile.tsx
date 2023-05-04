@@ -12,7 +12,7 @@ import styles from "./Profile.module.css";
 /** this component currently used for testing purposes only  */
 
 const Profile = () => {
-  const { data, isFetching, error } = useGetAllTemplatesQuery();
+  const { data, isFetching, error } = useGetAllRequestPicksQuery();
 
   useEffect(() => {
     console.log("data:", "");
