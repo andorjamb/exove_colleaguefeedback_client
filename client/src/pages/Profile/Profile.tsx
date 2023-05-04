@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   useGetAllRequestPicksQuery,
   useGetRequestPickByUserIdQuery,
@@ -10,18 +10,16 @@ import styles from "./Profile.module.css";
 /** this component currently used for testing purposes only  */
 
 const Profile = () => {
-  const { data, isFetching, error } = useGetAllRequestPicksQuery();
+  const { data, isLoading, error } = useGetAllRequestPicksQuery();
+
+  useEffect(() => {
+    console.log("data:", "");
+  }, [data]);
 
   return (
     <div className={styles.container}>
       <div className={styles.profile}>
-        {data ? (
-          <>{data}</>
-        ) : (
-          <>
-            <p>Fetching</p>
-          </>
-        )}
+        {data ? <>{data}</> : { isLoading } ? <p>Fetching</p> : <></>}
       </div>
     </div>
   );
