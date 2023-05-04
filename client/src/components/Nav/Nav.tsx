@@ -1,4 +1,6 @@
+//React
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 //styles
 import styles from "./Nav.module.css";
@@ -12,21 +14,18 @@ const Nav = () => {
   return (
     <nav className={styles.nav}>
       <ul className={styles.ul}>
-        <li className={styles.li}>
-          <a className={styles.a} href="/dashboard">
-            {t("dashboard")}
-          </a>
-        </li>
-        <li className={styles.li}>
-          <a className={styles.a} href="/admin/template">
-            {t("")}
-          </a>
-        </li>
-        <li className={styles.li}>
-          <a className={styles.a} href="/">
-            {t("")}
-          </a>
-        </li>
+        <NavLink
+          className={({ isActive, isPending }) =>
+            isPending
+              ? `${styles.navlink} ${styles.pending}`
+              : isActive
+              ? `${styles.navlink} ${styles.active}`
+              : styles.navlink
+          }
+          to="/dashboard"
+        >
+          <li className={styles.li}>{t("dashboard")}</li>
+        </NavLink>
       </ul>
     </nav>
   );
