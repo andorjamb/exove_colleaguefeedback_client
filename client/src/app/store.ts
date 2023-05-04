@@ -6,10 +6,12 @@ import { userApi } from "../features/userApi";
 import { templateApi } from "../features/templateApi";
 import { requestPicksApi } from "../features/requestPicksApi";
 import { feedbackApi } from "../features/feedbackApi";
+import headerSlice from "../features/headerSlice";
 
 export const store = configureStore({
   reducer: {
     auth: authSlice,
+    header: headerSlice,
     [userApi.reducerPath]: userApi.reducer,
     [templateApi.reducerPath]: templateApi.reducer,
     [requestPicksApi.reducerPath]: requestPicksApi.reducer,
