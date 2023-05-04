@@ -15,6 +15,7 @@ export const store = configureStore({
     [userApi.reducerPath]: userApi.reducer,
     [templateApi.reducerPath]: templateApi.reducer,
     [requestPicksApi.reducerPath]: requestPicksApi.reducer,
+    [feedbackApi.reducerPath]: feedbackApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()

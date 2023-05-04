@@ -19,7 +19,7 @@ export interface IUserRoles {
 }
 
 export interface IUserData {
-  /** this is a model of the JSON object used by Exove */ id: string;
+  /** this is a model of the JSON object used by Exove, not mongodb schema */ id: string;
   firstName: string;
   surname: string;
   email: string;
