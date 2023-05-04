@@ -10,40 +10,15 @@ import { useAppSelector } from "../../../app/hooks";
 // Types
 import { IRequestPicks } from "../../../types/picks";
 import { IFeedback } from "../../../types/feedback";
+import { IUserDataGet } from "../../../types_updated/users";
 
 // Styles
 import styles from "./PersonRow.module.css";
 
 interface IPersonRowProps {
   userPicks: IRequestPicks | undefined;
-  user: IUserData;
+  user: IUserDataGet;
   userFeedbacks: IFeedback[];
-}
-
-interface IUserData {
-  _id: string;
-  ldapUid: string;
-  firstName: string;
-  surname: string;
-  email: string;
-  displayName: string;
-  phone: string;
-  about: {
-    avatar: string;
-    hobbies: string[];
-  };
-  work: {
-    reportsTo: {
-      id: string;
-      firstName: string;
-      surname: string;
-      email: string;
-    };
-    title: string;
-    department: string;
-    site: string;
-    startDate: string;
-  };
 }
 
 const PersonRow: React.FC<IPersonRowProps> = ({
@@ -60,8 +35,10 @@ const PersonRow: React.FC<IPersonRowProps> = ({
       userPicks.selectedList.filter((pick) => pick.roleLevel === 4).length > 0
     )
       return;
+    const cm = user.workId.find((work) => work.workReportStatus)?.reportsTo;
+    if (!cm) return;
     const newSelectedUser = {
-      userId: user.work.reportsTo.id,
+      userId: cm,
       selectionStatus: false, // for HR to approve
       roleLevel: 4,
     };
