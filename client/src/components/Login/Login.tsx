@@ -80,50 +80,48 @@ const Login = () => {
   }, [loggedIn]);
 
   return (
-    <>
-      <section className={styles.loginContainer}>
-        <div className={styles.login}>
-          <h1 className={styles.h1}>{t("loginTitle")}</h1>
-          <div className={styles.formContainer}>
-            <form className={styles.form}>
-              <div className={styles.formElements}>
-                <label className={styles.label} htmlFor="username">
-                  {t("username")}
-                </label>
-                <input
-                  type="text"
-                  className={styles.input}
-                  name="username"
-                  id="username"
-                  onChange={handleChange}
-                ></input>
-              </div>
-              <div className={styles.formElements}>
-                <label className={styles.label} htmlFor="password">
-                  {t("password")}
-                </label>
-                <input
-                  type="password"
-                  className={styles.input}
-                  name="password"
-                  id="password"
-                  onChange={handleChange}
-                ></input>
-              </div>
-              <div className={styles.formElements}>
-                <button
-                  className={[styles.button, styles.loginButton].join(" ")}
-                  type="submit"
-                  onClick={(e) => userLogin(e)}
-                >
-                  {t("signIn")}
-                </button>
-              </div>
-            </form>
-          </div>
+    <section className={styles.loginContainer}>
+      <div className={styles.login}>
+        <h1 className={styles.h1}>{t("loginTitle")}</h1>
+        <div className={styles.formContainer}>
+          <form className={styles.form}>
+            <div className={styles.formElements}>
+              <label className={styles.label} htmlFor="username">
+                {t("username")}
+              </label>
+              <input
+                type="text"
+                className={styles.input}
+                name="username"
+                id="username"
+                onChange={handleChange}
+              ></input>
+            </div>
+            <div className={styles.formElements}>
+              <label className={styles.label} htmlFor="password">
+                {t("password")}
+              </label>
+              <input
+                type="password"
+                className={styles.input}
+                name="password"
+                id="password"
+                onChange={handleChange}
+              ></input>
+            </div>
+            <div className={styles.formElements}>
+              <button
+                className={[styles.button, styles.loginButton].join(" ")}
+                type="submit"
+                onClick={(e) => userLogin(e)}
+              >
+                {t("signIn")}
+              </button>
+            </div>
+          </form>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 };
 
