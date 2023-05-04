@@ -5,6 +5,7 @@ import styles from "./Card.module.css";
 
 //Types
 import { IUserData } from "../../types/users";
+
 interface Props {
   employee: IUserData;
   clickCallback: React.MouseEventHandler<HTMLDivElement>;

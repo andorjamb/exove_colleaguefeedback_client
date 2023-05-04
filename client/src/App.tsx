@@ -34,6 +34,7 @@ const router = createBrowserRouter(
           <Route path="/dashboard" element={<Dashboard />}></Route>
           <Route path="/feedback" element={<Feedback />}></Route>
           <Route path="/template" element={<Template />}></Route>
+          <Route path="/profile" element={<Profile />}></Route>
 
           <Route path="/profiles/:id" element={<Profile />}></Route>
 

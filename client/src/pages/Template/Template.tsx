@@ -56,6 +56,7 @@ const Template = () => {
   });
   const [accordion, setAccordion] = useState<accordion[]>([{ open: false }]);
   const [sections, setSections] = useState<ISection[]>([]);
+  const [categoriesState, setCategoriesState] = useState<IQCategory[]>();
 
   const [currentTemplate, setCurrentTemplate] = useState<IConvertedTemplate>({
     id: "",
@@ -130,9 +131,16 @@ type: "",
     return dbCategories;
   };
 
+  const getActiveTemplate = async () => {
+    await axios
+      .get<ITemplate>(`${process.env.REACT_APP_SERVER_API}/template/active`)
+      .then((result) => result.data as ITemplate)
+      .then((data) => setServerData(data));
+  };
+
   useEffect(() => {
     if (loggedIn && isAdmin) {
-      console.log("test isAdmin"); //debugging
+      console.log("isAdmin:", isAdmin); //debugging
     } /* else {
       navigate("/"); 
     }*/
@@ -141,14 +149,8 @@ type: "",
 
   /* active template data loaded from db is set in state */
   useEffect(() => {
-    fetchCategories();
-    axios
-      .get<ITemplate>(`${process.env.REACT_APP_SERVER_API}/template/active`)
-      .then((res: AxiosResponse) => {
-        console.log(res.data);
-        // setServerData(res.data);
-        console.log(process.env.REACT_APP_SERVER_API);
-      });
+    fetchCategories().then((result) => setCategoriesState(result));
+    getActiveTemplate();
   }, []);
 
   useEffect(() => {
