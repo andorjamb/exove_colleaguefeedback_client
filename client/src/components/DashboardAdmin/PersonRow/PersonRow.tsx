@@ -1,9 +1,18 @@
-// Styles
+// React
 import { useEffect, useState } from "react";
+
+// Axios
+import axios from "axios";
+
+// Redux
 import { useAppSelector } from "../../../app/hooks";
+
+// Types
 import { IRequestPicks } from "../../../types/picks";
-import styles from "./PersonRow.module.css";
 import { IFeedback } from "../../../types/feedback";
+
+// Styles
+import styles from "./PersonRow.module.css";
 
 interface IPersonRowProps {
   userPicks: IRequestPicks | undefined;
@@ -48,23 +57,46 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     if (
       !userPicks ||
       !userPicks.selectedList ||
-      userPicks.selectedList.filter((pick) => pick.selectedRole === "cm")
-        .length > 0
+      userPicks.selectedList.filter((pick) => pick.roleLevel === 4).length > 0
     )
       return;
     const newSelectedUser = {
       userId: user.work.reportsTo.id,
       selectionStatus: false, // for HR to approve
-      selectedBy: "",
-      selectedRole: "cm",
-      feedBackSubmitted: false,
+      roleLevel: 4,
     };
     userPicks.selectedList.push(newSelectedUser);
     console.log(userPicks.selectedList);
   }, []);
 
-  const requestPicks = () => {
-    console.log("send picks pls");
+  /*   const updatePicks = async () => {
+    try {
+      const { data } = await axios.post(
+        `https://exove.vercel.app/api/picks/${userPicks?._id}`,
+        { ...newPick },
+        {
+          withCredentials: true,
+        }
+      );
+      console.log("Response", data);
+    } catch (err) {
+      console.log(err);
+    }
+  }; */
+
+  const requestPicks = async (newPick: { requestedTo: string }) => {
+    try {
+      const { data } = await axios.post(
+        "https://exove.vercel.app/api/picks/",
+        { ...newPick },
+        {
+          withCredentials: true,
+        }
+      );
+      console.log("Response", data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const remindToPick = () => {
@@ -96,33 +128,34 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         <td>
           {userPicks &&
             userPicks.selectedList &&
-            userPicks.selectedList.filter(
-              (pick) => pick.selectedRole === "colleague"
-            ).length}
-        </td>
-        <td>
-          {userPicks &&
-            userPicks.selectedList &&
-            userPicks.selectedList.filter(
-              (pick) => pick.selectedRole === "subordinate"
-            ).length}
-        </td>
-        <td>
-          {userPicks &&
-            userPicks.selectedList &&
-            userPicks.selectedList.filter((pick) => pick.selectedRole === "pm")
+            userPicks.selectedList.filter((pick) => pick.roleLevel === 5)
               .length}
         </td>
         <td>
           {userPicks &&
             userPicks.selectedList &&
-            userPicks.selectedList.filter((pick) => pick.selectedRole === "cm")
+            userPicks.selectedList.filter((pick) => pick.roleLevel === 6)
+              .length}
+        </td>
+        <td>
+          {userPicks &&
+            userPicks.selectedList &&
+            userPicks.selectedList.filter((pick) => pick.roleLevel === 3)
+              .length}
+        </td>
+        <td>
+          {userPicks &&
+            userPicks.selectedList &&
+            userPicks.selectedList.filter((pick) => pick.roleLevel === 4)
               .length}
         </td>
         <td>
           {/* There is no picks yet */}
           {!userPicks && (
-            <button className={styles.request} onClick={requestPicks}>
+            <button
+              className={styles.request}
+              onClick={() => requestPicks({ requestedTo: user.ldapUid })}
+            >
               Request picks
             </button>
           )}
@@ -135,17 +168,15 @@ const PersonRow: React.FC<IPersonRowProps> = ({
           {/* If fewer than 5 collagues are picked, display remind button */}
           {userPicks &&
             userPicks.selectedList &&
-            userPicks.selectedList.filter(
-              (pick) => pick.selectedRole === "colleague"
-            ).length < 5 && (
+            userPicks.selectedList.filter((pick) => pick.roleLevel === 5)
+              .length < 5 && (
               <button onClick={remindToPick}>Remind user to pick</button>
             )}
           {/* If enough collagues picked, display approve option */}
           {userPicks &&
             userPicks.selectedList &&
-            userPicks.selectedList.filter(
-              (pick) => pick.selectedRole === "colleague"
-            ).length >= 5 && (
+            userPicks.selectedList.filter((pick) => pick.roleLevel === 5)
+              .length >= 5 && (
               <button onClick={approvePicks}>Approve picks</button>
             )}
           {userPicks && userPicks.submitted && <p>Picks finalised</p>}
@@ -164,7 +195,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         userPicks &&
         userPicks.selectedList &&
         userPicks.selectedList
-          .filter((pick) => pick.selectedRole === "colleague")
+          .filter((pick) => pick.roleLevel === 5)
           .map((pick) => (
             <tr>
               <td></td>
@@ -176,24 +207,9 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         userPicks &&
         userPicks.selectedList &&
         userPicks.selectedList
-          .filter((pick) => pick.selectedRole === "subordinate")
+          .filter((pick) => pick.roleLevel === 6)
           .map((pick) => (
             <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>{pick.userId}</td>
-            </tr>
-          ))}
-
-      {expand &&
-        userPicks &&
-        userPicks.selectedList &&
-        userPicks.selectedList
-          .filter((pick) => pick.selectedRole === "pm")
-          .map((pick) => (
-            <tr>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -205,7 +221,22 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         userPicks &&
         userPicks.selectedList &&
         userPicks.selectedList
-          .filter((pick) => pick.selectedRole === "cm")
+          .filter((pick) => pick.roleLevel === 3)
+          .map((pick) => (
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>{pick.userId}</td>
+            </tr>
+          ))}
+
+      {expand &&
+        userPicks &&
+        userPicks.selectedList &&
+        userPicks.selectedList
+          .filter((pick) => pick.roleLevel === 4)
           .map((pick) => (
             <tr>
               <td></td>
