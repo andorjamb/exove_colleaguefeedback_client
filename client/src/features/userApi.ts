@@ -5,7 +5,6 @@ import { IUser } from "../types/users";
 
 const serverApi = process.env.REACT_APP_SERVER_API;
 
-/** for fetching profile data of loggedIn user */
 export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: fetchBaseQuery({ baseUrl: serverApi }),
