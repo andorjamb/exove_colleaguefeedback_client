@@ -1,7 +1,6 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
 
-import headerSlice from "../features/headerSlice";
 import authSlice from "../features/authSlice";
 import { userApi } from "../features/userApi";
 import { templateApi } from "../features/templateApi";
@@ -10,7 +9,6 @@ import { feedbackApi } from "../features/feedbackApi";
 
 export const store = configureStore({
   reducer: {
-    header: headerSlice,
     auth: authSlice,
     [userApi.reducerPath]: userApi.reducer,
     [templateApi.reducerPath]: templateApi.reducer,

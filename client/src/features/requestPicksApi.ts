@@ -3,13 +3,14 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 //Types
 import { IRequestPicks } from "../types/picks";
 
-const serverApi = process.env.REACT_APP_SERVER_API;
-const devServerApi = "http://localhost:4000/";
+//const serverApi = process.env.REACT_APP_SERVER_API;
+const serverApi = "https://exove.vercel.app/api/";
+//const serverApi = "http://localhost:4000/";
 
 export const requestPicksApi = createApi({
   reducerPath: "requestPicksApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://exove.vercel.app/api/",
+    baseUrl: serverApi,
     prepareHeaders(headers) {
       return headers;
     },
@@ -19,12 +20,13 @@ export const requestPicksApi = createApi({
   endpoints: (builder) => ({
     getAllRequestPicks: builder.query<IRequestPicks[], void>({
       query: () => "picks",
+      providesTags: ["RequestPicks"],
     }),
     getRequestPickByUserId: builder.query<IRequestPicks, string>({
       query: (userId) => `picks/${userId}`,
     }),
   }),
-});
+})
 
 export const { useGetAllRequestPicksQuery, useGetRequestPickByUserIdQuery } =
   requestPicksApi;

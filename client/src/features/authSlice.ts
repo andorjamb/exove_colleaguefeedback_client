@@ -1,39 +1,10 @@
 //React
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
-
-//
-import axios from "axios";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 //Types
-import { IUserData } from "../types/users";
 
-interface ILoginParams {
-  userName: string;
-  password: string;
-}
-
-const serverEndpoint = process.env.REACT_APP_SERVER_API as string;
-
-//Thunk may not be needed, currently not used
-export const loginUser = createAsyncThunk(
-  "auth/login",
-  async (loginParams: ILoginParams, { rejectWithValue }) => {
-    try {
-      await axios.post(`${serverEndpoint}/login`, loginParams).then((res) => {
-        console.log(res.data());
-
-        return res.data();
-      });
-    } catch (err: any) {
-      if (err.response && err.response.data.message) {
-        return rejectWithValue(err.response.data.message);
-      } else {
-        return rejectWithValue(err.message);
-      }
-    }
-  }
-);
+//const serverApi = process.env.REACT_APP_SERVER_API as string;
+const serverApi = "https://exove.vercel.app/api/";
 
 export const authSlice = createSlice({
   name: "auth",
@@ -52,22 +23,6 @@ export const authSlice = createSlice({
     setIsAdmin: (state, action: PayloadAction<boolean>) => {
       state.isAdmin = action.payload;
     },
-  },
-  extraReducers: (builder) => {
-    /** for thunk only */
-    builder.addCase(loginUser.pending, (state: any) => {
-      state.loading = true;
-    });
-    builder.addCase(loginUser.fulfilled, (state: any, { payload }) => {
-      state.loading = false;
-      state.success = true;
-    });
-    builder.addCase(loginUser.rejected, (state: any, { payload }) => {
-      state.loading = false;
-      if (payload) {
-        state.error = payload;
-      }
-    });
   },
 });
 

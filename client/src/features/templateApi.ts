@@ -3,13 +3,14 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 //Types
 import { ITemplate } from "../types/template";
 
-const serverApi = process.env.REACT_APP_SERVER_API;
-const devServerUrl = "http://localhost:4000/";
+//const serverApi = process.env.REACT_APP_SERVER_API;
+const serverApi = "https://exove.vercel.app/api/";
+//const serverUrl = "http://localhost:4000/";
 
 export const templateApi = createApi({
   reducerPath: "templateApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://exove.vercel.app/api/",
+    baseUrl: serverApi,
     prepareHeaders(headers) {
       return headers;
     },
