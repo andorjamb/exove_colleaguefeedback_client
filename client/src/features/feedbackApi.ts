@@ -8,7 +8,7 @@ const devServerUrl = "http://localhost:4000/";
 
 export const feedbackApi = createApi({
   reducerPath: "feedbackApi",
-  baseQuery: fetchBaseQuery({ baseUrl: serverApi }),
+  baseQuery: fetchBaseQuery({ baseUrl: "https://exove.vercel.app/api/" }),
   tagTypes: ["Feedback"],
   endpoints: (builder) => ({
     getAllFeedbacks: builder.query<IFeedback[], void>({
