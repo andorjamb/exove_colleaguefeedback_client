@@ -3,6 +3,7 @@ import {
   useGetAllRequestPicksQuery,
   useGetRequestPickByUserIdQuery,
 } from "../../features/requestPicksApi";
+import { useGetAllUsersQuery } from "../../features/userApi";
 
 //Styling
 import styles from "./Profile.module.css";
@@ -10,7 +11,7 @@ import styles from "./Profile.module.css";
 /** this component currently used for testing purposes only  */
 
 const Profile = () => {
-  const { data, isLoading, error } = useGetAllRequestPicksQuery();
+  const { data, isFetching, error } = useGetAllRequestPicksQuery();
 
   useEffect(() => {
     console.log("data:", "");
@@ -19,7 +20,7 @@ const Profile = () => {
   return (
     <div className={styles.container}>
       <div className={styles.profile}>
-        {data ? <>{data}</> : { isLoading } ? <p>Fetching</p> : <></>}
+        {data ? <>{data}</> : { isFetching } ? <p>Fetching</p> : <></>}
       </div>
     </div>
   );
