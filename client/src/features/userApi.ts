@@ -7,7 +7,13 @@ const serverApi = process.env.REACT_APP_SERVER_API;
 
 export const userApi = createApi({
   reducerPath: "userApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "https://exove.vercel.app/api/" }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: "https://exove.vercel.app/api/",
+    prepareHeaders(headers) {
+      return headers;
+    },
+    credentials: "include",
+  }),
   tagTypes: ["Users"],
   endpoints: (builder) => ({
     getAllUsers: builder.query<IUser[], void>({

@@ -8,7 +8,13 @@ const devServerApi = "http://localhost:4000/";
 
 export const requestPicksApi = createApi({
   reducerPath: "requestPicksApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "https://exove.vercel.app/api/" }), //for testing
+  baseQuery: fetchBaseQuery({
+    baseUrl: "https://exove.vercel.app/api/",
+    prepareHeaders(headers) {
+      return headers;
+    },
+    credentials: "include",
+  }), //for testing
   tagTypes: ["RequestPicks"],
   endpoints: (builder) => ({
     getAllRequestPicks: builder.query<IRequestPicks[], void>({
