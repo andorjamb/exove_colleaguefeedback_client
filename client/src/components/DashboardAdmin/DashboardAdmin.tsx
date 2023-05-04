@@ -8,7 +8,8 @@ import axios from "axios";
 import SearchBar from "./SearchBar/SearchBar";
 import { IFeedback } from "../../types/feedback";
 import BulkButtons from "./BulkButtons/BulkButtons";
-
+import { useGetAllFeedbacksQuery } from "../../features/feedbackApi";
+import { ITemplateGet } from "../../types_updated/template";
 interface IUser {
   _id: {
     type: string;
@@ -322,6 +323,8 @@ const DashboardAdmin = () => {
   const [picks, setPicks] = useState<IRequestPicks[]>([]);
   const [feedbacks, setFeedbacks] = useState<IFeedback[]>([]);
   const [searchInput, setSearchInput] = useState<string>("");
+  const feedbackData = useGetAllFeedbacksQuery();
+  console.log(feedbackData.data);
 
   const searchChangeHandler = (e: React.FormEvent<HTMLInputElement>) => {
     console.log("curr search:", e.currentTarget.value);
