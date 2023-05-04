@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 //Types
-import { IUser } from "../types/users";
+import { IUserDataGet } from "../types_updated/users";
 
 const serverApi = process.env.REACT_APP_SERVER_API;
 
@@ -16,10 +16,10 @@ export const userApi = createApi({
   }),
   tagTypes: ["Users"],
   endpoints: (builder) => ({
-    getAllUsers: builder.query<IUser[], void>({
+    getAllUsers: builder.query<IUserDataGet[], void>({
       query: () => "users",
     }),
-    getUserByName: builder.query<IUser, string>({
+    getUserByName: builder.query<IUserDataGet, string>({
       query: (name) => `users/${name}`,
     }),
   }),
