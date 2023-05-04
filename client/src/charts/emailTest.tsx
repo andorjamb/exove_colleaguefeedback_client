@@ -1,49 +1,49 @@
-import React, { useRef } from "react";
+import React from "react";
 import emailjs from "@emailjs/browser";
 
-interface IEmailParameters {
+/* interface IEmailParameters {
   name: string;
   date: string;
-}
+  link: string;
+} */
 const EmailTest = () => {
-  const button = useRef();
-  const username = ""; //
+  const username = "";
+  const link = "";
 
-  const serviceId = "";
+  const serviceId = "service_s3jvp7d";
   //process.env.REACT_APP_EMAIL_SERVICE_ID;
-  const templateId = "";
-  const publicKey = process.env.REACT_APP_EMAIL_PUBLIC_KEY;
+  const templateId = "requestPicks";
+  const publicKey = "";
+  //process.env.REACT_APP_EMAIL_PUBLIC_KEY;
 
-  let futureDate = new Date();
-  futureDate.setDate(futureDate.getDate() + 14);
-  console.log(futureDate.toLocaleDateString());
+  let date = new Date();
+  date.setDate(date.getDate() + 14);
+  let futureDate = date.toLocaleDateString();
+  console.log(futureDate); //debugging
 
   const emailParameters = {
     name: `${username}`,
     date: futureDate,
+    link: "",
   };
   const sendEmail = (e: any) => {
     e.preventDefault();
 
     //emailjs.send(serviceID, templateID, templateParams, publicKey);
 
-    emailjs
-      .send(serviceId, "YOUR_TEMPLATE_ID", emailParameters, "YOUR_PUBLIC_KEY")
-      .then(
-        (result) => {
-          console.log(result.text);
-        },
-        (error) => {
-          console.log(error.text);
-        }
-      );
+    emailjs.send(serviceId, templateId, emailParameters, publicKey).then(
+      (result: any) => {
+        console.log(result.text);
+      },
+      (error: any) => {
+        console.log(error.text);
+      }
+    );
   };
 
   return (
     <div>
-      <button ref="button" onClick={sendEmail}>
-        Send Email
-      </button>
+      <button onClick={sendEmail}>Send Email</button>
     </div>
   );
 };
