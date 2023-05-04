@@ -8,12 +8,12 @@ import emailjs from "@emailjs/browser";
 } */
 const EmailTest = () => {
   const username = "";
-  const link = "";
+  const link = "https://exove-colleaguefeedback-client.vercel.app/dashboard";
 
   const serviceId = "service_s3jvp7d";
   //process.env.REACT_APP_EMAIL_SERVICE_ID;
   const templateId = "requestPicks";
-  const publicKey = "";
+  const publicKey = "7V3KMhSGrGlz-4pNX";
   //process.env.REACT_APP_EMAIL_PUBLIC_KEY;
 
   let date = new Date();
@@ -24,12 +24,11 @@ const EmailTest = () => {
   const emailParameters = {
     name: `${username}`,
     date: futureDate,
-    link: "",
+    link: link,
+    emailTo: "kronosaur@hotmail.com",
   };
   const sendEmail = (e: any) => {
     e.preventDefault();
-
-    //emailjs.send(serviceID, templateID, templateParams, publicKey);
 
     emailjs.send(serviceId, templateId, emailParameters, publicKey).then(
       (result: any) => {
