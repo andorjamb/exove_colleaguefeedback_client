@@ -39,7 +39,7 @@ export const authSlice = createSlice({
   name: "auth",
   initialState: {
     loggedIn: false, //set as needed when ldap server down
-    isAdmin: true, //set as needed when ldap server down
+    isAdmin: false, //set as needed when ldap server down
     error: null,
     success: false,
     loading: false,
