@@ -2,11 +2,12 @@ import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
 
 import authSlice from "../features/authSlice";
+import headerSlice from "../features/headerSlice";
 import { userApi } from "../features/userApi";
 import { templateApi } from "../features/templateApi";
 import { requestPicksApi } from "../features/requestPicksApi";
 import { feedbackApi } from "../features/feedbackApi";
-import headerSlice from "../features/headerSlice";
+import { categoryApi } from "../features/categoryApi";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     [templateApi.reducerPath]: templateApi.reducer,
     [requestPicksApi.reducerPath]: requestPicksApi.reducer,
     [feedbackApi.reducerPath]: feedbackApi.reducer,
+    [categoryApi.reducerPath]: categoryApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
