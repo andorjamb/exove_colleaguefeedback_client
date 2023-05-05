@@ -8,7 +8,7 @@ import emailjs from "@emailjs/browser";
 } */
 const EmailTest = () => {
   const username = "Lera";
-  const link = "";
+  const link = "https://exove-colleaguefeedback-client.vercel.app/dashboard";
 
   const serviceId = "service_s3jvp7d";
   //process.env.REACT_APP_EMAIL_SERVICE_ID;
@@ -31,8 +31,6 @@ const EmailTest = () => {
   };
   const sendEmail = (e: any) => {
     e.preventDefault();
-
-    //emailjs.send(serviceID, templateID, templateParams, publicKey);
 
     emailjs.send(serviceId, templateId, emailParameters, publicKey).then(
       (result: any) => {
