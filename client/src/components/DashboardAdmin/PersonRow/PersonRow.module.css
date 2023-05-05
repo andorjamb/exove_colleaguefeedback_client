@@ -2,6 +2,15 @@
   border-bottom: 1px solid black;
 }
 
+.table_row button {
+  text-transform: none;
+}
+
+.picks_container {
+  display: flex;
+  gap: 0.5rem;
+}
+
 .first_cell div {
   display: flex;
   gap: 0.5rem;
@@ -25,7 +34,6 @@
 .request {
   background-color: var(--exovePurple);
   color: white;
-  text-transform: none;
 }
 
 .not_available {
@@ -43,17 +51,14 @@
 .remind {
   background-color: var(--darkGray);
   color: white;
-  text-transform: none;
 }
 
 .approve {
   background-color: var(--exoveGreen);
   color: white;
-  text-transform: none;
 }
 
 .warning {
   background-color: var(--exoveOrange);
   color: white;
-  text-transform: none;
 }

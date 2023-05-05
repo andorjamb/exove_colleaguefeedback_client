@@ -33,11 +33,13 @@ const PersonRow: React.FC<IPersonRowProps> = ({
   const [createPick] = useCreatePickMutation();
   const { refetch } = useGetAllRequestPicksQuery();
 
+  if (user.ldapUid === "curie") console.log("userPicks", userPicks);
+
   useEffect(() => {
     if (
       !userPicks ||
-      !userPicks.selectedList ||
-      userPicks.selectedList.filter((pick) => pick.roleLevel === 4).length > 0
+      !userPicks.SelectedList ||
+      userPicks.SelectedList.filter((pick) => pick.roleLevel === 4).length > 0
     )
       return;
     const cm = user.workId.find((work) => work.workReportStatus)?.reportsTo;
@@ -47,8 +49,8 @@ const PersonRow: React.FC<IPersonRowProps> = ({
       selectionStatus: false, // for HR to approve
       roleLevel: 4,
     };
-    userPicks.selectedList.push(newSelectedUser);
-    console.log(userPicks.selectedList);
+    userPicks.SelectedList.push(newSelectedUser);
+    console.log(userPicks.SelectedList);
   }, []);
 
   const requestPicks = async (newPick: { requestedTo: string }) => {
@@ -61,7 +63,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
   };
 
   const approvePicks = () => {
-    userPicks?.selectedList.forEach((pick) => (pick.selectionStatus = true));
+    userPicks?.SelectedList.forEach((pick) => (pick.selectionStatus = true));
     if (userPicks) userPicks.submitted = true;
   };
 
@@ -84,59 +86,65 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         </td>
         <td>
           {userPicks &&
-            userPicks.selectedList &&
-            userPicks.selectedList.filter((pick) => pick.roleLevel === 5)
+            userPicks.SelectedList &&
+            userPicks.SelectedList.filter((pick) => pick.roleLevel === 5)
               .length}
         </td>
         <td>
           {userPicks &&
-            userPicks.selectedList &&
-            userPicks.selectedList.filter((pick) => pick.roleLevel === 6)
+            userPicks.SelectedList &&
+            userPicks.SelectedList.filter((pick) => pick.roleLevel === 6)
               .length}
         </td>
         <td>
           {userPicks &&
-            userPicks.selectedList &&
-            userPicks.selectedList.filter((pick) => pick.roleLevel === 3)
+            userPicks.SelectedList &&
+            userPicks.SelectedList.filter((pick) => pick.roleLevel === 4)
               .length}
         </td>
         <td>
           {userPicks &&
-            userPicks.selectedList &&
-            userPicks.selectedList.filter((pick) => pick.roleLevel === 4)
+            userPicks.SelectedList &&
+            userPicks.SelectedList.filter((pick) => pick.roleLevel === 3)
               .length}
         </td>
         <td>
-          {/* There is no picks yet */}
-          {!userPicks && (
-            <button
-              className={styles.request}
-              onClick={() => requestPicks({ requestedTo: user.ldapUid })}
-            >
-              Request picks
-            </button>
-          )}
-          {/* If picks have been requested but not approved yet, display edit button */}
-          {userPicks && !userPicks.submitted && (
-            <button className={styles.edit}>
-              <span className="material-symbols-outlined">edit</span>
-            </button>
-          )}
-          {/* If fewer than 5 collagues are picked, display remind button */}
-          {userPicks &&
-            userPicks.selectedList &&
-            userPicks.selectedList.filter((pick) => pick.roleLevel === 5)
-              .length < 5 && (
-              <button onClick={remindToPick}>Remind user to pick</button>
+          <div className={styles.picks_container}>
+            {/* There is no picks yet */}
+            {!userPicks && (
+              <button
+                className={styles.request}
+                onClick={() => requestPicks({ requestedTo: user.ldapUid })}
+              >
+                Request picks
+              </button>
             )}
-          {/* If enough collagues picked, display approve option */}
-          {userPicks &&
-            userPicks.selectedList &&
-            userPicks.selectedList.filter((pick) => pick.roleLevel === 5)
-              .length >= 5 && (
-              <button onClick={approvePicks}>Approve picks</button>
+            {/* If picks have been requested but not approved yet, display edit button */}
+            {userPicks && !userPicks.submitted && (
+              <button className={styles.edit}>
+                <span className="material-symbols-outlined">edit</span>
+              </button>
             )}
-          {userPicks && userPicks.submitted && <p>Picks finalised</p>}
+            {/* If fewer than 5 collagues are picked, display remind button */}
+            {userPicks &&
+              userPicks.SelectedList &&
+              userPicks.SelectedList.filter((pick) => pick.roleLevel === 5)
+                .length < 5 && (
+                <button className={styles.remind} onClick={remindToPick}>
+                  Remind user to pick
+                </button>
+              )}
+            {/* If enough collagues picked, display approve option */}
+            {userPicks &&
+              userPicks.SelectedList &&
+              userPicks.SelectedList.filter((pick) => pick.roleLevel === 5)
+                .length >= 5 && (
+                <button className={styles.approve} onClick={approvePicks}>
+                  Approve picks
+                </button>
+              )}
+            {userPicks && userPicks.submitted && <p>Picks finalised</p>}
+          </div>
         </td>
         <td>
           {!userPicks?.submitted && (
@@ -150,60 +158,56 @@ const PersonRow: React.FC<IPersonRowProps> = ({
       </tr>
       {expand &&
         userPicks &&
-        userPicks.selectedList &&
-        userPicks.selectedList
-          .filter((pick) => pick.roleLevel === 5)
-          .map((pick) => (
+        userPicks.SelectedList &&
+        userPicks.SelectedList.filter((pick) => pick.roleLevel === 5).map(
+          (pick) => (
             <tr>
-              <td></td>
               <td></td>
               <td>{pick.userId}</td>
             </tr>
-          ))}
+          )
+        )}
       {expand &&
         userPicks &&
-        userPicks.selectedList &&
-        userPicks.selectedList
-          .filter((pick) => pick.roleLevel === 6)
-          .map((pick) => (
+        userPicks.SelectedList &&
+        userPicks.SelectedList.filter((pick) => pick.roleLevel === 6).map(
+          (pick) => (
             <tr>
-              <td></td>
               <td></td>
               <td></td>
               <td>{pick.userId}</td>
             </tr>
-          ))}
+          )
+        )}
 
       {expand &&
         userPicks &&
-        userPicks.selectedList &&
-        userPicks.selectedList
-          .filter((pick) => pick.roleLevel === 3)
-          .map((pick) => (
+        userPicks.SelectedList &&
+        userPicks.SelectedList.filter((pick) => pick.roleLevel === 4).map(
+          (pick) => (
             <tr>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
               <td>{pick.userId}</td>
             </tr>
-          ))}
+          )
+        )}
 
       {expand &&
         userPicks &&
-        userPicks.selectedList &&
-        userPicks.selectedList
-          .filter((pick) => pick.roleLevel === 4)
-          .map((pick) => (
+        userPicks.SelectedList &&
+        userPicks.SelectedList.filter((pick) => pick.roleLevel === 3).map(
+          (pick) => (
             <tr>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
               <td>{pick.userId}</td>
             </tr>
-          ))}
+          )
+        )}
     </>
   );
 };

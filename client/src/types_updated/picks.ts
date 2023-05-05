@@ -6,7 +6,7 @@ export interface IRequestPicks {
   requestedTo: string;
   requestedBy: string;
   requestedOn: Date;
-  selectedList: {
+  SelectedList: {
     userId: string;
     selectionStatus: boolean; // for HR to approve
     roleLevel: number;
