@@ -35,7 +35,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
 
   if (user.ldapUid === "curie") console.log("userPicks", userPicks);
 
-  useEffect(() => {
+  /*   useEffect(() => {
     if (
       !userPicks ||
       !userPicks.SelectedList ||
@@ -47,11 +47,11 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     const newSelectedUser = {
       userId: cm,
       selectionStatus: false, // for HR to approve
-      roleLevel: 4,
+      roleLevel: 3,
     };
     userPicks.SelectedList.push(newSelectedUser);
     console.log(userPicks.SelectedList);
-  }, []);
+  }, []); */
 
   const requestPicks = async (newPick: { requestedTo: string }) => {
     await createPick(newPick);
@@ -87,8 +87,9 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         <td>
           {userPicks &&
             userPicks.SelectedList &&
-            userPicks.SelectedList.filter((pick) => pick.roleLevel === 5)
-              .length}
+            userPicks.SelectedList.filter(
+              (pick) => pick.roleLevel === 5 && pick.userId !== user.ldapUid
+            ).length}
         </td>
         <td>
           {userPicks &&
@@ -128,8 +129,9 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             {/* If fewer than 5 collagues are picked, display remind button */}
             {userPicks &&
               userPicks.SelectedList &&
-              userPicks.SelectedList.filter((pick) => pick.roleLevel === 5)
-                .length < 5 && (
+              userPicks.SelectedList.filter(
+                (pick) => pick.roleLevel === 5 && pick.userId !== user.ldapUid
+              ).length < 5 && (
                 <button className={styles.remind} onClick={remindToPick}>
                   Remind user to pick
                 </button>
@@ -137,8 +139,9 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             {/* If enough collagues picked, display approve option */}
             {userPicks &&
               userPicks.SelectedList &&
-              userPicks.SelectedList.filter((pick) => pick.roleLevel === 5)
-                .length >= 5 && (
+              userPicks.SelectedList.filter(
+                (pick) => pick.roleLevel === 5 && pick.userId !== user.ldapUid
+              ).length >= 5 && (
                 <button className={styles.approve} onClick={approvePicks}>
                   Approve picks
                 </button>
@@ -159,23 +162,34 @@ const PersonRow: React.FC<IPersonRowProps> = ({
       {expand &&
         userPicks &&
         userPicks.SelectedList &&
-        userPicks.SelectedList.filter((pick) => pick.roleLevel === 5).map(
-          (pick) => (
-            <tr>
-              <td></td>
-              <td>{pick.userId}</td>
-            </tr>
-          )
-        )}
+        userPicks.SelectedList.filter(
+          (pick) => pick.roleLevel === 5 && pick.userId !== user.ldapUid
+        ).map((pick) => (
+          <tr className={styles.table_row_sub}>
+            <td></td>
+            <td>{pick.userId}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        ))}
       {expand &&
         userPicks &&
         userPicks.SelectedList &&
         userPicks.SelectedList.filter((pick) => pick.roleLevel === 6).map(
           (pick) => (
-            <tr>
+            <tr className={styles.table_row_sub}>
               <td></td>
               <td></td>
               <td>{pick.userId}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
           )
         )}
@@ -185,11 +199,15 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         userPicks.SelectedList &&
         userPicks.SelectedList.filter((pick) => pick.roleLevel === 4).map(
           (pick) => (
-            <tr>
+            <tr className={styles.table_row_sub}>
               <td></td>
               <td></td>
               <td></td>
               <td>{pick.userId}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
           )
         )}
@@ -199,12 +217,15 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         userPicks.SelectedList &&
         userPicks.SelectedList.filter((pick) => pick.roleLevel === 3).map(
           (pick) => (
-            <tr>
+            <tr className={styles.table_row_sub}>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
               <td>{pick.userId}</td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
           )
         )}
