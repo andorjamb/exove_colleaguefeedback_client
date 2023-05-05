@@ -1,151 +1,159 @@
 export interface IReportData {
-    _id: string,
-    requestPicksId :string,
-    feedbackTo: string,
-    dataGroups?: [
-        {
-        group1 : {
-            question1: {
-                colleagues: number[], 
-                CM: number, 
-                self: number, 
-                colleagueAverage: number
-            },
-            question2: {
-                colleagues: number[], 
-                CM: number, 
-                self: number, 
-                colleagueAverage: number
-            },
-            question3: {
-                colleagues: number[], 
-                CM: number, 
-                self: number, 
-                colleagueAverage: number
-            },
-            question4: {
-                colleagues: number[], 
-                CM: number, 
-                self: number, 
-                colleagueAverage: number
-            },
-        },
-    }, {
-        group2 : {
-            question1: {
-                colleagues: number[], 
-                CM: number, 
-                self: number, 
-                colleagueAverage: number
-            },
-            question2: {
-                colleagues: number[], 
-                CM: number, 
-                self: number, 
-                colleagueAverage: number
-            },
-            question3: {
-                colleagues: number[], 
-                CM: number, 
-                self: number, 
-                colleagueAverage: number
-            },
-            question4: {
-                colleagues: number[], 
-                CM: number, 
-                self: number, 
-                colleagueAverage: number
-            },
-        },
-    },{
-        group3: { 
-            question1: {
-                colleagues: number[], 
-                CM: number, 
-                self: number, 
-                colleagueAverage: number
-            },
-            question2: {
-                colleagues: number[], 
-                CM: number, 
-                self: number, 
-                colleagueAverage: number
-            },
-            question3: {
-                colleagues: number[], 
-                CM: number, 
-                self: number, 
-                colleagueAverage: number
-            },
-            question4: {
-                colleagues: number[], 
-                CM: number, 
-                self: number, 
-                colleagueAverage: number
-            },
-        },
-    },{
-        group4: {
-            question1: {
-                colleagues: number[], 
-                CM: number, 
-                self: number, 
-                colleagueAverage: number
-            },
-        
-            question2: {
-                colleagues: number[], 
-                CM: number, 
-                self: number, 
-                colleagueAverage: number
-            },
-            question3: {
-                colleagues: number[], 
-                CM: number, 
-                self: number, 
-                colleagueAverage: number
-            },
-            question4: {
-                colleagues: number[], 
-                CM: number, 
-                self: number, 
-                colleagueAverage: number
-            },
-        }
+  _id: string;
+  requestPicksId: string;
+  feedbackTo: string;
+  rangeCategories?: [
+    {
+      category1: {
+        question1: {
+          questionId: string;
+          colleagues: number[];
+          CM: number;
+          self: number;
+          PM: number;
+          subordinates: number[];
+        };
+        question2: {
+          colleagues: number[];
+          CM: number;
+          self: number;
+          colleagueAverage: number;
+        };
+        question3: {
+          colleagues: number[];
+          CM: number;
+          self: number;
+          colleagueAverage: number;
+        };
+        question4: {
+          colleagues: number[];
+          CM: number;
+          self: number;
+          colleagueAverage: number;
+        };
+      };
+    },
+    {
+      category2: {
+        question1: {
+          colleagues: number[];
+          CM: number;
+          self: number;
+          colleagueAverage: number;
+        };
+        question2: {
+          colleagues: number[];
+          CM: number;
+          self: number;
+          colleagueAverage: number;
+        };
+        question3: {
+          colleagues: number[];
+          CM: number;
+          self: number;
+          colleagueAverage: number;
+        };
+        question4: {
+          colleagues: number[];
+          CM: number;
+          self: number;
+          colleagueAverage: number;
+        };
+      };
+    },
+    {
+      category3: {
+        question1: {
+          colleagues: number[];
+          CM: number;
+          self: number;
+          colleagueAverage: number;
+        };
+        question2: {
+          colleagues: number[];
+          CM: number;
+          self: number;
+          colleagueAverage: number;
+        };
+        question3: {
+          colleagues: number[];
+          CM: number;
+          self: number;
+          colleagueAverage: number;
+        };
+        question4: {
+          colleagues: number[];
+          CM: number;
+          self: number;
+          colleagueAverage: number;
+        };
+      };
+    },
+    {
+      category4: {
+        question1: {
+          colleagues: number[];
+          CM: number;
+          self: number;
+          colleagueAverage: number;
+        };
+
+        question2: {
+          colleagues: number[];
+          CM: number;
+          self: number;
+          colleagueAverage: number;
+        };
+        question3: {
+          colleagues: number[];
+          CM: number;
+          self: number;
+          colleagueAverage: number;
+        };
+        question4: {
+          colleagues: number[];
+          CM: number;
+          self: number;
+          colleagueAverage: number;
+        };
+      };
     }
-],
-    textGroups?: [{ //for text responses
-        group1: {
-            colleagues: string[], 
-            CM: string, 
-            self: string, 
-        },
-        group2: {
-            colleagues: string[], 
-            CM: string, 
-            self: string,     
-        },
-        group3: {
-            colleagues: string[], 
-            CM: string, 
-            self: string,        
-        },
-        group4: {
-            colleagues: string[], 
-            CM: string, 
-            self: string, 
-        },
-        group5: {
-            weaknesses: {
-                colleagues: string[], 
-                CM: string, 
-                self: string, 
-            },
-            strengths: {
-                colleagues: string[], 
-                CM: string, 
-                self: string, 
-            }
-        }
-}]
+  ];
+  textCategorys?: [
+    {
+      //for text responses
+      category1: {
+        colleagues: string[];
+        CM: string;
+        self: string;
+      }[];
+      category2: {
+        colleagues: string[];
+        CM: string;
+        self: string;
+      };
+      category3: {
+        colleagues: string[];
+        CM: string;
+        self: string;
+      };
+      category4: {
+        colleagues: string[];
+        CM: string;
+        self: string;
+      };
+      category5: {
+        weaknesses: {
+          colleagues: string[];
+          CM: string;
+          self: string;
+        };
+        strengths: {
+          colleagues: string[];
+          CM: string;
+          self: string;
+        };
+      };
+    }
+  ];
 }

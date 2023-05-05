@@ -1,4 +1,4 @@
-import { IUserData } from "../types/users";
+import { IUserDataGet } from "../types/users";
 
 //LDAP USERS
 /* boyle
@@ -15,121 +15,57 @@ pasteur
 rieman
 tesla */
 
-export const testEmployeeData: IUserData[] = [
+/* interface IUserRolesGet {
+  _id: string;
+  roleName: string;
+  roleLevel: number;
+  roleStatus: boolean;
+  createBy: string;
+  users: string[];
+  createdOn: Date;
+} */
+
+/* export interface IUserDataGet {
+  _id: string;
+  firstName: string;
+  surname: string;
+  ldapUid: string;
+  email: string;
+  displayName: string;
+  rolesId: IUserRolesGet;
+  workId: {
+    _id: string;
+    reportsTo: string;
+    workReportStatus: boolean;
+  }[];
+  title: string;
+  phone: string;
+  imageUrl: string;
+  userStatus: boolean;
+} */
+
+export const testEmployeeData: IUserDataGet[] = [
   {
-    id: "jesse01",
+    _id: "jesse01",
     firstName: "Jesse",
     surname: "Mwangi",
+    ldapUid: "",
     email: "jesse@fakemail.com",
     displayName: "Jesse Mwangi",
-    personal: {
-      honorific: "",
-      shortBirthDate: "",
-      gender: "",
+    rolesId: {
+      _id: "",
+      roleName: "",
+      roleLevel: 3,
+      roleStatus: true,
+      createBy: "HR",
+      users: [],
+      createdOn: new Date(),
     },
-    about: {
-      avatar:
-        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/132.png",
-      hobbies: [""],
-    },
-    work: {
-      reportsTo: {
-        id: "",
-        firstName: "",
-        surname: "",
-        email: "",
-      },
-      title: "Junior Developer",
-      department: "IT",
-      site: "Helsinki",
-      startDate: "",
-    },
-  },
-  {
-    id: "anna01",
-    firstName: "Anna",
-    surname: "Petelin",
-    email: "anna@fakemail.com",
-    displayName: "Anna Petelin",
-    personal: {
-      honorific: "",
-      shortBirthDate: "",
-      gender: "",
-    },
-    about: {
-      avatar:
-        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/132.png",
-      hobbies: [""],
-    },
-    work: {
-      reportsTo: {
-        id: "",
-        firstName: "",
-        surname: "",
-        email: "",
-      },
-      title: "Junior Developer",
-      department: "IT",
-      site: "Helsinki",
-      startDate: "",
-    },
-  },
-  {
-    id: "lera01",
-    firstName: "Valeria",
-    surname: "Vagapova",
-    email: "lera@fakemail.com",
-    displayName: "Valeria Vagapova",
-    personal: {
-      honorific: "",
-      shortBirthDate: "",
-      gender: "",
-    },
-    about: {
-      avatar:
-        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/132.png",
-      hobbies: [""],
-    },
-    work: {
-      reportsTo: {
-        id: "",
-        firstName: "",
-        surname: "",
-        email: "",
-      },
-      title: "Junior Developer",
-      department: "IT",
-      site: "Helsinki",
-      startDate: "",
-    },
-  },
-  {
-    id: "dibja01",
-    firstName: "Dibya",
-    surname: "Dahal",
-    email: "dibya@fakemail.com",
-    displayName: "Dibya Dahal",
-    personal: {
-      honorific: "",
-      shortBirthDate: "",
-      gender: "",
-    },
-    about: {
-      avatar:
-        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/132.png",
-      hobbies: [""],
-    },
-    work: {
-      reportsTo: {
-        id: "",
-        firstName: "",
-        surname: "",
-        email: "",
-      },
-      title: "Junior Developer",
-      department: "IT",
-      site: "Helsinki",
-      startDate: "",
-    },
+    workId: [{ _id: "", reportsTo: "", workReportStatus: false }],
+    title: "Manager",
+    phone: "",
+    imageUrl:
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/132.png",
+    userStatus: true,
   },
 ];

@@ -1,5 +1,5 @@
 import React from "react";
-import { ICat_Quest, IQuestion, IQuestionLang, ITemplate, ISection } from "../../types/template";
+import { ICat_Quest, IQuestion, IQuestionLang, ITemplateGet, ISection } from "../../types/template";
 
 import styles from "../../pages/Template/Template.module.css";
 

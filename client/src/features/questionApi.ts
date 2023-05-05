@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 //Types
 import { IQuestion } from "../types/questions";
-import {} from "../types_updated/questions";
+
 
 //const serverApi = process.env.REACT_APP_SERVER_API;
 const serverApi = "https://exove.vercel.app/api/";
