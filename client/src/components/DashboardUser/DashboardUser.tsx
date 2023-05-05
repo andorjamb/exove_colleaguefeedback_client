@@ -1,6 +1,7 @@
 //React
 import React, { useState } from "react";
 
+
 import axios from "axios";
 
 //Pages and Components
@@ -31,18 +32,12 @@ const DashboardUser = () => {
   const emp_id = ""; //replace with actual uid when available
   const userInfo = useSelector((state: any) => state.auth.user);
   const usersData = useGetAllUsersQuery();
-  const employees: IUserData[] = [];
+  const employees: IUserDataGet[] = [];
   /** this will be fetched using RTK Query */
 
   const [selected, setSelected] = useState<string[]>([]);
 
   const [searchValue, setSearchValue] = useState("");
-
-  const employeeFilter = testEmployeeData.filter(
-    (item) =>
-      item.displayName.toLowerCase().includes(searchValue) ||
-      item.title.toLowerCase().includes(searchValue)
-  );
 
   function searchFilter(e: React.ChangeEvent<HTMLInputElement>) {
     setSearchValue(e.target.value.toLowerCase());
