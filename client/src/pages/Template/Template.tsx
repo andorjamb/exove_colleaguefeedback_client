@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 
 //Types
 import {
-  ITemplate,
+  ITemplateGet,
   IQuestion,
   IQCategory,
   IQuestionLang,
@@ -53,7 +53,7 @@ const Template = () => {
   const isAdmin = useSelector((state: any) => state.auth.isAdmin);
   const navigate = useNavigate();
 
-  const [serverData, setServerData] = useState<ITemplate>();
+  const [serverData, setServerData] = useState<ITemplateGet>();
   const [questionState, setQuestionState] = useState({
     newQuestion: "",
     questionArray: [],
@@ -137,8 +137,8 @@ type: "",
 
   const getActiveTemplate = async () => {
     await axios
-      .get<ITemplate>(`${process.env.REACT_APP_SERVER_API}/template/active`)
-      .then((result) => result.data as ITemplate)
+      .get<ITemplateGet>(`${process.env.REACT_APP_SERVER_API}/template/active`)
+      .then((result) => result.data as ITemplateGet)
       .then((data) => setServerData(data));
   };
 

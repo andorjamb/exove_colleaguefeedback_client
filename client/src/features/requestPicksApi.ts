@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 //Types
 import { IRequestPicks } from "../types/picks";
-import { IRequestPicksPost } from "../types_updated/picks";
+import { IRequestPicksPost } from "../types/picks";
 
 //const serverApi = process.env.REACT_APP_SERVER_API;
 const serverApi = "https://exove.vercel.app/api/";

@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 //Types
-import { IUserDataGet } from "../types_updated/users";
+import { IUserDataGet } from "../types/users";
 
 const serverApi = process.env.REACT_APP_SERVER_API;
 

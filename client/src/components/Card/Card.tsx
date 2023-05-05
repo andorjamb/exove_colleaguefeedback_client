@@ -4,8 +4,7 @@ import React from "react";
 import styles from "./Card.module.css";
 
 //Types
-import { IUserData } from "../../types/users";
-import { IUserDataGet } from "../../types_updated/users";
+import { IUserDataGet } from "../../types/users";
 
 interface Props {
   employee: IUserDataGet;

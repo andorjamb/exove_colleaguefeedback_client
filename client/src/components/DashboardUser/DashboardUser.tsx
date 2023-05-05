@@ -1,7 +1,6 @@
 //React
 import React, { useState } from "react";
 
-
 import axios from "axios";
 
 //Pages and Components
@@ -16,7 +15,7 @@ import "../../translations/i18next";
 import { useTranslation } from "react-i18next";
 
 //Types
-import { IUserDataGet } from "../../types_updated/users";
+import { IUserDataGet } from "../../types/users";
 
 //Testing data
 //import { testEmployeeData } from "../../testdata/testEmployeeData";

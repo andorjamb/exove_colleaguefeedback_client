@@ -14,10 +14,10 @@ import SearchBar from "./SearchBar/SearchBar";
 import PersonRow from "./PersonRow/PersonRow";
 
 // Types
-import { ITemplateGet } from "../../types_updated/template";
+import { ITemplateGet } from "../../types/template";
 import { IFeedback } from "../../types/feedback";
 import { IRequestPicks } from "../../types/picks";
-import { IUserDataGet } from "../../types_updated/users";
+import { IUserDataGet } from "../../types/users";
 
 // Styles
 import styles from "./DashboardAdmin.module.css";
