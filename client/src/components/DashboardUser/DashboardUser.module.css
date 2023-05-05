@@ -1,55 +1,54 @@
 .container {
-    height: 100%;
-    width: 100%;
+  height: 100%;
+  width: 100%;
 }
 
 .mainContent {
-    background-color: white;
-    width: 100vw;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    padding: 2rem;
+  background-color: white;
+  width: 100%;
+  max-width: 1400px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
 }
-
 
 .submitButton {
-    background-color: var(--exoveGreen);
-    color: white;
-    float: right;
-    height: 2rem;
-    width: 5rem; 
-    text-transform: uppercase;
-    font-weight: 800;
-    border: none;
+  background-color: var(--exoveGreen);
+  color: white;
+  float: right;
+  height: 2rem;
+
+  text-transform: uppercase;
+  font-weight: 800;
+  border: none;
 }
 .selectionGrid {
-    display: grid;
-    width: 100%;
-    grid-gap: 2rem;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: auto;
-    background-color: white;
-
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background-color: white;
 }
 
 @media screen and (max-width: 940px) {
-    .selectionGrid {
-        grid-gap: 1.5rem;
-    }
+  .selectionGrid {
+    grid-gap: 1.5rem;
+  }
 }
 
-
 @media screen and (max-width: 840px) {
-    .selectionGrid {
-        grid-template-columns: repeat(2, 1fr);
-        grid-gap: 1rem;
-    }
+  .selectionGrid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 1rem;
+  }
 }
 
 @media screen and (max-width: 640px) {
-    .selectionGrid {
-        grid-template-columns: 1fr;
-        justify-content: center;
-    }
+  .selectionGrid {
+    grid-template-columns: 1fr;
+    justify-content: center;
+  }
 }

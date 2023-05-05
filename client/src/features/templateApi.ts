@@ -25,9 +25,16 @@ export const templateApi = createApi({
     getTemplateById: builder.query<ITemplate, string>({
       query: (id) => `template/${id}`,
     }),
+    getActiveTemplate: builder.query<ITemplate, void>({
+      query: () => `template/active`,
+    }),
   }),
 });
 
-export const { useGetAllTemplatesQuery, useGetTemplateByIdQuery } = templateApi;
+export const {
+  useGetAllTemplatesQuery,
+  useGetTemplateByIdQuery,
+  useGetActiveTemplateQuery,
+} = templateApi;
 
 export default templateApi.reducer;

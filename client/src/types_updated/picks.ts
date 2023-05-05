@@ -14,3 +14,7 @@ export interface IRequestPicks {
   submitted: boolean;
   submittedOn: Date;
 }
+
+export interface IRequestPicksPost {
+  requestedTo: string;
+}
