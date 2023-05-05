@@ -1,6 +1,7 @@
 //React
 import React, { useState } from "react";
 
+
 import axios from "axios";
 
 //Pages and Components
@@ -15,10 +16,10 @@ import "../../translations/i18next";
 import { useTranslation } from "react-i18next";
 
 //Types
-import { IUserData } from "../../types/users";
+import { IUserDataGet } from "../../types_updated/users";
 
 //Testing data
-import { testEmployeeData } from "../../testdata/testEmployeeData";
+//import { testEmployeeData } from "../../testdata/testEmployeeData";
 import SearchBar from "../DashboardAdmin/SearchBar/SearchBar";
 import { useGetAllUsersQuery } from "../../features/userApi";
 import { useGetAllRequestPicksQuery } from "../../features/requestPicksApi";
@@ -31,12 +32,16 @@ const DashboardUser = () => {
   const emp_id = ""; //replace with actual uid when available
   const userInfo = useSelector((state: any) => state.auth.user);
   const usersData = useGetAllUsersQuery();
-  const picksData = useGetAllRequestPicksQuery();
-  const employees: IUserData[] = [];
+  const employees: IUserDataGet[] = [];
   /** this will be fetched using RTK Query */
+
   const [selected, setSelected] = useState<string[]>([]);
 
-  /* const userPicks = picksData.find((picks) => picks.requestedTo === user); */
+  const [searchValue, setSearchValue] = useState("");
+
+  function searchFilter(e: React.ChangeEvent<HTMLInputElement>) {
+    setSearchValue(e.target.value.toLowerCase());
+  }
 
   if (usersData.isFetching) return <p>Loading...</p>;
 
