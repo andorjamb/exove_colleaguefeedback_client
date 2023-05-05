@@ -46,13 +46,9 @@ const AdminNav = () => {
               ? `${styles.navlink} ${styles.active}`
               : styles.navlink
           }
-          to="/dashboard"
+          to="/userview"
         >
-          <li className={styles.li}>
-            <a className={styles.a} href="/dashboard">
-              {t("userView")}
-            </a>
-          </li>
+          <li className={styles.li}>{t("userView")}</li>
         </NavLink>
       </ul>
     </nav>

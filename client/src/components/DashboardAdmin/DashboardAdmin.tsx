@@ -6,6 +6,7 @@ import axios from "axios";
 import { useGetAllFeedbacksQuery } from "../../features/feedbackApi";
 import { useGetAllRequestPicksQuery } from "../../features/requestPicksApi";
 import { useGetAllUsersQuery } from "../../features/userApi";
+import { useGetActiveTemplateQuery } from "../../features/templateApi";
 
 // Components
 import BulkButtons from "./BulkButtons/BulkButtons";
@@ -73,6 +74,8 @@ const DashboardAdmin = () => {
   const feedbackData = useGetAllFeedbacksQuery();
   const usersData = useGetAllUsersQuery();
   const picksData = useGetAllRequestPicksQuery();
+  const activeTemplateData = useGetActiveTemplateQuery();
+  console.log("activeTemplateData", activeTemplateData.data);
   /* const activeTemplateData =  */
 
   if (usersData.isFetching || feedbackData.isFetching || picksData.isFetching)

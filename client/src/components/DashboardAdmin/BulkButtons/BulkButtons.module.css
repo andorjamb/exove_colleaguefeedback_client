@@ -1,3 +1,10 @@
+.buttons_container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
 .buttons_container button {
   font-weight: 400;
 }

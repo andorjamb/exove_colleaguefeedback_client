@@ -23,5 +23,6 @@ export interface IUserDataGet {
   }[];
   title: string;
   phone: string;
+  imageUrl: string;
   userStatus: boolean;
 }

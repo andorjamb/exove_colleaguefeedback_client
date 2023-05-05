@@ -19,47 +19,77 @@ import { IUserData } from "../../types/users";
 
 //Testing data
 import { testEmployeeData } from "../../testdata/testEmployeeData";
+import SearchBar from "../DashboardAdmin/SearchBar/SearchBar";
+import { useGetAllUsersQuery } from "../../features/userApi";
 
 const DashboardUser = () => {
+  const [searchInput, setSearchInput] = useState<string>("");
   const { t, i18n } = useTranslation(["dashboardUser"]);
   const serverEndpoint = process.env.REACT_APP_SERVER_ENDPOINT; //
   const emp_id = ""; //replace with actual uid when available
 
+  const usersData = useGetAllUsersQuery();
   const employees: IUserData[] = [];
   /** this will be fetched using RTK Query */
 
   const [selected, setSelected] = useState<string[]>([]);
 
+  if (usersData.isFetching) return <p>Loading...</p>;
+
+  console.log("selected", selected);
+
+  const filteredUsersData = usersData.data
+    ?.filter((user) => user.userStatus)
+    .filter(
+      (user) =>
+        user.firstName.toLowerCase().includes(searchInput.toLowerCase()) ||
+        user.surname.toLowerCase().includes(searchInput.toLowerCase()) ||
+        user.displayName.toLowerCase().includes(searchInput.toLowerCase())
+    );
+
   function clickHandler(e: React.MouseEvent<HTMLDivElement>, id: string) {
     console.log(e.currentTarget); //debugging
     console.log(id); //debugging
-    setSelected((selected) => [...selected, id]);
+    if (selected.includes(id))
+      setSelected((selected) => selected.filter((item) => item !== id));
+    else setSelected((selected) => [...selected, id]);
   }
 
   function submitHandler() {
     console.log(selected); //debugging
+
     axios.patch(`${serverEndpoint}/picks/${emp_id}`, {});
   }
 
-  function changeHandler(e: React.ChangeEvent<HTMLInputElement>) {
-    console.log(e.target.value); //debugging
-  }
+  const searchChangeHandler = (e: React.FormEvent<HTMLInputElement>) => {
+    console.log("curr search:", e.currentTarget.value);
+    setSearchInput(e.currentTarget.value);
+  };
 
   return (
     <div className={styles.container}>
       <div className={styles.mainContent}>
         <div>
-          <h3>{t("title")}</h3>
+          <h1>{t("title")}</h1>
         </div>
-        <Searchbar onChange={(e: any) => changeHandler(e)} />
+        <SearchBar
+          onChangeHandler={searchChangeHandler}
+          inputValue={searchInput}
+        />
         <div className={styles.selectionGrid}>
-          {testEmployeeData?.map((item) => (
-            <Card
-              key={item.id}
-              employee={item}
-              clickCallback={(e: any) => clickHandler(e, item.id)}
-            />
-          ))}
+          {filteredUsersData!
+            .sort((user1, user2) => {
+              if (selected.includes(user1.ldapUid)) return -1;
+              else return 0;
+            })
+            .map((item) => (
+              <Card
+                key={item._id}
+                employee={item}
+                clickCallback={(e: any) => clickHandler(e, item.ldapUid)}
+                picked={selected.includes(item.ldapUid)}
+              />
+            ))}
         </div>
         <div>
           <button

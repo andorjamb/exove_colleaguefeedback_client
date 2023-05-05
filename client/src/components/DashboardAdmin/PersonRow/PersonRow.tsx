@@ -5,7 +5,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 // Redux
-import { useAppSelector } from "../../../app/hooks";
+import {
+  useCreatePickMutation,
+  useGetAllRequestPicksQuery,
+} from "../../../features/requestPicksApi";
 
 // Types
 import { IRequestPicks } from "../../../types/picks";
@@ -27,6 +30,8 @@ const PersonRow: React.FC<IPersonRowProps> = ({
   userFeedbacks,
 }) => {
   const [expand, setExpand] = useState(false);
+  const [createPick] = useCreatePickMutation();
+  const { refetch } = useGetAllRequestPicksQuery();
 
   useEffect(() => {
     if (
@@ -46,34 +51,9 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     console.log(userPicks.selectedList);
   }, []);
 
-  /*   const updatePicks = async () => {
-    try {
-      const { data } = await axios.post(
-        `https://exove.vercel.app/api/picks/${userPicks?._id}`,
-        { ...newPick },
-        {
-          withCredentials: true,
-        }
-      );
-      console.log("Response", data);
-    } catch (err) {
-      console.log(err);
-    }
-  }; */
-
   const requestPicks = async (newPick: { requestedTo: string }) => {
-    try {
-      const { data } = await axios.post(
-        "https://exove.vercel.app/api/picks/",
-        { ...newPick },
-        {
-          withCredentials: true,
-        }
-      );
-      console.log("Response", data);
-    } catch (err) {
-      console.log(err);
-    }
+    await createPick(newPick);
+    refetch();
   };
 
   const remindToPick = () => {
