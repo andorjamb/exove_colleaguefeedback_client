@@ -1,5 +1,20 @@
 import { IUserData } from "../types/users";
 
+//LDAP USERS
+/* boyle
+curie
+einstein
+euclid
+euler
+galieleo
+gauss
+jmacy
+newton
+nobel
+pasteur
+rieman
+tesla */
+
 export const testEmployeeData: IUserData[] = [
   {
     id: "jesse01",
