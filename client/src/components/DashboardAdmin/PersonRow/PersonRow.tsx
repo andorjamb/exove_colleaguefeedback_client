@@ -13,7 +13,7 @@ import {
 // Types
 import { IRequestPicks } from "../../../types/picks";
 import { IFeedback } from "../../../types/feedback";
-import { IUserDataGet } from "../../../types_updated/users";
+import { IUserDataGet } from "../../../types/users";
 
 // Styles
 import styles from "./PersonRow.module.css";

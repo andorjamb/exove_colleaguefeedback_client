@@ -1,7 +1,7 @@
 /** For creating conversions from mongoose json objects to json objects for frontend */
 import {
   ICat_Quest,
-  ITemplate,
+  ITemplateGet,
   IQuestion,
   ITemplateQuestion,
   ISection,
@@ -84,7 +84,7 @@ class TemplateClass {
 }
 
 //////// conversion functions ////////////
-export const convertTemplate = async (template: ITemplate) => {
+export const convertTemplate = async (template: ITemplateGet) => {
   let newSectionArray: ISection[];
 
   let newTemplate = new TemplateClass(

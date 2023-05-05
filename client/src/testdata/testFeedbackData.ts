@@ -6,9 +6,37 @@ const testReportData:IReportData =  {
     _id: '234',
     requestPicksId :'456',
     feedbackTo: 'ivan01',
-    dataGroups: [
+    rangeCategories: [
         {
-        group1 : {
+        category1 : {
+            question1: {
+                colleagues:[4,3,3,3,3], 
+                CM: 4, 
+                self: 3, 
+                colleagueAverage: 4 
+                //ceiling or floor? 
+            },
+            question2: {
+                colleagues: [4,4,4,5,4], 
+                CM: 4, 
+                self: 4, 
+                colleagueAverage: 4
+            },
+            question3: {
+                colleagues: [3,2,3,4,4], 
+                CM: 3, 
+                self: 4, 
+                colleagueAverage: 3
+            },
+            question4: {
+                colleagues: [3,4,4,3,3], 
+                CM: 3, 
+                self: 3, 
+                colleagueAverage: 3
+            },
+        },
+    },{
+        category2 : {
             question1: {
                 colleagues:[4,3,3,3,3], 
                 CM: 4, 
@@ -35,7 +63,7 @@ const testReportData:IReportData =  {
             },
         },
     },{
-        group2 : {
+        category3 : {
             question1: {
                 colleagues:[4,3,3,3,3], 
                 CM: 4, 
@@ -62,34 +90,7 @@ const testReportData:IReportData =  {
             },
         },
     },{
-        group3 : {
-            question1: {
-                colleagues:[4,3,3,3,3], 
-                CM: 4, 
-                self: 3, 
-                colleagueAverage: 4 //ceiling or floor? 
-            },
-            question2: {
-                colleagues: [4,4,4,5,4], 
-                CM: 4, 
-                self: 4, 
-                colleagueAverage: 4
-            },
-            question3: {
-                colleagues: [3,2,3,4,4], 
-                CM: 3, 
-                self: 4, 
-                colleagueAverage: 3
-            },
-            question4: {
-                colleagues: [3,4,4,3,3], 
-                CM: 3, 
-                self: 3, 
-                colleagueAverage: 3
-            },
-        },
-    },{
-        group4 : {
+        category4 : {
             question1: {
                 colleagues:[4,3,3,3,3], 
                 CM: 4, 
@@ -117,28 +118,28 @@ const testReportData:IReportData =  {
         },
     }
 ],
-    textGroups: [{ //for text responses
-        group1: {
+    textcategorys: [{ //for text responses
+        category1: {
             colleagues: ["good job", "works too hard", "could do better"], 
             CM: "great team member", 
             self: "I know I have areas to improve", 
         },
-        group2: {
+        category2: {
             colleagues: ["good job", "works too hard", "could do better"], 
             CM: "great team member", 
             self: "I know I have areas to improve", 
         },
-        group3: {
+        category3: {
             colleagues: ["good job", "works too hard", "could do better"], 
             CM: "great team member", 
             self: "I know I have areas to improve", 
         },
-        group4: {
+        category4: {
             colleagues: ["good job", "works too hard", "could do better"], 
             CM: "great team member", 
             self: "I know I have areas to improve", 
         },
-        group5: {
+        category5: {
             weaknesses: {
                 colleagues: ["should arrive earlier", "sometimes indecisive"], 
                 CM: "could contribute more at meetings", 
