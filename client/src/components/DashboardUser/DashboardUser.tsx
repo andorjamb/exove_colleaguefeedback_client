@@ -50,7 +50,9 @@ const DashboardUser = () => {
   function clickHandler(e: React.MouseEvent<HTMLDivElement>, id: string) {
     console.log(e.currentTarget); //debugging
     console.log(id); //debugging
-    setSelected((selected) => [...selected, id]);
+    if (selected.includes(id))
+      setSelected((selected) => selected.filter((item) => item !== id));
+    else setSelected((selected) => [...selected, id]);
   }
 
   function submitHandler() {
@@ -67,7 +69,7 @@ const DashboardUser = () => {
     <div className={styles.container}>
       <div className={styles.mainContent}>
         <div>
-          <h3>{t("title")}</h3>
+          <h1>{t("title")}</h1>
         </div>
         <SearchBar
           onChangeHandler={searchChangeHandler}
