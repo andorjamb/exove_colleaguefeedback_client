@@ -21,18 +21,22 @@ import { IUserData } from "../../types/users";
 import { testEmployeeData } from "../../testdata/testEmployeeData";
 import SearchBar from "../DashboardAdmin/SearchBar/SearchBar";
 import { useGetAllUsersQuery } from "../../features/userApi";
+import { useGetAllRequestPicksQuery } from "../../features/requestPicksApi";
+import { useSelector } from "react-redux";
 
 const DashboardUser = () => {
   const [searchInput, setSearchInput] = useState<string>("");
   const { t, i18n } = useTranslation(["dashboardUser"]);
   const serverEndpoint = process.env.REACT_APP_SERVER_ENDPOINT; //
   const emp_id = ""; //replace with actual uid when available
-
+  const userInfo = useSelector((state: any) => state.auth.user);
   const usersData = useGetAllUsersQuery();
+  const picksData = useGetAllRequestPicksQuery();
   const employees: IUserData[] = [];
   /** this will be fetched using RTK Query */
-
   const [selected, setSelected] = useState<string[]>([]);
+
+  /* const userPicks = picksData.find((picks) => picks.requestedTo === user); */
 
   if (usersData.isFetching) return <p>Loading...</p>;
 
@@ -80,7 +84,7 @@ const DashboardUser = () => {
           {filteredUsersData!
             .sort((user1, user2) => {
               if (selected.includes(user1.ldapUid)) return -1;
-              else return 0;
+              else return 1;
             })
             .map((item) => (
               <Card

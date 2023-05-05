@@ -22,7 +22,7 @@ const Profile = () => {
   return (
     <div className={styles.container}>
       <div className={styles.profile}>
-        {data ? <>{data}</> : { isFetching } ? <p>Fetching</p> : <></>}
+        {/* {data ? <>{data}</> : { isFetching } ? <p>Fetching</p> : <></>} */}
 
         <EmailTest />
       </div>

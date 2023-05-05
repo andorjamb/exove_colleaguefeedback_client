@@ -81,6 +81,8 @@ const DashboardAdmin = () => {
   if (usersData.isFetching || feedbackData.isFetching || picksData.isFetching)
     return <p>Loading...</p>;
 
+  console.log("picksData from dash", picksData);
+
   const searchChangeHandler = (e: React.FormEvent<HTMLInputElement>) => {
     console.log("curr search:", e.currentTarget.value);
     setSearchInput(e.currentTarget.value);

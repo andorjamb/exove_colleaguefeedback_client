@@ -7,7 +7,7 @@ import emailjs from "@emailjs/browser";
   link: string;
 } */
 const EmailTest = () => {
-  const username = "";
+  const username = "Lera";
   const link = "https://exove-colleaguefeedback-client.vercel.app/dashboard";
 
   const serviceId = "service_s3jvp7d";
@@ -24,8 +24,10 @@ const EmailTest = () => {
   const emailParameters = {
     name: `${username}`,
     date: futureDate,
-    link: link,
-    emailTo: "kronosaur@hotmail.com",
+    link: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQScA7p2q5GDil58X2C_xhJ9BrsRAR2YFt1O9MqAbJxPEr8hYi7",
+    emailTo: "lera.vagapova@gmail.com",
+    from_name: "Essi",
+    reply_to: "y.nomore@gmail.com",
   };
   const sendEmail = (e: any) => {
     e.preventDefault();
