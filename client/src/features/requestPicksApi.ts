@@ -33,6 +33,13 @@ export const requestPicksApi = createApi({
         body: picks,
       }),
     }),
+    updatePick: builder.mutation<void, IRequestPicksPost>({
+      query: (picks) => ({
+        url: "picks",
+        method: "PATCH",
+        body: picks,
+      }),
+    }),
   }),
 });
 
@@ -40,6 +47,7 @@ export const {
   useGetAllRequestPicksQuery,
   useGetRequestPickByUserIdQuery,
   useCreatePickMutation,
+  useUpdatePickMutation,
 } = requestPicksApi;
 
 export default requestPicksApi.reducer;

@@ -10,16 +10,20 @@ import { IUserDataGet } from "../../types_updated/users";
 interface Props {
   employee: IUserDataGet;
   clickCallback: React.MouseEventHandler<HTMLDivElement>;
+  picked: boolean;
 }
 
-const Card = ({ employee, clickCallback }: Props) => {
+const Card = ({ employee, clickCallback, picked }: Props) => {
   function clickHandler(e: any) {
     e.currentTarget.classList.toggle(`${styles.selected}`);
     clickCallback(e);
   }
 
   return (
-    <div className={styles.card} onClick={clickHandler}>
+    <div
+      className={`${styles.card} ${picked ? styles.selected : ""}`}
+      onClick={clickHandler}
+    >
       <img className={styles.avatar} src={employee.imageUrl} alt="avatar" />
       <div>
         <h3 className={styles.name}>{employee.displayName}</h3>

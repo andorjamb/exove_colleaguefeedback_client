@@ -57,6 +57,7 @@ const DashboardUser = () => {
 
   function submitHandler() {
     console.log(selected); //debugging
+
     axios.patch(`${serverEndpoint}/picks/${emp_id}`, {});
   }
 
@@ -76,13 +77,19 @@ const DashboardUser = () => {
           inputValue={searchInput}
         />
         <div className={styles.selectionGrid}>
-          {filteredUsersData!.map((item) => (
-            <Card
-              key={item._id}
-              employee={item}
-              clickCallback={(e: any) => clickHandler(e, item._id)}
-            />
-          ))}
+          {filteredUsersData!
+            .sort((user1, user2) => {
+              if (selected.includes(user1.ldapUid)) return -1;
+              else return 0;
+            })
+            .map((item) => (
+              <Card
+                key={item._id}
+                employee={item}
+                clickCallback={(e: any) => clickHandler(e, item.ldapUid)}
+                picked={selected.includes(item.ldapUid)}
+              />
+            ))}
         </div>
         <div>
           <button
