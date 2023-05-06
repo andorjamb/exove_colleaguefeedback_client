@@ -18,3 +18,4 @@ export interface IRequestPicks {
 export interface IRequestPicksPost {
   requestedTo: string;
 }
+

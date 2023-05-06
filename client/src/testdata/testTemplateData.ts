@@ -1,4 +1,4 @@
-import { ITemplate } from "../types/template";
+import { ITemplateGet } from "../types/template";
 
 //form in db
 export const testTemplateData = {
@@ -254,5 +254,3 @@ export const testTemplateData: ITemplate = {
   active: true,
 };
  */
-
-

@@ -26,18 +26,36 @@ export const requestPicksApi = createApi({
     getRequestPickByUserId: builder.query<IRequestPicks, string>({
       query: (userId) => `picks/${userId}`,
     }),
+    getRequestPickByDocId: builder.query<IRequestPicks, string>({
+      query: (id) => `pick-id/${id}`,
+    }),
     createPick: builder.mutation<void, IRequestPicksPost>({
-      query: (picks) => ({
-        url: "picks",
+      query: (body) => ({
+        url: "picks/createreqpick",
         method: "POST",
-        body: picks,
+        body,
       }),
     }),
-    updatePick: builder.mutation<void, IRequestPicksPost>({
-      query: (picks) => ({
-        url: "picks",
+    submitPick: builder.mutation<void, { body: IRequestPicksPost; id: string }>(
+      {
+        //for adding picks to list  - should body be an array of strings?
+        query: ({ body, id }) => ({
+          url: `picks/${id}`,
+          method: "PATCH",
+          body,
+        }),
+      }
+    ),
+    approvePick: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `picks/approve-pick/${id}`,
         method: "PATCH",
-        body: picks,
+      }),
+    }),
+    deletePick: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/picks/${id}`,
+        method: "DELETE",
       }),
     }),
   }),
@@ -47,7 +65,6 @@ export const {
   useGetAllRequestPicksQuery,
   useGetRequestPickByUserIdQuery,
   useCreatePickMutation,
-  useUpdatePickMutation,
 } = requestPicksApi;
 
 export default requestPicksApi.reducer;
