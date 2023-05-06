@@ -1,4 +1,6 @@
 export interface IReportData {
+  //report interface still in planning phase
+
   _id: string;
   requestPicksId: string;
   feedbackTo: string;

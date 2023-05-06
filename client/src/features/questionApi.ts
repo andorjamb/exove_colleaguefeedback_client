@@ -3,7 +3,6 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 //Types
 import { IQuestion } from "../types/questions";
 
-
 //const serverApi = process.env.REACT_APP_SERVER_API;
 const serverApi = "https://exove.vercel.app/api/";
 //const serverApi = "http://localhost:4000/";
@@ -24,7 +23,22 @@ export const questionApi = createApi({
       providesTags: ["Questions"],
     }),
     getQuestionId: builder.query<IQuestion, string>({
-      query: (userId) => `question/${userId}`,
+      query: (id) => `question/${id}`,
+    }),
+    addQuestion: builder.mutation<IQuestion, void>({
+      query: (body) => ({
+        url: "question",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Questions"],
+    }),
+    deleteQuestion: builder.mutation<IQuestion, string>({
+      query: (id) => ({
+        url: `question/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Questions"],
     }),
   }),
 });

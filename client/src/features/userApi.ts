@@ -19,12 +19,35 @@ export const userApi = createApi({
     getAllUsers: builder.query<IUserDataGet[], void>({
       query: () => "users",
     }),
-    getUserByName: builder.query<IUserDataGet, string>({
-      query: (name) => `users/${name}`,
+    getUserByLdapUid: builder.query<IUserDataGet, string>({
+      query: (ldapUid) => `users/${ldapUid}`,
+    }),
+    getUserById: builder.query<IUserDataGet, string>({
+      query: (userId) => `users/id/${userId}`,
+    }),
+    addUser: builder.mutation<IUserDataGet, void>({
+      query: () => ({
+        url: "users",
+        method: "POST",
+      }),
+      invalidatesTags: ["Users"],
+    }),
+    updateUser: builder.mutation<IUserDataGet, string>({
+      query: (docId) => ({
+        url: `users/${docId}`,
+        method: "PUT",
+      }),
+      invalidatesTags: ["Users"],
+    }),
+    updateUserReportsTo: builder.mutation({
+      query: (docId) => ({
+        url: `users/${docId}`,
+        method: "PATCH",
+      }),
     }),
   }),
 });
 
-export const { useGetUserByNameQuery, useGetAllUsersQuery } = userApi;
+export const { useGetUserByLdapUidQuery, useGetAllUsersQuery } = userApi;
 
 export default userApi.reducer;
