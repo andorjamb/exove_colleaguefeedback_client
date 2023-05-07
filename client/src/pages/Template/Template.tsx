@@ -2,8 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import axios, { AxiosResponse } from "axios";
-import { v4 as uuidv4 } from "uuid";
+//import { v4 as uuidv4 } from "uuid";
 
 //Types
 import {
@@ -14,6 +13,7 @@ import {
   ISection,
   IConvertedTemplate,
   ITemplateQuestion,
+  IQuestionPost,
 } from "../../types/template";
 
 //Styling
@@ -27,7 +27,16 @@ import {
   convertTemplate,
   /* fetchCategories, */
 } from "../../functions/templateConverter";
-import { useGetAllTemplatesQuery } from "../../features/templateApi";
+import {
+  useGetActiveTemplateQuery,
+  useGetAllTemplatesQuery,
+} from "../../features/templateApi";
+import {
+  useGetAllQuestionsQuery,
+  useGetQuestionIdQuery,
+  useAddQuestionMutation,
+} from "../../features/questionApi";
+import { useGetAllCategoriesQuery } from "../../features/categoryApi";
 
 //Components
 import Accordion from "../../components/Accordion/Accordion";
@@ -43,17 +52,28 @@ type accordion = {
   open: boolean;
 };
 
-let convertedTemplateData: IConvertedTemplate;
-const devServer = "http://localhost:4000";
+//let convertedTemplateData: IConvertedTemplate;
 
 const Template = () => {
-  const templateData = useGetAllTemplatesQuery();
-  const templates = templateData.data;
+  const getTemplateData = useGetAllTemplatesQuery();
+  const getActiveTemplate = useGetActiveTemplateQuery();
+  const getCategories = useGetAllCategoriesQuery();
+  const getQuestions = useGetAllQuestionsQuery();
+
+  const [addQuestion] = useAddQuestionMutation();
+
+  const templates = getTemplateData.data;
+  const activeTemplate = getActiveTemplate.data;
+  const categories = getCategories.data;
+  const questions = getQuestions.data;
+  console.log(activeTemplate);
+  console.log(categories);
+  console.log(questions);
+
   const loggedIn = useSelector((state: any) => state.auth.loggedIn);
   const isAdmin = useSelector((state: any) => state.auth.isAdmin);
   const navigate = useNavigate();
 
-  const [serverData, setServerData] = useState<ITemplateGet>();
   const [questionState, setQuestionState] = useState({
     newQuestion: "",
     questionArray: [],
@@ -98,9 +118,6 @@ const Template = () => {
   async function submitHandler(e: any) {
     e.preventDefault();
     console.log(currentTemplate); //debugging
-
-    //await axios.post(prodEndpoint, body);
-    //converter(body)
   }
 
   function toggleAccordion(e: any, i: number) {
@@ -114,33 +131,14 @@ const Template = () => {
     });
   }
 
-  /* addQuestion request body sent to server:
-category: category_id,
-question: {lang: 'en', question: "questionText", ?id},
-createdBy: "user",
-type: "",
-*/
   function createQuestion(categoryId: string) {
-    let newQuestion = {
-      id: categoryId,
-      question: { lang: "en", question: questionState.newQuestion, id: uuidv4 },
-      isFreeForm: false,
+    let newQuestion: IQuestionPost = {
+      category: categoryId,
+      question: { lang: "en", question: questionState.newQuestion },
+      type: "",
     };
+    addQuestion(newQuestion);
   }
-
-  const fetchCategories = async () => {
-    let result = await axios.get<IQCategory[]>(`${devServer}/category`);
-    let dbCategories = result.data;
-    console.log(dbCategories);
-    return dbCategories;
-  };
-
-  const getActiveTemplate = async () => {
-    await axios
-      .get<ITemplateGet>(`${process.env.REACT_APP_SERVER_API}/template/active`)
-      .then((result) => result.data as ITemplateGet)
-      .then((data) => setServerData(data));
-  };
 
   useEffect(() => {
     if (loggedIn && isAdmin) {
@@ -150,24 +148,6 @@ type: "",
     }*/
     //eslint-disable-next-line
   }, [isAdmin]);
-
-  /* active template data loaded from db is set in state */
-  useEffect(() => {
-    fetchCategories().then((result) => setCategoriesState(result));
-    getActiveTemplate();
-  }, []);
-
-  useEffect(() => {
-    console.log(templateData, templates);
-  }, [templateData, templates]);
-
-  useEffect(() => {
-    if (serverData) {
-      console.log(serverData);
-      //const convertedTemplate: IConvertedTemplate = convertTemplate(serverData);
-      //setCurrentTemplate((state) => convertedTemplate);
-    }
-  }, [serverData]);
 
   return (
     <div className={styles.container}>

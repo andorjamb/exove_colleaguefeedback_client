@@ -1,7 +1,5 @@
 //mongodb models:
 
-
-
 enum QuestionType {
   range = "Number",
   open = "String",
@@ -40,9 +38,7 @@ export interface ITemplateGet {
   active: false;
 }
 
-
 //////
-
 
 export interface ICat_Quest {
   category: string; //id
@@ -75,7 +71,20 @@ export interface IQCategory {
   createdOn: Date;
   createdBy: string;
   categoryStatus: boolean;
-} 
+}
+
+//Types for sending new question to db
+
+type QuestionLangPost = {
+  lang: string;
+  question: string;
+};
+
+export interface IQuestionPost {
+  category: string;
+  type: string;
+  question: QuestionLangPost;
+}
 
 /* 
 EXPANDED VIEW OF ITemplate
