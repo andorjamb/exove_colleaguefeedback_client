@@ -1,4 +1,4 @@
-import { IReportData } from "../types/report"
+import { IReportData } from "../types/report";
 /**
  * feedback => IReportData:'capture' from form - at what stage?: 
  * 
@@ -18,13 +18,11 @@ import { IReportData } from "../types/report"
       return total/array.length;
    
     */
-    
-export const makeCharts = (data:IReportData) =>{
 
-}
+export const makeCharts = (data: IReportData) => {};
 
-export const makeOneReport=(requestPickId:string) => {
-    /**PSEUDOCODE
+export const makeOneReport = (requestPickId: string) => {
+  /**PSEUDOCODE
      * 
      * assume static number of categories
      * assume dynamic number of questions per category
@@ -48,4 +46,4 @@ export const makeOneReport=(requestPickId:string) => {
      * set report.
      * 
      */
-}
+};

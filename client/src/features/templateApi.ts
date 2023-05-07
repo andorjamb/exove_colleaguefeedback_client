@@ -22,19 +22,35 @@ export const templateApi = createApi({
       query: () => `template/`,
       providesTags: ["Templates"],
     }),
-    getTemplateById: builder.query<ITemplateGet, string>({
-      query: (id) => `template/${id}`,
-    }),
+    /*   getTemplateById: builder.query<ITemplateGet, string>({
+      query: (id) => `template/${id}`, // no endpoint
+    }), */
     getActiveTemplate: builder.query<ITemplateGet, void>({
       query: () => `template/active`,
+    }),
+    addTemplate: builder.mutation<void, ITemplateGet>({
+      query: (body) => ({
+        url: `template`,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Templates"],
+    }),
+    setDefaultTemplate: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `template/${id}`,
+        method: "PATCH",
+      }),
     }),
   }),
 });
 
 export const {
   useGetAllTemplatesQuery,
-  useGetTemplateByIdQuery,
+  //useGetTemplateByIdQuery,
   useGetActiveTemplateQuery,
+  useAddTemplateMutation,
+  useSetDefaultTemplateMutation,
 } = templateApi;
 
 export default templateApi.reducer;

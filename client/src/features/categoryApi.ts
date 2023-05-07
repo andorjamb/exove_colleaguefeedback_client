@@ -31,6 +31,11 @@ export interface ICategoryGet {
   questions: IQuesionGet[];
 } */
 
+interface ICategoryBody {
+  categoryName: string;
+  description: string;
+  questions: string[]; //array of question ids
+}
 //const serverApi = process.env.REACT_APP_SERVER_API;
 const serverApi = "https://exove.vercel.app/api/";
 //const serverApi = "http://localhost:4000/";
@@ -50,12 +55,19 @@ export const categoryApi = createApi({
       query: () => "category",
       providesTags: ["Categories"],
     }),
-    getCategoryById: builder.query<ICategoryGet, string>({
+    /*  getCategoryById: builder.query<ICategoryGet, string>({
       query: (id) => `question/${id}`,
+    }), */ //no server endpoint
+    addCategory: builder.mutation<void, ICategoryBody>({
+      query: (body) => ({
+        url: `category`,
+        method: "POST",
+        body,
+      }),
     }),
   }),
 });
 
-export const { useGetAllCategoriesQuery } = categoryApi;
+export const { useGetAllCategoriesQuery, useAddCategoryMutation } = categoryApi;
 
 export default categoryApi.reducer;

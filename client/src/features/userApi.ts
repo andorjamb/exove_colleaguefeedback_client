@@ -48,6 +48,11 @@ export const userApi = createApi({
   }),
 });
 
-export const { useGetUserByLdapUidQuery, useGetAllUsersQuery } = userApi;
+export const {
+  useGetUserByLdapUidQuery,
+  useGetAllUsersQuery,
+  useUpdateUserMutation,
+  useUpdateUserReportsToMutation,
+} = userApi;
 
 export default userApi.reducer;
