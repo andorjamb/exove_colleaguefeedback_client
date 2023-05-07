@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 //Types
-import { IQuestionTextGet, ICategoryGet } from "../types/template";
+import { IQuestionTextGet, ICategoryGet, IQCategory } from "../types/template";
 
 /* enum QuestionType {
   range = "Number",
@@ -38,7 +38,6 @@ interface ICategoryBody {
 }
 //const serverApi = process.env.REACT_APP_SERVER_API;
 const serverApi = "https://exove.vercel.app/api/";
-//const serverApi = "http://localhost:4000/";
 
 export const categoryApi = createApi({
   reducerPath: "categoryApi",
@@ -51,7 +50,7 @@ export const categoryApi = createApi({
   }),
   tagTypes: ["Categories"],
   endpoints: (builder) => ({
-    getAllCategories: builder.query<ICategoryGet[], void>({
+    getAllCategories: builder.query<IQCategory[], void>({
       query: () => "category",
       providesTags: ["Categories"],
     }),

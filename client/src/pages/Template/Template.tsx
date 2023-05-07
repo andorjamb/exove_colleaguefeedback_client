@@ -2,18 +2,19 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import axios, { AxiosResponse } from "axios";
-import { v4 as uuidv4 } from "uuid";
+//import { v4 as uuidv4 } from "uuid";
 
 //Types
 import {
   ITemplateGet,
+  ITemplatePost,
   IQuestion,
   IQCategory,
   IQuestionLang,
   ISection,
   IConvertedTemplate,
   ITemplateQuestion,
+  IQuestionPost,
 } from "../../types/template";
 
 //Styling
@@ -27,7 +28,17 @@ import {
   convertTemplate,
   /* fetchCategories, */
 } from "../../functions/templateConverter";
-import { useGetAllTemplatesQuery } from "../../features/templateApi";
+import {
+  useGetActiveTemplateQuery,
+  useGetAllTemplatesQuery,
+  useAddTemplateMutation,
+} from "../../features/templateApi";
+import {
+  useGetAllQuestionsQuery,
+  useGetQuestionIdQuery,
+  useAddQuestionMutation,
+} from "../../features/questionApi";
+import { useGetAllCategoriesQuery } from "../../features/categoryApi";
 
 //Components
 import Accordion from "../../components/Accordion/Accordion";
@@ -39,54 +50,58 @@ import Accordion from "../../components/Accordion/Accordion";
   post('/template', addTemplate);  ------------- save template to db
   patch('/template/:id', setDefaultTemplate); ------ set template as default, all others as not default 
  */
+
+/**
+ * export interface IQCategory {
+  _id: string;
+  categoryName: string;
+  description?: string;
+  questions?: string[];
+  createdOn: Date;
+  createdBy: string;
+  categoryStatus: boolean;
+}
+ * 
+ */
+
 type accordion = {
   open: boolean;
 };
 
-let convertedTemplateData: IConvertedTemplate;
-const devServer = "http://localhost:4000";
+//let convertedTemplateData: IConvertedTemplate;
 
 const Template = () => {
-  const templateData = useGetAllTemplatesQuery();
-  const templates = templateData.data;
+  const getTemplateData = useGetAllTemplatesQuery();
+  const getActiveTemplate = useGetActiveTemplateQuery();
+  const getCategories = useGetAllCategoriesQuery();
+  const getQuestions = useGetAllQuestionsQuery(); //IQuestion[]
+
+  const [addQuestion] = useAddQuestionMutation();
+  const [addTemplate] = useAddTemplateMutation();
+
+  const templates = getTemplateData.data;
+  const activeTemplate = getActiveTemplate.data;
+  const categories = getCategories.data;
+  const questions = getQuestions.data;
+  console.log(activeTemplate);
+  console.log(categories);
+  console.log(questions);
+
   const loggedIn = useSelector((state: any) => state.auth.loggedIn);
   const isAdmin = useSelector((state: any) => state.auth.isAdmin);
   const navigate = useNavigate();
 
-  const [serverData, setServerData] = useState<ITemplateGet>();
   const [questionState, setQuestionState] = useState({
     newQuestion: "",
     questionArray: [],
   });
   const [accordion, setAccordion] = useState<accordion[]>([{ open: false }]);
-  const [sections, setSections] = useState<ISection[]>([]);
-  const [categoriesState, setCategoriesState] = useState<IQCategory[]>();
 
-  const [currentTemplate, setCurrentTemplate] = useState<IConvertedTemplate>({
-    id: "",
-    templateTitle: "",
-    sections: [
-      {
-        id: "",
-        name: "",
-        questions: [
-          {
-            id: "",
-            question: "",
-            isFreeForm: false,
-          },
-        ],
-      },
-    ],
-    active: true,
-  });
+  const [templateTitle, setTemplateTitle] = useState<string>("");
 
-  function changeHandler(e: any) {
+  function titleChangeHandler(e: any) {
     console.log(e.target.value);
-    setCurrentTemplate((currentTemplate) => ({
-      ...currentTemplate,
-      [e.target.name]: e.target.value,
-    }));
+    setTemplateTitle((title) => e.target.value);
   }
 
   function questionChangeHandler(e: any, i: number, categoryId: string) {
@@ -97,10 +112,7 @@ const Template = () => {
 
   async function submitHandler(e: any) {
     e.preventDefault();
-    console.log(currentTemplate); //debugging
-
-    //await axios.post(prodEndpoint, body);
-    //converter(body)
+    // addTemplate()
   }
 
   function toggleAccordion(e: any, i: number) {
@@ -114,60 +126,14 @@ const Template = () => {
     });
   }
 
-  /* addQuestion request body sent to server:
-category: category_id,
-question: {lang: 'en', question: "questionText", ?id},
-createdBy: "user",
-type: "",
-*/
   function createQuestion(categoryId: string) {
-    let newQuestion = {
-      id: categoryId,
-      question: { lang: "en", question: questionState.newQuestion, id: uuidv4 },
-      isFreeForm: false,
+    let newQuestion: IQuestionPost = {
+      category: categoryId,
+      question: { lang: "en", question: questionState.newQuestion },
+      type: "",
     };
+    addQuestion(newQuestion);
   }
-
-  const fetchCategories = async () => {
-    let result = await axios.get<IQCategory[]>(`${devServer}/category`);
-    let dbCategories = result.data;
-    console.log(dbCategories);
-    return dbCategories;
-  };
-
-  const getActiveTemplate = async () => {
-    await axios
-      .get<ITemplateGet>(`${process.env.REACT_APP_SERVER_API}/template/active`)
-      .then((result) => result.data as ITemplateGet)
-      .then((data) => setServerData(data));
-  };
-
-  useEffect(() => {
-    if (loggedIn && isAdmin) {
-      console.log("isAdmin:", isAdmin); //debugging
-    } /* else {
-      navigate("/"); 
-    }*/
-    //eslint-disable-next-line
-  }, [isAdmin]);
-
-  /* active template data loaded from db is set in state */
-  useEffect(() => {
-    fetchCategories().then((result) => setCategoriesState(result));
-    getActiveTemplate();
-  }, []);
-
-  useEffect(() => {
-    console.log(templateData, templates);
-  }, [templateData, templates]);
-
-  useEffect(() => {
-    if (serverData) {
-      console.log(serverData);
-      //const convertedTemplate: IConvertedTemplate = convertTemplate(serverData);
-      //setCurrentTemplate((state) => convertedTemplate);
-    }
-  }, [serverData]);
 
   return (
     <div className={styles.container}>
@@ -182,8 +148,8 @@ type: "",
           <input
             className={styles.input}
             name="templateTitle"
-            defaultValue={testTemplateData.templateTitle}
-            onChange={changeHandler}
+            value={activeTemplate?.templateTitle}
+            onChange={titleChangeHandler}
           />{" "}
           <div className={styles.iconDiv}>
             <span className={styles.materialIcons}>edit</span>
@@ -215,18 +181,18 @@ type: "",
           <h3 className={styles.h3}>Feedback Questions</h3>
         </div>
         {/* ACCORDIONS */}
-        {sections?.map((item, i) => (
+        {categories?.map((item, i) => (
           <Accordion
             key={i}
-            item={item}
+            category={item}
+            questions={questions} //the array of all questions
             clickHandler={(e: any) => toggleAccordion(e, i)}
-            isOpen={accordion[i].open}
+            isOpen={true}
             questionChangeHandler={questionChangeHandler}
             createQuestion={() => createQuestion}
           />
         ))}
         <div className={styles.formRow}>
-          {" "}
           <button type="submit" onClick={submitHandler}>
             Save
           </button>

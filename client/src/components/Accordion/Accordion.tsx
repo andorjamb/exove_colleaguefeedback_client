@@ -1,27 +1,44 @@
 import React from "react";
-import { ICat_Quest, IQuestion, IQuestionLang, ITemplateGet, ISection } from "../../types/template";
+import {
+  IQuestion,
+  IQuestionLang,
+  ICategoryGet,
+  IQCategory,
+} from "../../types/template";
 
 import styles from "../../pages/Template/Template.module.css";
 
 interface Props {
-  item: ISection;
+  category: IQCategory;
+  questions: IQuestion[] | undefined;
   clickHandler: any;
   isOpen: boolean;
   questionChangeHandler: (
     event: React.MouseEventHandler<HTMLFieldSetElement>,
-    i: number, id:string
+    i: number,
+    id: string
   ) => void;
-  createQuestion: (event: React.MouseEventHandler<HTMLButtonElement>,
-    id:string) => void;
+  createQuestion: (
+    event: React.MouseEventHandler<HTMLButtonElement>,
+    id: string
+  ) => void;
 }
 
 const Accordion = ({
-  item,
+  category,
+  questions,
   clickHandler,
   isOpen,
   questionChangeHandler,
   createQuestion,
 }: Props) => {
+  let questionArray: IQuestion[] = [];
+  questions?.forEach((question) => {
+    if (question.category === category._id) {
+      questionArray.push(question);
+    }
+  });
+
   return (
     <div>
       <div className={styles.accordionContainer}>
@@ -30,7 +47,8 @@ const Accordion = ({
             <span className={styles.materialIcons}>
               {isOpen ? "remove" : "add"}
             </span>
-            {item?.name}
+            {category?.categoryName}
+            {category?._id}
           </div>
 
           {isOpen ? (
@@ -41,35 +59,15 @@ const Accordion = ({
                   className={styles.fieldset}
                   onChange={() => questionChangeHandler}
                 >
-                  {item.questions?.map((q) => (
-                    <li>
-                      {!q.isFreeForm ? (
-                        <label>
-                          <input
-                            type="checkbox"
-                            defaultChecked={item.questions.indexOf(q) !== -1}
-                            className={styles.input}
-                          />
-                          {q.question + " (1-5)"}
-                        </label>
-                      ) : (
-                        <label>
-                          <input
-                            type="checkbox"
-                            defaultChecked={item.questions.indexOf(q) !== -1}
-                            className={styles.input}
-                          />
-                          {q.question + " (free form)"}
-                        </label>
-                      )}
-                    </li>
-                  ))}
+                  {questionArray.map((q) =>
+                    q.question.map((item) => item.question)
+                  )}
                 </fieldset>
               </ul>
               <fieldset
                 className={`${styles.fieldset} ${styles.accordionContent}`}
               >
-                <legend>Add new question</legend>
+                <legend>Create new question in this category:</legend>
                 <input className={styles.input} />
                 <label>
                   <input
@@ -77,11 +75,11 @@ const Accordion = ({
                     value="freeForm"
                     className={styles.input}
                   />
-                  Check if question is free form
+                  Question is free form
                 </label>
                 <button
                   type="button"
-                  onClick={()=>createQuestion}
+                  onClick={() => createQuestion}
                   className={styles.addQuestionButton}
                 >
                   Add

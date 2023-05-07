@@ -25,3 +25,16 @@ export interface IQuestionLang {
   answer?: string;
   answeredOn: Date;
 }
+
+//Types for sending new question to db
+
+type QuestionLangPost = {
+  lang: string;
+  question: string;
+};
+
+export interface IQuestionPost {
+  category: string;
+  type: string;
+  question: QuestionLangPost;
+}

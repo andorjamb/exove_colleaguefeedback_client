@@ -8,6 +8,7 @@ import { templateApi } from "../features/templateApi";
 import { requestPicksApi } from "../features/requestPicksApi";
 import { feedbackApi } from "../features/feedbackApi";
 import { categoryApi } from "../features/categoryApi";
+import { questionApi } from "../features/questionApi";
 
 export const store = configureStore({
   reducer: {
@@ -18,13 +19,16 @@ export const store = configureStore({
     [requestPicksApi.reducerPath]: requestPicksApi.reducer,
     [feedbackApi.reducerPath]: feedbackApi.reducer,
     [categoryApi.reducerPath]: categoryApi.reducer,
+    [questionApi.reducerPath]: questionApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(userApi.middleware)
       .concat(templateApi.middleware)
       .concat(requestPicksApi.middleware)
-      .concat(feedbackApi.middleware),
+      .concat(feedbackApi.middleware)
+      .concat(questionApi.middleware)
+      .concat(categoryApi.middleware),
 });
 
 setupListeners(store.dispatch);

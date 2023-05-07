@@ -1,7 +1,5 @@
 //mongodb models:
 
-
-
 enum QuestionType {
   range = "Number",
   open = "String",
@@ -14,7 +12,7 @@ export interface IQuestionTextGet {
   question: string;
 }
 
-export interface IQuesionGet {
+export interface IQuestionGet {
   _id: string;
   category: string;
   createdBy: string;
@@ -27,7 +25,7 @@ export interface IQuesionGet {
 export interface ICategoryGet {
   _id: string;
   category: string;
-  questions: IQuesionGet[];
+  questions: IQuestionGet[];
 }
 
 export interface ITemplateGet {
@@ -40,9 +38,7 @@ export interface ITemplateGet {
   active: false;
 }
 
-
 //////
-
 
 export interface ICat_Quest {
   category: string; //id
@@ -75,8 +71,28 @@ export interface IQCategory {
   createdOn: Date;
   createdBy: string;
   categoryStatus: boolean;
-} 
+}
 
+//Types for sending new question to db
+
+type QuestionLangPost = {
+  lang: string;
+  question: string;
+};
+
+export interface IQuestionPost {
+  category: string;
+  type: string;
+  question: QuestionLangPost;
+}
+
+//Types for sending new template to db
+
+export interface ITemplatePost {
+  templateTitle: string;
+  instructions: string;
+  categories: [{}];
+}
 /* 
 EXPANDED VIEW OF ITemplate
  {
