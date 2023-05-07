@@ -43,6 +43,11 @@ export const questionApi = createApi({
   }),
 });
 
-export const { useGetAllQuestionsQuery } = questionApi;
+export const {
+  useGetAllQuestionsQuery,
+  useGetQuestionIdQuery,
+  useAddQuestionMutation,
+  useDeleteQuestionMutation,
+} = questionApi;
 
 export default questionApi.reducer;
