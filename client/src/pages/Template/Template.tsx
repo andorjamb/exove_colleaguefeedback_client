@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 //Types
 import {
   ITemplateGet,
+  ITemplatePost,
   IQuestion,
   IQCategory,
   IQuestionLang,
@@ -30,6 +31,7 @@ import {
 import {
   useGetActiveTemplateQuery,
   useGetAllTemplatesQuery,
+  useAddTemplateMutation,
 } from "../../features/templateApi";
 import {
   useGetAllQuestionsQuery,
@@ -48,6 +50,20 @@ import Accordion from "../../components/Accordion/Accordion";
   post('/template', addTemplate);  ------------- save template to db
   patch('/template/:id', setDefaultTemplate); ------ set template as default, all others as not default 
  */
+
+/**
+ * export interface IQCategory {
+  _id: string;
+  categoryName: string;
+  description?: string;
+  questions?: string[];
+  createdOn: Date;
+  createdBy: string;
+  categoryStatus: boolean;
+}
+ * 
+ */
+
 type accordion = {
   open: boolean;
 };
@@ -58,9 +74,10 @@ const Template = () => {
   const getTemplateData = useGetAllTemplatesQuery();
   const getActiveTemplate = useGetActiveTemplateQuery();
   const getCategories = useGetAllCategoriesQuery();
-  const getQuestions = useGetAllQuestionsQuery();
+  const getQuestions = useGetAllQuestionsQuery(); //IQuestion[]
 
   const [addQuestion] = useAddQuestionMutation();
+  const [addTemplate] = useAddTemplateMutation();
 
   const templates = getTemplateData.data;
   const activeTemplate = getActiveTemplate.data;
@@ -79,34 +96,12 @@ const Template = () => {
     questionArray: [],
   });
   const [accordion, setAccordion] = useState<accordion[]>([{ open: false }]);
-  const [sections, setSections] = useState<ISection[]>([]);
-  const [categoriesState, setCategoriesState] = useState<IQCategory[]>();
 
-  const [currentTemplate, setCurrentTemplate] = useState<IConvertedTemplate>({
-    id: "",
-    templateTitle: "",
-    sections: [
-      {
-        id: "",
-        name: "",
-        questions: [
-          {
-            id: "",
-            question: "",
-            isFreeForm: false,
-          },
-        ],
-      },
-    ],
-    active: true,
-  });
+  const [templateTitle, setTemplateTitle] = useState<string>("");
 
-  function changeHandler(e: any) {
+  function titleChangeHandler(e: any) {
     console.log(e.target.value);
-    setCurrentTemplate((currentTemplate) => ({
-      ...currentTemplate,
-      [e.target.name]: e.target.value,
-    }));
+    setTemplateTitle((title) => e.target.value);
   }
 
   function questionChangeHandler(e: any, i: number, categoryId: string) {
@@ -117,7 +112,7 @@ const Template = () => {
 
   async function submitHandler(e: any) {
     e.preventDefault();
-    console.log(currentTemplate); //debugging
+    // addTemplate()
   }
 
   function toggleAccordion(e: any, i: number) {
@@ -140,15 +135,6 @@ const Template = () => {
     addQuestion(newQuestion);
   }
 
-  useEffect(() => {
-    if (loggedIn && isAdmin) {
-      console.log("isAdmin:", isAdmin); //debugging
-    } /* else {
-      navigate("/"); 
-    }*/
-    //eslint-disable-next-line
-  }, [isAdmin]);
-
   return (
     <div className={styles.container}>
       <h1>New feedback template</h1>
@@ -162,8 +148,8 @@ const Template = () => {
           <input
             className={styles.input}
             name="templateTitle"
-            defaultValue={testTemplateData.templateTitle}
-            onChange={changeHandler}
+            value={activeTemplate?.templateTitle}
+            onChange={titleChangeHandler}
           />{" "}
           <div className={styles.iconDiv}>
             <span className={styles.materialIcons}>edit</span>
@@ -195,18 +181,18 @@ const Template = () => {
           <h3 className={styles.h3}>Feedback Questions</h3>
         </div>
         {/* ACCORDIONS */}
-        {sections?.map((item, i) => (
+        {categories?.map((item, i) => (
           <Accordion
             key={i}
-            item={item}
+            category={item}
+            questions={questions} //the array of all questions
             clickHandler={(e: any) => toggleAccordion(e, i)}
-            isOpen={accordion[i].open}
+            isOpen={true}
             questionChangeHandler={questionChangeHandler}
             createQuestion={() => createQuestion}
           />
         ))}
         <div className={styles.formRow}>
-          {" "}
           <button type="submit" onClick={submitHandler}>
             Save
           </button>

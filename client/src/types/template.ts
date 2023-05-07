@@ -12,7 +12,7 @@ export interface IQuestionTextGet {
   question: string;
 }
 
-export interface IQuesionGet {
+export interface IQuestionGet {
   _id: string;
   category: string;
   createdBy: string;
@@ -25,7 +25,7 @@ export interface IQuesionGet {
 export interface ICategoryGet {
   _id: string;
   category: string;
-  questions: IQuesionGet[];
+  questions: IQuestionGet[];
 }
 
 export interface ITemplateGet {
@@ -86,6 +86,13 @@ export interface IQuestionPost {
   question: QuestionLangPost;
 }
 
+//Types for sending new template to db
+
+export interface ITemplatePost {
+  templateTitle: string;
+  instructions: string;
+  categories: [{}];
+}
 /* 
 EXPANDED VIEW OF ITemplate
  {
