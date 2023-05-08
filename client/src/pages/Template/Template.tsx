@@ -39,6 +39,7 @@ import {
   useAddQuestionMutation,
 } from "../../features/questionApi";
 import { useGetAllCategoriesQuery } from "../../features/categoryApi";
+import {correctt}
 
 //Components
 import Accordion from "../../components/Accordion/Accordion";
@@ -51,24 +52,19 @@ import Accordion from "../../components/Accordion/Accordion";
   patch('/template/:id', setDefaultTemplate); ------ set template as default, all others as not default 
  */
 
-/**
- * export interface IQCategory {
-  _id: string;
-  categoryName: string;
-  description?: string;
-  questions?: string[];
-  createdOn: Date;
-  createdBy: string;
-  categoryStatus: boolean;
-}
- * 
- */
 
 type accordion = {
   open: boolean;
 };
 
-//let convertedTemplateData: IConvertedTemplate;
+type correctedQuestion = {
+  id: string;
+  question: string;
+  isFreeForm: boolean;
+};
+
+
+
 
 const Template = () => {
   const getTemplateData = useGetAllTemplatesQuery();
@@ -84,7 +80,6 @@ const Template = () => {
   const categories = getCategories.data;
   const questions = getQuestions.data;
   console.log(activeTemplate);
-  console.log(categories);
   console.log(questions);
 
   const loggedIn = useSelector((state: any) => state.auth.loggedIn);
@@ -98,6 +93,49 @@ const Template = () => {
   const [accordion, setAccordion] = useState<accordion[]>([{ open: false }]);
 
   const [templateTitle, setTemplateTitle] = useState<string>("");
+
+  let newQuestion: correctedQuestion;
+  
+  function dataParser() {
+    categories?.forEach((category) => {
+      let questionArray: correctedQuestion[] = [];
+    questions?.forEach((question) => {
+      if (question.category === category._id && correctType(question.type)) {
+        if (question.type.startsWith("s".toLowerCase())) {
+          newQuestion = {
+            id: question._id,
+            question: question.question[0].question as string,
+            isFreeForm: true,
+          };
+        } else {
+          newQuestion = {
+            id: question._id,
+            question: question.question[0].question as string,
+            isFreeForm: true,
+          };
+        }
+      }
+      questionArray.push(newQuestion);
+    });
+    console.log(questionArray);//debugging
+    
+    let correctedCategory = new SectionClass(
+      category._id,
+      category.categoryName,
+      questionArray
+    );
+    console.log(correctedCategory); //debugging
+  });
+}
+
+  function correctType(p: string) {
+    const values: string[] = ["Number", "number", "String", "string"];
+    if (values.includes(p)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   function titleChangeHandler(e: any) {
     console.log(e.target.value);

@@ -24,6 +24,12 @@ interface Props {
   ) => void;
 }
 
+type correctedQuestion = {
+  id: string;
+  question: string;
+  isFreeForm: boolean;
+};
+
 const Accordion = ({
   category,
   questions,
@@ -32,12 +38,27 @@ const Accordion = ({
   questionChangeHandler,
   createQuestion,
 }: Props) => {
+  let newQuestion: correctedQuestion;
+  
+
   let questionArray: IQuestion[] = [];
   questions?.forEach((question) => {
     if (question.category === category._id) {
       questionArray.push(question);
     }
   });
+  console.log("accordion question array:", questionArray[0]);
+
+  function questionParser() {}
+
+  function correctType(type: string) {
+    const types: string[] = ["Number", "number", "String", "string"];
+    if (types.includes(type)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   return (
     <div>

@@ -1,12 +1,10 @@
 /** For creating conversions from mongoose json objects to json objects for frontend */
 import {
-  ICat_Quest,
   ITemplateGet,
   IQuestion,
   ITemplateQuestion,
   ISection,
 } from "../types/template";
-import axios from "axios";
 
 /*backend category interfaces */
 export interface IQCategory {
@@ -19,38 +17,7 @@ export interface IQCategory {
   categoryStatus: boolean;
 }
 
-/* export interface IQuestion {
-    _id: string;
-    category: string;  //category id
-    createdOn: Date;
-    createdBy: string;
-    active: boolean;
-    type: string;
-    question: IQuestionLang[];
-  } */
-
-/* backend question interface */
-export interface IQuestionLang {
-  _id: string; //assume this is doc id, not the same as IQuestion parent id?
-  lang: string;
-  question?: string; //actual question
-  answer?: string;
-  answeredOn?: Date;
-}
-
 /////////// classes  ////////////
-
-class TemplateQuestionClass {
-  id: string;
-  question: string;
-  isFreeForm: boolean;
-
-  constructor(id: string, question: string, isFreeForm: boolean) {
-    this.id = id;
-    this.question = question;
-    this.isFreeForm = isFreeForm;
-  }
-}
 
 class SectionClass {
   id: string;
@@ -64,100 +31,58 @@ class SectionClass {
   }
 }
 
-class TemplateClass {
-  id: string;
-  templateTitle: string;
-  sections: ISection[];
-  active: boolean;
-
-  constructor(
-    id: string,
-    templateTitle: string,
-    sections: ISection[],
-    active: boolean
-  ) {
-    this.id = id;
-    this.templateTitle = templateTitle;
-    this.sections = sections;
-    this.active = active;
-  }
-}
-
 //////// conversion functions ////////////
 export const convertTemplate = async (template: ITemplateGet) => {
-  let newSectionArray: ISection[];
-
-  let newTemplate = new TemplateClass(
-    template._id,
-    template.templateTitle,
-    [],
-    true
-  );
-
-  const allCategories: IQCategory[] = await fetchCategories();
-
-  //get each question assigned to this question category in db
-  const populateSection = (section: ISection) => {
-    allCategories.forEach((category: IQCategory) => {
-      let newQuestionArray: ITemplateQuestion[];
-      let questionIds: string[] | undefined = category?.questions;
-
-      questionIds?.forEach(async (id) => {
-        let question: IQuestion = await fetchQuestion(id);
-        let newQuestion = new TemplateQuestionClass(question._id, "", false);
-        if (question.type === "String" || "string") {
-          newQuestion.isFreeForm = true;
-        }
-        question.question.forEach((q) => {
-          if (q.lang === "en") {
-            if (q.question) {
-              newQuestion.question = q.question;
-            }
-          }
-        });
-        newQuestionArray.push(newQuestion);
-        section.questions = newQuestionArray; //
-      });
-    });
+  let categories: IQCategory[] = []; //error suppression purposes only
+  let questions: IQuestion[] = [];
+  type correctedQuestion = {
+    id: string;
+    question: string;
+    isFreeForm: boolean;
   };
+  let newQuestion: correctedQuestion;
 
-  allCategories.forEach((category: IQCategory) => {
-    let newSection: ISection = new SectionClass(
+  function correctType(p: string) {
+    const values: string[] = ["Number", "number", "String", "string"];
+    if (values.includes(p)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // loop through all categories
+  // loop through all questions assigned to the category, rectify them and push to array
+  // attach the array to a rectified category type
+
+  categories.forEach((category) => {
+    let questionArray: correctedQuestion[] = [];
+
+    questions?.forEach((question) => {
+      if (question.category === category._id && correctType(question.type)) {
+        if (question.type.startsWith("s".toLowerCase())) {
+          newQuestion = {
+            id: question._id,
+            question: question.question[0].question as string,
+            isFreeForm: true,
+          };
+        } else {
+          newQuestion = {
+            id: question._id,
+            question: question.question[0].question as string,
+            isFreeForm: true,
+          };
+        }
+      }
+      questionArray.push(newQuestion);
+    });
+    console.log(questionArray);
+    //
+    let correctedCategory = new SectionClass(
       category._id,
       category.categoryName,
-      []
+      questionArray
     );
-    populateSection(newSection);
-    newSectionArray.push(newSection);
+    console.log(correctedCategory); //debugging
   });
 };
-
-export const fetchCategories = async () => {
-  let result = await axios.get<IQCategory[]>(
-    `${process.env.REACT_APP_SERVER_API}/category`
-  );
-  let dbCategories = result.data;
-  console.log(dbCategories);
-  return dbCategories;
-};
-
-export const fetchQuestion = async (id: string) => {
-  let result = await axios.get<IQuestion>(
-    `${process.env.REACT_APP_SERVER_API}/question/${id}`
-  );
-  return result.data;
-};
-
-/* function saveTemplate(template) {
-  const body = {
-    templateTitle: template.templateTitle,
-    instructions: "",
-    createdOn: new Date(),
-    createdBy: "",
-    categories: [
-
-    ]
-
-
-  }
-} */
