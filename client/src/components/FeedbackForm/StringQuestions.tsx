@@ -6,7 +6,7 @@ interface question {
 }
 
 const StringQuestions = ({question}:question) => {
-    console.log('***********',question)
+
     return (
         <div style={{"display":"flex","flexDirection":"column", "gap":"1rem", alignItems:"flex-start"}}>
           

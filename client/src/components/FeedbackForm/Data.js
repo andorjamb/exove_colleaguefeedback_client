@@ -15,7 +15,7 @@ export const template ={  "_id": "04ed79e1-36ab-45c8-94eb-d34393d23412",
                         "createdBy": "newton",
                         "createdOn": "2023-05-01T13:17:22.593Z",
                         "active": true,
-                        "type": "Boolean",
+                        "type": "String",
                         "question": [
                             {
                                 "lang": "Eng",
@@ -47,7 +47,7 @@ export const template ={  "_id": "04ed79e1-36ab-45c8-94eb-d34393d23412",
                         "createdBy": "newton",
                         "createdOn": "2023-05-01T13:22:03.547Z",
                         "active": true,
-                        "type": "Boolean",
+                        "type": "Range",
                         "question": [
                             {
                                 "lang": "Eng",
@@ -87,7 +87,7 @@ export const template ={  "_id": "04ed79e1-36ab-45c8-94eb-d34393d23412",
                         "createdBy": "newton",
                         "createdOn": "2023-05-05T22:34:59.656Z",
                         "active": true,
-                        "type": "Boolean",
+                        "type": "String",
                         "question": [
                             {
                                 "lang": "Eng",
@@ -120,7 +120,7 @@ export const template ={  "_id": "04ed79e1-36ab-45c8-94eb-d34393d23412",
                         "createdBy": "newton",
                         "createdOn": "2023-05-01T13:20:23.177Z",
                         "active": true,
-                        "type": "Boolean",
+                        "type": "String",
                         "question": [
                             {
                                 "lang": "Eng",
@@ -140,7 +140,7 @@ export const template ={  "_id": "04ed79e1-36ab-45c8-94eb-d34393d23412",
                         "createdBy": "newton",
                         "createdOn": "2023-05-01T13:20:44.474Z",
                         "active": true,
-                        "type": "Boolean",
+                        "type": "Range",
                         "question": [
                             {
                                 "lang": "Eng",
@@ -173,7 +173,7 @@ export const template ={  "_id": "04ed79e1-36ab-45c8-94eb-d34393d23412",
                         "createdBy": "newton",
                         "createdOn": "2023-05-01T13:19:23.786Z",
                         "active": true,
-                        "type": "Boolean",
+                        "type": "Range",
                         "question": [
                             {
                                 "lang": "Eng",
@@ -193,7 +193,7 @@ export const template ={  "_id": "04ed79e1-36ab-45c8-94eb-d34393d23412",
                         "createdBy": "newton",
                         "createdOn": "2023-05-01T13:19:43.139Z",
                         "active": true,
-                        "type": "Boolean",
+                        "type": "String",
                         "question": [
                             {
                                 "lang": "Eng",
