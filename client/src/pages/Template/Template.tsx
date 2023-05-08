@@ -37,6 +37,7 @@ type accordion = {
 };
 
 type correctedQuestion = {
+  //redundant type - same as ITemplateQuestion?
   id: string;
   question: string;
   isFreeForm: boolean;
@@ -65,6 +66,12 @@ const Template = () => {
   const [accordion, setAccordion] = useState<accordion[]>([
     { open: false },
     { open: false },
+    { open: false },
+    { open: false },
+    { open: false },
+    { open: false },
+    { open: false },
+    { open: false },
   ]);
   const [templateTitle, setTemplateTitle] = useState<string>("");
 
@@ -72,14 +79,11 @@ const Template = () => {
   const activeTemplate = getActiveTemplate.data;
   const categories = getCategories.data;
   const questions = getQuestions.data;
-  // console.log(activeTemplate);   //debugging
-  //console.log(questions);    //debugging
   const categoriesCount: number | undefined = categories?.length;
   console.log("number of categories:", categoriesCount);
-  categories?.forEach((cat)=>{
-
+  categories?.forEach((cat) => {
     //use for setting number of accordion states
-  })
+  });
 
   /*   const loggedIn = useSelector((state: any) => state.auth.loggedIn);
   const isAdmin = useSelector((state: any) => state.auth.isAdmin);
@@ -90,7 +94,6 @@ const Template = () => {
     questionArray: [],
   });
 
-  let newQuestion: correctedQuestion;
   let newCategoryArray: ISection[];
   newCategoryArray = dataParser();
 
@@ -109,25 +112,38 @@ const Template = () => {
 
   function dataParser() {
     let categoryArray: ISection[] = [];
+    let newQuestion: ITemplateQuestion = {
+      id: "",
+      question: "",
+      isFreeForm: false,
+    };
     categories?.forEach((category) => {
-      let questionArray: correctedQuestion[] = [];
+      let questionArray: ITemplateQuestion[] = [];
       questions?.forEach((question) => {
-        if (question.category === category._id && correctType(question.type)) {
+        if (question.category === category._id) {
+          console.log("question match:", question.question);
+          newQuestion = {
+            ...newQuestion,
+            id: question._id,
+            question: question.question[0].question as string,
+          };
+
           if (question.type.startsWith("s".toLowerCase())) {
             newQuestion = {
-              id: question._id,
-              question: question.question[0].question as string,
+              ...newQuestion,
+              /*   id: question._id,
+              question: question.question[0].question as string, */
               isFreeForm: true,
             };
-          } else {
+          } /* else {
             newQuestion = {
               id: question._id,
               question: question.question[0].question as string,
               isFreeForm: false,
             };
-          }
+          } */
+          questionArray.push(newQuestion);
         }
-        questionArray.push(newQuestion);
       });
       console.log(questionArray); //debugging
 
@@ -136,24 +152,20 @@ const Template = () => {
         category.categoryName,
         questionArray
       );
-      console.log(correctedCategory); //debugging
+      console.log("reformed catogry", correctedCategory); //debugging
       categoryArray.push(correctedCategory);
     });
     return categoryArray;
   }
 
-  // loop through all categories
-  // loop through all questions assigned to the category, rectify them and push to array
-  // attach the array to a rectified category type
-
-  function correctType(p: string) {
+  /* function correctType(p: string) {
     const values: string[] = ["Number", "number", "String", "string"];
     if (values.includes(p)) {
       return true;
     } else {
       return false;
     }
-  }
+  } */
 
   function titleChangeHandler(e: any) {
     console.log(e.target.value);
