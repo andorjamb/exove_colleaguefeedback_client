@@ -54,8 +54,10 @@ const FeedbackForm = () => {
 const category:ICategory[] = qTemplate.categories
   return (
     <div>
+      <div style={{"display":"flex", "flexDirection":"column", "padding": "1rem 7rem","alignItems":"flex-start"}}>
       <h1>Feedback for your Colleague</h1>
-      <h2>Dibya Dahal</h2>
+      <h2 style={{"color":"#6E12E7"}}>Dibya Dahal</h2>
+      </div>
 
       <h3>Instruction</h3>
       <h4>

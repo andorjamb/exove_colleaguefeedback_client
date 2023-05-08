@@ -23,35 +23,35 @@ const RangeQuestions = ({ question }: question) => {
             
           const percentage = ((value  ) / 5) * 100;
           return {
-            background: `linear-gradient(to right, #4BEBDD ,#A567CC ${percentage}%, grey ${percentage}%)`,
+            background: `linear-gradient(to right, #4BEBDD ,#A567CC ${percentage}%, #F2F2F2 ${percentage}%)`,
           };
         }
         else if(value ===1){
             
             const percentage = ((value ) / 5) * 100;
             return {
-              background: `linear-gradient(to right, #4BEBDD , #A567CC ${percentage}%, grey ${percentage}%)`,
+              background: `linear-gradient(to right, #4BEBDD , #A567CC ${percentage}%, #F2F2F2 ${percentage}%)`,
             };
         }
         else if(value ===2){
             
             const percentage = ((value ) / 5) * 100;
             return {
-              background: `linear-gradient(to right, #4BEBDD , #A567CC ,#DF2C9F ${percentage}%, grey ${percentage}%)`,
+              background: `linear-gradient(to right, #4BEBDD , #A567CC ,#DF2C9F ${percentage}%, #F2F2F2 ${percentage}%)`,
             };
         }
         else if(value ===3){
             
             const percentage = ((value ) / 5) * 100;
             return {
-              background: `linear-gradient(to right, #4BEBDD , #A567CC ,#DF2C9F, #F85B6B ${percentage}%, grey ${percentage}%)`,
+              background: `linear-gradient(to right, #4BEBDD , #A567CC ,#DF2C9F, #F85B6B ${percentage}%, #F2F2F2 ${percentage}%)`,
             };
         }
         else if(value ===4){
             
             const percentage = ((value ) / 5) * 100;
             return {
-              background: `linear-gradient(to right, #4BEBDD , #A567CC ,#DF2C9F, #F85B6B, #FFF94D ${percentage}%, grey ${percentage}%)`,
+              background: `linear-gradient(to right, #4BEBDD , #A567CC ,#DF2C9F, #F85B6B, #FFF94D ${percentage}%, #F2F2F2 ${percentage}%)`,
             };
         }
         else if(value ===5){
