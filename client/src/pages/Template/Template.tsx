@@ -2,40 +2,29 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-//import { v4 as uuidv4 } from "uuid";
+
+//Styles
+import styles from "./Template.module.css";
 
 //Types
 import {
-  ITemplateGet,
   ITemplatePost,
-  IQuestion,
-  IQCategory,
-  IQuestionLang,
-  ISection,
-  IConvertedTemplate,
   ITemplateQuestion,
   IQuestionPost,
+  ISection,
 } from "../../types/template";
 
-//Styling
-import styles from "./Template.module.css";
-
 //Internal imports
-import { testTemplateData } from "../../testdata/testTemplateData";
 import { preface } from "./preface";
 import { gradingGuidance } from "./gradingGuidance";
 import {
-  convertTemplate,
-  /* fetchCategories, */
-} from "../../functions/templateConverter";
-import {
   useGetActiveTemplateQuery,
-  useGetAllTemplatesQuery,
+  //useGetAllTemplatesQuery,
   useAddTemplateMutation,
 } from "../../features/templateApi";
 import {
   useGetAllQuestionsQuery,
-  useGetQuestionIdQuery,
+  //useGetQuestionIdQuery,
   useAddQuestionMutation,
 } from "../../features/questionApi";
 import { useGetAllCategoriesQuery } from "../../features/categoryApi";
@@ -43,35 +32,30 @@ import { useGetAllCategoriesQuery } from "../../features/categoryApi";
 //Components
 import Accordion from "../../components/Accordion/Accordion";
 
-/**
- * API ROUTES
-  get('/template', getTemplates); ------------------Get all templates
-  get('/template/active', getTemplate);  ----------------get current active template
-  post('/template', addTemplate);  ------------- save template to db
-  patch('/template/:id', setDefaultTemplate); ------ set template as default, all others as not default 
- */
-
-/**
- * export interface IQCategory {
-  _id: string;
-  categoryName: string;
-  description?: string;
-  questions?: string[];
-  createdOn: Date;
-  createdBy: string;
-  categoryStatus: boolean;
-}
- * 
- */
-
 type accordion = {
   open: boolean;
 };
 
-//let convertedTemplateData: IConvertedTemplate;
+type correctedQuestion = {
+  //redundant type - same as ITemplateQuestion?
+  id: string;
+  question: string;
+  isFreeForm: boolean;
+};
+
+class SectionClass {
+  id: string;
+  name: string;
+  questions: ITemplateQuestion[];
+  constructor(id: string, name: string, questions: ITemplateQuestion[]) {
+    this.id = id;
+    this.name = name;
+    this.questions = questions;
+  }
+}
 
 const Template = () => {
-  const getTemplateData = useGetAllTemplatesQuery();
+  //const getTemplateData = useGetAllTemplatesQuery();
   const getActiveTemplate = useGetActiveTemplateQuery();
   const getCategories = useGetAllCategoriesQuery();
   const getQuestions = useGetAllQuestionsQuery(); //IQuestion[]
@@ -79,25 +63,109 @@ const Template = () => {
   const [addQuestion] = useAddQuestionMutation();
   const [addTemplate] = useAddTemplateMutation();
 
-  const templates = getTemplateData.data;
+  const [accordion, setAccordion] = useState<accordion[]>([
+    { open: false },
+    { open: false },
+    { open: false },
+    { open: false },
+    { open: false },
+    { open: false },
+    { open: false },
+    { open: false },
+  ]);
+  const [templateTitle, setTemplateTitle] = useState<string>("");
+
+  //const templates = getTemplateData.data;
   const activeTemplate = getActiveTemplate.data;
   const categories = getCategories.data;
   const questions = getQuestions.data;
-  console.log(activeTemplate);
-  console.log(categories);
-  console.log(questions);
+  const categoriesCount: number | undefined = categories?.length;
+  console.log("number of categories:", categoriesCount);
+  categories?.forEach((cat) => {
+    //use for setting number of accordion states
+  });
 
-  const loggedIn = useSelector((state: any) => state.auth.loggedIn);
+  /*   const loggedIn = useSelector((state: any) => state.auth.loggedIn);
   const isAdmin = useSelector((state: any) => state.auth.isAdmin);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); */
 
   const [questionState, setQuestionState] = useState({
     newQuestion: "",
     questionArray: [],
   });
-  const [accordion, setAccordion] = useState<accordion[]>([{ open: false }]);
 
-  const [templateTitle, setTemplateTitle] = useState<string>("");
+  let newCategoryArray: ISection[];
+  newCategoryArray = dataParser();
+
+  /** new dataform in template:
+   *
+   * categories: [{
+   *    id:string,
+   *    name: string,
+   *      questions : [{id: string, question: string, isFreeForm: boolean}, {},{}]
+   *    },
+   *    {},
+   *    {}
+   *  ]
+   *
+   */
+
+  function dataParser() {
+    let categoryArray: ISection[] = [];
+    let newQuestion: ITemplateQuestion = {
+      id: "",
+      question: "",
+      isFreeForm: false,
+    };
+    categories?.forEach((category) => {
+      let questionArray: ITemplateQuestion[] = [];
+      questions?.forEach((question) => {
+        if (question.category === category._id) {
+          newQuestion = {
+            ...newQuestion,
+            id: question._id,
+            question: question.question[0].question as string,
+            isFreeForm: false,
+          };
+
+          if (question.type.startsWith("s".toLowerCase())) {
+            newQuestion = {
+              ...newQuestion,
+              /*   id: question._id,
+              question: question.question[0].question as string, */
+              isFreeForm: true,
+            };
+          } /* else {
+            newQuestion = {
+              id: question._id,
+              question: question.question[0].question as string,
+              isFreeForm: false,
+            };
+          } */
+          questionArray.push(newQuestion);
+        }
+      });
+      console.log(questionArray); //debugging
+
+      let correctedCategory = new SectionClass(
+        category._id,
+        category.categoryName,
+        questionArray
+      );
+      console.log("reformed catogry", correctedCategory); //debugging
+      categoryArray.push(correctedCategory);
+    });
+    return categoryArray;
+  }
+
+  /* function correctType(p: string) {
+    const values: string[] = ["Number", "number", "String", "string"];
+    if (values.includes(p)) {
+      return true;
+    } else {
+      return false;
+    }
+  } */
 
   function titleChangeHandler(e: any) {
     console.log(e.target.value);
@@ -110,13 +178,18 @@ const Template = () => {
     setQuestionState(items);
   }
 
-  async function submitHandler(e: any) {
+  async function saveTemplate(e: any) {
     e.preventDefault();
-    // addTemplate()
+    let newTemplate: ITemplatePost = {
+      templateTitle: templateTitle,
+      instructions: "",
+      categories: [{}],
+    };
+    addTemplate(newTemplate);
   }
 
   function toggleAccordion(e: any, i: number) {
-    let currentValue = accordion[i].open;
+    let currentValue = accordion[i]?.open;
     setAccordion((accordion) => {
       return accordion.map((item) => {
         return accordion.indexOf(item) === i
@@ -129,7 +202,7 @@ const Template = () => {
   function createQuestion(categoryId: string) {
     let newQuestion: IQuestionPost = {
       category: categoryId,
-      question: { lang: "en", question: questionState.newQuestion },
+      question: { lang: "Eng", question: questionState.newQuestion },
       type: "",
     };
     addQuestion(newQuestion);
@@ -181,19 +254,18 @@ const Template = () => {
           <h3 className={styles.h3}>Feedback Questions</h3>
         </div>
         {/* ACCORDIONS */}
-        {categories?.map((item, i) => (
+        {newCategoryArray.map((item, i) => (
           <Accordion
             key={i}
             category={item}
-            questions={questions} //the array of all questions
             clickHandler={(e: any) => toggleAccordion(e, i)}
-            isOpen={true}
+            isOpen={accordion[i]?.open}
             questionChangeHandler={questionChangeHandler}
             createQuestion={() => createQuestion}
           />
         ))}
         <div className={styles.formRow}>
-          <button type="submit" onClick={submitHandler}>
+          <button type="submit" onClick={saveTemplate}>
             Save
           </button>
           <button type="button">Preview</button>
