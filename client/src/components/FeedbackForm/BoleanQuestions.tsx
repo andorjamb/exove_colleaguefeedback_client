@@ -22,9 +22,9 @@ const BoleanQuestions = ({question}:question) => {
       }
     return (
         <div className={styles.bolContainer}>
-            <h4 className={styles.bolQuestion}>{question}</h4>
+            <p className={styles.bolQuestion}>{question}</p>
             <div className={styles.bolComponent} >
-  <div className={styles.bolDecision} style={{  flexDirection:rows }} onClick={direction}>
+  <div className={styles.bolDecision} style={{  flexDirection:rows, transition:"flexDirection ease 4s" }} onClick={direction}>
       <p className={styles.bolCircle}  >{switchState.toString()}</p>
     </div>
   </div>

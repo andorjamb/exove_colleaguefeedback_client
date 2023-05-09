@@ -63,7 +63,7 @@ const category:ICategory[] = qTemplate.categories
       <h3 className={styles.instructionsTitle}>Instruction</h3>
 
   
-      <h4 className={styles.instructions}>
+      <p className={styles.instructions}>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit
         quis tempora minus, fuga officia sed ut? Id blanditiis, voluptates
         voluptate eaque ipsum cupiditate dolore sunt possimus tempora excepturi
@@ -71,12 +71,12 @@ const category:ICategory[] = qTemplate.categories
         elit. Non suscipit vitae tempore eligendi, nulla optio placeat?
         Consequatur deserunt obcaecati, atque reiciendis in corrupti praesentium
         libero, doloribus rem excepturi placeat perferendis!
-      </h4>
+      </p>
 
       <div className={styles.questionContainer}>
         {qTemplate.categories.map(
           (cat) => (
-          <div key={cat.category._id}>
+          <div className={styles.catQuest} key={cat.category._id} >
             <h2>{cat.category.categoryName}</h2>
 
             {
