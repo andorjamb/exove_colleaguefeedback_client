@@ -23,8 +23,15 @@ export interface IQuestionGet {
 }
 
 export interface ICategoryGet {
+  //in template/active this is no longer being used
   _id: string;
   category: string;
+  questions: IQuestionGet[];
+}
+
+export interface IActiveTemplateCategory {
+  _id: string;
+  categoryName: string;
   questions: IQuestionGet[];
 }
 
@@ -35,6 +42,16 @@ export interface ITemplateGet {
   createdOn: Date;
   createdBy: string;
   categories: ICategoryGet[];
+  active: false;
+}
+
+export interface IActiveTemplateGet {
+  _id: string;
+  templateTitle: string;
+  instructions: string;
+  createdOn: Date;
+  createdBy: string;
+  categories: IActiveTemplateCategory[];
   active: false;
 }
 

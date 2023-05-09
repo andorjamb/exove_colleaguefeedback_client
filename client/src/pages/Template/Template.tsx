@@ -90,6 +90,24 @@ const Template = () => {
 
   let newCategoryArray: ISection[] = dataParser();
 
+  // /*   useEffect(() => {
+  if (activeTemplate) {
+    console.log("active template:");
+    let activeCategoryArray = activeTemplate.categories.map((item) => {
+      console.log(item._id);
+      let questionIdArray = item.questions.map((question) => {
+        return question._id;
+      });
+      console.log(questionIdArray);
+      return { cat_id: item._id, question_id: questionIdArray };
+    });
+    console.log("finalised array:", activeCategoryArray);
+  }
+  // [id, id, id ,id ---]
+  //console.log(activeCategoryArray);
+  // }
+  //}, [activeTemplate]);  */
+
   useEffect(() => {
     if (categories?.length) {
       let accordionCopy = [...accordion];
