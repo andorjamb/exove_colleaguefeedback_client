@@ -151,3 +151,34 @@ font-size: 20px;
 .sTextarea{
     width: 100%;
 }
+
+
+/* Button */
+
+.button {
+    width: 8rem;
+    height: 3.5rem;
+    cursor: pointer;
+  }
+  
+  .loginButton {
+    background-color:#45AF76;
+    box-shadow: 4px 4px black;
+    color: white;
+    position: absolute;
+    border: none;
+    bottom: 0;
+    right: 0;
+  }
+  
+  .loginButton:active {
+    background-color: black;
+    transform: translate(4px, 4px);
+    box-shadow: none;
+  }
+
+  .formElements {
+    display: block;
+    position: relative;
+    padding: 2rem;
+  }

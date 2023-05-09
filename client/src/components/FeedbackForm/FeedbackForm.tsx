@@ -1,10 +1,11 @@
 import React, { useMemo, useState } from "react";
 
+
 //Survey packages
 import { Model } from "survey-core";
 
 //Styling
-import styles from "./FeedbackForm.module.css";
+import style from "./FeedbackForm.module.css";
 import StringQuestions from "./StringQuestions";
 import { template } from "./Data";
 import RangeQuestions from "./RangeQuestions";
@@ -54,16 +55,16 @@ const FeedbackForm = () => {
  const [language,setLang]=useState<string>('Eng')
 const category:ICategory[] = qTemplate.categories
   return (
-    <div className={styles.main}>
-      <div className={styles.user} style={{}}>
-      <h1 className={styles.header}>Feedback for your Colleague</h1>
-      <h2 className={styles.username}>Dibya Dahal</h2>
+    <div className={style.main}>
+      <div className={style.user} style={{}}>
+      <h1 className={style.header}>Feedback for your Colleague</h1>
+      <h2 className={style.username}>Dibya Dahal</h2>
       </div>
 
-      <h3 className={styles.instructionsTitle}>Instruction</h3>
+      <h3 className={style.instructionsTitle}>Instruction</h3>
 
   
-      <p className={styles.instructions}>
+      <p className={style.instructions}>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit
         quis tempora minus, fuga officia sed ut? Id blanditiis, voluptates
         voluptate eaque ipsum cupiditate dolore sunt possimus tempora excepturi
@@ -73,10 +74,10 @@ const category:ICategory[] = qTemplate.categories
         libero, doloribus rem excepturi placeat perferendis!
       </p>
 
-      <div className={styles.questionContainer}>
+      <div className={style.questionContainer}>
         {qTemplate.categories.map(
           (cat) => (
-          <div className={styles.catQuest} key={cat.category._id} >
+          <div className={style.catQuest} key={cat.category._id} >
             <h2>{cat.category.categoryName}</h2>
 
             {
@@ -119,7 +120,16 @@ const category:ICategory[] = qTemplate.categories
   )
   )
   }
+  
   </div>
+  <div className={style.formElements}>
+              <button
+                className={[style.button, style.loginButton].join(" ")}
+                type="submit"
+              >
+              Submit
+              </button>
+            </div>
   </div>
   )
 };
