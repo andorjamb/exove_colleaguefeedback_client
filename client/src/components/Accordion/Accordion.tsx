@@ -11,13 +11,18 @@ interface Props {
   category: ISection;
   clickHandler: any;
   isOpen: boolean;
-  questionChangeHandler: (
-    event: React.MouseEventHandler<HTMLFieldSetElement>,
-    i: number,
+  checkboxChangeHandler: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    cat: string,
     id: string
   ) => void;
+  createQuestionChangeHandler: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    cat: string,
+    value: string
+  ) => void;
   createQuestion: (
-    event: React.MouseEventHandler<HTMLButtonElement>,
+    e: React.MouseEventHandler<HTMLButtonElement>,
     id: string
   ) => void;
 }
@@ -26,7 +31,8 @@ const Accordion = ({
   category,
   clickHandler,
   isOpen,
-  questionChangeHandler,
+  checkboxChangeHandler,
+  createQuestionChangeHandler,
   createQuestion,
 }: Props) => {
   /** new dataform in template:
@@ -55,17 +61,19 @@ const Accordion = ({
           {isOpen ? (
             <>
               <ul className={styles.accordionContent}>
-                <fieldset
-                  name=""
-                  className={styles.fieldset}
-                  onChange={() => questionChangeHandler}
-                >
+                <fieldset className={styles.fieldset}>
                   {category.questions?.map((q) => (
-                    <li>
+                    <li key={q.id}>
                       {!q?.isFreeForm ? (
                         <label>
                           <input
                             type="checkbox"
+                            onChange={(e) =>
+                              checkboxChangeHandler(e, category.id, q.id)
+                            }
+                            name="questions"
+                            value={q.id}
+                            id={q.id}
                             /* defaultChecked={category.questions.indexOf(q) !== -1} */
                             className={styles.input}
                           />
@@ -75,6 +83,11 @@ const Accordion = ({
                         <label>
                           <input
                             type="checkbox"
+                            onChange={(e) =>
+                              checkboxChangeHandler(e, category.id, q.id)
+                            }
+                            name="questions"
+                            id={q.id}
                             /*   defaultChecked={category.questions.indexOf(q) !== -1} */
                             className={styles.input}
                           />
@@ -89,12 +102,24 @@ const Accordion = ({
                 className={`${styles.fieldset} ${styles.accordionContent}`}
               >
                 <legend>Create new question in this category:</legend>
-                <input className={styles.input} />
+                <input
+                  className={styles.input}
+                  type="text"
+                  onChange={(e) =>
+                    createQuestionChangeHandler(e, category.id, e.target.value)
+                  }
+                />
                 <label>
                   <input
                     type="checkbox"
-                    value="freeForm"
                     className={styles.input}
+                    onChange={(e) =>
+                      createQuestionChangeHandler(
+                        e,
+                        category.id,
+                        e.target.value
+                      )
+                    }
                   />
                   Question is free form
                 </label>

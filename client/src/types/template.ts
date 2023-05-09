@@ -42,7 +42,7 @@ export interface ITemplateGet {
 
 export interface ICat_Quest {
   category: string; //id
-  questions: IQuestion[];
+  questions: IQuestion[]; //IQuestionGet
 }
 
 export interface IQuestion {
@@ -86,15 +86,20 @@ export interface IQuestionPost {
   question: QuestionLangPost;
 }
 
+/* export interface ICategoryPost {
+  category: string;
+  questions: QuestionLangPost[];
+} */
+
 //Types for sending new template to db
 
 export interface ITemplatePost {
   templateTitle: string;
   instructions: string;
-  categories: [{}];
+  categories: ICat_Quest[]; //different to ITemplatePost category array
 }
 /* 
-EXPANDED VIEW OF ITemplate
+EXPANDED VIEW OF ITemplate / ITemplateGet
  {
   _id: string;
   templateTitle: string;
@@ -127,13 +132,6 @@ EXPANDED VIEW OF ITemplate
   active: boolean;
 }
  */
-
-export interface IConvertedTemplate {
-  id: string; //maps to database doc id
-  templateTitle: string;
-  sections: ISection[];
-  active: boolean;
-}
 
 export interface ISection {
   id: string; //maps to database doc id

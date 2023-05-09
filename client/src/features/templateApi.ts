@@ -32,10 +32,12 @@ export const templateApi = createApi({
       }),
       invalidatesTags: ["Templates"],
     }),
-    setDefaultTemplate: builder.mutation<void, string>({
+    setActiveTemplate: builder.mutation<void, string>({
+      //sets {active : true} on specified template id
       query: (id) => ({
         url: `template/${id}`,
         method: "PATCH",
+        body: id,
       }),
     }),
   }),
@@ -45,7 +47,7 @@ export const {
   useGetAllTemplatesQuery,
   useGetActiveTemplateQuery,
   useAddTemplateMutation,
-  useSetDefaultTemplateMutation,
+  useSetActiveTemplateMutation,
 } = templateApi;
 
 export default templateApi.reducer;
