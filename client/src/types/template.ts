@@ -76,27 +76,29 @@ export interface IQCategory {
 //Types for sending new question to db
 
 type QuestionLangPost = {
+  //for creating new question
   lang: string;
   question: string;
 };
 
 export interface IQuestionPost {
+  //for creating new question
   category: string;
   type: string;
   question: QuestionLangPost;
 }
 
-/* export interface ICategoryPost {
+//Types for sending new template to db
+
+export interface ICategoryPost {
   category: string;
   questions: QuestionLangPost[];
-} */
-
-//Types for sending new template to db
+}
 
 export interface ITemplatePost {
   templateTitle: string;
   instructions: string;
-  categories: ICat_Quest[]; //different to ITemplatePost category array
+  categories: ICategoryPost[];
 }
 /* 
 EXPANDED VIEW OF ITemplate / ITemplateGet
@@ -109,7 +111,7 @@ EXPANDED VIEW OF ITemplate / ITemplateGet
   categories: [
     //ISection
     {
-      category: string;
+      category: string; //category id
       questions: [
         {
           id: string;
@@ -132,6 +134,8 @@ EXPANDED VIEW OF ITemplate / ITemplateGet
   active: boolean;
 }
  */
+
+//interfaces for mapping template questions to UI component
 
 export interface ISection {
   id: string; //maps to database doc id

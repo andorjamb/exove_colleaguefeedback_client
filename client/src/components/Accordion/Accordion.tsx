@@ -105,7 +105,7 @@ const Accordion = ({
                 <input
                   className={styles.input}
                   type="text"
-                  onChange={(e) =>
+                  onBlur={(e) =>
                     createQuestionChangeHandler(e, category.id, e.target.value)
                   }
                 />

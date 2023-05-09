@@ -104,6 +104,14 @@
 
 .addQuestionButton {
   background-color: var(--exoveGreen);
+  box-shadow: 4px 4px black;
+  transition: all ease-in-out 0.2s;
   color: white;
   float: right;
+}
+
+.addQuestionButton:active {
+  background-color: black;
+  transform: translate(4px, 4px);
+  box-shadow: none;
 }

@@ -13,11 +13,12 @@ import {
   IQuestionPost,
   ISection,
   ICat_Quest,
+  ICategoryPost,
 } from "../../types/template";
 
 //Internal imports
-import { preface } from "./preface";
-import { gradingGuidance } from "./gradingGuidance";
+import { preface } from "../../assets/preface";
+import { gradingGuidance } from "../../assets/gradingGuidance";
 import {
   useGetActiveTemplateQuery,
   //useGetAllTemplatesQuery,
@@ -53,13 +54,25 @@ const Template = () => {
   const getActiveTemplate = useGetActiveTemplateQuery();
   const getCategories = useGetAllCategoriesQuery();
   const getQuestions = useGetAllQuestionsQuery(); //IQuestion[]
+  const { isLoading } = useGetAllQuestionsQuery();
 
   const [addQuestion] = useAddQuestionMutation();
   const [addTemplate] = useAddTemplateMutation();
 
   const [accordion, setAccordion] = useState<accordion[]>([]);
   const [templateTitle, setTemplateTitle] = useState<string>("");
-  const [categoriesState, setCategoriesState] = useState<ICat_Quest[]>([]);
+  const [categoriesState, setCategoriesState] = useState<ICategoryPost[]>([]);
+  const [selectedQuestionState, setSelectedQuestionState] = useState<
+    IQuestionPost[]
+  >([]);
+
+  const [newQuestionState, setNewQuestionState] = useState<{
+    value: string;
+    type: string;
+  }>({
+    value: "",
+    type: "",
+  });
 
   /**
    * ICat_Quest [{
@@ -75,11 +88,6 @@ const Template = () => {
   const categories = getCategories.data;
   const questions = getQuestions.data;
 
-  const [questionState, setQuestionState] = useState({
-    newQuestion: "",
-    questionArray: [],
-  });
-
   let newCategoryArray: ISection[] = dataParser();
 
   useEffect(() => {
@@ -90,6 +98,7 @@ const Template = () => {
       }
       setAccordion((accordion) => [...accordionCopy]);
     }
+    //eslint-disable-next-line
   }, [categories]);
 
   /*   const loggedIn = useSelector((state: any) => state.auth.loggedIn);
@@ -156,6 +165,14 @@ const Template = () => {
   ) {
     console.log(value);
     console.log(categoryId);
+    if (value) {
+      //set question in newQuestion state
+      if (value === "on") {
+        //set question type String in newQuestion state
+      } else {
+        //set question type Number in newQuestion state
+      }
+    }
   }
 
   function titleChangeHandler(e: any) {
@@ -163,16 +180,26 @@ const Template = () => {
     setTemplateTitle((title) => e.target.value);
   }
 
-  function checkboxChangeHandler(
+  function createQuestion(categoryId: string) {
+    console.log(newQuestionState);
+    let newQuestion: IQuestionPost = {
+      category: categoryId,
+      question: { lang: "Eng", question: newQuestionState.value },
+      type: newQuestionState.type,
+    };
+    addQuestion(newQuestion);
+  }
+
+  function checkboxChangeHandler( //for adding questions to a template
     e: any,
     // i: number,
     categoryId: string,
     questionId: string
   ) {
-    let items = { ...questionState };
+    let items = { ...selectedQuestionState };
     console.log("cat_id: ", categoryId, "question_id: ", questionId);
     //items.questionArray = [...items.questionArray, e.target.value];
-    setQuestionState(items);
+    setSelectedQuestionState(items);
   }
 
   async function saveTemplate(e: any) {
@@ -194,15 +221,6 @@ const Template = () => {
           : item;
       });
     });
-  }
-
-  function createQuestion(categoryId: string) {
-    let newQuestion: IQuestionPost = {
-      category: categoryId,
-      question: { lang: "Eng", question: questionState.newQuestion },
-      type: "",
-    };
-    addQuestion(newQuestion);
   }
 
   return (
@@ -252,21 +270,29 @@ const Template = () => {
           <h3 className={styles.h3}>Feedback Questions</h3>
         </div>
         {/* ACCORDIONS */}
-        {newCategoryArray.map((item, i) => (
-          <Accordion
-            key={i}
-            category={item}
-            clickHandler={(e: any) => toggleAccordion(e, i)}
-            isOpen={accordion[i]?.open}
-            checkboxChangeHandler={(e) =>
-              checkboxChangeHandler(e, item.id, e.target.value)
-            }
-            createQuestionChangeHandler={(e) =>
-              createQuestionChangeHandler(e, item.id, e.target.value)
-            }
-            createQuestion={() => createQuestion}
-          />
-        ))}
+        {isLoading ? (
+          <>
+            <h4>Fetching questions</h4>
+          </>
+        ) : (
+          <>
+            {newCategoryArray.map((item, i) => (
+              <Accordion
+                key={i}
+                category={item}
+                clickHandler={(e: any) => toggleAccordion(e, i)}
+                isOpen={accordion[i]?.open}
+                checkboxChangeHandler={(e) =>
+                  checkboxChangeHandler(e, item.id, e.target.value)
+                }
+                createQuestionChangeHandler={(e) =>
+                  createQuestionChangeHandler(e, item.id, e.target.value)
+                }
+                createQuestion={() => createQuestion(item.id)}
+              />
+            ))}
+          </>
+        )}
         <div className={styles.formRow}>
           <button type="submit" onClick={saveTemplate}>
             Save
