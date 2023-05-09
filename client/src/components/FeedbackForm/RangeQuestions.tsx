@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import styles from "./FeedbackForm.module.css";
+
 interface question {
     question:string,
 
@@ -84,7 +86,7 @@ const RangeQuestions = ({ question }: question) => {
         
 
         return (
-            <label key={index} style={{ marginRight: "10px",backgroundColor: radioColor,cursor:"pointer",width:"40px",height:"40px", borderRadius:"50%" }}>
+            <label key={index} className={styles.rLabel} style={{ backgroundColor: radioColor}}>
                 <input
                     type="radio"
                     value={index}
@@ -96,25 +98,19 @@ const RangeQuestions = ({ question }: question) => {
                         }}
                     style={{ display: "none"}}
                 />
-                <span
-                    style={{
-                        display: "inline-block", 
-                        width: "30px",
-                        height: "2px",
-                        
-                        verticalAlign: "middle",
-                    }}
+                <span className={styles.rSpan}
+                    
                 />
             </label>
         );
     };
 
     return (
-        <div style={{width:"100%", "position": "relative", display:"flex", "justifyContent":"center",flexDirection:"column"}}> 
-            <label>{question}</label>
+        <div className={styles.rMainDiv} > 
+            <h3>{question}</h3>
            
 
-            <div style={{flexDirection: 'row', justifyContent: 'space-around', display: 'flex', ...getGradientStyle()}}>
+            <div className={styles.rAnswer} style={{ ...getGradientStyle()}}>
          
                 
                     {[1, 2, 3, 4, 5].map((index) => renderRadio(index))}

@@ -10,6 +10,7 @@ import { template } from "./Data";
 import RangeQuestions from "./RangeQuestions";
 import BoleanQuestions from "./BoleanQuestions";
 
+
 interface SingleQuiz {
   lang: string,
   question: string,
@@ -53,14 +54,16 @@ const FeedbackForm = () => {
  const [language,setLang]=useState<string>('Eng')
 const category:ICategory[] = qTemplate.categories
   return (
-    <div>
-      <div style={{"display":"flex", "flexDirection":"column", "padding": "1rem 7rem","alignItems":"flex-start"}}>
-      <h1>Feedback for your Colleague</h1>
-      <h2 style={{"color":"#6E12E7"}}>Dibya Dahal</h2>
+    <div className={styles.main}>
+      <div className={styles.user} style={{}}>
+      <h1 className={styles.header}>Feedback for your Colleague</h1>
+      <h2 className={styles.username}>Dibya Dahal</h2>
       </div>
 
-      <h3>Instruction</h3>
-      <h4>
+      <h3 className={styles.instructionsTitle}>Instruction</h3>
+
+  
+      <h4 className={styles.instructions}>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit
         quis tempora minus, fuga officia sed ut? Id blanditiis, voluptates
         voluptate eaque ipsum cupiditate dolore sunt possimus tempora excepturi
@@ -70,7 +73,7 @@ const category:ICategory[] = qTemplate.categories
         libero, doloribus rem excepturi placeat perferendis!
       </h4>
 
-      <div className="questionContainer">
+      <div className={styles.questionContainer}>
         {qTemplate.categories.map(
           (cat) => (
           <div key={cat.category._id}>
