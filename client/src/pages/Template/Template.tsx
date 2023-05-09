@@ -121,11 +121,11 @@ const Template = () => {
       let questionArray: ITemplateQuestion[] = [];
       questions?.forEach((question) => {
         if (question.category === category._id) {
-          console.log("question match:", question.question);
           newQuestion = {
             ...newQuestion,
             id: question._id,
             question: question.question[0].question as string,
+            isFreeForm: false,
           };
 
           if (question.type.startsWith("s".toLowerCase())) {
