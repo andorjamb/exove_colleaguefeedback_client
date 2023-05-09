@@ -146,3 +146,43 @@ export interface ITemplateQuestion {
   question: string;
   isFreeForm: boolean;
 }
+
+
+//Latest type for getting active and all templates
+
+interface SingleQuiz {
+  lang: string,
+  question: string,
+  _id:string
+}
+
+interface IQuiz{
+  _id: string;
+  category: string;
+  createdBy: string;
+  createdOn: string;
+  active: boolean;
+  type: string;
+  question:SingleQuiz[] ;
+}
+export interface ITemplate {
+ 
+    _id: string;
+    templateTitle: string;
+    instructions: string;
+    createdOn: string;
+    createdBy: string;
+    categories: ICategory[];
+    active: boolean;
+
+}
+
+export interface ICategory {
+category:IICategory;
+}
+
+interface IICategory {
+  _id: string;
+  categoryName:string;
+  questions: IQuiz[];
+};

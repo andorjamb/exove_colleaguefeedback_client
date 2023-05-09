@@ -12,8 +12,7 @@ const RangeQuestions = ({ question }: question) => {
         e.preventDefault()
         setValue(Number(e.target.value));
     };
-    
-    console.log(value)
+
     const divStyle = {
       
         

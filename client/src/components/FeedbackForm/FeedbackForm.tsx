@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 
 //Survey packages
@@ -10,55 +10,40 @@ import StringQuestions from "./StringQuestions";
 import { template } from "./Data";
 import RangeQuestions from "./RangeQuestions";
 import BoleanQuestions from "./BoleanQuestions";
+import {useGetActiveTemplateQuery,useAddTemplateMutation} from "../../features/templateApi";
+import { ICategory, ITemplate } from "../../types/template";
 
 
-interface SingleQuiz {
-  lang: string,
-  question: string,
-  _id:string
-}
-
-interface IQuiz{
-  _id: string;
-  category: string;
-  createdBy: string;
-  createdOn: string;
-  active: boolean;
-  type: string;
-  question:SingleQuiz[] ;
-}
-interface ITemplate {
- 
-    _id: string;
-    templateTitle: string;
-    instructions: string;
-    createdOn: string;
-    createdBy: string;
-    categories: ICategory[];
-    active: boolean;
-
-}
-
-interface ICategory {
-category:IICategory;
-}
-
-interface IICategory {
-  _id: string;
-  categoryName:string;
-  questions: IQuiz[];
-};
 
 
 const FeedbackForm = () => {
-  const qTemplate:ITemplate = template;
- const [language,setLang]=useState<string>('Eng')
-const category:ICategory[] = qTemplate.categories
+  const { data } = useGetActiveTemplateQuery() || [];
+  const [loadigState, setLoadingState] = useState<boolean>(true)
+  const [activeTmpt, setActiveTmpt] = useState<ITemplate>()
+ 
+  useEffect(() => {
+    if (data) {
+      setActiveTmpt(data)
+      setLoadingState(false)
+    } else {
+      setLoadingState(true)
+    }
+  
+  }, [data])
+  
+ 
+  const qTemplate = activeTmpt;
+  console.log(activeTmpt?.categories)
+  const [language, setLang] = useState<string>('Eng')
+  // const category = qTemplate.categories
   return (
+
+
     <div className={style.main}>
       <div className={style.user} style={{}}>
-      <h1 className={style.header}>Feedback for your Colleague</h1>
-      <h2 className={style.username}>Dibya Dahal</h2>
+        <h1 className={style.header}>Feedback for your Colleague</h1>
+        <h2 className={style.username}>Dibya Dahal</h2>
+
       </div>
 
       <h3 className={style.instructionsTitle}>Instruction</h3>
@@ -73,63 +58,73 @@ const category:ICategory[] = qTemplate.categories
         Consequatur deserunt obcaecati, atque reiciendis in corrupti praesentium
         libero, doloribus rem excepturi placeat perferendis!
       </p>
-
-      <div className={style.questionContainer}>
-        {qTemplate.categories.map(
+      <>
+        {
+        loadigState ? (
+          <>
+            <h1>Getting Data .........</h1>
+        </>) :
+          (
+          <div className = {style.questionContainer}>
+        {qTemplate && qTemplate.categories?.map(
           (cat) => (
-          <div className={style.catQuest} key={cat.category._id} >
-            <h2>{cat.category.categoryName}</h2>
+            <div className={style.catQuest} key={cat.category._id} >
+              <h2>{cat.category.categoryName}</h2>
 
-            {
-            cat.category.questions.map(
-              (quiz) => (
-              <div key={quiz._id}>
-                {quiz.type === 'String' ? (
-                  <StringQuestions
-                    key={quiz._id}
-                    question={quiz.question
-                      .filter((lang) => lang.lang === language)
-                      .map((lang) => lang.question)
-                      .toString()}
-                  />
-                ) : quiz.type === 'Range' ? (
-                  <RangeQuestions
-                  key={quiz._id}
-                  question={quiz.question
-                    .filter((lang) => lang.lang === language)
-                    .map((lang) => lang.question)
-                    .toString()}
-                />
-                ) :
-                 (
-                  <BoleanQuestions
-                    key={quiz._id}
-                    question={quiz.question
-                      .filter((lang) => lang.lang === language)
-                      .map((lang) => lang.question)
-                      .toString()}
-                  />
+              {
+                cat.category.questions.map(
+                  (quiz) => (
+                    <div key={quiz._id}>
+                      {quiz.type === 'string' ? (
+                        <StringQuestions
+                          key={quiz._id}
+                          question={quiz.question
+                            .filter((lang) => lang.lang === language)
+                            .map((lang) => lang.question)
+                            .toString()}
+                        />
+                      ) : quiz.type === 'number' ? (
+                        <RangeQuestions
+                          key={quiz._id}
+                          question={quiz.question
+                            .filter((lang) => lang.lang === language)
+                            .map((lang) => lang.question)
+                            .toString()}
+                        />
+                      ) :
+                        (
+                          <BoleanQuestions
+                            key={quiz._id}
+                            question={quiz.question
+                              .filter((lang) => lang.lang === language)
+                              .map((lang) => lang.question)
+                              .toString()}
+                          />
+                        )
+                      }
+                    </div>
+                  )
                 )
-                }
-              </div>
-            )
-            )
-            }
-          </div>
-      
-  )
-  )
-  }
-  
-  </div>
-  <div className={style.formElements}>
-              <button
-                className={[style.button, style.loginButton].join(" ")}
-                type="submit"
-              >
-              Submit
-              </button>
+              }
             </div>
+      
+          )
+        )
+        }
+      </div>
+  )
+
+  }
+   </>
+
+<div className={style.formElements}>
+<button
+  className={[style.button, style.loginButton].join(" ")}
+  type="submit"
+>
+Submit
+</button>
+</div>
   </div>
   )
 };
