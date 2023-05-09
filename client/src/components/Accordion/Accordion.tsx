@@ -1,16 +1,14 @@
+//React
 import React from "react";
-import {
-  IQuestion,
-  IQuestionLang,
-  ICategoryGet,
-  IQCategory,
-} from "../../types/template";
 
+//Styles
 import styles from "../../pages/Template/Template.module.css";
 
+//Types
+import { ISection, ITemplateQuestion } from "../../types/template";
+
 interface Props {
-  category: IQCategory;
-  questions: IQuestion[] | undefined;
+  category: ISection;
   clickHandler: any;
   isOpen: boolean;
   questionChangeHandler: (
@@ -26,19 +24,23 @@ interface Props {
 
 const Accordion = ({
   category,
-  questions,
   clickHandler,
   isOpen,
   questionChangeHandler,
   createQuestion,
 }: Props) => {
-  let questionArray: IQuestion[] = [];
-  questions?.forEach((question) => {
-    if (question.category === category._id) {
-      questionArray.push(question);
-    }
-  });
-
+  /** new dataform in template:
+   *
+   * categories: [{
+   *    id: string,
+   *    name: string,
+   *    questions: [{id: string, question: string, isFreeForm: boolean}, {},{}]
+   *    },
+   *    {},
+   *    {}
+   *  ]
+   *
+   */
   return (
     <div>
       <div className={styles.accordionContainer}>
@@ -47,8 +49,7 @@ const Accordion = ({
             <span className={styles.materialIcons}>
               {isOpen ? "remove" : "add"}
             </span>
-            {category?.categoryName}
-            {category?._id}
+            {category?.name}
           </div>
 
           {isOpen ? (
@@ -59,9 +60,29 @@ const Accordion = ({
                   className={styles.fieldset}
                   onChange={() => questionChangeHandler}
                 >
-                  {questionArray.map((q) =>
-                    q.question.map((item) => item.question)
-                  )}
+                  {category.questions?.map((q) => (
+                    <li>
+                      {!q?.isFreeForm ? (
+                        <label>
+                          <input
+                            type="checkbox"
+                            /* defaultChecked={category.questions.indexOf(q) !== -1} */
+                            className={styles.input}
+                          />
+                          {q?.question + " (1-5)"}
+                        </label>
+                      ) : (
+                        <label>
+                          <input
+                            type="checkbox"
+                            /*   defaultChecked={category.questions.indexOf(q) !== -1} */
+                            className={styles.input}
+                          />
+                          {q?.question + " (free form)"}
+                        </label>
+                      )}
+                    </li>
+                  ))}
                 </fieldset>
               </ul>
               <fieldset
