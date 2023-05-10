@@ -19,7 +19,6 @@ const BoleanQuestions = ({ questions, category }: question) => {
 
   const handleDivClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
-    console.log(switchState)
     setSwitchState(!switchState)
     const question: IQuestionLang = {
         _id: questions._id,

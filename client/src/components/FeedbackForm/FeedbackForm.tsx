@@ -1,32 +1,25 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-
-//Survey packages
-import { Model } from "survey-core";
-
-//Styling
 import style from "./FeedbackForm.module.css";
 import StringQuestions from "./StringQuestions";
-import { template } from "./Data";
 import RangeQuestions from "./RangeQuestions";
 import BoleanQuestions from "./BoleanQuestions";
 import {useGetActiveTemplateQuery} from "../../features/templateApi";
-import { ICategory, ITemplate } from "../../types/template";
-import { useDispatch } from "react-redux";
+import {  ITemplate } from "../../types/template";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import { IFCategory, IFeedback } from "../../types/feedback";
 import { newfeedback } from "../../features/feedBackSlice";
-import { IQuestionLang } from "../../types/questions";
-
-
 
 
 const FeedbackForm = () => {
+  
   const dispatch = useDispatch<AppDispatch>();
   const { data } = useGetActiveTemplateQuery() || [];
   const [loadigState, setLoadingState] = useState<boolean>(true)
   const [activeTmpt, setActiveTmpt] = useState<ITemplate>()
- 
+  const user = useSelector((state: any) => state.auth.user);
+
   useEffect(() => {
     if (data) {
      
@@ -46,7 +39,7 @@ const FeedbackForm = () => {
         requestpicksId: 'string',
         feedbackTo: 'string',
         progress: 'started',
-        responseDateLog: [new Date()],
+        responseDateLog: [new Date().toISOString()],
         categories: categories,
         roleLevel:3,
       }
@@ -60,10 +53,17 @@ const FeedbackForm = () => {
   
   }, [data])
   
+  const feedbacks = useSelector((state: any) => state.feedback);
  
   const qTemplate = activeTmpt;
   const [language, setLang] = useState<string>('Eng')
-  // const category = qTemplate.categories
+
+  const handleSubmitFeedBack = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault()
+    const feedBack: IFeedback = { ...feedbacks, userId: 'newton', roleLevel: 3 }
+    console.log(feedBack)
+  }
+
   return (
 
 
@@ -151,8 +151,8 @@ const FeedbackForm = () => {
 
 <div className={style.formElements}>
 <button
-  className={[style.button, style.loginButton].join(" ")}
-  type="submit"
+          className={[style.button, style.loginButton].join(" ")}
+          onClick={(e)=> handleSubmitFeedBack(e)}
 >
 Submit
 </button>

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { IFCategory, IFeedback } from "../types/feedback";
 import { IQuestionLang } from "../types/template";
 
+const date:Date = new Date();
 const questions: IQuestionLang = {
     _id: '',
     lang: '',
@@ -15,8 +16,7 @@ const category: IFCategory =
     }
 
 const initfeedback: IFeedback = {
-    requestpicksId: '',
-    responseDateLog:[new Date(Date.now())],
+    responseDateLog:[date.toISOString()],
     template: '',
     roleLevel: 0,
     feedbackTo: '',
