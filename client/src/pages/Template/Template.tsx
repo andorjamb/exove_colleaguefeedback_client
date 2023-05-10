@@ -14,6 +14,7 @@ import {
   ISection,
   ICategoryPost,
   IActiveTemplateGet,
+  ITemplate,
 } from "../../types/template";
 
 //Internal imports
@@ -85,12 +86,12 @@ const Template = () => {
 
   let activeCategoryObject = makeActiveCategoryObject(activeTemplate!);
 
-  function makeActiveCategoryObject(activeTemplate: IActiveTemplateGet) {
+  function makeActiveCategoryObject(activeTemplate: ITemplate) {
     let activeCategoryObject = activeTemplate?.categories.reduce(
       (accumulator, currentValue) => {
         return {
           ...accumulator,
-          [currentValue.category._id]: currentValue.questions,
+          [currentValue.category._id]: currentValue.category.questions,
         };
       }
     );
