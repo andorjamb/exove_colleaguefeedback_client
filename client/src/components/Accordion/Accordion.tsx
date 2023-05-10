@@ -21,11 +21,9 @@ interface Props {
     e: React.ChangeEvent<HTMLInputElement>,
     cat: string,
     value: string
+    // type: string
   ) => void;
-  createQuestion: (
-    e: React.MouseEventHandler<HTMLButtonElement>,
-    id: string
-  ) => void;
+  createQuestion: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const Accordion = ({
@@ -64,9 +62,11 @@ const Accordion = ({
                             name="questions"
                             value={q.id}
                             id={q.id}
-                            defaultChecked={activeCategories[
-                              category.id
-                            ].includes(q.id)}
+                            defaultChecked={
+                              activeCategories[category.id]
+                                ? activeCategories[category.id].includes(q.id)
+                                : {}
+                            }
                             className={styles.input}
                           />
                           {q?.question + " (1-5)"}
@@ -80,9 +80,11 @@ const Accordion = ({
                             }
                             name="questions"
                             id={q.id}
-                            defaultChecked={activeCategories[
-                              category.id
-                            ].includes(q.id)}
+                            defaultChecked={
+                              activeCategories[category.id]
+                                ? activeCategories[category.id].includes(q.id)
+                                : {}
+                            }
                             className={styles.input}
                           />
                           {q?.question + " (free form)"}
@@ -94,10 +96,14 @@ const Accordion = ({
               </ul>
               <fieldset
                 className={`${styles.fieldset} ${styles.accordionContent}`}
+                /*  onBlur={(e) =>
+                  createQuestionChangeHandler(e, category.id, e.target.value)
+                } */
               >
                 <legend>Create new question in this category:</legend>
                 <input
                   className={styles.input}
+                  name="newQuestion"
                   type="text"
                   onBlur={(e) =>
                     createQuestionChangeHandler(e, category.id, e.target.value)
@@ -106,6 +112,7 @@ const Accordion = ({
                 <label>
                   <input
                     type="checkbox"
+                    name="newQuestion"
                     className={styles.input}
                     onChange={(e) =>
                       createQuestionChangeHandler(
@@ -119,7 +126,7 @@ const Accordion = ({
                 </label>
                 <button
                   type="button"
-                  onClick={() => createQuestion}
+                  onClick={createQuestion}
                   className={styles.addQuestionButton}
                 >
                   Add

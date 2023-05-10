@@ -71,9 +71,11 @@ const Template = () => {
   >([]);
 
   const [newQuestionState, setNewQuestionState] = useState<{
+    categoryId: string;
     value: string;
     type: string;
   }>({
+    categoryId: "",
     value: "",
     type: "",
   });
@@ -156,15 +158,27 @@ const Template = () => {
     e: any,
     categoryId: string,
     value: string
+    /*type: string */
   ) {
-    console.log(value);
-    console.log(categoryId);
+    console.log(value, " ", categoryId, " "); //debugging
+
     if (value) {
-      //set question in newQuestion state
+      //set question in newQuestionState
+      setNewQuestionState((newQuestionState) => {
+        return {
+          ...newQuestionState,
+          value: e.target.value,
+          categoryId: categoryId,
+        };
+      });
       if (value === "on") {
-        //set question type String in newQuestion state
+        setNewQuestionState((newQuestionState) => {
+          return { ...newQuestionState, type: "String" };
+        });
       } else {
-        //set question type Number in newQuestion state
+        setNewQuestionState((newQuestionState) => {
+          return { ...newQuestionState, type: "Number" };
+        });
       }
     }
   }
@@ -174,14 +188,16 @@ const Template = () => {
     setTemplateTitle((title) => e.target.value);
   }
 
-  function createQuestion(categoryId: string) {
-    console.log(newQuestionState);
+  function createQuestion() {
+    console.log("adding question", newQuestionState);
     let newQuestion: IQuestionPost = {
-      category: categoryId,
+      category: newQuestionState.categoryId,
       question: { lang: "Eng", question: newQuestionState.value },
       type: newQuestionState.type,
     };
-    addQuestion(newQuestion);
+    addQuestion(newQuestion).then(() => {
+      console.log("sent");
+    });
   }
 
   function checkboxChangeHandler( //for adding questions to a template
@@ -288,7 +304,7 @@ const Template = () => {
                 createQuestionChangeHandler={(e) =>
                   createQuestionChangeHandler(e, item.id, e.target.value)
                 }
-                createQuestion={() => createQuestion(item.id)}
+                createQuestion={createQuestion}
               />
             ))}
           </>
