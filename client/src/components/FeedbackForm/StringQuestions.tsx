@@ -11,8 +11,8 @@ const StringQuestions = ({question}:question) => {
     return (
         <div className={styles.sMain}>
           
-              <h3>{question}</h3> 
-                <textarea className={styles.sTextarea}  name="answer" id="" cols={5} rows={5} placeholder='Type your answer..'>
+              <p>{question}</p> 
+                <textarea className={styles.sTextarea}  name={question.replace(' ','-')} id="" cols={5} rows={5} placeholder='Type your answer..'>
 
                 </textarea>
         

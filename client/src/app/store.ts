@@ -9,11 +9,13 @@ import { requestPicksApi } from "../features/requestPicksApi";
 import { feedbackApi } from "../features/feedbackApi";
 import { categoryApi } from "../features/categoryApi";
 import { questionApi } from "../features/questionApi";
+import feedBackSlice from "../features/feedBackSlice";
 
 export const store = configureStore({
   reducer: {
     auth: authSlice,
     header: headerSlice,
+    feedback:feedBackSlice,
     [userApi.reducerPath]: userApi.reducer,
     [templateApi.reducerPath]: templateApi.reducer,
     [requestPicksApi.reducerPath]: requestPicksApi.reducer,

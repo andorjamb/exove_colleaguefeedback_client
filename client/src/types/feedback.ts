@@ -1,20 +1,21 @@
 import { IQuestionLang } from "./questions";
 
 export interface IFeedback {
-  _id: string;
+  _id?: string; //Out generated
   template: string;
-  userId: string;
+  userId?: string; // get current user
   requestpicksId: string;
   feedbackTo: string;
   progress: string;
   responseByDate?: string;
   responseDateLog: Date[]; //logs dates of changes
   categories: IFCategory[];
+  roleLevel?: number;
 }
 
 export interface IFCategory {
   category: string;
-  questions: IQuestionLang;
+  questions: IQuestionLang[];
 }
 
 export interface ITableEntry {

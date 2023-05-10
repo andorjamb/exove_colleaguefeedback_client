@@ -6,6 +6,7 @@ import {
   ITemplatePost,
   IActiveTemplateGet,
 } from "../types/template";
+import { ITemplate, ITemplateGet, ITemplatePost } from "../types/template";
 
 //const serverApi = process.env.REACT_APP_SERVER_API;
 const serverApi = "https://exove.vercel.app/api/";
@@ -25,7 +26,7 @@ export const templateApi = createApi({
       query: () => `template/`,
       providesTags: ["Templates"],
     }),
-    getActiveTemplate: builder.query<IActiveTemplateGet, void>({
+    getActiveTemplate: builder.query<ITemplate, void>({
       query: () => `template/active`,
     }),
     addTemplate: builder.mutation<void, ITemplatePost>({
