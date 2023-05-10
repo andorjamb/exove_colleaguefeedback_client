@@ -7,8 +7,14 @@ import styles from "../../pages/Template/Template.module.css";
 //Types
 import { ISection, ITemplateQuestion } from "../../types/template";
 
+type activeCategory = {
+  cat_id: string;
+  questions: string[];
+};
+
 interface Props {
   category: ISection;
+  activeCategories: activeCategory[];
   clickHandler: any;
   isOpen: boolean;
   checkboxChangeHandler: (
@@ -29,24 +35,13 @@ interface Props {
 
 const Accordion = ({
   category,
+  activeCategories,
   clickHandler,
   isOpen,
   checkboxChangeHandler,
   createQuestionChangeHandler,
   createQuestion,
 }: Props) => {
-  /** new dataform in template:
-   *
-   * categories: [{
-   *    id: string,
-   *    name: string,
-   *    questions: [{id: string, question: string, isFreeForm: boolean}, {},{}]
-   *    },
-   *    {},
-   *    {}
-   *  ]
-   *
-   */
   return (
     <div>
       <div className={styles.accordionContainer}>

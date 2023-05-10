@@ -1,7 +1,7 @@
 //React
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+/* import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom"; */
 
 //Styles
 import styles from "./Template.module.css";
@@ -12,8 +12,8 @@ import {
   ITemplateQuestion,
   IQuestionPost,
   ISection,
-  ICat_Quest,
   ICategoryPost,
+  IActiveTemplateGet,
 } from "../../types/template";
 
 //Internal imports
@@ -33,9 +33,15 @@ import { useGetAllCategoriesQuery } from "../../features/categoryApi";
 
 //Components
 import Accordion from "../../components/Accordion/Accordion";
+import { StringMap } from "i18next";
 
 type accordion = {
   open: boolean;
+};
+
+type activeCategory = {
+  cat_id: string;
+  questions: string[];
 };
 
 class SectionClass {
@@ -74,39 +80,21 @@ const Template = () => {
     type: "",
   });
 
-  /**
-   * ICat_Quest [{
-   * category: docId,
-   * questions: IQuestion[]  //but submit as as array of question ids?
-   * [{
-   * }
-   * ]}]
-   */
-
-  //const templates = getTemplateData.data;
   const activeTemplate = getActiveTemplate.data;
   const categories = getCategories.data;
   const questions = getQuestions.data;
 
   let newCategoryArray: ISection[] = dataParser();
+  let activeCategoryArray = makeActiveCategoryArray(activeTemplate!);
 
-  // /*   useEffect(() => {
-  if (activeTemplate) {
-    console.log("active template:");
-    let activeCategoryArray = activeTemplate.categories.map((item) => {
-      console.log(item._id);
-      let questionIdArray = item.questions.map((question) => {
-        return question._id;
-      });
-      console.log(questionIdArray);
-      return { cat_id: item._id, question_id: questionIdArray };
-    });
-    console.log("finalised array:", activeCategoryArray);
+  function makeActiveCategoryArray(activeTemplate: IActiveTemplateGet) {
+    let activeCategoryArray: activeCategory[] = activeTemplate?.categories.map(
+      (item) => {
+        return { cat_id: item.category._id, questions: item.questions };
+      }
+    );
+    return activeCategoryArray;
   }
-  // [id, id, id ,id ---]
-  //console.log(activeCategoryArray);
-  // }
-  //}, [activeTemplate]);  */
 
   useEffect(() => {
     if (categories?.length) {
@@ -122,21 +110,6 @@ const Template = () => {
   /*   const loggedIn = useSelector((state: any) => state.auth.loggedIn);
   const isAdmin = useSelector((state: any) => state.auth.isAdmin);
   const navigate = useNavigate(); */
-
-  /** new dataform in template:
-   *
-   * categories: [{
-   *    id:string,
-   *    name: string,
-   *      questions : [{id: string, question: string, isFreeForm: boolean}, {},{}]
-   *    },
-   *    {},
-   *    {}
-   *  ]
-   *
-   */
-
-  //console.log(activeTemplate);  //debugging
 
   function dataParser() {
     let categoryArray: ISection[] = [];
@@ -241,10 +214,15 @@ const Template = () => {
     });
   }
 
+  useEffect(() => {
+    if (activeTemplate?.templateTitle) {
+      setTemplateTitle((title) => activeTemplate.templateTitle);
+    }
+  }, [activeTemplate]);
+
   return (
     <div className={styles.container}>
       <h1>New feedback template</h1>
-      {accordion.length}
       <form className={styles.form}>
         <div className={styles.formRow}>
           <label htmlFor="templateTitle">
@@ -255,7 +233,7 @@ const Template = () => {
           <input
             className={styles.input}
             name="templateTitle"
-            value={activeTemplate?.templateTitle}
+            value={templateTitle}
             onChange={titleChangeHandler}
           />{" "}
           <div className={styles.iconDiv}>
@@ -298,6 +276,7 @@ const Template = () => {
               <Accordion
                 key={i}
                 category={item}
+                activeCategories={activeCategoryArray}
                 clickHandler={(e: any) => toggleAccordion(e, i)}
                 isOpen={accordion[i]?.open}
                 checkboxChangeHandler={(e) =>

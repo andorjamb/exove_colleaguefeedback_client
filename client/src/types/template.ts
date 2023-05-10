@@ -29,12 +29,16 @@ export interface ICategoryGet {
   questions: IQuestionGet[];
 }
 
+export interface IActiveTemplateCategories {
+  category: IActiveTemplateCategory;
+  questions: string[];
+}
+
 export interface IActiveTemplateCategory {
   _id: string;
   categoryName: string;
   questions: IQuestionGet[];
 }
-
 export interface ITemplateGet {
   _id: string;
   templateTitle: string;
@@ -51,7 +55,7 @@ export interface IActiveTemplateGet {
   instructions: string;
   createdOn: Date;
   createdBy: string;
-  categories: IActiveTemplateCategory[];
+  categories: IActiveTemplateCategories[];
   active: false;
 }
 
