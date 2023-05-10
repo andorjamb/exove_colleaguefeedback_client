@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from "./FeedbackForm.module.css";
 import { AppDispatch } from '../../app/store';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { SingleQuiz } from '../../types/template';
 import { IQuestionLang } from '../../types/template';
 import { addQuestion } from '../../features/feedBackSlice';
@@ -15,9 +15,7 @@ interface question {
 const StringQuestions = ({ questions, category }: question) => {
     
     const dispatch = useDispatch<AppDispatch>();
-    const feedbacks = useSelector((state: any) => state.feedback);
-    console.log(feedbacks)
-    
+   
     const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         e.preventDefault()
         const question: IQuestionLang = {

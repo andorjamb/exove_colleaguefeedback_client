@@ -125,10 +125,12 @@ const FeedbackForm = () => {
                         (
                           <BoleanQuestions
                             key={quiz._id}
-                            question={quiz.question
-                              .filter((lang) => lang.lang === language)
-                              .map((lang) => lang.question)
-                              .toString()}
+                            category={quiz.category}
+
+                          questions= {
+                              quiz.question.find(quiz => quiz.lang === language)!
+                              
+                            }
                           />
                         )
                       }
