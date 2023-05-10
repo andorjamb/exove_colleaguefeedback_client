@@ -38,10 +38,6 @@ type accordion = {
   open: boolean;
 };
 
-/* type activeCategoryObject = {
-
-}
- */
 class SectionClass {
   id: string;
   name: string;
@@ -65,15 +61,18 @@ const Template = () => {
 
   const [accordion, setAccordion] = useState<accordion[]>([]);
   const [templateTitle, setTemplateTitle] = useState<string>("");
-  const [categoriesState, setCategoriesState] = useState<ICategoryPost[]>([]);
+  /*  const [categoriesState, setCategoriesState] = useState<ICategoryPost[]>([]);
   const [selectedQuestionState, setSelectedQuestionState] = useState<
     IQuestionPost[]
-  >([]);
+  >([]); */
+  const [catQuestState, setCatQuestState] = useState<ICategoryPost[]>([]);
 
   const [newQuestionState, setNewQuestionState] = useState<{
+    categoryId: string;
     value: string;
     type: string;
   }>({
+    categoryId: "",
     value: "",
     type: "",
   });
@@ -156,15 +155,27 @@ const Template = () => {
     e: any,
     categoryId: string,
     value: string
+    /*type: string */
   ) {
-    console.log(value);
-    console.log(categoryId);
+    console.log(value, " ", categoryId, " "); //debugging
+
     if (value) {
-      //set question in newQuestion state
+      //set question in newQuestionState
+      setNewQuestionState((newQuestionState) => {
+        return {
+          ...newQuestionState,
+          value: e.target.value,
+          categoryId: categoryId,
+        };
+      });
       if (value === "on") {
-        //set question type String in newQuestion state
+        setNewQuestionState((newQuestionState) => {
+          return { ...newQuestionState, type: "String" };
+        });
       } else {
-        //set question type Number in newQuestion state
+        setNewQuestionState((newQuestionState) => {
+          return { ...newQuestionState, type: "Number" };
+        });
       }
     }
   }
@@ -174,36 +185,88 @@ const Template = () => {
     setTemplateTitle((title) => e.target.value);
   }
 
-  function createQuestion(categoryId: string) {
-    console.log(newQuestionState);
+  function createQuestion() {
+    console.log("adding question", newQuestionState);
     let newQuestion: IQuestionPost = {
-      category: categoryId,
+      category: newQuestionState.categoryId,
       question: { lang: "Eng", question: newQuestionState.value },
       type: newQuestionState.type,
     };
-    addQuestion(newQuestion);
+    addQuestion(newQuestion).then(() => {
+      console.log("sent");
+    });
   }
 
   function checkboxChangeHandler( //for adding questions to a template
     e: any,
-    // i: number,
     categoryId: string,
     questionId: string
   ) {
-    let items = { ...selectedQuestionState };
     console.log("cat_id: ", categoryId, "question_id: ", questionId);
-    //items.questionArray = [...items.questionArray, e.target.value];
-    setSelectedQuestionState(items);
+    let questionArray: string[] = [];
+    if (e.target.checked) {
+      questionArray.push(e.target.value);
+    } else {
+      questionArray = questionArray.filter((item) => item !== e.target.value);
+    }
+    let catObject: ICategoryPost = { category: categoryId, questions: [] };
+
+    /*  setCatQuestState((catQuestState) => {
+      return { ...catQuestState, category: categoryId, questions: [] };
+    }); */
+    setCatQuestState((catQuestState) => {
+      return [...catQuestState, catObject]; //add new category with question array
+    });
   }
+
+  /*   function getToppings() {
+    const toppingsList = [];
+    const toppings = document.getElementsByName("toppings");
+    toppings.forEach(function (topping) {
+        if (topping.checked) {
+            toppingsList.push(topping.value)
+        };
+    })
+    return toppingsList;
+} */
+
+  /*
+  export interface ICategoryPost {
+    category: string;
+    questions: QuestionLangPost[];
+  }
+  
+type QuestionLangPost = {
+  //for creating new question
+  lang: string;
+  question: string;
+};
+
+export interface IQuestionPost {
+  //for creating new question
+  category: string;
+  type: string;
+  question: QuestionLangPost;
+}
+
+export interface ITemplatePost {
+  templateTitle: string;
+  instructions: string;
+  categories: ICategoryPost[];
+}
+
+*/
 
   async function saveTemplate(e: any) {
     e.preventDefault();
     let newTemplate: ITemplatePost = {
       templateTitle: templateTitle,
       instructions: "",
-      categories: categoriesState,
+      categories: catQuestState,
     };
-    await addTemplate(newTemplate); //this needs to return the created id of saved template
+    await addTemplate(newTemplate).then(() => {
+      console.log("template saved successfully");
+    }); //this may need to return the created id of saved template? (in case of needing to set as default/active)
   }
 
   function toggleAccordion(e: any, i: number) {
@@ -288,13 +351,13 @@ const Template = () => {
                 createQuestionChangeHandler={(e) =>
                   createQuestionChangeHandler(e, item.id, e.target.value)
                 }
-                createQuestion={() => createQuestion(item.id)}
+                createQuestion={createQuestion}
               />
             ))}
           </>
         )}
         <div className={styles.formRow}>
-          <button type="submit" onClick={saveTemplate}>
+          <button className={styles.greenButton} type="submit" onClick={saveTemplate}>
             Save
           </button>
           <button type="button">Preview</button>
