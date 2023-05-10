@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { IFCategory, IFeedback } from "../types/feedback";
 import { IQuestionLang } from "../types/template";
 
+const date:Date = new Date();
 const questions: IQuestionLang = {
     _id: '',
     lang: '',
@@ -15,8 +16,7 @@ const category: IFCategory =
     }
 
 const initfeedback: IFeedback = {
-    requestpicksId: '',
-    responseDateLog:[new Date],
+    responseDateLog:[date.toISOString()],
     template: '',
     roleLevel: 0,
     feedbackTo: '',
@@ -40,15 +40,22 @@ const feedBackSlice = createSlice({
 
       
         addQuestion (state, action){
-              const { category , question }= action.payload;
-              const categoryIndex = state.feedback.categories.findIndex(cat => cat.category === category);
-              if (categoryIndex !== -1) {
-                state.feedback.categories[categoryIndex].questions.push(question);
+            const { category, question } = action.payload;
+            
+            const categoryIndex = state.feedback.categories.findIndex(cat => cat.category === category);
+            const checkduplicate = state.feedback.categories[categoryIndex].questions.findIndex(id => id._id === question._id)
+            if (categoryIndex !== -1) {
+
+                if (checkduplicate !== -1) {
+
+                    state.feedback.categories[categoryIndex].questions[checkduplicate] =
+                        { ...state.feedback.categories[categoryIndex].questions[checkduplicate],answer:question.answer };
+                } else {
+                    
+                    state.feedback.categories[categoryIndex].questions.push(question);
+                }
               }
-            }
-          
-        
-        ,
+            },
     }    
 })
 

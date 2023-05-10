@@ -29,9 +29,9 @@ const Login = () => {
   const isAdmin = useSelector((state: any) => state.auth.isAdmin);
   //const { error } = useSelector((state: any) => state.auth);
 
-  const devLoginEndpoint = "http://localhost:3001/api/";
+  const devLoginEndpoint = "https://exove.vercel.app/api/";
   // `${process.env.REACT_APP_SERVER_URL}/api/login` as string;
-  const prodLoginEndpoint = "http://localhost:3001/api/login";
+  const prodLoginEndpoint = "https://exove.vercel.app/api/login";
 
   const [loginParams, setLoginParams] = useState<ILoginParams>({
     username: "",

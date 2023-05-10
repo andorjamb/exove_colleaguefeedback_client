@@ -1,32 +1,25 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-
-//Survey packages
-import { Model } from "survey-core";
-
-//Styling
 import style from "./FeedbackForm.module.css";
 import StringQuestions from "./StringQuestions";
-import { template } from "./Data";
 import RangeQuestions from "./RangeQuestions";
 import BoleanQuestions from "./BoleanQuestions";
 import {useGetActiveTemplateQuery} from "../../features/templateApi";
-import { ICategory, ITemplate } from "../../types/template";
-import { useDispatch } from "react-redux";
+import {  ITemplate } from "../../types/template";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import { IFCategory, IFeedback } from "../../types/feedback";
 import { newfeedback } from "../../features/feedBackSlice";
-import { IQuestionLang } from "../../types/questions";
-
-
 
 
 const FeedbackForm = () => {
+  
   const dispatch = useDispatch<AppDispatch>();
   const { data } = useGetActiveTemplateQuery() || [];
   const [loadigState, setLoadingState] = useState<boolean>(true)
   const [activeTmpt, setActiveTmpt] = useState<ITemplate>()
- 
+  const user = useSelector((state: any) => state.auth.user);
+
   useEffect(() => {
     if (data) {
      
@@ -46,7 +39,7 @@ const FeedbackForm = () => {
         requestpicksId: 'string',
         feedbackTo: 'string',
         progress: 'started',
-        responseDateLog: [new Date],
+        responseDateLog: [new Date().toISOString()],
         categories: categories,
         roleLevel:3,
       }
@@ -60,17 +53,23 @@ const FeedbackForm = () => {
   
   }, [data])
   
+  const feedbacks = useSelector((state: any) => state.feedback);
  
   const qTemplate = activeTmpt;
-  console.log(activeTmpt?.categories)
   const [language, setLang] = useState<string>('Eng')
-  // const category = qTemplate.categories
+
+  const handleSubmitFeedBack = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault()
+    const feedBack: IFeedback = { ...feedbacks, userId: 'newton', roleLevel: 3 }
+    console.log(feedBack)
+  }
+
   return (
 
 
     <div className={style.main}>
       <div className={style.user} style={{}}>
-        <h1 className={style.header}>Feedback for your Colleague</h1>
+        <h1 className={style.header}>{ qTemplate?.templateTitle}</h1>
         <h2 className={style.username}>Dibya Dahal</h2>
 
       </div>
@@ -79,13 +78,7 @@ const FeedbackForm = () => {
 
   
       <p className={style.instructions}>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit
-        quis tempora minus, fuga officia sed ut? Id blanditiis, voluptates
-        voluptate eaque ipsum cupiditate dolore sunt possimus tempora excepturi
-        perspiciatis ullam. Lorem ipsum dolor sit amet consectetur adipisicing
-        elit. Non suscipit vitae tempore eligendi, nulla optio placeat?
-        Consequatur deserunt obcaecati, atque reiciendis in corrupti praesentium
-        libero, doloribus rem excepturi placeat perferendis!
+        {qTemplate?.instructions}
       </p>
       <>
         {
@@ -105,29 +98,39 @@ const FeedbackForm = () => {
                   (quiz) => (
                     <div key={quiz._id}>
                       {quiz.type === 'string' ? (
+                        <>
                         <StringQuestions
+                          
                           key={quiz._id}
-                          question={quiz.question!
-                            .filter((lang) => lang.lang === language)
-                            .map((lang) => lang.question)
-                            .toString()}
+                          category={quiz.category}
+
+                          questions= {
+                              quiz.question.find(quiz => quiz.lang === language)!
+                              
+                            }
+                      
                         />
+                        </>
                       ) : quiz.type === 'number' ? (
                         <RangeQuestions
                           key={quiz._id}
-                          question={quiz.question
-                            .filter((lang) => lang.lang === language)
-                            .map((lang) => lang.question)
-                            .toString()}
+                          category={quiz.category}
+
+                          questions= {
+                              quiz.question.find(quiz => quiz.lang === language)!
+                              
+                            }
                         />
                       ) :
                         (
                           <BoleanQuestions
                             key={quiz._id}
-                            question={quiz.question
-                              .filter((lang) => lang.lang === language)
-                              .map((lang) => lang.question)
-                              .toString()}
+                            category={quiz.category}
+
+                          questions= {
+                              quiz.question.find(quiz => quiz.lang === language)!
+                              
+                            }
                           />
                         )
                       }
@@ -148,8 +151,8 @@ const FeedbackForm = () => {
 
 <div className={style.formElements}>
 <button
-  className={[style.button, style.loginButton].join(" ")}
-  type="submit"
+          className={[style.button, style.loginButton].join(" ")}
+          onClick={(e)=> handleSubmitFeedBack(e)}
 >
 Submit
 </button>

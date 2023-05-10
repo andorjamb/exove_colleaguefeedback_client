@@ -1,22 +1,31 @@
 import React, { useState } from 'react';
 import styles from "./FeedbackForm.module.css";
+import { IQuestionLang, SingleQuiz } from '../../types/template';
+import { useDispatch } from 'react-redux';
+import { addQuestion } from '../../features/feedBackSlice';
 
 interface question {
-    question:string,
+  questions: SingleQuiz,
+  category:string,
 
 }
-const RangeQuestions = ({ question }: question) => {
+const RangeQuestions = ({ questions, category }: question) => {
     const [value, setValue] = useState(0);
+  const dispatch = useDispatch()
+  
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      e.preventDefault()
+      setValue(Number(e.target.value));
+      const question: IQuestionLang = {
+          _id: questions._id,
+          lang: questions.lang,
+          question: questions.question,
+          answer:e.target.value
+      }
 
-    const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault()
-        setValue(Number(e.target.value));
-    };
+      dispatch(addQuestion({question,category}))
+  }
 
-    const divStyle = {
-      
-        
-    }
     const getGradientStyle = () => {
         if (value === -1) {
           return { background: "linear-gradient(to right, #d5d7d5d1, #d5d7d5d1, #d5d7d5d1)" };
@@ -81,7 +90,6 @@ const RangeQuestions = ({ question }: question) => {
       radioColor = colors[4];
     }
         
-
     return (
       <label key={index} className={`${styles.rLabel}` } style={{ backgroundColor: radioColor}}>
                 <input
@@ -89,10 +97,7 @@ const RangeQuestions = ({ question }: question) => {
                     value={index}
                     checked={index === value}
                     onChange={
-                        (e) => {
-                            console.log(e.target.value)
-                            handleRadioChange(e)
-                        }}
+                        (e) => {handleInputChange(e)}}
                     style={{ display: "none"}}
                 />
                 <span className={styles.rSpan}
@@ -104,7 +109,7 @@ const RangeQuestions = ({ question }: question) => {
 
     return (
         <div className={styles.rMainDiv} > 
-            <p >{question}</p>
+            <p >{questions.question}</p>
            
 
             <div className={styles.rAnswer} style={{ ...getGradientStyle()}}>

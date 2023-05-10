@@ -173,7 +173,7 @@ export interface ITemplateQuestion {
 
 //Latest type for getting active and all templates
 
-interface SingleQuiz {
+export interface SingleQuiz {
   lang: string,
   question: string,
   _id:string

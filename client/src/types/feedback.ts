@@ -4,11 +4,11 @@ export interface IFeedback {
   _id?: string; //Out generated
   template: string;
   userId?: string; // get current user
-  requestpicksId: string;
+  requestpicksId?: string;
   feedbackTo: string;
   progress: string;
   responseByDate?: string;
-  responseDateLog: Date[]; //logs dates of changes
+  responseDateLog: string[]; //logs dates of changes
   categories: IFCategory[];
   roleLevel?: number;
 }
