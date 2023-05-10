@@ -1,6 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 //Types
+import {
+  ITemplateGet,
+  ITemplatePost,
+  IActiveTemplateGet,
+} from "../types/template";
 import { ITemplate, ITemplateGet, ITemplatePost } from "../types/template";
 
 //const serverApi = process.env.REACT_APP_SERVER_API;
@@ -32,10 +37,12 @@ export const templateApi = createApi({
       }),
       invalidatesTags: ["Templates"],
     }),
-    setDefaultTemplate: builder.mutation<void, string>({
+    setActiveTemplate: builder.mutation<void, string>({
+      //sets {active : true} on specified template id
       query: (id) => ({
         url: `template/${id}`,
         method: "PATCH",
+        body: id,
       }),
     }),
   }),
@@ -45,7 +52,7 @@ export const {
   useGetAllTemplatesQuery,
   useGetActiveTemplateQuery,
   useAddTemplateMutation,
-  useSetDefaultTemplateMutation,
+  useSetActiveTemplateMutation,
 } = templateApi;
 
 export default templateApi.reducer;

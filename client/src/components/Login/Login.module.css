@@ -65,6 +65,7 @@
   box-shadow: 4px 4px black;
   color: white;
   position: absolute;
+  transition: all ease-in-out 0.2s;
   border: none;
   bottom: 0;
   right: 0;
