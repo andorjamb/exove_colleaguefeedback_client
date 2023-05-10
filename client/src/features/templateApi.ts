@@ -1,7 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 //Types
-import { ITemplateGet, ITemplatePost } from "../types/template";
+import {
+  ITemplateGet,
+  ITemplatePost,
+  IActiveTemplateGet,
+} from "../types/template";
 
 //const serverApi = process.env.REACT_APP_SERVER_API;
 const serverApi = "https://exove.vercel.app/api/";
@@ -21,7 +25,7 @@ export const templateApi = createApi({
       query: () => `template/`,
       providesTags: ["Templates"],
     }),
-    getActiveTemplate: builder.query<ITemplateGet, void>({
+    getActiveTemplate: builder.query<IActiveTemplateGet, void>({
       query: () => `template/active`,
     }),
     addTemplate: builder.mutation<void, ITemplatePost>({
@@ -32,10 +36,12 @@ export const templateApi = createApi({
       }),
       invalidatesTags: ["Templates"],
     }),
-    setDefaultTemplate: builder.mutation<void, string>({
+    setActiveTemplate: builder.mutation<void, string>({
+      //sets {active : true} on specified template id
       query: (id) => ({
         url: `template/${id}`,
         method: "PATCH",
+        body: id,
       }),
     }),
   }),
@@ -45,7 +51,7 @@ export const {
   useGetAllTemplatesQuery,
   useGetActiveTemplateQuery,
   useAddTemplateMutation,
-  useSetDefaultTemplateMutation,
+  useSetActiveTemplateMutation,
 } = templateApi;
 
 export default templateApi.reducer;
