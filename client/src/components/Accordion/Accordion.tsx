@@ -49,6 +49,10 @@ const Accordion = ({
           {isOpen ? (
             <>
               <ul className={styles.accordionContent}>
+                <p className={styles.howTo}>
+                  Checked questions will be saved to new template when you click
+                  'Save' below
+                </p>
                 <fieldset className={styles.fieldset}>
                   {category.questions?.map((q) => (
                     <li key={q.id}>
@@ -127,7 +131,7 @@ const Accordion = ({
                 <button
                   type="button"
                   onClick={createQuestion}
-                  className={styles.addQuestionButton}
+                  className={styles.greenButton}
                 >
                   Add
                 </button>
