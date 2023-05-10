@@ -16,7 +16,7 @@ const category: IFCategory =
 
 const initfeedback: IFeedback = {
     requestpicksId: '',
-    responseDateLog:[new Date],
+    responseDateLog:[new Date(Date.now())],
     template: '',
     roleLevel: 0,
     feedbackTo: '',
@@ -40,15 +40,22 @@ const feedBackSlice = createSlice({
 
       
         addQuestion (state, action){
-              const { category , question }= action.payload;
-              const categoryIndex = state.feedback.categories.findIndex(cat => cat.category === category);
-              if (categoryIndex !== -1) {
-                state.feedback.categories[categoryIndex].questions.push(question);
+            const { category, question } = action.payload;
+            
+            const categoryIndex = state.feedback.categories.findIndex(cat => cat.category === category);
+            const checkduplicate = state.feedback.categories[categoryIndex].questions.findIndex(id => id._id === question._id)
+            if (categoryIndex !== -1) {
+
+                if (checkduplicate !== -1) {
+
+                    state.feedback.categories[categoryIndex].questions[checkduplicate] =
+                        { ...state.feedback.categories[categoryIndex].questions[checkduplicate],answer:question.answer };
+                } else {
+                    
+                    state.feedback.categories[categoryIndex].questions.push(question);
+                }
               }
-            }
-          
-        
-        ,
+            },
     }    
 })
 

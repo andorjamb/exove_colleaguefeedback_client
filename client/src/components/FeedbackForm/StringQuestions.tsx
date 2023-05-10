@@ -1,20 +1,42 @@
 import React from 'react';
 import styles from "./FeedbackForm.module.css";
+import { AppDispatch } from '../../app/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { SingleQuiz } from '../../types/template';
+import { IQuestionLang } from '../../types/template';
+import { addQuestion } from '../../features/feedBackSlice';
 
 interface question {
-    question:string,
+    questions: SingleQuiz,
+    category:string,
 
 }
 
-const StringQuestions = ({question}:question) => {
+const StringQuestions = ({ questions, category }: question) => {
+    
+    const dispatch = useDispatch<AppDispatch>();
+    const feedbacks = useSelector((state: any) => state.feedback);
+    console.log(feedbacks)
+    
+    const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        e.preventDefault()
+        const question: IQuestionLang = {
+            _id: questions._id,
+            lang: questions.lang,
+            question: questions.question,
+            answer:e.target.value
+        }
 
+        dispatch(addQuestion({question,category}))
+    }
     return (
         <div className={styles.sMain}>
           
-              <p>{question}</p> 
-                <textarea className={styles.sTextarea}  name={question.replace(' ','-')} id="" cols={5} rows={5} placeholder='Type your answer..'>
-
-                </textarea>
+              <p>{questions.question}</p> 
+            <textarea className={styles.sTextarea} 
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { handleInputChange(e) }}
+                id="" cols={5} rows={5} placeholder='Type your answer..'>
+            </textarea>
         
             
 

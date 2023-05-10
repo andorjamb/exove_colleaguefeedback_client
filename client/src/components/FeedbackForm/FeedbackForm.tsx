@@ -46,7 +46,7 @@ const FeedbackForm = () => {
         requestpicksId: 'string',
         feedbackTo: 'string',
         progress: 'started',
-        responseDateLog: [new Date],
+        responseDateLog: [new Date()],
         categories: categories,
         roleLevel:3,
       }
@@ -62,7 +62,6 @@ const FeedbackForm = () => {
   
  
   const qTemplate = activeTmpt;
-  console.log(activeTmpt?.categories)
   const [language, setLang] = useState<string>('Eng')
   // const category = qTemplate.categories
   return (
@@ -70,7 +69,7 @@ const FeedbackForm = () => {
 
     <div className={style.main}>
       <div className={style.user} style={{}}>
-        <h1 className={style.header}>Feedback for your Colleague</h1>
+        <h1 className={style.header}>{ qTemplate?.templateTitle}</h1>
         <h2 className={style.username}>Dibya Dahal</h2>
 
       </div>
@@ -79,13 +78,7 @@ const FeedbackForm = () => {
 
   
       <p className={style.instructions}>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit
-        quis tempora minus, fuga officia sed ut? Id blanditiis, voluptates
-        voluptate eaque ipsum cupiditate dolore sunt possimus tempora excepturi
-        perspiciatis ullam. Lorem ipsum dolor sit amet consectetur adipisicing
-        elit. Non suscipit vitae tempore eligendi, nulla optio placeat?
-        Consequatur deserunt obcaecati, atque reiciendis in corrupti praesentium
-        libero, doloribus rem excepturi placeat perferendis!
+        {qTemplate?.instructions}
       </p>
       <>
         {
@@ -105,20 +98,28 @@ const FeedbackForm = () => {
                   (quiz) => (
                     <div key={quiz._id}>
                       {quiz.type === 'string' ? (
+                        <>
                         <StringQuestions
+                          
                           key={quiz._id}
-                          question={quiz.question!
-                            .filter((lang) => lang.lang === language)
-                            .map((lang) => lang.question)
-                            .toString()}
+                          category={quiz.category}
+
+                          questions= {
+                              quiz.question.find(quiz => quiz.lang === language)!
+                              
+                            }
+                      
                         />
+                        </>
                       ) : quiz.type === 'number' ? (
                         <RangeQuestions
                           key={quiz._id}
-                          question={quiz.question
-                            .filter((lang) => lang.lang === language)
-                            .map((lang) => lang.question)
-                            .toString()}
+                          category={quiz.category}
+
+                          questions= {
+                              quiz.question.find(quiz => quiz.lang === language)!
+                              
+                            }
                         />
                       ) :
                         (
