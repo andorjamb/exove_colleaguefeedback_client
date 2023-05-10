@@ -33,17 +33,15 @@ import { useGetAllCategoriesQuery } from "../../features/categoryApi";
 
 //Components
 import Accordion from "../../components/Accordion/Accordion";
-import { StringMap } from "i18next";
 
 type accordion = {
   open: boolean;
 };
 
-type activeCategory = {
-  cat_id: string;
-  questions: string[];
-};
+/* type activeCategoryObject = {
 
+}
+ */
 class SectionClass {
   id: string;
   name: string;
@@ -85,15 +83,20 @@ const Template = () => {
   const questions = getQuestions.data;
 
   let newCategoryArray: ISection[] = dataParser();
-  let activeCategoryArray = makeActiveCategoryArray(activeTemplate!);
 
-  function makeActiveCategoryArray(activeTemplate: IActiveTemplateGet) {
-    let activeCategoryArray: activeCategory[] = activeTemplate?.categories.map(
-      (item) => {
-        return { cat_id: item.category._id, questions: item.questions };
+  let activeCategoryObject = makeActiveCategoryObject(activeTemplate!);
+
+  function makeActiveCategoryObject(activeTemplate: IActiveTemplateGet) {
+    let activeCategoryObject = activeTemplate?.categories.reduce(
+      (accumulator, currentValue) => {
+        return {
+          ...accumulator,
+          [currentValue.category._id]: currentValue.questions,
+        };
       }
     );
-    return activeCategoryArray;
+
+    return activeCategoryObject;
   }
 
   useEffect(() => {
@@ -276,7 +279,7 @@ const Template = () => {
               <Accordion
                 key={i}
                 category={item}
-                activeCategories={activeCategoryArray}
+                activeCategories={activeCategoryObject}
                 clickHandler={(e: any) => toggleAccordion(e, i)}
                 isOpen={accordion[i]?.open}
                 checkboxChangeHandler={(e) =>

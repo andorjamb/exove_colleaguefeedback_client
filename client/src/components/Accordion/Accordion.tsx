@@ -7,14 +7,9 @@ import styles from "../../pages/Template/Template.module.css";
 //Types
 import { ISection, ITemplateQuestion } from "../../types/template";
 
-type activeCategory = {
-  cat_id: string;
-  questions: string[];
-};
-
 interface Props {
   category: ISection;
-  activeCategories: activeCategory[];
+  activeCategories: any;
   clickHandler: any;
   isOpen: boolean;
   checkboxChangeHandler: (
@@ -69,7 +64,9 @@ const Accordion = ({
                             name="questions"
                             value={q.id}
                             id={q.id}
-                            /* defaultChecked={category.questions.indexOf(q) !== -1} */
+                            defaultChecked={activeCategories[
+                              category.id
+                            ].includes(q.id)}
                             className={styles.input}
                           />
                           {q?.question + " (1-5)"}
@@ -83,7 +80,9 @@ const Accordion = ({
                             }
                             name="questions"
                             id={q.id}
-                            /*   defaultChecked={category.questions.indexOf(q) !== -1} */
+                            defaultChecked={activeCategories[
+                              category.id
+                            ].includes(q.id)}
                             className={styles.input}
                           />
                           {q?.question + " (free form)"}
