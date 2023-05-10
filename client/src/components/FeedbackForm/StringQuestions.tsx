@@ -12,7 +12,7 @@ const StringQuestions = ({question}:question) => {
         <div className={styles.sMain}>
           
               <p>{question}</p> 
-                <textarea className={styles.sTextarea}  name="answer" id="" cols={5} rows={5} placeholder='Type your answer..'>
+                <textarea className={styles.sTextarea}  name={question.replace(' ','-')} id="" cols={5} rows={5} placeholder='Type your answer..'>
 
                 </textarea>
         

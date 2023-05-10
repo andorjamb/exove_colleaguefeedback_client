@@ -10,20 +10,49 @@ import StringQuestions from "./StringQuestions";
 import { template } from "./Data";
 import RangeQuestions from "./RangeQuestions";
 import BoleanQuestions from "./BoleanQuestions";
-import {useGetActiveTemplateQuery,useAddTemplateMutation} from "../../features/templateApi";
+import {useGetActiveTemplateQuery} from "../../features/templateApi";
 import { ICategory, ITemplate } from "../../types/template";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../app/store";
+import { IFCategory, IFeedback } from "../../types/feedback";
+import { newfeedback } from "../../features/feedBackSlice";
+import { IQuestionLang } from "../../types/questions";
 
 
 
 
 const FeedbackForm = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const { data } = useGetActiveTemplateQuery() || [];
   const [loadigState, setLoadingState] = useState<boolean>(true)
   const [activeTmpt, setActiveTmpt] = useState<ITemplate>()
  
   useEffect(() => {
     if (data) {
+     
+      const categories: IFCategory[] = []
+       
+      data.categories.forEach(cat => {
+        const cate: IFCategory = {
+          category: cat.category._id,
+          questions:[]
+        }
+        categories.push(cate)
+      });
+      
+
+      const feedback: IFeedback = {
+        template: data.templateTitle,
+        requestpicksId: 'string',
+        feedbackTo: 'string',
+        progress: 'started',
+        responseDateLog: [new Date],
+        categories: categories,
+        roleLevel:3,
+      }
+      dispatch(newfeedback(feedback));
       setActiveTmpt(data)
+      
       setLoadingState(false)
     } else {
       setLoadingState(true)
@@ -78,7 +107,7 @@ const FeedbackForm = () => {
                       {quiz.type === 'string' ? (
                         <StringQuestions
                           key={quiz._id}
-                          question={quiz.question
+                          question={quiz.question!
                             .filter((lang) => lang.lang === language)
                             .map((lang) => lang.question)
                             .toString()}

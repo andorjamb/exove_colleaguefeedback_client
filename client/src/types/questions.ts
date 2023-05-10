@@ -1,3 +1,5 @@
+import { QuestionType } from "./template";
+
 export interface IQCategory {
   _id: string;
   categoryName: string;
@@ -23,7 +25,8 @@ export interface IQuestionLang {
   lang: string;
   question?: string;
   answer?: string;
-  answeredOn: Date;
+  answeredOn?: Date;
+  type?: string;
 }
 
 //Types for sending new question to db

@@ -1,6 +1,6 @@
 //mongodb models:
 
-enum QuestionType {
+export enum QuestionType {
   range = "Number",
   open = "String",
   truefalse = "Boolean",
