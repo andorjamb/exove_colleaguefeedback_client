@@ -1,15 +1,17 @@
 //React
-import React, { useRef } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 //Styles
 import styles from "../../pages/Template/Template.module.css";
+import "../../pages/Template/Template.css";
 
 //Types
 import { ISection, ITemplateQuestion } from "../../types/template";
 
 interface Props {
-  category: ISection;
-  activeCategories: any;
+  category: ISection; //all available categories, all questions per category
+  activeCategories: any; //questions in active template: used to initialise default checked state
   clickHandler: any;
   isOpen: boolean;
   checkboxChangeHandler: (
@@ -28,15 +30,14 @@ interface Props {
 
 const Accordion = ({
   category,
-  activeCategories,  /** pass down checked state instead  */
+  activeCategories,
   clickHandler,
   isOpen,
   checkboxChangeHandler,
   createQuestionChangeHandler,
   createQuestion,
 }: Props) => {
- 
-
+  console.log("in accordion", activeCategories);//debugging - working
   return (
     <div>
       <div className={styles.accordionContainer}>
