@@ -1,5 +1,5 @@
 //React
-import React from "react";
+import React, { useRef } from "react";
 
 //Styles
 import styles from "../../pages/Template/Template.module.css";
@@ -28,13 +28,15 @@ interface Props {
 
 const Accordion = ({
   category,
-  activeCategories,
+  activeCategories,  /** pass down checked state instead  */
   clickHandler,
   isOpen,
   checkboxChangeHandler,
   createQuestionChangeHandler,
   createQuestion,
 }: Props) => {
+ 
+
   return (
     <div>
       <div className={styles.accordionContainer}>
@@ -79,6 +81,7 @@ const Accordion = ({
                         <label>
                           <input
                             type="checkbox"
+                            value={q.id}
                             onChange={(e) =>
                               checkboxChangeHandler(e, category.id, q.id)
                             }
@@ -100,9 +103,6 @@ const Accordion = ({
               </ul>
               <fieldset
                 className={`${styles.fieldset} ${styles.accordionContent}`}
-                /*  onBlur={(e) =>
-                  createQuestionChangeHandler(e, category.id, e.target.value)
-                } */
               >
                 <legend>Create new question in this category:</legend>
                 <input
