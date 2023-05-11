@@ -1,13 +1,18 @@
+.dashboard_wrapper {
+  display: flex;
+  justify-content: center;
+}
+
 .dashboard_container {
   display: flex;
   align-items: center;
   flex-direction: column;
   gap: 1rem;
+  max-width: 1400px;
 }
 
 .table {
   width: 100%;
-  max-width: 1400px;
   border-collapse: collapse;
   text-align: left;
 }

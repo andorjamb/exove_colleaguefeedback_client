@@ -7,6 +7,7 @@
 
 .buttons_container button {
   font-weight: 400;
+  height: 2.5rem;
 }
 
 .request {
