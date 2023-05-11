@@ -1,7 +1,7 @@
 .search_container {
   background-color: antiquewhite;
   display: flex;
-  width: 50%;
+  width: 100%;
 }
 
 .search_container input {

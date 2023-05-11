@@ -1,13 +1,18 @@
 .card {
   box-sizing: border-box;
-  justify-content: space-evenly;
+
   height: 6rem;
   display: flex;
   border: 1px solid black;
   align-items: center;
+  text-align: left;
   padding: 0.5rem;
   width: 18rem;
   cursor: pointer;
+}
+
+.unclickable {
+  cursor: auto;
 }
 
 .selected {
@@ -17,6 +22,7 @@
 }
 
 .avatar {
+  margin: 0 1.2rem;
   height: 80%;
   width: auto;
   clip-path: circle();

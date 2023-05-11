@@ -65,6 +65,9 @@ export const {
   useGetAllRequestPicksQuery,
   useGetRequestPickByUserIdQuery,
   useCreatePickMutation,
+  useSubmitPickMutation,
+  useApprovePickMutation,
+  useDeletePickMutation,
 } = requestPicksApi;
 
 export default requestPicksApi.reducer;
