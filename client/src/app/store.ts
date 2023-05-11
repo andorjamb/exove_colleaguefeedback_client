@@ -3,6 +3,7 @@ import { setupListeners } from "@reduxjs/toolkit/dist/query";
 
 import authSlice from "../features/authSlice";
 import headerSlice from "../features/headerSlice";
+import templateSlice from "../features/templateSlice";
 import { userApi } from "../features/userApi";
 import { templateApi } from "../features/templateApi";
 import { requestPicksApi } from "../features/requestPicksApi";
@@ -10,12 +11,14 @@ import { feedbackApi } from "../features/feedbackApi";
 import { categoryApi } from "../features/categoryApi";
 import { questionApi } from "../features/questionApi";
 import feedBackSlice from "../features/feedBackSlice";
+import { isTemplateMiddle } from "typescript";
 
 export const store = configureStore({
   reducer: {
     auth: authSlice,
     header: headerSlice,
-    feedback:feedBackSlice,
+    feedback: feedBackSlice,
+    template: templateSlice,
     [userApi.reducerPath]: userApi.reducer,
     [templateApi.reducerPath]: templateApi.reducer,
     [requestPicksApi.reducerPath]: requestPicksApi.reducer,
