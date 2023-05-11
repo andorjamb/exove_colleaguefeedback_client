@@ -10,7 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import { IFCategory, IFeedback } from "../../types/feedback";
 import { newfeedback } from "../../features/feedBackSlice";
-
+import { getSecureUserUid } from "../../functions/secureUser";
+import { loggedInUser } from "../../types/users";
 
 const FeedbackForm = () => {
   
@@ -18,7 +19,7 @@ const FeedbackForm = () => {
   const { data } = useGetActiveTemplateQuery() || [];
   const [loadigState, setLoadingState] = useState<boolean>(true)
   const [activeTmpt, setActiveTmpt] = useState<ITemplate>()
-  const user = useSelector((state: any) => state.auth.user);
+  const [userInfo, setUserInfo] = useState<loggedInUser>()
 
   useEffect(() => {
     if (data) {
@@ -60,17 +61,29 @@ const FeedbackForm = () => {
 
   const handleSubmitFeedBack = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
-    const feedBack: IFeedback = { ...feedbacks, userId: 'newton', roleLevel: 3 }
+    const feedBack: IFeedback = { ...feedbacks, userId: userInfo?.uid, roleLevel: 3 }
     console.log(feedBack)
   }
 
+  useEffect(() => {
+    getUser()
+  },[])
+  const getUser = async () => {
+  try {
+    const userDetails: loggedInUser = await getSecureUserUid()
+    if(userDetails) setUserInfo(userDetails)
+  } catch (error) {
+    console.log(error)
+  }
+
+}
   return (
 
 
     <div className={style.main}>
       <div className={style.user} style={{}}>
         <h1 className={style.header}>{ qTemplate?.templateTitle}</h1>
-        <h2 className={style.username}>Dibya Dahal</h2>
+        <h2 className={style.username}>Moi {userInfo ? userInfo.displayName : 'Guest'}</h2>
 
       </div>
 
@@ -155,7 +168,8 @@ const FeedbackForm = () => {
           onClick={(e)=> handleSubmitFeedBack(e)}
 >
 Submit
-</button>
+        </button>
+        
 </div>
   </div>
   )
