@@ -15,6 +15,7 @@ import { setIsAdmin, setLoggedIn } from "../../features/authSlice";
 // Styling
 import styles from "./Login.module.css";
 import { AppDispatch } from "../../app/store";
+import { secureUserUid } from "../../functions/secureUser";
 
 interface ILoginParams {
   username: string;
@@ -55,8 +56,15 @@ const Login = () => {
         .post(prodLoginEndpoint, loginParams, {
           withCredentials: true,
         })
-        .then((res) => {
+        .then(async (res) => {
           console.log("login res", res);
+          await secureUserUid(
+            {
+              uid: res.data?.uid,
+              roleLevel: res.data?.rolesId?.roleLevel,
+              displayName: res.data.displayName,
+              imageUrl:res.data.imageUrl || ''
+            })
           if (res.data?.rolesId?.roleLevel < 3) {
             sessionStorage.setItem("isAdmin", "true");
             dispatch(setIsAdmin(true));

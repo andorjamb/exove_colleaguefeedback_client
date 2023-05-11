@@ -60,3 +60,9 @@ export interface IUserData {
   };
 }
  */
+export interface loggedInUser {
+  uid: string,
+  roleLevel: number,
+  displayName: string,
+  imageUrl: string
+}
