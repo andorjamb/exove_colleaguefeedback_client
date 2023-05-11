@@ -16,7 +16,7 @@ export interface IQuestionGet {
   _id: string;
   category: string;
   createdBy: string;
-  createdOn: string;
+  createdOn: Date;
   active: boolean;
   type: QuestionType;
   question: IQuestionTextGet[];
@@ -121,7 +121,19 @@ export interface ITemplatePost {
   instructions: string;
   categories: ICategoryPost[];
 }
-/* 
+
+/* Expanded view of catgories:ICategoriesPost[]
+categories: [
+  {
+  category: category_id,
+  questions: [] ? unclear whether this should be array of strings of array of IQuestionPost
+},{},
+
+]
+
+
+
+*/ /* 
 EXPANDED VIEW OF ITemplate / ITemplateGet
  {
   _id: string;
@@ -193,7 +205,7 @@ export interface ITemplate {
     _id: string;
     templateTitle: string;
     instructions: string;
-    createdOn: string;
+    createdOn: Date;
     createdBy: string;
     categories: ICategory[];
     active: boolean;
