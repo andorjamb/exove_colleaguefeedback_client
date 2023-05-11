@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 import styles from "./SearchBar.module.css";
 
 interface ISearchBarProps {

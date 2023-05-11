@@ -1,36 +1,33 @@
 .container {
   height: 100%;
   width: 100%;
+  padding: 1rem;
 }
 
 .mainContent {
   background-color: white;
   width: 100%;
-  max-width: 1300px;
+  max-width: 1200px;
   margin: auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 1rem;
-  padding: 2rem;
+  padding: 2rem 0;
 }
 
 .submitButton {
   background-color: var(--exoveGreen);
   color: white;
   float: right;
-  height: 2rem;
-
+  height: 2.5rem;
   text-transform: uppercase;
   font-weight: 800;
   border: none;
 }
-.selectionGrid {
-  display: flex;
-  width: 100%;
-  flex-wrap: wrap;
-  gap: 1rem;
-  background-color: white;
+
+.inactive {
+  background-color: var(--darkGray);
+  cursor: auto;
 }
 
 @media screen and (max-width: 940px) {

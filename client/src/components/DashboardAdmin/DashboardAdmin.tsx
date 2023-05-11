@@ -76,9 +76,14 @@ const DashboardAdmin = () => {
   const picksData = useGetAllRequestPicksQuery();
   const activeTemplateData = useGetActiveTemplateQuery();
   console.log("activeTemplateData", activeTemplateData.data);
-  /* const activeTemplateData =  */
+  const [showModal, setShowModal] = useState(false);
 
-  if (usersData.isFetching || feedbackData.isFetching || picksData.isFetching)
+  if (
+    !activeTemplateData.data ||
+    usersData.isFetching ||
+    feedbackData.isFetching ||
+    picksData.isFetching
+  )
     return <p>Loading...</p>;
 
   console.log("picksData from dash", picksData);
@@ -123,42 +128,45 @@ const DashboardAdmin = () => {
   };
 
   return (
-    <div className={styles.dashboard_container}>
-      <SearchBar
-        inputValue={searchInput}
-        onChangeHandler={searchChangeHandler}
-      />
-      <BulkButtons />
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>Employee name</th>
-            <th>Collagues</th>
-            <th>Subordinates</th>
-            <th>PM</th>
-            <th>CM</th>
-            <th>Picks</th>
-            <th>Feedbacks</th>
-            <th>Report</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredUsers!.map((currUser) => {
-            return (
-              <PersonRow
-                key={currUser._id}
-                user={currUser}
-                userPicks={picksData.data!.find(
-                  (pick) => pick.requestedTo === currUser.ldapUid
-                )}
-                userFeedbacks={feedbackData.data!.filter(
-                  (feedback) => feedback.feedbackTo === currUser.ldapUid
-                )}
-              />
-            );
-          })}
-        </tbody>
-      </table>
+    <div className={styles.dashboard_wrapper}>
+      <div className={styles.dashboard_container}>
+        <SearchBar
+          inputValue={searchInput}
+          onChangeHandler={searchChangeHandler}
+        />
+        <BulkButtons />
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>Employee name</th>
+              <th>Collagues</th>
+              <th>Subordinates</th>
+              <th>PM</th>
+              <th>CM</th>
+              <th>Picks</th>
+              <th>Feedbacks</th>
+              <th>Report</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredUsers!.map((currUser) => {
+              return (
+                <PersonRow
+                  key={currUser._id}
+                  user={currUser}
+                  userPicks={picksData.data!.find(
+                    (pick) => pick.requestedTo === currUser.ldapUid
+                  )}
+                  userFeedbacks={feedbackData.data!.filter(
+                    (feedback) => feedback.feedbackTo === currUser.ldapUid
+                  )}
+                  /* showEditPicks={() => setShowModal(true)} */
+                />
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
