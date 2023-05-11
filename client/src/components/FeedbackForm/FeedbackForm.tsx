@@ -12,14 +12,17 @@ import { newfeedback } from "../../features/feedBackSlice";
 import { getSecureUserUid } from "../../functions/secureUser";
 import { loggedInUser } from "../../types/users";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const FeedbackForm = () => {
   
   const dispatch = useDispatch<AppDispatch>();
   const { data } = useGetActiveTemplateQuery() || [];
+
   const [loadigState, setLoadingState] = useState<boolean>(true)
-  const [activeTmpt, setActiveTmpt] = useState<ITemplate>()
+  const [qTemplate, setActiveTmpt] = useState<ITemplate>()
   const [userInfo, setUserInfo] = useState<loggedInUser>()
+  const {feedback} = useSelector((state: any) => state.feedback);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,16 +37,17 @@ const FeedbackForm = () => {
         }
         categories.push(cate)
       });
-      const feedback: IFeedback = {
-        template: data.templateTitle,
-        requestpicksId: 'string',
-        feedbackTo: 'string',
+      const newFeedbacks: IFeedback = {
+        template: data._id, 
+        requestpicksId: 'da3040ce-43e9-4d2b-89a1-cefe27563492',
+        feedbackTo: 'einstein',
         progress: 'started',
         responseDateLog: [new Date().toISOString()],
         categories: categories,
-        roleLevel:3,
+        roleLevel: 5,
+        userId:userInfo?.uid,
       }
-      dispatch(newfeedback(feedback));
+      dispatch(newfeedback(newFeedbacks));
       setActiveTmpt(data)
       
       setLoadingState(false)
@@ -51,19 +55,24 @@ const FeedbackForm = () => {
       setLoadingState(true)
     }
   
-  }, [data, dispatch])
+  }, [data, dispatch, userInfo?.uid])
    
-  const feedbacks = useSelector((state: any) => state.feedback);
- 
-  const qTemplate = activeTmpt;
   const [language, setLang] = useState<string>('Eng')
 
-  const handleSubmitFeedBack = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleSubmitFeedBack = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
-    const feedBack: IFeedback = { ...feedbacks, userId: userInfo?.uid, roleLevel: 3 }
-    console.log(feedBack)
-  }
+   
+    try {
 
+      const url = 'https://exove.vercel.app/api/feedback/da3040ce-43e9-4d2b-89a1-cefe27563492'
+      const { data } = await axios.post(url,{...feedback} , { withCredentials: true })
+      console.log(data)
+  alert(data)
+    } catch (error) {
+    
+
+    }
+  }
   useEffect(() => {
     const getUser = async () => {
       try {
@@ -119,7 +128,7 @@ const FeedbackForm = () => {
                 cat.category.questions.map(
                   (quiz) => (
                     <div key={quiz._id}>
-                      {quiz.type === 'string' ? (
+                      {quiz.type.toLowerCase() === 'string' ? (
                         <>
                         <StringQuestions
                           
@@ -133,7 +142,7 @@ const FeedbackForm = () => {
                       
                         />
                         </>
-                      ) : quiz.type === 'number' ? (
+                      ) : quiz.type.toLowerCase() === 'number' ? (
                         <RangeQuestions
                           key={quiz._id}
                           category={quiz.category}

@@ -13,11 +13,7 @@ export const secureUserUid = async ({ uid, roleLevel,displayName,imageUrl }: log
     const encoder = new TextEncoder();
     const data = encoder.encode(JSON.stringify(userInfo));
     const sessionKey = await crypto.subtle.generateKey({name: 'AES-GCM', length: 256}, true, ['encrypt', 'decrypt']);
-    
-    // Export the session key as a JWK object
     const exportedKey = await crypto.subtle.exportKey('jwk', sessionKey);
-    
-    // Store the exported key as a string in sessionStorage
     sessionStorage.setItem('sessionKey', JSON.stringify(exportedKey));
     
     const iv = crypto.getRandomValues(new Uint8Array(12));
@@ -35,10 +31,7 @@ export const  getSecureUserUid = async () => {
         return null;
       }
       
-      // Retrieve the exported key from sessionStorage
       const exportedKey = JSON.parse(sessionStorage.getItem('sessionKey')!);
-      
-      // Import the key as a CryptoKey object
       const sessionKey = await crypto.subtle.importKey('jwk', exportedKey, { name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt']);
       
       const encrypted = new Uint8Array(encryptedString.split(',').map(Number));
@@ -47,12 +40,10 @@ export const  getSecureUserUid = async () => {
       
       const decrypted = await crypto.subtle.decrypt({name: 'AES-GCM', iv}, sessionKey, ciphertext);
       const decoder = new TextDecoder();
-      console.log(decrypted)
-      const decryptedString = await decoder.decode(decrypted);
+      const decryptedString =  decoder.decode(decrypted);
       const decryptedData = await JSON.parse(decryptedString);
       return decryptedData;
    } catch (error) {
-       console.log(error)
     return error
    }
     

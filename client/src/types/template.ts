@@ -82,6 +82,7 @@ export interface IQuestionLang {
   question?: string; //actual question text
   answer?: string;
   answeredOn?: Date;
+  type: string;
 }
 
 export interface IQCategory {

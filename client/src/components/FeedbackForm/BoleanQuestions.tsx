@@ -27,7 +27,8 @@ const BoleanQuestions = ({ questions, category }: question) => {
         _id: questions._id,
         lang: questions.lang,
         question: questions.question,
-        answer:(!switchState).toString()
+      answer: (!switchState).toString(),
+        type:'boolean'
     }
     direction() // change diff display
     dispatch(addQuestion({question,category}))
