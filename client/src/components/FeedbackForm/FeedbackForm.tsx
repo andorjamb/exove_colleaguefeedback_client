@@ -11,6 +11,7 @@ import { IFCategory, IFeedback } from "../../types/feedback";
 import { newfeedback } from "../../features/feedBackSlice";
 import { getSecureUserUid } from "../../functions/secureUser";
 import { loggedInUser } from "../../types/users";
+import { useNavigate } from "react-router-dom";
 
 const FeedbackForm = () => {
   
@@ -19,6 +20,7 @@ const FeedbackForm = () => {
   const [loadigState, setLoadingState] = useState<boolean>(true)
   const [activeTmpt, setActiveTmpt] = useState<ITemplate>()
   const [userInfo, setUserInfo] = useState<loggedInUser>()
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (data) {
@@ -32,8 +34,6 @@ const FeedbackForm = () => {
         }
         categories.push(cate)
       });
-      
-
       const feedback: IFeedback = {
         template: data.templateTitle,
         requestpicksId: 'string',
@@ -51,8 +51,8 @@ const FeedbackForm = () => {
       setLoadingState(true)
     }
   
-  }, [data])
-  
+  }, [data, dispatch])
+   
   const feedbacks = useSelector((state: any) => state.feedback);
  
   const qTemplate = activeTmpt;
@@ -65,17 +65,27 @@ const FeedbackForm = () => {
   }
 
   useEffect(() => {
-    getUser()
-  },[])
-  const getUser = async () => {
-  try {
-    const userDetails: loggedInUser = await getSecureUserUid()
-    if(userDetails) setUserInfo(userDetails)
-  } catch (error) {
-    console.log(error)
+    const getUser = async () => {
+      try {
+        setLoadingState(true)
+      const userDetails: loggedInUser = await getSecureUserUid()
+        if (userDetails) {
+          
+          setUserInfo(userDetails)
+        }
+        else {
+          navigate('/login')
+        }
+        setLoadingState(false)
+    } catch (error) {
+        console.log(error)
+        setLoadingState(false)
+    }
+  
   }
+    getUser()
+  },[navigate])
 
-}
   return (
 
 
