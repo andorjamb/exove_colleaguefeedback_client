@@ -1,9 +1,6 @@
 //React
 import React, { useState, useEffect } from "react";
 
-//Styles
-import styles from "./Template/Template.module.css";
-
 //Types
 import {
   ITemplatePost,
@@ -297,49 +294,47 @@ const Template = () => {
   }, [selectedQuestionState]);
 
   return (
-    <div className={styles.container}>
+    <div className={"container"}>
       <h1>New feedback template</h1>
-      <form className={styles.form}>
-        <div className={styles.formRow}>
+      <form className={"form"}>
+        <div className={"formRow"}>
           <label htmlFor="templateTitle">
-            <h3 className={styles.h3}>Template title</h3>
+            <h3 className={"h3"}>Template title</h3>
           </label>
         </div>
-        <div className={styles.formRow}>
+        <div className={"formRow"}>
           <input
-            className={styles.input}
+            className={"input"}
             name="templateTitle"
             value={templateTitle}
             onChange={titleChangeHandler}
           />{" "}
-          <div className={styles.iconDiv}>
-            <span className={styles.materialIcons}>edit</span>
+          <div className={"iconDiv"}>
+            <span className={"materialIcons"}>edit</span>
           </div>
         </div>
         <section>
-          <div className={styles.formRow}>
+          <div className={"formRow"}>
             <label htmlFor="preface">
-              <h3 className={styles.h3}>Introductory text</h3>
+              <h3 className={"h3"}>Introductory text</h3>
             </label>
             <span>Non-editable text</span>
           </div>
-          <div className={`${styles.noedit} ${styles.preface}`}>{preface}</div>
+          <div className={`${"noedit"} ${"preface"}`}>{preface}</div>
         </section>
         {/* END SECTION */}
         <section>
-          <div className={styles.formRow}>
+          <div className={"formRow"}>
             <label htmlFor="gradingGuidance">
-              <h3 className={styles.h3}>Grading Guidance</h3>
+              <h3 className={"h3"}>Grading Guidance</h3>
             </label>
             <span>Non-editable text</span>
           </div>
-          <div className={`${styles.noedit} ${styles.preface}`}>
-            {gradingGuidance}
-          </div>
+          <div className={`${"noedit"} ${"preface"}`}>{gradingGuidance}</div>
         </section>
         {/* END SECTION */}
-        <div className={styles.formRow}>
-          <h3 className={styles.h3}>Feedback Questions</h3>
+        <div className={"formRow"}>
+          <h3 className={"h3"}>Feedback Questions</h3>
         </div>
         {/* ACCORDIONS */}
         {isLoading ? (
@@ -366,9 +361,9 @@ const Template = () => {
             ))}
           </>
         )}
-        <div className={styles.formRow}>
+        <div className={"formRow"}>
           <button
-            className={styles.greenButton}
+            className={"greenButton"}
             type="submit"
             onClick={saveTemplate}
           >
