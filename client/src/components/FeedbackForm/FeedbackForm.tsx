@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import style from "./FeedbackForm.module.css";
 import StringQuestions from "./StringQuestions";
 import RangeQuestions from "./RangeQuestions";

@@ -3,6 +3,7 @@ import styles from "./FeedbackForm.module.css";
 import { IQuestionLang, SingleQuiz } from '../../types/template';
 import { useDispatch } from 'react-redux';
 import { addQuestion } from '../../features/feedBackSlice';
+import React from 'react';
 
 
 interface question {
@@ -13,6 +14,7 @@ interface question {
 const BoleanQuestions = ({ questions, category }: question) => {
   const dispatch =useDispatch()
   const [switchState, setSwitchState] = useState(true);
+  const [booleanState, setBooleanState]= useState("")
   const rows = switchState ? 'row' : 'row-reverse';
   // const [booleanQuestion,setBooleanQuestion ] = useState<string>({question:questions.question})
 
@@ -20,6 +22,7 @@ const BoleanQuestions = ({ questions, category }: question) => {
   const handleDivClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
     setSwitchState(!switchState)
+    setBooleanState("selected")
     const question: IQuestionLang = {
         _id: questions._id,
         lang: questions.lang,
@@ -45,9 +48,13 @@ const BoleanQuestions = ({ questions, category }: question) => {
        
         <p className={styles.bolQuestion}>{questions.question}</p>      
             <div className={styles.bolComponent} >
-          <div className={styles.bolDecision} style={{ flexDirection: rows, transition: "flexDirection ease 4s" }}
+          <div className={`${styles.bolDecision} ${(switchState && booleanState==="") ? styles.bolInitial : (switchState && booleanState==="selected") ? styles.bolTrue: styles.bolFalse}`}
+style={{ flexDirection: rows, transition: "flexDirection ease 4s" }}
             onClick={(e) => handleDivClick(e) }>
-      <p className={styles.bolCircle}  >{switchState.toString()}</p>
+      <p className={styles.bolCircle}  >
+
+        { booleanState==="" ? "Click": switchState.toString()}
+        </p>
     </div>
   </div>
         </div>
