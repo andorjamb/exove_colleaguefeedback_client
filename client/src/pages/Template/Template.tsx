@@ -66,7 +66,6 @@ const Template = () => {
 
   const [accordion, setAccordion] = useState<accordion[]>([]);
   const [templateTitle, setTemplateTitle] = useState<string>("");
-  const [catQuestState, setCatQuestState] = useState<ICategoryPost[]>([]);
   const activeCheckboxState = useSelector(
     (state: any) => state.template.templateSelection
   );
@@ -92,18 +91,21 @@ const Template = () => {
 
   /** used to set default checked value of checkboxes, returns all active questions indexed by category  */
   function makeActiveCategoryObject(activeTemplate: any) {
-    if (activeTemplate?.categories.category_id){
-    let activeCategoryObject = activeTemplate?.categories.reduce(
-      (accumulator: any, currentValue: any) => {
-        return {
-          ...accumulator,
-          ...{ [currentValue.category._id]: currentValue.questions },
-        };
-      },
-      {}
-    );
-    dispatch(updateTemplateSelection(activeCategoryObject));}
-    else{console.log('categories not populated.')}
+    if (activeTemplate?.categories.length) {
+      let activeCategoryObject = activeTemplate?.categories.reduce(
+        (accumulator: any, currentValue: any) => {
+          return {
+            ...accumulator,
+            ...{ [currentValue.category._id]: currentValue.questions },
+          };
+        },
+        {}
+      );
+      dispatch(updateTemplateSelection(activeCategoryObject));
+      return activeCategoryObject;
+    } else {
+      console.log("categories not populated.");
+    }
   }
 
   /** set initial open state of accordion divs when categories are fetched */
@@ -213,20 +215,22 @@ const Template = () => {
   /* onChange event handler for selecting questions to be added to template  */
   function checkboxChangeHandler(
     e: any,
-    categoryId: string,
+    categoryId: string, //passed from mapped all-category values
     questionId: string
   ) {
     let checkboxStateCopy = { ...activeCheckboxState };
+    console.log(checkboxStateCopy); //debugging
     let questionArray: string[];
     /** initialise array with pre-selected questions  */
-    /** alter array of questions */
     if (checkboxStateCopy[categoryId]) {
       questionArray = checkboxStateCopy[categoryId];
+      console.log(checkboxStateCopy); //debugging
     } else {
+      checkboxStateCopy = { ...checkboxStateCopy, [categoryId]: [] };
       questionArray = [];
+      console.log(checkboxStateCopy); //debugging
     }
-    //let questionArray = checkboxStateCopy[categoryId];
-    console.log(checkboxStateCopy); //debugging
+
     if (e.target.checked) {
       questionArray.push(e.target.value);
     } else {
@@ -234,26 +238,26 @@ const Template = () => {
       questionArray = questionArray.filter((item) => item !== e.target.value);
     }
 
-    /*     const updatedObjectArray = activeCheckboxState?.map(
-      (obj: ActiveCheckboxes) => 
-        for (const key of Object.keys(obj)) {
-          if (key === categoryId) {
-            return { ...obj, key: questionArray }; //overwrite array
-          }
-        }
-        console.log("altering arrary of", obj.key, "to:", questionArray);
-        return obj;
-      }
-    ); */
+    if (Object.keys(checkboxStateCopy).length) {
+      console.log("keys found");
+    } else {
+      console.log("no keys in the object");
+    }
 
     for (const key of Object.keys(checkboxStateCopy)) {
       if (key === categoryId) {
         return { ...checkboxStateCopy, key: questionArray }; //overwrite array
+      } else {
+        checkboxStateCopy = {
+          ...checkboxStateCopy,
+          [categoryId]: questionArray,
+        };
       }
+      console.log(checkboxStateCopy);
       return checkboxStateCopy;
     }
-    console.log("altering arrary of", categoryId, "to:", questionArray);
 
+    console.log("altering array of", categoryId, "to:", questionArray);
     dispatch(updateTemplateSelection(checkboxStateCopy));
   }
 
@@ -262,39 +266,24 @@ const Template = () => {
     e.preventDefault();
 
     //need to convert activeCheckboxState to db-friendly form
-
-
-   /*     const catQuestArray = catQuestState.map((obj) => {
-      if (obj.category === categoryId) {
-        return { ...obj, questions: questionArray };
-      }
-      console.log(obj);
-      return obj;
-    }); */
-
-   // let catObject: ICategoryPost = { category: categoryId, questions: [] };
-
-    /*  setCatQuestState((catQuestState) => {
-       return { ...catQuestState, category: categoryId, questions: [] };
-      }); */
-
-
-
-
-
-
-
-
-
+    console.log(activeCheckboxState);
+    let categoryArray: ICategoryPost[] = [];
+    let categoryIds = Object.keys(activeCheckboxState);
+    categoryIds.forEach((id) => {
+      let questionArray = activeCheckboxState[id];
+      let categoryObject = { category: id, questions: questionArray };
+      categoryArray.push(categoryObject);
+    });
+    console.log(categoryArray);
 
     let newTemplate: ITemplatePost = {
       templateTitle: templateTitle,
       instructions: preface,
-      categories: activeCheckboxState,
+      categories: categoryArray,
     };
-    await addTemplate(newTemplate).then((res) => {
-      console.log(res);
-    }); //this may need to return the created id of saved template? (in case of needing to set as default/active)
+    /*  await addTemplate(newTemplate).then((res) => {
+      console.log(res); */
+    // }); //this may need to return the created id of saved template? (in case of needing to set as default/active)
   }
 
   function toggleAccordion(e: any, i: number) {
@@ -319,9 +308,19 @@ const Template = () => {
     //eslint-disable-next-line
   }, [categories]);
 
+  /* for rendering active template questions */
+  useEffect(() => {
+    console.log(activeTemplate);
+    if (activeTemplate?.categories.length) {
+      console.log('categories:',activeTemplate?.categories)
+      makeActiveCategoryObject(activeTemplate);
+    }
+
+    //eslint-disable-next-line
+  }, [activeTemplate]);
+
   /* for rendering active template title */
   useEffect(() => {
-    makeActiveCategoryObject(activeTemplate!);
     if (activeTemplate?.templateTitle) {
       setTemplateTitle((title) => activeTemplate.templateTitle);
     }

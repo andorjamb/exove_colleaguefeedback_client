@@ -1,13 +1,18 @@
 //React
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 // Redux
 import { useSelector } from "react-redux";
+import { useGetAllUsersQuery } from "../../features/userApi";
+import { useGetAllRequestPicksQuery } from "../../features/requestPicksApi";
+import { getSecureUserUid } from "../../functions/secureUser";
+import { useGetRequestPickByUserIdQuery } from "../../features/requestPicksApi";
 
 //Pages and Components
 import Card from "../Card/Card";
 import SearchBar from "../DashboardAdmin/SearchBar/SearchBar";
+import UserPickBlock from "./UserPickBlock";
 
 //Styling
 import styles from "./DashboardUser.module.css";
@@ -18,30 +23,33 @@ import { useTranslation } from "react-i18next";
 
 //Types
 import { IUserDataGet } from "../../types/users";
-
-//Testing data
-//import { testEmployeeData } from "../../testdata/testEmployeeData";
-import { useGetAllUsersQuery } from "../../features/userApi";
-import { useGetAllRequestPicksQuery } from "../../features/requestPicksApi";
-import UserPickBlock from "./UserPickBlock";
+import { loggedInUser } from "../../types/users";
 
 const DashboardUser = () => {
-  const [searchInput, setSearchInput] = useState<string>("");
   const { t, i18n } = useTranslation(["dashboardUser"]);
   const serverEndpoint = process.env.REACT_APP_SERVER_ENDPOINT;
-  const emp_id = ""; //replace with actual uid when available
-  const userInfo = useSelector((state: any) => state.auth.user);
   const usersData = useGetAllUsersQuery();
-  const employees: IUserDataGet[] = [];
-  /** this will be fetched using RTK Query */
-
   const [selected, setSelected] = useState<IUserDataGet[]>([]);
+  const [currentUserInfo, setCurrentUserInfo] = useState<loggedInUser>();
 
-  if (usersData.isFetching) return <p>Loading...</p>;
+  const getUserInfo = async () => {
+    const userDetails: loggedInUser = await getSecureUserUid();
+    setCurrentUserInfo(userDetails);
+    console.log("loggedInUser", userDetails);
+  };
+
+  useEffect(() => {
+    try {
+      getUserInfo();
+    } catch (err) {
+      console.log("error getting user", err);
+    }
+  }, []);
+  if (usersData.isFetching || !currentUserInfo) return <p>Loading...</p>;
 
   const submitHandler = () => {
     console.log("Submitting:", selected); //debugging
-    axios.patch(`${serverEndpoint}/picks/${emp_id}`, {});
+    axios.patch(`${serverEndpoint}/picks/${currentUserInfo}`, {});
   };
 
   const doneHandler = (picksSelected: IUserDataGet[]) => {

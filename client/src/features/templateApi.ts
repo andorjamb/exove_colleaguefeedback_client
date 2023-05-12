@@ -4,9 +4,9 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   ITemplateGet,
   ITemplatePost,
-  IActiveTemplateGet,ITemplate
+  IActiveTemplateGet,
+  ITemplate,
 } from "../types/template";
-// import { , ITemplateGet, ITemplatePost } from "../types/template";
 
 //const serverApi = process.env.REACT_APP_SERVER_API;
 const serverApi = "https://exove.vercel.app/api/";
@@ -45,6 +45,7 @@ export const templateApi = createApi({
         method: "PATCH",
         body: id,
       }),
+      invalidatesTags: ["ActiveTemplate"],
     }),
   }),
 });
