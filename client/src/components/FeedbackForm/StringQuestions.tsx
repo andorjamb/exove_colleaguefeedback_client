@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { SingleQuiz } from '../../types/template';
 import { IQuestionLang } from '../../types/template';
 import { addQuestion } from '../../features/feedBackSlice';
+import { type } from '@testing-library/user-event/dist/types/setup/directApi';
 
 interface question {
     questions: SingleQuiz,
@@ -22,7 +23,8 @@ const StringQuestions = ({ questions, category }: question) => {
             _id: questions._id,
             lang: questions.lang,
             question: questions.question,
-            answer:e.target.value
+            answer: e.target.value,
+            type:'string'
         }
 
         dispatch(addQuestion({question,category}))

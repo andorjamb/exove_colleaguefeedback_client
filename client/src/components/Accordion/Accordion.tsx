@@ -1,15 +1,17 @@
 //React
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 //Styles
 import styles from "../../pages/Template/Template.module.css";
+import "../../pages/Template/Template.css";
 
 //Types
-import { ISection, ITemplateQuestion } from "../../types/template";
+import { ISection } from "../../types/template";
 
 interface Props {
-  category: ISection;
-  activeCategories: any;
+  category: ISection; //all available categories, all questions per category
+  //activeCategories: any; //questions in active template: used to initialise default checked state
   clickHandler: any;
   isOpen: boolean;
   checkboxChangeHandler: (
@@ -28,13 +30,19 @@ interface Props {
 
 const Accordion = ({
   category,
-  activeCategories,
+  //activeCategories,
   clickHandler,
   isOpen,
   checkboxChangeHandler,
   createQuestionChangeHandler,
   createQuestion,
 }: Props) => {
+  //activeCategories currently passed as prop, could be pulled from state instead?
+  const activeCategories = useSelector(
+    (state: any) => state.template.templateSelection
+  );
+  console.log(activeCategories);
+
   return (
     <div>
       <div className={styles.accordionContainer}>
@@ -69,7 +77,7 @@ const Accordion = ({
                             defaultChecked={
                               activeCategories[category.id]
                                 ? activeCategories[category.id].includes(q.id)
-                                : {}
+                                : false
                             }
                             className={styles.input}
                           />
@@ -79,6 +87,7 @@ const Accordion = ({
                         <label>
                           <input
                             type="checkbox"
+                            value={q.id}
                             onChange={(e) =>
                               checkboxChangeHandler(e, category.id, q.id)
                             }
@@ -87,7 +96,7 @@ const Accordion = ({
                             defaultChecked={
                               activeCategories[category.id]
                                 ? activeCategories[category.id].includes(q.id)
-                                : {}
+                                : false
                             }
                             className={styles.input}
                           />
@@ -100,9 +109,6 @@ const Accordion = ({
               </ul>
               <fieldset
                 className={`${styles.fieldset} ${styles.accordionContent}`}
-                /*  onBlur={(e) =>
-                  createQuestionChangeHandler(e, category.id, e.target.value)
-                } */
               >
                 <legend>Create new question in this category:</legend>
                 <input

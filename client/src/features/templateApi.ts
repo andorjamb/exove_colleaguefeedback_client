@@ -4,9 +4,9 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   ITemplateGet,
   ITemplatePost,
-  IActiveTemplateGet,ITemplate
+  IActiveTemplateGet,
+  ITemplate,
 } from "../types/template";
-// import { , ITemplateGet, ITemplatePost } from "../types/template";
 
 //const serverApi = process.env.REACT_APP_SERVER_API;
 const serverApi = "https://exove.vercel.app/api/";
@@ -20,14 +20,15 @@ export const templateApi = createApi({
     },
     credentials: "include",
   }),
-  tagTypes: ["Templates"],
+  tagTypes: ["Templates", "ActiveTemplate"],
   endpoints: (builder) => ({
-    getAllTemplates: builder.query<ITemplateGet[], void>({
+    getAllTemplates: builder.query<IActiveTemplateGet[], void>({
       query: () => `template/`,
       providesTags: ["Templates"],
     }),
     getActiveTemplate: builder.query<ITemplate, void>({
       query: () => `template/active`,
+      providesTags: ["ActiveTemplate"],
     }),
     addTemplate: builder.mutation<void, ITemplatePost>({
       query: (body) => ({
@@ -35,7 +36,7 @@ export const templateApi = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Templates"],
+      invalidatesTags: ["Templates", "ActiveTemplate"],
     }),
     setActiveTemplate: builder.mutation<void, string>({
       //sets {active : true} on specified template id
@@ -44,6 +45,7 @@ export const templateApi = createApi({
         method: "PATCH",
         body: id,
       }),
+      invalidatesTags: ["ActiveTemplate"],
     }),
   }),
 });

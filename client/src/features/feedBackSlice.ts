@@ -8,6 +8,7 @@ const questions: IQuestionLang = {
     lang: '',
     question: '',
     answer: '',
+    type:'',
 }
 const category: IFCategory = 
     {

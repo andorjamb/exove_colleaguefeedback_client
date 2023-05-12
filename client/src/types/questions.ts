@@ -26,7 +26,7 @@ export interface IQuestionLang {
   question?: string;
   answer?: string;
   answeredOn?: Date;
-  type?: string;
+  type: string;
 }
 
 //Types for sending new question to db

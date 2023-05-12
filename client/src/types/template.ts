@@ -16,7 +16,7 @@ export interface IQuestionGet {
   _id: string;
   category: string;
   createdBy: string;
-  createdOn: string;
+  createdOn: Date;
   active: boolean;
   type: QuestionType;
   question: IQuestionTextGet[];
@@ -82,6 +82,7 @@ export interface IQuestionLang {
   question?: string; //actual question text
   answer?: string;
   answeredOn?: Date;
+  type: string;
 }
 
 export interface IQCategory {
@@ -111,9 +112,13 @@ export interface IQuestionPost {
 
 //Types for sending new template to db
 
+/* export interface ICategoryPost {
+  category: string;
+  questions: QuestionLangPost[];?
+} */
 export interface ICategoryPost {
   category: string;
-  questions: QuestionLangPost[];
+  questions: string[];
 }
 
 export interface ITemplatePost {
@@ -121,7 +126,19 @@ export interface ITemplatePost {
   instructions: string;
   categories: ICategoryPost[];
 }
-/* 
+
+/* Expanded view of catgories:ICategoriesPost[]
+categories: [
+  {
+  category: category_id,
+  questions: [] ? unclear whether this should be array of strings of array of IQuestionPost
+},{},
+
+]
+
+
+
+*/ /* 
 EXPANDED VIEW OF ITemplate / ITemplateGet
  {
   _id: string;
@@ -170,42 +187,39 @@ export interface ITemplateQuestion {
   isFreeForm: boolean;
 }
 
-
 //Latest type for getting active and all templates
 
 export interface SingleQuiz {
-  lang: string,
-  question: string,
-  _id:string
+  lang: string;
+  question: string;
+  _id: string;
 }
 
-interface IQuiz{
+interface IQuiz {
   _id: string;
   category: string;
   createdBy: string;
   createdOn: string;
   active: boolean;
   type: string;
-  question:SingleQuiz[] ;
+  question: SingleQuiz[];
 }
 export interface ITemplate {
- 
-    _id: string;
-    templateTitle: string;
-    instructions: string;
-    createdOn: string;
-    createdBy: string;
-    categories: ICategory[];
-    active: boolean;
-
+  _id: string;
+  templateTitle: string;
+  instructions: string;
+  createdOn: Date;
+  createdBy: string;
+  categories: ICategory[];
+  active: boolean;
 }
 
 export interface ICategory {
-category:IICategory;
+  category: IICategory;
 }
 
 interface IICategory {
   _id: string;
-  categoryName:string;
+  categoryName: string;
   questions: IQuiz[];
-};
+}

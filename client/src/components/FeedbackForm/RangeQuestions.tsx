@@ -20,7 +20,8 @@ const RangeQuestions = ({ questions, category }: question) => {
           _id: questions._id,
           lang: questions.lang,
           question: questions.question,
-          answer:e.target.value
+        answer: e.target.value,
+          type:'number'
       }
 
       dispatch(addQuestion({question,category}))
