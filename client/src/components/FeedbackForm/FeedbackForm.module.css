@@ -1,24 +1,26 @@
 /* globals */
-.h1 {
-}
-.h1 {
-}
-.h3 {
-}
-.h4 {
-}
+.h1 {}
+
+.h1 {}
+
+.h3 {}
+
+.h4 {}
+
 /* main feedback component */
 
 .main {
   padding: 3rem;
 }
+
 .user {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
-.header {
-}
+
+.header {}
+
 .username {
   color: #6e12e7;
 }
@@ -28,11 +30,13 @@
   display: flex;
   align-items: flex-start;
 }
+
 .instructions {
   display: flex;
   align-items: flex-start;
   text-align: left;
 }
+
 .questionContainer {
   padding: 4rem 0;
   text-align: left;
@@ -46,6 +50,7 @@
   flex-direction: column;
   gap: 2rem;
 }
+
 /* Bolean file css */
 
 .bolContainer {
@@ -54,9 +59,11 @@
   justify-content: space-between;
   align-items: center;
 }
+
 .bolQuestion {
   width: 40%;
 }
+
 .bolComponent {
   padding: 0.4rem;
   width: 50%;
@@ -71,16 +78,20 @@
   display: flex;
   transition: all 0.4s ease-out;
 }
+
 .bolInitial {
   background: #f2f2f2;
   padding-left: 40%;
 }
+
 .bolTrue {
   background: green;
 }
+
 .bolFalse {
   background: #7a75ddd1;
 }
+
 .bolCircle {
   padding: 0.2rem;
   width: 100px;
@@ -94,7 +105,8 @@
   align-items: center;
   font-size: 20px;
 }
-.bolInitial > p {
+
+.bolInitial>p {
   background: #d5d7d5d1;
 }
 
@@ -123,7 +135,8 @@
   flex-direction: row;
   align-items: center;
 }
-.rMainDiv > p {
+
+.rMainDiv>p {
   width: 40%;
 }
 
@@ -144,6 +157,7 @@
   gap: 1rem;
   align-items: flex-start;
 }
+
 .sTextarea {
   width: 100%;
 }
@@ -156,6 +170,8 @@
   cursor: pointer;
 }
 
+
+
 .loginButton {
   background-color: #45af76;
   box-shadow: 4px 4px black;
@@ -164,6 +180,13 @@
   border: none;
   bottom: 0;
   right: 0;
+}
+
+.loginButton:disabled {
+  background-color: #b3b3b3;
+  pointer-events: none;
+
+
 }
 
 .loginButton:active {
