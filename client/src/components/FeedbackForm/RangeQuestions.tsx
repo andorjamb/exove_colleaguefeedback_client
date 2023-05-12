@@ -10,12 +10,15 @@ interface question {
 
 }
 const RangeQuestions = ({ questions, category }: question) => {
-    const [value, setValue] = useState(0);
+  const [value, setValue] = useState(0);
+  const [selectedValue, setSelectedValue] = useState<number>();
   const dispatch = useDispatch()
   
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       e.preventDefault()
       setValue(Number(e.target.value));
+      setSelectedValue(Number(e.target.value));
+      console.log(selectedValue)
       const question: IQuestionLang = {
           _id: questions._id,
           lang: questions.lang,
@@ -106,8 +109,12 @@ const RangeQuestions = ({ questions, category }: question) => {
                 >{index}</span>
             </label>
         );
+  };
+  
+    const validateSelection = () => {
+      return selectedValue !== undefined;
     };
-
+  
     return (
         <div className={styles.rMainDiv} > 
             <p >{questions.question}</p>
@@ -118,7 +125,10 @@ const RangeQuestions = ({ questions, category }: question) => {
                 
                     {[1, 2, 3, 4, 5].map((index) => renderRadio(index))}
                    
-            </div>
+        {!validateSelection() && (
+        <span style={{ color: 'red' }}>*</span>
+      )}
+        </div>
         </div>
     );
 }
