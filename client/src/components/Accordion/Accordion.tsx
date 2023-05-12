@@ -30,7 +30,6 @@ interface Props {
 
 const Accordion = ({
   category,
-  //activeCategories,
   clickHandler,
   isOpen,
   checkboxChangeHandler,
@@ -41,7 +40,7 @@ const Accordion = ({
   const activeCategories = useSelector(
     (state: any) => state.template.templateSelection
   );
-  console.log(activeCategories);
+  //console.log(activeCategories); //debugging
 
   return (
     <div>

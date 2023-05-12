@@ -1,6 +1,7 @@
 //React
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 // Redux
 import { useSelector } from "react-redux";
@@ -22,13 +23,16 @@ import "../../translations/i18next";
 import { useTranslation } from "react-i18next";
 
 //Types
-import { IUserDataGet } from "../../types/users";
-import { loggedInUser } from "../../types/users";
+import { IUserDataGet, loggedInUser } from "../../types/users";
 
 const DashboardUser = () => {
-  const { t, i18n } = useTranslation(["dashboardUser"]);
-  const serverEndpoint = process.env.REACT_APP_SERVER_ENDPOINT;
+  const navigate = useNavigate();
+  const { t } = useTranslation(["dashboardUser"]);
+
+  const serverEndpoint = "https://exove.vercel.app/api";
   const usersData = useGetAllUsersQuery();
+  const employeesList: IUserDataGet[] = [];
+
   const [selected, setSelected] = useState<IUserDataGet[]>([]);
   const [currentUserInfo, setCurrentUserInfo] = useState<loggedInUser>();
 
@@ -49,6 +53,7 @@ const DashboardUser = () => {
 
   const submitHandler = () => {
     console.log("Submitting:", selected); //debugging
+    axios.patch(`${serverEndpoint}/picks/${currentUserInfo.uid}`, {});
     axios.patch(`${serverEndpoint}/picks/${currentUserInfo}`, {});
   };
 
