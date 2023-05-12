@@ -29,45 +29,38 @@ const DashboardUser = () => {
   const navigate = useNavigate();
   const { t } = useTranslation(["dashboardUser"]);
 
-  const [searchInput, setSearchInput] = useState<string>("");
   const serverEndpoint = "https://exove.vercel.app/api";
-  const [userInfo, setUserInfo] = useState<loggedInUser>();
   const usersData = useGetAllUsersQuery();
   const employeesList: IUserDataGet[] = [];
 
   const [selected, setSelected] = useState<IUserDataGet[]>([]);
   const [currentUserInfo, setCurrentUserInfo] = useState<loggedInUser>();
 
+  const getUserInfo = async () => {
+    const userDetails: loggedInUser = await getSecureUserUid();
+    setCurrentUserInfo(userDetails);
+    console.log("loggedInUser", userDetails);
+  };
+
+  useEffect(() => {
+    try {
+      getUserInfo();
+    } catch (err) {
+      console.log("error getting user", err);
+    }
+  }, []);
+  if (usersData.isFetching || !currentUserInfo) return <p>Loading...</p>;
+
   const submitHandler = () => {
     console.log("Submitting:", selected); //debugging
-    axios.patch(`${serverEndpoint}/picks/${userInfo?.uid}`, {});
+    axios.patch(`${serverEndpoint}/picks/${currentUserInfo.uid}`, {});
+    axios.patch(`${serverEndpoint}/picks/${currentUserInfo}`, {});
   };
 
   const doneHandler = (picksSelected: IUserDataGet[]) => {
     setSelected([...picksSelected]);
-    if (selected.length < 6) {
-    }
   };
 
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const userDetails: loggedInUser = await getSecureUserUid();
-        if (userDetails) {
-          setUserInfo(userDetails);
-          console.log(userDetails);
-        } else {
-          navigate("/login");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getUser();
-    //eslint-disable-next-line
-  }, []);
-
-  if (usersData.isFetching) return <p>Loading...</p>;
   return (
     <div className={styles.container}>
       <div className={styles.mainContent}>
