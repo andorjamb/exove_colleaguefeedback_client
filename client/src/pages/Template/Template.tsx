@@ -69,6 +69,7 @@ const Template = () => {
   const activeCheckboxState = useSelector(
     (state: any) => state.template.templateSelection
   );
+  const lang = useSelector((state: any) => state.header.lang);
 
   //console.log(activeCheckboxState); //debugging  - working
 
@@ -312,10 +313,9 @@ const Template = () => {
   useEffect(() => {
     console.log(activeTemplate);
     if (activeTemplate?.categories.length) {
-      console.log('categories:',activeTemplate?.categories)
+      console.log("categories:", activeTemplate?.categories);
       makeActiveCategoryObject(activeTemplate);
     }
-
     //eslint-disable-next-line
   }, [activeTemplate]);
 
@@ -352,7 +352,7 @@ const Template = () => {
             <label htmlFor="preface">
               <h3 className={"h3"}>Introductory text</h3>
             </label>
-            <span>Non-editable text</span>
+            <span>Please consult a developer to edit this text</span>
           </div>
           <div className={`${"noedit"} ${"preface"}`}>{preface}</div>
         </section>
@@ -362,7 +362,7 @@ const Template = () => {
             <label htmlFor="gradingGuidance">
               <h3 className={"h3"}>Grading Guidance</h3>
             </label>
-            <span>Non-editable text</span>
+            <span>Please consult a developer to edit this text</span>
           </div>
           <div className={`${"noedit"} ${"preface"}`}>{gradingGuidance}</div>
         </section>

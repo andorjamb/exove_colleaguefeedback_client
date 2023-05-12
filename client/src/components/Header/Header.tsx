@@ -17,6 +17,7 @@ import "../../translations/i18next";
 import { useTranslation } from "react-i18next";
 
 import axios from "axios";
+import { setLanguage } from "../../features/headerSlice";
 
 /** if user == admin, return AdminNav, else return Nav */
 
@@ -31,9 +32,11 @@ const Header = () => {
 
   const selectEng = () => {
     i18n.changeLanguage("en");
+    dispatch(setLanguage("Eng"));
   };
   const selectFi = () => {
     i18n.changeLanguage("fi");
+    dispatch(setLanguage("Fin"));
   };
 
   const logout = () => {
@@ -84,3 +87,4 @@ const Header = () => {
 };
 
 export default Header;
+
