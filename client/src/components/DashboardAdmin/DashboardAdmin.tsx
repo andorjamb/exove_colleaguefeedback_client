@@ -79,12 +79,14 @@ const DashboardAdmin = () => {
   const [showModal, setShowModal] = useState(false);
 
   if (
-    !activeTemplateData.data ||
+    activeTemplateData.isFetching ||
     usersData.isFetching ||
     feedbackData.isFetching ||
     picksData.isFetching
   )
     return <p>Loading...</p>;
+
+  if (!activeTemplateData.data) return <p>No active templates</p>;
 
   console.log("picksData from dash", picksData);
 
