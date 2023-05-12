@@ -13,12 +13,9 @@ import {
   IQuestionPost,
   ISection,
   ICategoryPost,
-  // IActiveTemplateGet,
 } from "../../types/template";
 
-//Internal imports
-import { preface } from "../../assets/preface";
-import { gradingGuidance } from "../../assets/gradingGuidance";
+//Redux
 import {
   useGetActiveTemplateQuery,
   useAddTemplateMutation,
@@ -30,8 +27,10 @@ import {
 import { useGetAllCategoriesQuery } from "../../features/categoryApi";
 import { updateTemplateSelection } from "../../features/templateSlice";
 
-//Components
+//Components and internal imports
 import Accordion from "../../components/Accordion/Accordion";
+import { preface } from "../../assets/preface";
+import { gradingGuidance } from "../../assets/gradingGuidance";
 
 type accordion = {
   open: boolean;
@@ -220,32 +219,38 @@ const Template = () => {
     questionId: string
   ) {
     let checkboxStateCopy = { ...activeCheckboxState };
-    console.log(checkboxStateCopy); //debugging
-    let questionArray: string[];
-    /** initialise array with pre-selected questions  */
-    if (checkboxStateCopy[categoryId]) {
-      questionArray = checkboxStateCopy[categoryId];
-      console.log(checkboxStateCopy); //debugging
-    } else {
-      checkboxStateCopy = { ...checkboxStateCopy, [categoryId]: [] };
-      questionArray = [];
-      console.log(checkboxStateCopy); //debugging
-    }
+    Object.isExtensible(checkboxStateCopy);
+    // console.log(checkboxStateCopy); //debugging - working
 
     if (e.target.checked) {
-      questionArray.push(e.target.value);
+      checkboxStateCopy = {
+        ...checkboxStateCopy,
+        [categoryId]: [...[categoryId], e.target.value],
+      };
+      console.log("adding item,", checkboxStateCopy); //debugging
+      dispatch(updateTemplateSelection(checkboxStateCopy));
     } else {
+      let questionArray = [...checkboxStateCopy[categoryId]];
       console.log(questionArray);
-      questionArray = questionArray.filter((item) => item !== e.target.value);
+      let newQuestionArray = questionArray.filter((item) => {
+        return item !== e.target.value;
+      });
+      console.log("after filtering:", newQuestionArray);
+      checkboxStateCopy = {
+        ...checkboxStateCopy,
+        [categoryId]: newQuestionArray,
+      };
+      dispatch(updateTemplateSelection(checkboxStateCopy));
+      console.log(activeCheckboxState);
     }
-
+    /* 
     if (Object.keys(checkboxStateCopy).length) {
       console.log("keys found");
     } else {
       console.log("no keys in the object");
-    }
+    } */
 
-    for (const key of Object.keys(checkboxStateCopy)) {
+    /*   for (const key of Object.keys(checkboxStateCopy)) {
       if (key === categoryId) {
         return { ...checkboxStateCopy, key: questionArray }; //overwrite array
       } else {
@@ -256,10 +261,9 @@ const Template = () => {
       }
       console.log(checkboxStateCopy);
       return checkboxStateCopy;
-    }
+    } */
 
-    console.log("altering array of", categoryId, "to:", questionArray);
-    dispatch(updateTemplateSelection(checkboxStateCopy));
+    //dispatch(updateTemplateSelection(checkboxStateCopy));
   }
 
   /* onSubmit handler for saving template to db  */
@@ -311,7 +315,6 @@ const Template = () => {
 
   /* for rendering active template questions */
   useEffect(() => {
-    console.log(activeTemplate);
     if (activeTemplate?.categories.length) {
       console.log("categories:", activeTemplate?.categories);
       makeActiveCategoryObject(activeTemplate);
@@ -381,7 +384,6 @@ const Template = () => {
               <Accordion
                 key={i}
                 category={item}
-                //activeCategories={activeCheckboxState}
                 clickHandler={(e: any) => toggleAccordion(e, i)}
                 isOpen={accordion[i]?.open}
                 checkboxChangeHandler={(e) =>
