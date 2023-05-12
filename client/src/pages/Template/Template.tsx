@@ -31,6 +31,7 @@ import { updateTemplateSelection } from "../../features/templateSlice";
 import Accordion from "../../components/Accordion/Accordion";
 import { preface } from "../../assets/preface";
 import { gradingGuidance } from "../../assets/gradingGuidance";
+import CustomSpinner from "../../components/CustomSpinner/CustomSpinner";
 
 type accordion = {
   open: boolean;
@@ -232,11 +233,6 @@ const Template = () => {
         [categoryId]: newQuestionArray,
       };
 
-      /* checkboxStateCopy = {
-        ...checkboxStateCopy,
-        [categoryId]: [...[categoryId], e.target.value],
-      };*/
-
       dispatch(updateTemplateSelection(checkboxStateCopy));
       console.log("adding item,", checkboxStateCopy); //debugging
     } else {
@@ -275,17 +271,7 @@ const Template = () => {
 
     //need to convert activeCheckboxState to db-friendly form
     console.log(activeCheckboxState);
-    // let categoryArray: ICategoryPost[] = [];
     let categoryArray = postCategoryConverter(activeCheckboxState);
-    /* 
-    let categoryIds = Object.keys(activeCheckboxState);
-    categoryIds.forEach((id) => {
-      let questionArray = activeCheckboxState[id];
-      let categoryObject = { category: id, questions: questionArray };
-      categoryArray.push(categoryObject);
-    });
-    console.log(categoryArray); */
-
     let newTemplate: ITemplatePost = {
       templateTitle: templateTitle,
       instructions: preface,
@@ -321,7 +307,6 @@ const Template = () => {
   /* for rendering active template questions */
   useEffect(() => {
     if (activeTemplate?.categories.length) {
-      console.log("categories:", activeTemplate?.categories);
       makeActiveCategoryObject(activeTemplate);
     }
     //eslint-disable-next-line
@@ -382,6 +367,7 @@ const Template = () => {
         {isLoading ? (
           <>
             <h4>Fetching questions</h4>
+            <CustomSpinner />
           </>
         ) : (
           <>
