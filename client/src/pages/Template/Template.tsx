@@ -1,5 +1,10 @@
 //React
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+//Styles
+import styles from "../../pages/Template/Template.module.css";
+import "../../pages/Template/Template.css";
 
 //Types
 import {
@@ -8,7 +13,7 @@ import {
   IQuestionPost,
   ISection,
   ICategoryPost,
-  IActiveTemplateGet,
+  // IActiveTemplateGet,
 } from "../../types/template";
 
 //Internal imports
@@ -23,6 +28,7 @@ import {
   useAddQuestionMutation,
 } from "../../features/questionApi";
 import { useGetAllCategoriesQuery } from "../../features/categoryApi";
+import { updateTemplateSelection } from "../../features/templateSlice";
 
 //Components
 import Accordion from "../../components/Accordion/Accordion";
@@ -31,10 +37,9 @@ type accordion = {
   open: boolean;
 };
 
-/* type activeCS = {
-  category: string; //categoryid
-  questions: string[]; //unclear whether this should be array of strings of array of IQuestionPost
-}; */
+interface ActiveCheckboxes {
+  [index: string]: string[];
+}
 
 class SectionClass {
   id: string;
@@ -48,6 +53,9 @@ class SectionClass {
 }
 
 const Template = () => {
+  const dispatch = useDispatch();
+
+  /** data fetching and state */
   const getActiveTemplate = useGetActiveTemplateQuery();
   const getCategories = useGetAllCategoriesQuery();
   const getQuestions = useGetAllQuestionsQuery(); //IQuestion[]
@@ -58,11 +66,12 @@ const Template = () => {
 
   const [accordion, setAccordion] = useState<accordion[]>([]);
   const [templateTitle, setTemplateTitle] = useState<string>("");
-  const [selectedQuestionState, setSelectedQuestionState] = useState<string[]>(
-    []
-  );
   const [catQuestState, setCatQuestState] = useState<ICategoryPost[]>([]);
-  const [activeCheckboxState, setActiveCheckboxState] = useState<any>({});
+  const activeCheckboxState = useSelector(
+    (state: any) => state.template.templateSelection
+  );
+
+  //console.log(activeCheckboxState); //debugging  - working
 
   const [newQuestionState, setNewQuestionState] = useState<{
     categoryId: string;
@@ -78,12 +87,12 @@ const Template = () => {
   const categories = getCategories.data;
   const questions = getQuestions.data;
 
+  /** data manipulations  */
   let newCategoryArray: ISection[] = dataParser();
-
-  let activeCategoryObject = makeActiveCategoryObject(activeTemplate!);
 
   /** used to set default checked value of checkboxes, returns all active questions indexed by category  */
   function makeActiveCategoryObject(activeTemplate: any) {
+    if (activeTemplate?.categories.category_id){
     let activeCategoryObject = activeTemplate?.categories.reduce(
       (accumulator: any, currentValue: any) => {
         return {
@@ -93,22 +102,13 @@ const Template = () => {
       },
       {}
     );
-    return activeCategoryObject;
+    dispatch(updateTemplateSelection(activeCategoryObject));}
+    else{console.log('categories not populated.')}
   }
 
-  /** set initial state of accordion divs when categories are fetched */
-  useEffect(() => {
-    if (categories?.length) {
-      let accordionCopy = [...accordion];
-      for (let i = 0; i < categories.length; i++) {
-        accordionCopy.push({ open: false });
-      }
-      setAccordion((accordion) => [...accordionCopy]);
-    }
-    //eslint-disable-next-line
-  }, [categories]);
+  /** set initial open state of accordion divs when categories are fetched */
 
-  /** used to manipulate fetched template data into form useful for rendering  */
+  /** used to manipulate fetched template data into a form useful for rendering  */
   function dataParser() {
     let categoryArray: ISection[] = [];
     let arrayQuestion: ITemplateQuestion = {
@@ -125,6 +125,7 @@ const Template = () => {
             id: question._id,
             question: question.question[0].question as string, //TOFIX: this could cause bugs if 'Eng' is not first in array
             isFreeForm: false,
+            //makes assumption that questions will only be one of two types
           };
 
           if (question.type.startsWith("s".toLowerCase())) {
@@ -147,6 +148,8 @@ const Template = () => {
     return categoryArray;
   }
 
+  /** event handlers */
+
   function titleChangeHandler(e: any) {
     console.log(e.target.value);
     setTemplateTitle((title) => e.target.value);
@@ -158,8 +161,6 @@ const Template = () => {
     categoryId: string,
     value: string
   ) {
-    console.log(value, " ", categoryId, " "); //debugging
-
     if (value) {
       if (value.length > 2) {
         setNewQuestionState((newQuestionState) => {
@@ -215,50 +216,81 @@ const Template = () => {
     categoryId: string,
     questionId: string
   ) {
-    console.log("cat_id: ", categoryId, "question_id: ", questionId); //debugging
-    let questionArray = selectedQuestionState; //type string[] = [];
-    /** need to get ALL checkbox items belonging to name 'questions'  */
+    let checkboxStateCopy = { ...activeCheckboxState };
+    let questionArray: string[];
+    /** initialise array with pre-selected questions  */
+    /** alter array of questions */
+    if (checkboxStateCopy[categoryId]) {
+      questionArray = checkboxStateCopy[categoryId];
+    } else {
+      questionArray = [];
+    }
+    //let questionArray = checkboxStateCopy[categoryId];
+    console.log(checkboxStateCopy); //debugging
     if (e.target.checked) {
-      /** need to target only object belonging to current cat_id */
       questionArray.push(e.target.value);
     } else {
+      console.log(questionArray);
       questionArray = questionArray.filter((item) => item !== e.target.value);
     }
-    setSelectedQuestionState((selectedQuestionState) => questionArray);
 
-    const catQuestArray = catQuestState.map((obj) => {
+    /*     const updatedObjectArray = activeCheckboxState?.map(
+      (obj: ActiveCheckboxes) => 
+        for (const key of Object.keys(obj)) {
+          if (key === categoryId) {
+            return { ...obj, key: questionArray }; //overwrite array
+          }
+        }
+        console.log("altering arrary of", obj.key, "to:", questionArray);
+        return obj;
+      }
+    ); */
+
+    for (const key of Object.keys(checkboxStateCopy)) {
+      if (key === categoryId) {
+        return { ...checkboxStateCopy, key: questionArray }; //overwrite array
+      }
+      return checkboxStateCopy;
+    }
+    console.log("altering arrary of", categoryId, "to:", questionArray);
+
+    dispatch(updateTemplateSelection(checkboxStateCopy));
+  }
+
+  /* onSubmit handler for saving template to db  */
+  async function saveTemplate(e: any) {
+    e.preventDefault();
+
+    //need to convert activeCheckboxState to db-friendly form
+
+
+   /*     const catQuestArray = catQuestState.map((obj) => {
       if (obj.category === categoryId) {
         return { ...obj, questions: questionArray };
       }
       console.log(obj);
       return obj;
-    });
-    // setCatQuestState(catQuestArray);
+    }); */
 
-    let catObject: ICategoryPost = { category: categoryId, questions: [] };
+   // let catObject: ICategoryPost = { category: categoryId, questions: [] };
 
     /*  setCatQuestState((catQuestState) => {
        return { ...catQuestState, category: categoryId, questions: [] };
       }); */
-    //add new category with question array
-  }
 
-  /*[
-    {
-    category: category_id,
-    questions: [] ? unclear whether this should be array of strings of array of IQuestionPost
-  },{},
-  
-  ]
-  */
 
-  /* onSubmit handler for saving template to db  */
-  async function saveTemplate(e: any) {
-    e.preventDefault();
+
+
+
+
+
+
+
+
     let newTemplate: ITemplatePost = {
       templateTitle: templateTitle,
       instructions: preface,
-      categories: catQuestState,
+      categories: activeCheckboxState,
     };
     await addTemplate(newTemplate).then((res) => {
       console.log(res);
@@ -276,22 +308,25 @@ const Template = () => {
     });
   }
 
+  useEffect(() => {
+    if (categories?.length) {
+      let accordionCopy = [...accordion];
+      for (let i = 0; i < categories.length; i++) {
+        accordionCopy.push({ open: false });
+      }
+      setAccordion((accordion) => [...accordionCopy]);
+    }
+    //eslint-disable-next-line
+  }, [categories]);
+
   /* for rendering active template title */
   useEffect(() => {
+    makeActiveCategoryObject(activeTemplate!);
     if (activeTemplate?.templateTitle) {
       setTemplateTitle((title) => activeTemplate.templateTitle);
     }
+    //eslint-disable-next-line
   }, [activeTemplate]);
-
-  /**dubugging purpose only */
-  useEffect(() => {
-    console.log("catQuestState:", catQuestState);
-  }, [catQuestState]);
-
-  /**dubugging purpose only */
-  useEffect(() => {
-    console.log("selectedQuestionState:", selectedQuestionState);
-  }, [selectedQuestionState]);
 
   return (
     <div className={"container"}>
@@ -347,7 +382,7 @@ const Template = () => {
               <Accordion
                 key={i}
                 category={item}
-                activeCategories={activeCategoryObject}
+                //activeCategories={activeCheckboxState}
                 clickHandler={(e: any) => toggleAccordion(e, i)}
                 isOpen={accordion[i]?.open}
                 checkboxChangeHandler={(e) =>
