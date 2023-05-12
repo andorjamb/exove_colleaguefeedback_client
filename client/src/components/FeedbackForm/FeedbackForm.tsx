@@ -60,6 +60,27 @@ const FeedbackForm = () => {
   ) => {
     e.preventDefault();
 
+    // Check if all string answers are filled
+  const stringQuestions = qTemplate?.categories?.flatMap((cat) =>
+  cat.category.questions.filter((quiz) => quiz.type.toLowerCase() === "string")
+);
+
+const unansweredStringQuestions = stringQuestions?.filter((quiz) => {
+  const question = quiz.question.find((q) => q.lang === language);
+  const answer = feedback.categories.find(
+    (cat:any) => cat.category === quiz.category
+  )?.questions.find((q:any) => q._id === quiz._id)?.answer;
+
+  return !answer || answer.trim().length === 0;
+});
+
+if (unansweredStringQuestions && unansweredStringQuestions.length > 0) {
+  alert("Please answer all string questions");
+  return;
+}
+
+    
+
     try {
       const url =
         "https://exove.vercel.app/api/feedback/da3040ce-43e9-4d2b-89a1-cefe27563492";
