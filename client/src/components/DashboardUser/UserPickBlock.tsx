@@ -37,15 +37,14 @@ const UserPickBlock: React.FC<IUserPickBlockProps> = ({
   defaultSelection,
 }) => {
   const [searchInput, setSearchInput] = useState<string>("");
-  const { t, i18n } = useTranslation(["dashboardUser"]);
-  const emp_id = ""; //replace with actual uid when available
-  const userInfo = useSelector((state: any) => state.auth.user);
+  const { t } = useTranslation(["dashboardUser"]);
   const usersData = useGetAllUsersQuery();
   const [selected, setSelected] = useState<IUserDataGet[]>(defaultSelection);
   const [editing, setEditing] = useState<boolean>(defaultEditing);
-  const [searchValue, setSearchValue] = useState("");
 
-  if (usersData.isFetching) return <p>{t("Loading...")}</p>;
+  useEffect(() => {
+    console.log(selected);
+  }, [selected]); //debugging
 
   const filteredUsersData = usersData.data
     ?.filter((user) => user.userStatus)
@@ -74,6 +73,7 @@ const UserPickBlock: React.FC<IUserPickBlockProps> = ({
     setSearchInput(e.currentTarget.value);
   };
 
+  if (usersData.isFetching) return <p>{t("Loading...")}</p>;
   return (
     <div className={styles.container}>
       <div className={styles.heading}>

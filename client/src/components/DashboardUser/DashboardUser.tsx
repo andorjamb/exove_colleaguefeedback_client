@@ -1,6 +1,7 @@
 //React
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 // Redux
 import { useSelector } from "react-redux";
@@ -22,40 +23,51 @@ import "../../translations/i18next";
 import { useTranslation } from "react-i18next";
 
 //Types
-import { IUserDataGet } from "../../types/users";
-import { loggedInUser } from "../../types/users";
+import { IUserDataGet, loggedInUser } from "../../types/users";
 
 const DashboardUser = () => {
-  const { t, i18n } = useTranslation(["dashboardUser"]);
-  const serverEndpoint = process.env.REACT_APP_SERVER_ENDPOINT;
+  const navigate = useNavigate();
+  const { t } = useTranslation(["dashboardUser"]);
+
+  const [searchInput, setSearchInput] = useState<string>("");
+  const serverEndpoint = "https://exove.vercel.app/api";
+  const [userInfo, setUserInfo] = useState<loggedInUser>();
   const usersData = useGetAllUsersQuery();
+  const employeesList: IUserDataGet[] = [];
+
   const [selected, setSelected] = useState<IUserDataGet[]>([]);
   const [currentUserInfo, setCurrentUserInfo] = useState<loggedInUser>();
 
-  const getUserInfo = async () => {
-    const userDetails: loggedInUser = await getSecureUserUid();
-    setCurrentUserInfo(userDetails);
-    console.log("loggedInUser", userDetails);
-  };
-
-  useEffect(() => {
-    try {
-      getUserInfo();
-    } catch (err) {
-      console.log("error getting user", err);
-    }
-  }, []);
-  if (usersData.isFetching || !currentUserInfo) return <p>Loading...</p>;
-
   const submitHandler = () => {
     console.log("Submitting:", selected); //debugging
-    axios.patch(`${serverEndpoint}/picks/${currentUserInfo}`, {});
+    axios.patch(`${serverEndpoint}/picks/${userInfo?.uid}`, {});
   };
 
   const doneHandler = (picksSelected: IUserDataGet[]) => {
     setSelected([...picksSelected]);
+    if (selected.length < 6) {
+    }
   };
 
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const userDetails: loggedInUser = await getSecureUserUid();
+        if (userDetails) {
+          setUserInfo(userDetails);
+          console.log(userDetails);
+        } else {
+          navigate("/login");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getUser();
+    //eslint-disable-next-line
+  }, []);
+
+  if (usersData.isFetching) return <p>Loading...</p>;
   return (
     <div className={styles.container}>
       <div className={styles.mainContent}>
