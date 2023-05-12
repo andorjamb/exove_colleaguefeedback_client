@@ -24,6 +24,7 @@ const FeedbackForm = () => {
   const { feedback } = useSelector((state: any) => state.feedback);
   const navigate = useNavigate();
   const [language, setLang] = useState<string>("Eng");
+  const [unAnsweredQuestions, setUnAnsweredQuestions] = useState<number>();
 
   useEffect(() => {
     if (data) {
@@ -55,31 +56,36 @@ const FeedbackForm = () => {
     }
   }, [data, dispatch, userInfo?.uid]);
 
+  useEffect(() => {
+    const validateNumber = () => {
+      const stringQuestions =
+        qTemplate?.categories?.flatMap((cat) =>
+          cat.category.questions.filter(
+            (quiz) => quiz.type.toLowerCase() === "number"
+          )
+        ) || [];
+      const feedbacked: IFeedback = feedback;
+      const stringQuestionsAnswers =
+        feedbacked?.categories?.flatMap((cat) =>
+          cat.questions.filter((quiz) => quiz.type.toLowerCase() === "number")
+        ) || [];
+
+      setUnAnsweredQuestions(
+        stringQuestions.length - stringQuestionsAnswers.length
+      );
+    };
+    validateNumber();
+  }, [feedback, qTemplate?.categories]);
+
   const handleSubmitFeedBack = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
 
-    // Check if all string answers are filled
-  const stringQuestions = qTemplate?.categories?.flatMap((cat) =>
-  cat.category.questions.filter((quiz) => quiz.type.toLowerCase() === "string")
-);
-
-const unansweredStringQuestions = stringQuestions?.filter((quiz) => {
-  const question = quiz.question.find((q) => q.lang === language);
-  const answer = feedback.categories.find(
-    (cat:any) => cat.category === quiz.category
-  )?.questions.find((q:any) => q._id === quiz._id)?.answer;
-
-  return !answer || answer.trim().length === 0;
-});
-
-if (unansweredStringQuestions && unansweredStringQuestions.length > 0) {
-  alert("Please answer all string questions");
-  return;
-}
-
-    
+    if (unAnsweredQuestions !== 0) {
+      alert(`questions are still needs answers`);
+      return false;
+    }
 
     try {
       const url =
@@ -184,6 +190,7 @@ if (unansweredStringQuestions && unansweredStringQuestions.length > 0) {
         <button
           className={[style.button, style.loginButton].join(" ")}
           onClick={(e) => handleSubmitFeedBack(e)}
+          disabled={unAnsweredQuestions !== 0}
         >
           Submit
         </button>
