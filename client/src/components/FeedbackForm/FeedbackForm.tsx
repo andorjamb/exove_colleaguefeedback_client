@@ -55,40 +55,36 @@ const FeedbackForm = () => {
     }
   }, [data, dispatch, userInfo?.uid]);
 
+
+
   const handleSubmitFeedBack = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
 
-    // Check if all string answers are filled
   const stringQuestions = qTemplate?.categories?.flatMap((cat) =>
-  cat.category.questions.filter((quiz) => quiz.type.toLowerCase() === "string")
-);
+  cat.category.questions.filter((quiz) => quiz.type.toLowerCase() === "number")
+  ) || [];
+  const feedbacked:IFeedback =feedback
+  const stringQuestionsAnswers = feedbacked?.categories?.flatMap((cat) =>
+  cat.questions.filter((quiz) => quiz.type.toLowerCase() === "number")
+  ) || [];
 
-const unansweredStringQuestions = stringQuestions?.filter((quiz) => {
-  const question = quiz.question.find((q) => q.lang === language);
-  const answer = feedback.categories.find(
-    (cat:any) => cat.category === quiz.category
-  )?.questions.find((q:any) => q._id === quiz._id)?.answer;
-
-  return !answer || answer.trim().length === 0;
-});
-
-if (unansweredStringQuestions && unansweredStringQuestions.length > 0) {
-  alert("Please answer all string questions");
-  return;
-}
-
+    if (stringQuestions.length - stringQuestionsAnswers.length !== 0) 
+    {
+      alert(`${stringQuestions.length - stringQuestionsAnswers.length} questions are still needs answers`)
+      return false;
+  }
     
 
     try {
-      const url =
-        "https://exove.vercel.app/api/feedback/da3040ce-43e9-4d2b-89a1-cefe27563492";
-      const { data } = await axios.post(
-        url,
-        { ...feedback },
-        { withCredentials: true }
-      );
+      // const url =
+      //   "https://exove.vercel.app/api/feedback/da3040ce-43e9-4d2b-89a1-cefe27563492";
+      // const { data } = await axios.post(
+      //   url,
+      //   { ...feedback },
+      //   { withCredentials: true }
+      // );
       console.log(data);
       alert(data);
     } catch (error) {}
