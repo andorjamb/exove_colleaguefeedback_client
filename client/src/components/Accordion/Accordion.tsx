@@ -36,7 +36,6 @@ const Accordion = ({
   createQuestionChangeHandler,
   createQuestion,
 }: Props) => {
-  //activeCategories currently passed as prop, could be pulled from state instead?
   const activeCategories = useSelector(
     (state: any) => state.template.templateSelection
   );
