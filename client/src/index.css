@@ -12,6 +12,12 @@
   --darkGray: rgb(168, 168, 168);
   --medGray: rgb(216, 216, 215);
   --paleGray: rgb(242, 242, 242);
+  /* gradient colors */
+  --color1: #4bebdec3;
+  --color2: #a76acdcc;
+  --color3: #e130a3c1;
+  --color4: #f85b6bcf;
+  --color5: #fff94dc4;
 }
 
 * {
