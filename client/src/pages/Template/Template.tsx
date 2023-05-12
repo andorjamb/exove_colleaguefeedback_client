@@ -223,12 +223,22 @@ const Template = () => {
     // console.log(checkboxStateCopy); //debugging - working
 
     if (e.target.checked) {
+      let questionArray = [...checkboxStateCopy[categoryId]];
+      console.log("current state", questionArray);
+      let newQuestionArray = [...questionArray, e.target.value];
+      console.log("after adding:", newQuestionArray);
       checkboxStateCopy = {
         ...checkboxStateCopy,
-        [categoryId]: [...[categoryId], e.target.value],
+        [categoryId]: newQuestionArray,
       };
-      console.log("adding item,", checkboxStateCopy); //debugging
+
+      /* checkboxStateCopy = {
+        ...checkboxStateCopy,
+        [categoryId]: [...[categoryId], e.target.value],
+      };*/
+
       dispatch(updateTemplateSelection(checkboxStateCopy));
+      console.log("adding item,", checkboxStateCopy); //debugging
     } else {
       let questionArray = [...checkboxStateCopy[categoryId]];
       console.log(questionArray);
@@ -241,37 +251,14 @@ const Template = () => {
         [categoryId]: newQuestionArray,
       };
       dispatch(updateTemplateSelection(checkboxStateCopy));
-      console.log(activeCheckboxState);
+      console.log(activeCheckboxState); //debugging
     }
-    /* 
-    if (Object.keys(checkboxStateCopy).length) {
-      console.log("keys found");
-    } else {
-      console.log("no keys in the object");
-    } */
-
-    /*   for (const key of Object.keys(checkboxStateCopy)) {
-      if (key === categoryId) {
-        return { ...checkboxStateCopy, key: questionArray }; //overwrite array
-      } else {
-        checkboxStateCopy = {
-          ...checkboxStateCopy,
-          [categoryId]: questionArray,
-        };
-      }
-      console.log(checkboxStateCopy);
-      return checkboxStateCopy;
-    } */
 
     //dispatch(updateTemplateSelection(checkboxStateCopy));
   }
 
   /* onSubmit handler for saving template to db  */
-  async function saveTemplate(e: any) {
-    e.preventDefault();
-
-    //need to convert activeCheckboxState to db-friendly form
-    console.log(activeCheckboxState);
+  function postCategoryConverter(obj: ActiveCheckboxes) {
     let categoryArray: ICategoryPost[] = [];
     let categoryIds = Object.keys(activeCheckboxState);
     categoryIds.forEach((id) => {
@@ -280,15 +267,33 @@ const Template = () => {
       categoryArray.push(categoryObject);
     });
     console.log(categoryArray);
+    return categoryArray;
+  }
+
+  async function saveTemplate(e: any) {
+    e.preventDefault();
+
+    //need to convert activeCheckboxState to db-friendly form
+    console.log(activeCheckboxState);
+    // let categoryArray: ICategoryPost[] = [];
+    let categoryArray = postCategoryConverter(activeCheckboxState);
+    /* 
+    let categoryIds = Object.keys(activeCheckboxState);
+    categoryIds.forEach((id) => {
+      let questionArray = activeCheckboxState[id];
+      let categoryObject = { category: id, questions: questionArray };
+      categoryArray.push(categoryObject);
+    });
+    console.log(categoryArray); */
 
     let newTemplate: ITemplatePost = {
       templateTitle: templateTitle,
       instructions: preface,
       categories: categoryArray,
     };
-    /*  await addTemplate(newTemplate).then((res) => {
-      console.log(res); */
-    // }); //this may need to return the created id of saved template? (in case of needing to set as default/active)
+    await addTemplate(newTemplate).then((res) => {
+      console.log(res);
+    });
   }
 
   function toggleAccordion(e: any, i: number) {
