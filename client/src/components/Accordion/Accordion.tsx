@@ -41,6 +41,7 @@ const Accordion = ({
   const activeCategories = useSelector(
     (state: any) => state.template.templateSelection
   );
+  console.log(activeCategories);
 
   return (
     <div>
