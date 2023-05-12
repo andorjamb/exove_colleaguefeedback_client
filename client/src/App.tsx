@@ -1,4 +1,5 @@
 // React
+import { useState } from "react";
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -10,10 +11,10 @@ import {
 // Redux
 import { Provider, useDispatch } from "react-redux";
 import { store } from "./app/store";
+import { getSecureUserUid } from "./functions/secureUser";
 
 // Components and pages
 import ProtectedRoutes from "./routing/ProtectedRoutes";
-
 import Layout from "./components/Layout/Layout";
 import Login from "./components/Login/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
@@ -22,6 +23,9 @@ import DashboardUser from "./components/DashboardUser/DashboardUser";
 import Feedback from "./pages/Feedback/Feedback";
 import Profile from "./pages/Profile/Profile";
 import Report from "./pages/Report/Report";
+
+// Types
+import { loggedInUser } from "./types/users";
 
 // Styling
 import "./App.css";
@@ -38,9 +42,7 @@ const router = createBrowserRouter(
           <Route path="/template" element={<Template />}></Route>
           <Route path="/profile" element={<Profile />}></Route>
           <Route path="/report/:id" element={<Report />}></Route>
-
           <Route path="/profiles/:id" element={<Profile />}></Route>
-
           <Route path="/*" element={<Navigate to="/" replace />}></Route>
         </Route>
       </Route>
@@ -48,9 +50,15 @@ const router = createBrowserRouter(
   )
 );
 
-function App() {
+const App = () => {
   const dispatch = useDispatch();
   //dispatch(api.util.resetApiState());  //reset base api state to clear cache and refresh
+  const [currentUserInfo, setCurrentUserInfo] = useState<loggedInUser>();
+  const getUserInfo = async () => {
+    const userDetails: loggedInUser = await getSecureUserUid();
+    setCurrentUserInfo(userDetails);
+    console.log("loggedInUser", userDetails);
+  };
 
   return (
     <Provider store={store}>
@@ -59,6 +67,6 @@ function App() {
       </div>
     </Provider>
   );
-}
+};
 
 export default App;
