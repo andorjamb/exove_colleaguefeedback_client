@@ -112,9 +112,13 @@ export interface IQuestionPost {
 
 //Types for sending new template to db
 
+/* export interface ICategoryPost {
+  category: string;
+  questions: QuestionLangPost[];?
+} */
 export interface ICategoryPost {
   category: string;
-  questions: QuestionLangPost[];
+  questions: string[];
 }
 
 export interface ITemplatePost {
@@ -183,42 +187,39 @@ export interface ITemplateQuestion {
   isFreeForm: boolean;
 }
 
-
 //Latest type for getting active and all templates
 
 export interface SingleQuiz {
-  lang: string,
-  question: string,
-  _id:string
+  lang: string;
+  question: string;
+  _id: string;
 }
 
-interface IQuiz{
+interface IQuiz {
   _id: string;
   category: string;
   createdBy: string;
   createdOn: string;
   active: boolean;
   type: string;
-  question:SingleQuiz[] ;
+  question: SingleQuiz[];
 }
 export interface ITemplate {
- 
-    _id: string;
-    templateTitle: string;
-    instructions: string;
-    createdOn: Date;
-    createdBy: string;
-    categories: ICategory[];
-    active: boolean;
-
+  _id: string;
+  templateTitle: string;
+  instructions: string;
+  createdOn: Date;
+  createdBy: string;
+  categories: ICategory[];
+  active: boolean;
 }
 
 export interface ICategory {
-category:IICategory;
+  category: IICategory;
 }
 
 interface IICategory {
   _id: string;
-  categoryName:string;
+  categoryName: string;
   questions: IQuiz[];
-};
+}
