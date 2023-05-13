@@ -41,3 +41,9 @@
   font-weight: 800;
   align-items: center;
 }
+
+.displayName {
+  color: var(--exovePurple);
+  font-weight: 800;
+  font-size: 1.2rem;
+}

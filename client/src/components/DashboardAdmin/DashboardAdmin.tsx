@@ -12,6 +12,7 @@ import { useGetActiveTemplateQuery } from "../../features/templateApi";
 import BulkButtons from "./BulkButtons/BulkButtons";
 import SearchBar from "./SearchBar/SearchBar";
 import PersonRow from "./PersonRow/PersonRow";
+import CustomSpinner from "../CustomSpinner/CustomSpinner";
 
 // Types
 import { ITemplateGet } from "../../types/template";
@@ -84,7 +85,12 @@ const DashboardAdmin = () => {
     feedbackData.isFetching ||
     picksData.isFetching
   )
-    return <p>Loading...</p>;
+    return (
+      <>
+        <p>Loading...</p>
+        <CustomSpinner />
+      </>
+    );
 
   if (!activeTemplateData.data) return <p>No active templates</p>;
 
