@@ -1,0 +1,38 @@
+.container {
+  height: 100vh;
+  width: 80vw;
+  display: flex;
+}
+
+.report {
+  height: 100%;
+  width: 100%;
+  border: 1px solid black;
+  margin-top: 3rem;
+}
+
+.sidebar {
+  width: 30vw;
+  
+  height: 100vh;
+  background-color: var(--medblack);
+  color: white;
+}
+
+.sidebarUl {
+  padding: 0.5rem;
+  display: flex;
+  height: 0.75rem;
+  color: white;
+}
+
+.a {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+  color: white;
+}
+
+.a::selection {
+  background-color: black;
+}

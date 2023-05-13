@@ -22,13 +22,13 @@ export const feedbackApi = createApi({
       providesTags: ["Feedbacks"],
     }),
     getFeedbackByDocId: builder.query<IFeedback, string>({
-      query: (docId) => `feedback/${docId}`,
+      query: (docId) => `feedback/${docId}`, //may be erroneous in backend
     }),
-    getFeedbackByName: builder.query<IFeedback, string>({
+    getFeedbacksByName: builder.query<IFeedback[], string>({
       query: (name) => `feedback/name/${name}`, //ldapUid ??
     }),
     getUserTotalFeedbacks: builder.query<IFeedback[], string>({
-      query: (name) => `feed/${name}`, //returns { ...userFeedback, feedbacksCount, requestPicksCount }
+      query: (name) => `feedback/feed/${name}`, //returns { ...userFeedback, feedbacksCount, requestPicksCount }
     }),
     postFeedback: builder.mutation<void, { body: IFeedback; id: string }>({
       query: ({ id, body }) => ({
@@ -59,7 +59,7 @@ Type '(id: string, body: IFeedback) => { url: string; method: string; body: IFee
 export const {
   useGetAllFeedbacksQuery,
   useGetFeedbackByDocIdQuery,
-  useGetFeedbackByNameQuery,
+  useGetFeedbacksByNameQuery,
   useGetUserTotalFeedbacksQuery,
   usePostFeedbackMutation,
   useDeleteFeedbackMutation,

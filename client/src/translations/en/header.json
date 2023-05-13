@@ -1,7 +1,8 @@
 {
-    "templates": "Template",
-    "surveys": "Feedback",
-    "dashboard": "Dashboard",
-    "userView": "To user view",
-    "logout": "Logout"
+  "templates": "Template",
+  "surveys": "Feedback",
+  "dashboard": "Dashboard",
+  "userView": "To user view",
+  "logout": "Logout",
+  "reports": "Reports"
 }

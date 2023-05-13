@@ -6,13 +6,16 @@ interface ActiveCheckboxes {
 
 export const templateSlice = createSlice({
   name: "template",
-  initialState: { templateSelection: {} },
+  initialState: { templateSelection: {}, activeTemplateId: "" },
   reducers: {
     updateTemplateSelection: (
       state,
       action: PayloadAction<ActiveCheckboxes>
     ) => {
       state.templateSelection = { ...action.payload };
+    },
+    setActiveTemplateId: (state, action: PayloadAction<string>) => {
+      state.activeTemplateId = action.payload;
     },
   },
 });
