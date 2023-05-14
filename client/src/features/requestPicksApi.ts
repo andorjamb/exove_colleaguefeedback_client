@@ -6,7 +6,6 @@ import { IRequestPicksPost } from "../types/picks";
 
 //const serverApi = process.env.REACT_APP_SERVER_API;
 const serverApi = "https://exove.vercel.app/api/";
-//const serverApi = "http://localhost:4000/";
 
 export const requestPicksApi = createApi({
   reducerPath: "requestPicksApi",

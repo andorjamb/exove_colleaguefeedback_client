@@ -1,12 +1,59 @@
 import { IReportData } from "../types/report";
+
+interface rangeDataGroup {
+  categoryId: string;
+  categoryName: string;
+  questions: rangeResult[];
+}
+
+interface rangeResult {
+  questionId: string;
+  question: string;
+  colleagues: number[];
+  CM: number;
+  self: number;
+  colleagueAverage: number;
+}
+
+interface stringDataGroup {
+  categoryId: string;
+  categoryName: string;
+  questions: stringResult[];
+}
+interface stringResult {
+  questionId: string;
+  question: string;
+  colleagues: string[];
+  CM: string;
+  self: string;
+}
+
+export class ReportClass {
+  requestPicksId: string | undefined;
+  feedbackTo: string | undefined; //ldapUid
+  reportsTo: string | undefined; //ldapUid of responsibile CM who will view report
+  rangeDataGroups: rangeDataGroup[];
+  stringDataGroups: stringDataGroup[];
+
+  constructor(
+    requestPicksId: string | undefined,
+    feedbackTo: string | undefined,
+    reportsTo: string | undefined,
+    rangeDataGroups: rangeDataGroup[],
+    stringDataGroups: stringDataGroup[]
+  ) {
+    this.requestPicksId = requestPicksId;
+    this.feedbackTo = feedbackTo;
+    this.reportsTo = reportsTo;
+    this.rangeDataGroups = rangeDataGroups;
+    this.stringDataGroups = stringDataGroups;
+  }
+}
 /**
- * feedback => IReportData:'capture' from form - at what stage?: 
- * 
  * - get feedbackdata for this requestPick when essi approves a feedback instance:
  * OR 
  * - automatically when reviewer submits form ?
  * add data to ReportData object:
- 
     
     MAKING CHARTS from report object
 
@@ -16,10 +63,11 @@ import { IReportData } from "../types/report";
     let total = 0;
     for (const i=0; i<array.length; i++) { total = total + i;}
       return total/array.length;
-   
     */
 
 export const makeCharts = (data: IReportData) => {};
+//labels array for chart:
+/** const questionNameArray = reportData.rangeDataGroups.map((item)=>{item.questions.question}) */
 
 export const makeOneReport = (requestPickId: string) => {
   /**PSEUDOCODE
@@ -28,22 +76,28 @@ export const makeOneReport = (requestPickId: string) => {
      * assume dynamic number of questions per category
      *  1. CONVERTING FEEDBACK OBJECT TO REPORT OBJECT:
  Function will be triggered by onClick of 'generate report' button
-     * assume 'progress' property of IFeedback object has possible values
+     * assume 'progress' property of IFeedback object has possible values eg)
      * [null, 'incomplete', 'submitted', 'approved']
-     * get all feedbacks where feedback.requestPickId === currentRequestPickId && feedback.progress === 'approved';
-     *  const report = new Report();
-     * this.requestPickId = current.RequestPickId;
-     * this.feedbackTo = current.feedbackTo;
-     * feedbacks will be an array.
+     * //[started]
      * for each feedback: 
-     * if (asRole = 'colleague'){
+     * if (userId === feedbackTo){
      * 
      * }
-     * if (asRole = 'CM) {
+     * if (userId === reportsTo) {
      * }
-     * if (asRole = 'self') {}
+     * if (roleLevel = 'self') {}
      * 
      * set report.
      * 
      */
 };
+/* Th administrator will only run this function if enough completed feedbacks received, so might assume the check for 'progress' doesn't need to be run? */
+
+/*
+if (feedback.template !== activeTemplateId) {
+  return;
+}
+if (feedback.progress != { value }) {
+  return;
+}
+*/
