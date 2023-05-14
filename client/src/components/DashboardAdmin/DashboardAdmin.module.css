@@ -8,6 +8,7 @@
   align-items: center;
   flex-direction: column;
   gap: 1rem;
+  width: 80%;
   max-width: 1400px;
 }
 
@@ -20,12 +21,26 @@
 .table th {
   background-color: var(--exovePink);
   padding: 0.7rem 0.3rem;
+  text-align: center;
 }
 
-.table thead th:first-child {
+.table th:first-child {
   padding-left: 2.2rem;
+  text-align: left;
+}
+
+.table th:nth-child(2),
+.table th:nth-child(3),
+.table th:nth-child(4),
+.table th:nth-child(5) {
+  width: 3rem;
 }
 
 .table td {
   padding: 0.3rem;
+  text-align: center;
+}
+
+.table td:nth-child(2n) {
+  background-color: var(--paleGray);
 }

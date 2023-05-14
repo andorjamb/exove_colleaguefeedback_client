@@ -190,7 +190,9 @@ const PersonRow: React.FC<IPersonRowProps> = ({
           <tr className={styles.table_row_sub}>
             <td>{pick.userId}</td>
             <td>
-              <div className={styles.dot}></div>
+              <div className={styles.dot_container}>
+                <div className={styles.dot}></div>
+              </div>
             </td>
             <td></td>
             <td></td>
@@ -206,10 +208,12 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         userPicks.SelectedList.filter((pick) => pick.roleLevel === 6).map(
           (pick) => (
             <tr className={styles.table_row_sub}>
-              <td></td>
               <td>{pick.userId}</td>
+              <td></td>
               <td>
-                <div className={styles.dot}></div>
+                <div className={styles.dot_container}>
+                  <div className={styles.dot}></div>
+                </div>
               </td>
               <td></td>
               <td></td>
@@ -230,7 +234,9 @@ const PersonRow: React.FC<IPersonRowProps> = ({
               <td></td>
               <td></td>
               <td>
-                <div className={styles.dot}></div>
+                <div className={styles.dot_container}>
+                  <div className={styles.dot}></div>
+                </div>
               </td>
               <td></td>
               <td></td>
@@ -251,7 +257,9 @@ const PersonRow: React.FC<IPersonRowProps> = ({
               <td></td>
               <td></td>
               <td>
-                <div className={styles.dot}></div>
+                <div className={styles.dot_container}>
+                  <div className={styles.dot}></div>
+                </div>
               </td>
               <td></td>
               <td></td>

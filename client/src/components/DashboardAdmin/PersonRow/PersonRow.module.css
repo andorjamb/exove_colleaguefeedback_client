@@ -9,6 +9,12 @@
 
 .table_row_sub td:first-child {
   padding-left: 3.5rem;
+  text-align: left;
+}
+
+.dot_container {
+  display: flex;
+  justify-content: center;
 }
 
 .dot {
