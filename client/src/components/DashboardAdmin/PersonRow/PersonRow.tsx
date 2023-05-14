@@ -37,8 +37,8 @@ const PersonRow: React.FC<IPersonRowProps> = ({
 }) => {
   const [expand, setExpand] = useState(false);
   const [createPick] = useCreatePickMutation();
-  const { refetch } = useGetAllRequestPicksQuery();
   const [approvePick] = useApprovePickMutation();
+  const [deletePick] = useDeletePickMutation();
   const [showModal, setShowModal] = useState(false);
   const usersData = useGetAllUsersQuery();
 
@@ -48,7 +48,6 @@ const PersonRow: React.FC<IPersonRowProps> = ({
 
   const requestPicks = async (newPick: { requestedTo: string }) => {
     await createPick(newPick);
-    refetch();
   };
 
   const remindToPick = async () => {
@@ -92,8 +91,14 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         userPicks?.SelectedList.find((user) => user.userId === pick.ldapUid) ===
         undefined
     );
-    deletedPicks?.forEach((pick) => console.log("pick to delete", pick));
-    /* addedPicks.forEach((pick) => useCreatePickMutation({userId: pick.ldapUid})); */
+    deletedPicks?.forEach((pick) => {
+      console.log("pick to delete", pick);
+    });
+    // await????
+    addedPicks.forEach((pick) => {
+      console.log("pick to add", pick);
+      createPick({ requestedTo: pick.ldapUid });
+    });
   };
 
   return (
