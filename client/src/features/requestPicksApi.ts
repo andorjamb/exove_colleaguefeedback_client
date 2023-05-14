@@ -41,7 +41,6 @@ export const requestPicksApi = createApi({
       void,
       { body: IRequestPicksPatch; id: string }
     >({
-      //for adding picks to list  - should body be an array of strings?
       query: ({ body, id }) => ({
         url: `picks/${id}`,
         method: "PATCH",
