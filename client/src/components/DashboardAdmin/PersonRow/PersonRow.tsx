@@ -51,13 +51,13 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     refetch();
   };
 
-  const remindToPick = () => {
+  const remindToPick = async () => {
     console.log("reminding");
   };
 
-  const approvePicks = () => {
+  const approvePicks = async () => {
     if (!userPicks) return;
-    approvePick(userPicks._id);
+    await approvePick(userPicks._id);
   };
 
   const toggleExpand = () => {
@@ -83,7 +83,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     return res;
   };
 
-  const updatePicks = (newSelection: IUserDataGet[]) => {
+  const updatePicks = async (newSelection: IUserDataGet[]) => {
     const deletedPicks = userPicks?.SelectedList.filter((pick) =>
       newSelection.find((user) => user.ldapUid === pick.userId)
     );
@@ -158,7 +158,6 @@ const PersonRow: React.FC<IPersonRowProps> = ({
                 (pick) => pick.roleLevel === 5 && pick.userId !== user.ldapUid
               ).length < 5 && (
                 <button className={styles.remind} onClick={remindToPick}>
-                  <span className="material-symbols-outlined">group_add</span>
                   <span className="material-symbols-outlined">timer</span>
                 </button>
               )}

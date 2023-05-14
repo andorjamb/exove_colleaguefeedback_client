@@ -19,7 +19,7 @@
 }
 
 .table th {
-  background-color: var(--exovePink);
+  background-color: var(--paleGray);
   padding: 0.7rem 0.3rem;
   text-align: center;
 }
@@ -42,5 +42,4 @@
 }
 
 .table td:nth-child(2n) {
-  background-color: var(--paleGray);
 }

@@ -26,10 +26,16 @@
 
 .table_row button {
   text-transform: none;
+  width: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .picks_container {
   display: flex;
+  justify-content: center;
   gap: 0.5rem;
 }
 
