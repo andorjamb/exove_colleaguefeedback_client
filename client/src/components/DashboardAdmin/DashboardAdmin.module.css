@@ -22,6 +22,7 @@
   background-color: var(--paleGray);
   padding: 0.7rem 0.3rem;
   text-align: center;
+  font-size: 0.9rem;
 }
 
 .table th:first-child {

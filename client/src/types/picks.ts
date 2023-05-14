@@ -19,3 +19,7 @@ export interface IRequestPicksPost {
   requestedTo: string;
 }
 
+export interface IRequestPicksPatch {
+  userId: string;
+  roleLevel: number;
+}

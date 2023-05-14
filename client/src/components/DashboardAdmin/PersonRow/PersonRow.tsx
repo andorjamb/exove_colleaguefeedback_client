@@ -10,8 +10,14 @@ import {
   useCreatePickMutation,
   useDeletePickMutation,
   useGetAllRequestPicksQuery,
+  useSubmitPickMutation,
 } from "../../../features/requestPicksApi";
 import { useGetAllUsersQuery } from "../../../features/userApi";
+
+// Components
+import UserPickBlock from "../../DashboardUser/UserPickBlock";
+import Tooltip from "@mui/material/Tooltip";
+import Fade from "@mui/material/Fade";
 
 // Types
 import { IRequestPicks } from "../../../types/picks";
@@ -20,7 +26,6 @@ import { IUserDataGet } from "../../../types/users";
 
 // Styles
 import styles from "./PersonRow.module.css";
-import UserPickBlock from "../../DashboardUser/UserPickBlock";
 
 interface IPersonRowProps {
   userPicks: IRequestPicks | undefined;
@@ -37,6 +42,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
 }) => {
   const [expand, setExpand] = useState(false);
   const [createPick] = useCreatePickMutation();
+  const [submitPick] = useSubmitPickMutation();
   const [approvePick] = useApprovePickMutation();
   const [deletePick] = useDeletePickMutation();
   const [showModal, setShowModal] = useState(false);
@@ -82,22 +88,31 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     return res;
   };
 
-  const updatePicks = async (newSelection: IUserDataGet[]) => {
-    const deletedPicks = userPicks?.SelectedList.filter((pick) =>
+  const updateColleaguePicks = async (newSelection: IUserDataGet[]) => {
+    const colleaguePicks = userPicks?.SelectedList.filter(
+      (pick) => pick.roleLevel === 5
+    );
+    if (!userPicks) return;
+    const deletedPicks = colleaguePicks?.filter((pick) =>
       newSelection.find((user) => user.ldapUid === pick.userId)
     );
     const addedPicks = newSelection.filter(
       (pick) =>
-        userPicks?.SelectedList.find((user) => user.userId === pick.ldapUid) ===
+        colleaguePicks?.find((user) => user.userId === pick.ldapUid) ===
         undefined
     );
+    console.log("added picks", addedPicks);
+    console.log("deleted picks", deletedPicks);
     deletedPicks?.forEach((pick) => {
       console.log("pick to delete", pick);
     });
     // await????
     addedPicks.forEach((pick) => {
       console.log("pick to add", pick);
-      createPick({ requestedTo: pick.ldapUid });
+      submitPick({
+        body: { userId: pick.ldapUid, roleLevel: 5 },
+        id: userPicks?._id,
+      });
     });
   };
 
@@ -152,9 +167,15 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             )}
             {/* If picks have been requested but not approved yet, display edit button */}
             {userPicks && !userPicks.submitted && (
-              <button onClick={showEditPicksHandler} className={styles.edit}>
-                <span className="material-symbols-outlined">edit</span>
-              </button>
+              <Tooltip
+                TransitionComponent={Fade}
+                title={`Request colleague picks from ${user.displayName}`}
+                placement="bottom-start"
+              >
+                <button onClick={showEditPicksHandler} className={styles.edit}>
+                  <span className="material-symbols-outlined">edit</span>
+                </button>
+              </Tooltip>
             )}
             {/* If fewer than 5 collagues are picked, display remind button */}
             {userPicks &&
@@ -162,15 +183,27 @@ const PersonRow: React.FC<IPersonRowProps> = ({
               userPicks.SelectedList.filter(
                 (pick) => pick.roleLevel === 5 && pick.userId !== user.ldapUid
               ).length < 5 && (
-                <button className={styles.remind} onClick={remindToPick}>
-                  <span className="material-symbols-outlined">timer</span>
-                </button>
+                <Tooltip
+                  TransitionComponent={Fade}
+                  title={`Remind ${user.displayName} to pick colleagues`}
+                  placement="bottom-start"
+                >
+                  <button className={styles.remind} onClick={remindToPick}>
+                    <span className="material-symbols-outlined">timer</span>
+                  </button>
+                </Tooltip>
               )}
             {/* If enough collagues picked, display approve option */}
             {userPicks && userPicks.SelectedList && !userPicks.submitted && (
-              <button className={styles.approve} onClick={approvePicks}>
-                <span className="material-symbols-outlined">done</span>
-              </button>
+              <Tooltip
+                TransitionComponent={Fade}
+                title={`Approve ${user.displayName}'s picks`}
+                placement="bottom-start"
+              >
+                <button className={styles.approve} onClick={approvePicks}>
+                  <span className="material-symbols-outlined">done</span>
+                </button>
+              </Tooltip>
             )}
             {userPicks && userPicks.submitted && <p>Picks finalised</p>}
           </div>
@@ -284,13 +317,19 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             </button>
             <h1>Edit picks for {user.displayName}</h1>
             <UserPickBlock
+              users={usersData.data.filter(
+                (pick) => pick.ldapUid !== user.ldapUid
+              )}
               editHandler={() => {}}
-              doneHandler={updatePicks}
+              doneHandler={updateColleaguePicks}
               heading="Colleagues"
               defaultEditing={false}
               defaultSelection={getUserArrayByRoleLevel(5)}
             />
             <UserPickBlock
+              users={usersData.data.filter(
+                (pick) => pick.ldapUid !== user.ldapUid
+              )}
               editHandler={() => {}}
               doneHandler={() => {}}
               heading="Subordinates"
@@ -298,6 +337,9 @@ const PersonRow: React.FC<IPersonRowProps> = ({
               defaultSelection={getUserArrayByRoleLevel(6)}
             />
             <UserPickBlock
+              users={usersData.data.filter(
+                (pick) => pick.ldapUid !== user.ldapUid
+              )}
               editHandler={() => {}}
               doneHandler={() => {}}
               heading="PM"
@@ -305,6 +347,9 @@ const PersonRow: React.FC<IPersonRowProps> = ({
               defaultSelection={getUserArrayByRoleLevel(4)}
             />
             <UserPickBlock
+              users={usersData.data.filter(
+                (pick) => pick.ldapUid !== user.ldapUid
+              )}
               editHandler={() => {}}
               doneHandler={() => {}}
               heading="CM"

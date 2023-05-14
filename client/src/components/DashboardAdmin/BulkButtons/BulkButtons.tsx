@@ -32,7 +32,7 @@ const BulkButtons = () => {
     <div className={styles.buttons_container}>
       <Tooltip
         TransitionComponent={Fade}
-        title="Request picks from all users"
+        title="Request colleague picks from all users"
         placement="bottom-start"
       >
         <button
@@ -45,26 +45,55 @@ const BulkButtons = () => {
           <span className="material-symbols-outlined">group_add</span>Request
         </button>
       </Tooltip>
-      <button className={styles.remind}>
-        <span className="material-symbols-outlined">group_add</span>
-        <span className="material-symbols-outlined">timer</span>
-      </button>
-      <button className={styles.request}>
-        <span className="material-symbols-outlined">rate_review</span>Request
-      </button>
-      <button className={styles.remind}>
-        <span className="material-symbols-outlined">rate_review</span>{" "}
-        <span className="material-symbols-outlined">timer</span>
-      </button>
-      <button className={styles.warning}>
-        <span className="material-symbols-outlined">description</span> Generate
-        all
-      </button>
-      <button className={styles.approve}>
-        {" "}
-        <span className="material-symbols-outlined">description</span> Generate
-        complete
-      </button>
+      <Tooltip
+        TransitionComponent={Fade}
+        title="Remind all users to pick colleagues"
+        placement="bottom-start"
+      >
+        <button className={styles.remind}>
+          <span className="material-symbols-outlined">group_add</span>
+          <span className="material-symbols-outlined">timer</span>
+        </button>
+      </Tooltip>
+      <Tooltip
+        TransitionComponent={Fade}
+        title="Request feedbacks from all users"
+        placement="bottom-start"
+      >
+        <button className={styles.request}>
+          <span className="material-symbols-outlined">rate_review</span>Request
+        </button>
+      </Tooltip>
+      <Tooltip
+        TransitionComponent={Fade}
+        title="Remind all users to give feedbacks"
+        placement="bottom-start"
+      >
+        <button className={styles.remind}>
+          <span className="material-symbols-outlined">rate_review</span>
+          <span className="material-symbols-outlined">timer</span>
+        </button>
+      </Tooltip>
+      <Tooltip
+        TransitionComponent={Fade}
+        title="Generate all reports (including incomplete) and make them available to competence managers"
+        placement="bottom-start"
+      >
+        <button className={styles.warning}>
+          <span className="material-symbols-outlined">description</span>{" "}
+          Generate all
+        </button>
+      </Tooltip>
+      <Tooltip
+        TransitionComponent={Fade}
+        title="Generate all complete reports and make them available to competence managers"
+        placement="bottom-start"
+      >
+        <button className={styles.approve}>
+          <span className="material-symbols-outlined">description</span>
+          Generate complete
+        </button>
+      </Tooltip>
     </div>
   );
 };

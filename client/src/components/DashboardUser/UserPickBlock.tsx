@@ -22,6 +22,7 @@ import { IUserDataGet } from "../../types/users";
 import { useGetAllUsersQuery } from "../../features/userApi";
 
 interface IUserPickBlockProps {
+  users: IUserDataGet[];
   doneHandler: (picksSelected: IUserDataGet[]) => void;
   editHandler: (picksSelected: IUserDataGet[]) => void;
   heading: string;
@@ -30,6 +31,7 @@ interface IUserPickBlockProps {
 }
 
 const UserPickBlock: React.FC<IUserPickBlockProps> = ({
+  users,
   doneHandler,
   editHandler,
   heading,
@@ -38,7 +40,6 @@ const UserPickBlock: React.FC<IUserPickBlockProps> = ({
 }) => {
   const [searchInput, setSearchInput] = useState<string>("");
   const { t } = useTranslation(["dashboardUser"]);
-  const usersData = useGetAllUsersQuery();
   const [selected, setSelected] = useState<IUserDataGet[]>(defaultSelection);
   const [editing, setEditing] = useState<boolean>(defaultEditing);
 
@@ -46,8 +47,8 @@ const UserPickBlock: React.FC<IUserPickBlockProps> = ({
     console.log(selected);
   }, [selected]); //debugging
 
-  const filteredUsersData = usersData.data
-    ?.filter((user) => user.userStatus)
+  const filteredUsersData = users
+    .filter((user) => user.userStatus)
     .filter(
       (user) =>
         user.firstName.toLowerCase().includes(searchInput.toLowerCase()) ||
@@ -73,7 +74,6 @@ const UserPickBlock: React.FC<IUserPickBlockProps> = ({
     setSearchInput(e.currentTarget.value);
   };
 
-  if (usersData.isFetching) return <p>{t("Loading...")}</p>;
   return (
     <div className={styles.container}>
       <div className={styles.heading}>

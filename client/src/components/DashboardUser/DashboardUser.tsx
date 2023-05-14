@@ -28,11 +28,9 @@ import { IUserDataGet, loggedInUser } from "../../types/users";
 const DashboardUser = () => {
   const navigate = useNavigate();
   const { t } = useTranslation(["dashboardUser"]);
-
   const serverEndpoint = "https://exove.vercel.app/api";
   const usersData = useGetAllUsersQuery();
   const employeesList: IUserDataGet[] = [];
-
   const [selected, setSelected] = useState<IUserDataGet[]>([]);
   const [currentUserInfo, setCurrentUserInfo] = useState<loggedInUser>();
 
@@ -49,7 +47,8 @@ const DashboardUser = () => {
       console.log("error getting user", err);
     }
   }, []);
-  if (usersData.isFetching || !currentUserInfo) return <p>Loading...</p>;
+  if (usersData.isFetching || !usersData.data || !currentUserInfo)
+    return <p>Loading...</p>;
 
   const submitHandler = () => {
     console.log("Submitting:", selected); //debugging
@@ -65,6 +64,9 @@ const DashboardUser = () => {
     <div className={styles.container}>
       <div className={styles.mainContent}>
         <UserPickBlock
+          users={usersData.data.filter(
+            (user) => user.ldapUid !== currentUserInfo.uid
+          )}
           editHandler={doneHandler}
           doneHandler={() => {}}
           heading={t("title")}
