@@ -158,7 +158,8 @@ const PersonRow: React.FC<IPersonRowProps> = ({
                 (pick) => pick.roleLevel === 5 && pick.userId !== user.ldapUid
               ).length < 5 && (
                 <button className={styles.remind} onClick={remindToPick}>
-                  Remind user to pick
+                  <span className="material-symbols-outlined">group_add</span>
+                  <span className="material-symbols-outlined">timer</span>
                 </button>
               )}
             {/* If enough collagues picked, display approve option */}
@@ -187,8 +188,10 @@ const PersonRow: React.FC<IPersonRowProps> = ({
           (pick) => pick.roleLevel === 5 && pick.userId !== user.ldapUid
         ).map((pick) => (
           <tr className={styles.table_row_sub}>
-            <td></td>
             <td>{pick.userId}</td>
+            <td>
+              <div className={styles.dot}></div>
+            </td>
             <td></td>
             <td></td>
             <td></td>
@@ -204,8 +207,10 @@ const PersonRow: React.FC<IPersonRowProps> = ({
           (pick) => (
             <tr className={styles.table_row_sub}>
               <td></td>
-              <td></td>
               <td>{pick.userId}</td>
+              <td>
+                <div className={styles.dot}></div>
+              </td>
               <td></td>
               <td></td>
               <td></td>
@@ -221,10 +226,12 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         userPicks.SelectedList.filter((pick) => pick.roleLevel === 4).map(
           (pick) => (
             <tr className={styles.table_row_sub}>
-              <td></td>
-              <td></td>
-              <td></td>
               <td>{pick.userId}</td>
+              <td></td>
+              <td></td>
+              <td>
+                <div className={styles.dot}></div>
+              </td>
               <td></td>
               <td></td>
               <td></td>
@@ -239,11 +246,13 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         userPicks.SelectedList.filter((pick) => pick.roleLevel === 3).map(
           (pick) => (
             <tr className={styles.table_row_sub}>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td>{pick.userId}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>
+                <div className={styles.dot}></div>
+              </td>
               <td></td>
               <td></td>
               <td></td>

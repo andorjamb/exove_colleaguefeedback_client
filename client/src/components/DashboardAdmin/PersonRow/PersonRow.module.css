@@ -7,6 +7,17 @@
   border-bottom: 1px solid var(--darkGray);
 }
 
+.table_row_sub td:first-child {
+  padding-left: 3.5rem;
+}
+
+.dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  background-color: black;
+  border-radius: 100rem;
+}
+
 .table_row button {
   text-transform: none;
 }
@@ -71,6 +82,7 @@
   background-color: var(--exoveOrange);
   color: white;
 }
+
 .modal_container {
   position: absolute;
   top: 0;
