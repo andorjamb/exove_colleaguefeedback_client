@@ -35,6 +35,7 @@ export const requestPicksApi = createApi({
         method: "POST",
         body,
       }),
+      invalidatesTags: ["RequestPicks"],
     }),
     submitPick: builder.mutation<void, { body: IRequestPicksPost; id: string }>(
       {
@@ -44,6 +45,7 @@ export const requestPicksApi = createApi({
           method: "PATCH",
           body,
         }),
+        invalidatesTags: ["RequestPicks"],
       }
     ),
     approvePick: builder.mutation<void, string>({
@@ -51,12 +53,14 @@ export const requestPicksApi = createApi({
         url: `picks/approve-pick/${id}`,
         method: "PATCH",
       }),
+      invalidatesTags: ["RequestPicks"],
     }),
     deletePick: builder.mutation<void, string>({
       query: (id) => ({
         url: `/picks/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["RequestPicks"],
     }),
   }),
 });

@@ -147,8 +147,8 @@ const DashboardAdmin = () => {
           <thead>
             <tr>
               <th>Employee name</th>
-              <th>Collagues</th>
-              <th>Subordinates</th>
+              <th>Coll.</th>
+              <th>Sub.</th>
               <th>PM</th>
               <th>CM</th>
               <th>Picks</th>
