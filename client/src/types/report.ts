@@ -1,161 +1,38 @@
+/* export interface rangeDataGroup {
+  questions: rangeResult[];
+} */
+
+export interface rangeResult {
+  /*  questionId: string; */
+  question: string;
+  colleagues: number[];
+  CM: number;
+  self: number;
+  colleagueAverage: number;
+}
+
+/* export interface stringDataGroup {
+  questions: stringResult[];
+} */
+
+export interface stringResult {
+  /*   questionId: string; */
+  question: string;
+  colleagues: string[];
+  CM: string | undefined;
+  self: string;
+}
+
 export interface IReportData {
-  //report interface still in planning phase
+  requestPicksId: string | undefined;
+  feedbackTo: string | undefined;
+  reportsTo: string | undefined;
+  categories: IReportCategory[];
+}
 
-  _id: string;
-  requestPicksId: string;
-  feedbackTo: string;
-  rangeCategories?: [
-    {
-      category1: {
-        question1: {
-          questionId: string;
-          colleagues: number[];
-          CM: number;
-          self: number;
-          PM: number;
-          subordinates: number[];
-        };
-        question2: {
-          colleagues: number[];
-          CM: number;
-          self: number;
-          colleagueAverage: number;
-        };
-        question3: {
-          colleagues: number[];
-          CM: number;
-          self: number;
-          colleagueAverage: number;
-        };
-        question4: {
-          colleagues: number[];
-          CM: number;
-          self: number;
-          colleagueAverage: number;
-        };
-      };
-    },
-    {
-      category2: {
-        question1: {
-          colleagues: number[];
-          CM: number;
-          self: number;
-          colleagueAverage: number;
-        };
-        question2: {
-          colleagues: number[];
-          CM: number;
-          self: number;
-          colleagueAverage: number;
-        };
-        question3: {
-          colleagues: number[];
-          CM: number;
-          self: number;
-          colleagueAverage: number;
-        };
-        question4: {
-          colleagues: number[];
-          CM: number;
-          self: number;
-          colleagueAverage: number;
-        };
-      };
-    },
-    {
-      category3: {
-        question1: {
-          colleagues: number[];
-          CM: number;
-          self: number;
-          colleagueAverage: number;
-        };
-        question2: {
-          colleagues: number[];
-          CM: number;
-          self: number;
-          colleagueAverage: number;
-        };
-        question3: {
-          colleagues: number[];
-          CM: number;
-          self: number;
-          colleagueAverage: number;
-        };
-        question4: {
-          colleagues: number[];
-          CM: number;
-          self: number;
-          colleagueAverage: number;
-        };
-      };
-    },
-    {
-      category4: {
-        question1: {
-          colleagues: number[];
-          CM: number;
-          self: number;
-          colleagueAverage: number;
-        };
-
-        question2: {
-          colleagues: number[];
-          CM: number;
-          self: number;
-          colleagueAverage: number;
-        };
-        question3: {
-          colleagues: number[];
-          CM: number;
-          self: number;
-          colleagueAverage: number;
-        };
-        question4: {
-          colleagues: number[];
-          CM: number;
-          self: number;
-          colleagueAverage: number;
-        };
-      };
-    }
-  ];
-  textCategorys?: [
-    {
-      //for text responses
-      category1: {
-        colleagues: string[];
-        CM: string;
-        self: string;
-      }[];
-      category2: {
-        colleagues: string[];
-        CM: string;
-        self: string;
-      };
-      category3: {
-        colleagues: string[];
-        CM: string;
-        self: string;
-      };
-      category4: {
-        colleagues: string[];
-        CM: string;
-        self: string;
-      };
-      category5: {
-        weaknesses: {
-          colleagues: string[];
-          CM: string;
-          self: string;
-        };
-        strengths: {
-          colleagues: string[];
-          CM: string;
-          self: string;
-        };
-      };
-    }
-  ];
+export interface IReportCategory {
+  categoryName: string;
+  categoryId: string;
+  rangeDataGroups?: rangeResult[];
+  stringDataGroups?: stringResult[];
 }

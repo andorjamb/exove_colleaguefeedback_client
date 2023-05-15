@@ -6,7 +6,6 @@ import { IRequestPicksPost } from "../types/picks";
 
 //const serverApi = process.env.REACT_APP_SERVER_API;
 const serverApi = "https://exove.vercel.app/api/";
-//const serverApi = "http://localhost:4000/";
 
 export const requestPicksApi = createApi({
   reducerPath: "requestPicksApi",
@@ -17,17 +16,20 @@ export const requestPicksApi = createApi({
     },
     credentials: "include",
   }), //for testing
-  tagTypes: ["RequestPicks"],
+  tagTypes: ["RequestPicks", "UserRequestPicks", "DocIdRequestPicks"],
   endpoints: (builder) => ({
     getAllRequestPicks: builder.query<IRequestPicks[], void>({
       query: () => "picks",
       providesTags: ["RequestPicks"],
     }),
     getRequestPickByUserId: builder.query<IRequestPicks, string>({
+      /** fetches pick object where user=person selected to pick */
       query: (userId) => `picks/${userId}`,
+      providesTags: ["UserRequestPicks"],
     }),
     getRequestPickByDocId: builder.query<IRequestPicks, string>({
-      query: (id) => `pick-id/${id}`,
+      query: (id) => `picks/pick-id/${id}`,
+      providesTags: ["DocIdRequestPicks"],
     }),
     createPick: builder.mutation<void, IRequestPicksPost>({
       query: (body) => ({
@@ -75,6 +77,7 @@ export const requestPicksApi = createApi({
 export const {
   useGetAllRequestPicksQuery,
   useGetRequestPickByUserIdQuery,
+  useGetRequestPickByDocIdQuery,
   useCreatePickMutation,
   useSubmitPickMutation,
   useApprovePickMutation,
