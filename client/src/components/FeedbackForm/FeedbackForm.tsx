@@ -131,8 +131,7 @@ const FeedbackForm = () => {
 
       <>
         {loadingState ? (
-
-            <CustomSpinner />
+          <CustomSpinner />
         ) : (
           <div className={style.questionContainer}>
             <h3 className={style.instructionsTitle}>Instruction</h3>
