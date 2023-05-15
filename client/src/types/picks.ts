@@ -43,3 +43,8 @@ export interface IRequestPicksPatch {
   userId: string;
   roleLevel: number;
 }
+
+export interface IRequestPicksApprove {
+  userId: string;
+  selectionStatus: boolean;
+}

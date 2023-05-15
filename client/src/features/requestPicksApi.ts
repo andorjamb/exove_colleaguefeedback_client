@@ -1,8 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 //Types
-import { IRequestPicks, IRequestPicksPatch } from "../types/picks";
-import { IRequestPicksPost } from "../types/picks";
+import {
+  IRequestPicks,
+  IRequestPicksPost,
+  IRequestPicksPatch,
+  IRequestPicksApprove,
+} from "../types/picks";
 
 //const serverApi = process.env.REACT_APP_SERVER_API;
 const serverApi = "https://exove.vercel.app/api/";
@@ -48,10 +52,14 @@ export const requestPicksApi = createApi({
       }),
       invalidatesTags: ["RequestPicks"],
     }),
-    approvePick: builder.mutation<void, string>({
-      query: (id) => ({
+    approvePick: builder.mutation<
+      void,
+      { body: IRequestPicksApprove; id: string }
+    >({
+      query: ({ body, id }) => ({
         url: `picks/approve-pick/${id}`,
         method: "PATCH",
+        body,
       }),
       invalidatesTags: ["RequestPicks"],
     }),

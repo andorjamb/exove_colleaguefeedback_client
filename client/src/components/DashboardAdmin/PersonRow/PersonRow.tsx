@@ -32,6 +32,7 @@ interface IPersonRowProps {
   userPicks: IRequestPicks | undefined;
   user: IUserDataGet;
   userFeedbacks: IFeedback[];
+  allUsersData: IUserDataGet[];
   /* showEditPicks: () => void; */
 }
 
@@ -39,6 +40,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
   user,
   userPicks,
   userFeedbacks,
+  allUsersData,
   /* showEditPicks, */
 }) => {
   const [expand, setExpand] = useState(false);
@@ -48,14 +50,14 @@ const PersonRow: React.FC<IPersonRowProps> = ({
   const [finalPickSubmit] = useFinalPickSubmitMutation();
   const [deletePick] = useDeletePickMutation();
   const [showModal, setShowModal] = useState(false);
-  const usersData = useGetAllUsersQuery();
+  const [isLoading, setIsLoading] = useState(false);
 
-  if (usersData.isFetching || !usersData.data) return <p>Loading...</p>;
-
-  if (user.ldapUid === "curie") console.log("userPicks", userPicks);
+  console.log("user feedbacks for", user.displayName, userFeedbacks);
 
   const requestPicks = async (newPick: { requestedTo: string }) => {
+    setIsLoading(true);
     await createPick(newPick);
+    setIsLoading(false);
   };
 
   const remindToPick = async () => {
@@ -64,7 +66,9 @@ const PersonRow: React.FC<IPersonRowProps> = ({
 
   const approvePicks = async () => {
     if (!userPicks) return;
+    setIsLoading(true);
     await finalPickSubmit(userPicks._id);
+    setIsLoading(false);
   };
 
   const toggleExpand = () => {
@@ -75,6 +79,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     setShowModal(true);
   };
 
+  // Returns an array of picked users with given level
   const getUserArrayByRoleLevel = (level: number) => {
     if (!userPicks) return [];
     let res: IUserDataGet[] = [];
@@ -82,7 +87,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
       (pick) => pick.roleLevel === level && pick.userId !== user.ldapUid
     );
     filteredPicks.forEach((pick) => {
-      const userFound = usersData.data!.find(
+      const userFound = allUsersData.find(
         (user) => user.ldapUid === pick.userId
       );
       if (userFound) res.push(userFound);
@@ -90,34 +95,68 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     return res;
   };
 
+  // Deletes/deativates a pick
+  const deactivatePick = async (userId: string, pickRoleLevel: number) => {
+    if (!userPicks) return;
+    const pickFound = userPicks.SelectedList.find(
+      (pick) => pick.userId === userId && pick.roleLevel === pickRoleLevel
+    );
+    if (!pickFound) return;
+    const requestBody = {
+      userId: userId,
+      selectionStatus: false,
+    };
+    await approvePick({ body: requestBody, id: userPicks._id });
+  };
+
+  // Adds/activates a pick
+  const activatePick = async (userId: string, pickRoleLevel: number) => {
+    if (!userPicks) return;
+    const pickFound = userPicks.SelectedList.find(
+      (pick) => pick.userId === userId && pick.roleLevel === pickRoleLevel
+    );
+    if (pickFound) {
+      if (pickFound.selectionStatus === true) return;
+      else {
+        const requestBody = {
+          userId: userId,
+          selectionStatus: true,
+        };
+        await approvePick({ body: requestBody, id: userPicks._id });
+      }
+    } else {
+      const requestBody = {
+        userId: userId,
+        roleLevel: pickRoleLevel,
+      };
+      await submitPick({ body: requestBody, id: userPicks._id });
+    }
+  };
+
   const updateColleaguePicks = async (newSelection: IUserDataGet[]) => {
-    const colleaguePicks = userPicks?.SelectedList.filter(
+    if (!userPicks) return;
+    const colleaguePicks = userPicks.SelectedList.filter(
       (pick) => pick.roleLevel === 5
     );
     console.log("colleaguePicks", colleaguePicks);
-    if (!userPicks) return;
-    const deletedPicks = colleaguePicks?.filter((pick) =>
+    const deletedPicks = colleaguePicks.filter((pick) =>
       newSelection.find((user) => user.ldapUid === pick.userId)
     );
     const addedPicks = newSelection.filter(
       (pick) =>
-        colleaguePicks?.find((user) => user.userId === pick.ldapUid) ===
+        colleaguePicks.find((user) => user.userId === pick.ldapUid) ===
         undefined
     );
     console.log("added picks", addedPicks);
     console.log("deleted picks", deletedPicks);
-    deletedPicks?.forEach((pick) => {
-      // DELETE PICKS 404
-      deletePick(pick._id);
+    deletedPicks.forEach((pick) => {
+      deactivatePick(pick.userId, 5);
       console.log("pick to delete", pick);
     });
     // await????
     addedPicks.forEach((pick) => {
       console.log("pick to add", pick);
-      submitPick({
-        body: { userId: pick.ldapUid, roleLevel: 5 },
-        id: userPicks?._id,
-      });
+      activatePick(pick.ldapUid, 5);
     });
   };
 
@@ -375,7 +414,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             </button>
             <h1>Edit picks for {user.displayName}</h1>
             <UserPickBlock
-              users={usersData.data.filter(
+              users={allUsersData.filter(
                 (pick) => pick.ldapUid !== user.ldapUid
               )}
               editHandler={() => {}}
@@ -385,7 +424,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
               defaultSelection={getUserArrayByRoleLevel(5)}
             />
             <UserPickBlock
-              users={usersData.data.filter(
+              users={allUsersData.filter(
                 (pick) => pick.ldapUid !== user.ldapUid
               )}
               editHandler={() => {}}
@@ -395,7 +434,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
               defaultSelection={getUserArrayByRoleLevel(6)}
             />
             <UserPickBlock
-              users={usersData.data.filter(
+              users={allUsersData.filter(
                 (pick) => pick.ldapUid !== user.ldapUid
               )}
               editHandler={() => {}}
@@ -405,7 +444,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
               defaultSelection={getUserArrayByRoleLevel(4)}
             />
             <UserPickBlock
-              users={usersData.data.filter(
+              users={allUsersData.filter(
                 (pick) => pick.ldapUid !== user.ldapUid
               )}
               editHandler={() => {}}
