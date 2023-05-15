@@ -161,7 +161,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         </td>
         <td>
           {!userPicks?.submitted && (
-            <div className={styles.picks_container}>
+            <div className={styles.buttons_container}>
               {/* There is no picks yet */}
               {!userPicks && (
                 <Tooltip
@@ -225,22 +225,57 @@ const PersonRow: React.FC<IPersonRowProps> = ({
           )}
         </td>
         <td>
-          {!userPicks?.submitted && (
-            <p className={styles.not_available}>Approve picks first</p>
-          )}
-          {userPicks?.submitted && userFeedbacks.length === 0 && (
+          <div className={styles.buttons_container}>
+            {!userPicks?.submitted && (
+              <p className={styles.not_available}>unavailable</p>
+            )}
+            {
+              /* userPicks?.submitted && userFeedbacks.length === 0  &&*/ <Tooltip
+                TransitionComponent={Fade}
+                title={`Request feedbacks for ${user.displayName}`}
+                placement="bottom-start"
+              >
+                <button className={styles.request}>
+                  <span className="material-symbols-outlined">send</span>
+                </button>
+              </Tooltip>
+            }
+            {
+              /* userPicks &&
+              userPicks?.SelectedList.length > userFeedbacks.length && */ <Tooltip
+                TransitionComponent={Fade}
+                title={`Remind everyone to feedback ${user.displayName}`}
+                placement="bottom-start"
+              >
+                <button className={styles.remind}>
+                  <span className="material-symbols-outlined">timer</span>
+                </button>
+              </Tooltip>
+            }
+          </div>
+        </td>
+        <td>
+          <div className={styles.buttons_container}>
             <Tooltip
               TransitionComponent={Fade}
-              title={`Request feedbacks for ${user.displayName}`}
+              title={`Preview ${user.displayName}'s report`}
               placement="bottom-start"
             >
-              <button className={styles.request}>
-                <span className="material-symbols-outlined">send</span>
+              <button className={styles.edit}>
+                <span className="material-symbols-outlined">visibility</span>
               </button>
             </Tooltip>
-          )}
+            <Tooltip
+              TransitionComponent={Fade}
+              title="Generate report and make it available to competence manager"
+              placement="bottom-start"
+            >
+              <button className={styles.approve}>
+                <span className="material-symbols-outlined">description</span>
+              </button>
+            </Tooltip>
+          </div>
         </td>
-        <td>reports</td>
       </tr>
       {expand &&
         userPicks &&
