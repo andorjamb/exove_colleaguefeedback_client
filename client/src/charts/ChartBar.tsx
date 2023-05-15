@@ -32,9 +32,9 @@ const ChartBar = ({ barChartData }: Props) => {
           <YAxis dataKey="" domain={[0, 5]} />
           <Tooltip />
           <Legend />
-          <Bar dataKey="colleagues" fill="#651bde" />
-          <Bar dataKey="CM" fill="#63ad7b" />
-          <Bar dataKey="self" fill="#f19c5b" />
+          <Bar dataKey="colleagues" fill="rgb(101,27,222)" />
+          <Bar dataKey="CM" fill="rgb(99,173,123)" />
+          <Bar dataKey="self" fill="rgb(241,156,91)" />
         </BarChart>
       </div>
     </>

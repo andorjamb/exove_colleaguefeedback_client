@@ -1,30 +1,37 @@
 //React
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { jsPDF } from "jspdf";
 
 //styles
 import styles from "./Report.module.css";
 
+//Types
+import { IReportData, IReportCategory, rangeResult } from "../../types/report";
+import { IFeedback } from "../../types/feedback";
+import { IUserDataGet } from "../../types/users";
+
 //Redux
 import { useSelector } from "react-redux";
-import { useGetRequestPickByUserIdQuery } from "../../features/requestPicksApi";
-import {
-  useGetFeedbackByDocIdQuery,
-  useGetFeedbacksByNameQuery,
-  useGetUserTotalFeedbacksQuery,
-} from "../../features/feedbackApi";
+import { useGetRequestPickByDocIdQuery } from "../../features/requestPicksApi";
+import { useGetFeedbacksByNameQuery } from "../../features/feedbackApi";
 import {
   useGetUserByLdapUidQuery,
   useGetAllUsersQuery,
 } from "../../features/userApi";
 import { useGetActiveTemplateQuery } from "../../features/templateApi";
-//need all users?
+
+//Translations
+import "../../translations/i18next";
+import { useTranslation } from "react-i18next";
 
 //Components
 import CustomSpinner from "../../components/CustomSpinner/CustomSpinner";
-import ChartBar from "../../charts/Chart_Bar";
-import ChartRadar from "../../charts/Chart_Radar";
+import ChartBar from "../../charts/ChartBar";
+import ChartRadar from "../../charts/ChartRadar";
 import { ReportClass } from "../../functions/reportFunctions";
+import { testChartData } from "../../testdata/testChartData";
+import { workerData } from "worker_threads";
 
 //(manager and HR only view)
 //check user: if not correct role level, navigate to login
@@ -41,55 +48,119 @@ import { ReportClass } from "../../functions/reportFunctions";
  */
 
 const Report = () => {
-  const { userId } = useParams(); //assume user LdapUid
-  const ActiveTemplateId = useSelector(
-    (state: any) => state.template.activeTemplateId
-  );
-  /*   const getUsers = useGetAllUsersQuery();
-      const users = getUsers.data; */
-  const barChartData = [
-    { question: "Queston1", colleagues: 4, CM: 3, self: 5 },
-    { question: "Question2", colleagues: 5, CM: 4, self: 4 },
-    { question: "Question3", colleagues: 1, CM: 4, self: 4 },
-    { question: "Question4", colleagues: 3, CM: 3, self: 5 },
-    { question: "Question5", colleagues: 3, CM: 2, self: 3 },
-  ];
+  const { pickId } = useParams();
+  const { t } = useTranslation(["report"]);
+  const reportRoot = useRef<HTMLDivElement>(null);
+  const doc = new jsPDF("landscape", "pt", "a4");
+  const [userId, setUserId] = useState<string | undefined>("");
 
-  const radarChartData = [
-    { question: "Q1", colleagueAverage: 4, CM: 3, self: 5 },
-    { question: "Q2", colleagueAverage: 5, CM: 4, self: 4 },
-    { question: "Q3", colleagueAverage: 1, CM: 4, self: 4 },
-    { question: "Q4", colleagueAverage: 3, CM: 3, self: 5 },
-    { question: "Q5", colleagueAverage: 3, CM: 2, self: 3 },
-  ];
-
-  const getActiveTemplate = useGetActiveTemplateQuery();
-  const templateTitle = getActiveTemplate.data?.templateTitle;
-  const getUserFeedbacks = useGetFeedbacksByNameQuery(userId as any);
-  const getPick = useGetRequestPickByUserIdQuery(userId as any);
-  const getUserData = useGetUserByLdapUidQuery(userId as any);
-  const userFeedbacks = getUserFeedbacks.data;
-  const userData = getUserData.data;
-  const pickId = getPick?.data?._id;
-  const activeTemplate = getActiveTemplate.data;
-
-  console.log("userID :", userId);
-  console.log(pickId);
-  console.log(userFeedbacks);
-
+  /** jsPDF requires inline styles, doesn't support external css? (seems to be working though)
+  //pick-id eg)  52e103e0-1c23-4220-9a47-bed14056cfe3
+  //pick.requestedTo ->ldapUid
+*/
+  const allUsers = useGetAllUsersQuery().data;
+  const getPick = useGetRequestPickByDocIdQuery(pickId as any).data;
+  const activeTemplate = useGetActiveTemplateQuery().data;
+  const templateTitle = activeTemplate?.templateTitle;
+  const categories = activeTemplate?.categories;
+  const userData = useGetUserByLdapUidQuery(userId as any).data;
   const date = new Date().getFullYear();
   const { isLoading, isFetching } = useGetFeedbacksByNameQuery(userId as any);
-  const CM = userData?.workId[0].reportsTo;
+  const feedbacks: IFeedback[] | undefined =
+    useGetFeedbacksByNameQuery("einstein").data;
+  let mappedCategories: any;
+  //const [reportCategories, setReportCategories] = useState<any>([]);
+  //const [reportSubject, setReportSubject] = useState<IUserDataGet>();
 
-  /**
-   * feedbacks.forEach((feedback)=>{})
-   * OR use templateSelection
+  let rangeResult = [];
+  let stringResult = [];
+  let CM: string = "";
+  /*   if (userData?.workId) {
+    console.log("workId object:", userData.workId);
+  } */
+  // console.log(allUsers);
+
+  console.log("feedbacks", feedbacks);
+  if (categories) {
+    mappedCategories = categories?.map((category) => {
+      return {
+        categoryName: category.category.categoryName,
+        categoryId: category.category._id,
+        rangeDataGroups: [],
+        stringDataGroups: [],
+      };
+    });
+    //console.log("mapped categories:", mappedCategories);
+    //setReportCategories((reportCategories: any) => mappedCategories);
+  }
+
+  /*  */
+  useEffect(() => {
+    setUserId(getPick?.requestedTo);
+  }, [getPick]);
+
+  /*   useEffect(() => {
+    makeReportCategoriesData(feedbacks);
+  }, [feedbacks]); */
+
+  if (feedbacks) {
+    //makeReportCategoriesData(feedbacks);
+  }
+
+  function makeReportCategoriesData(feedbacks: IFeedback[]) {
+    let CMFeedback = feedbacks?.find((feedback) => feedback.userId === CM);
+    console.log(CMFeedback);
+    let selfFeedback = feedbacks.filter(
+      (feedback) => feedback.userId === feedback.feedbackTo
+    )[0];
+    let reduction = feedbacks.reduce((accumulator: any, currentValue: any) => {
+      return {
+        ...accumulator,
+        ...{ [currentValue.user._id]: currentValue.categories },
+      };
+    }, {});
+    console.log("reduction", reduction);
+  }
+
+  let mappedSet = new Map(
+    feedbacks?.map((feedback) => [feedback.userId, feedback.categories])
+  );
+  console.log("mappedSet", mappedSet);
+
+  // function makeChartData() {}
+
+  /**OBJECT ARRAY
+   * mappedcategories = [
+   * {categoryName: "",
+   * chartData: [{
+            question: "Q1",
+            colleagueAverage: 4,
+            colleagues: [3, 4, 5, 1],
+            CM: 3,
+            self: 5,
+          },{},{},{}],
+      comments: {self: "",
+    CM: "",
+  colleagues: ["",""]}
+        },
+        {},
+        {}
+   * ]
+        
+   * 
+   * 
    */
-  //should there be an array of feedbackIds in reportClass?
 
-  let report = new ReportClass(pickId, userId, CM, [], []);
-
-  function makeChartData() {}
+  function makePdf() {
+    if (reportRoot.current) {
+      doc.html(reportRoot.current, {
+        html2canvas: { scale: 0.8 },
+        async callback(doc) {
+          await doc.save(`report_${pickId}`);
+        },
+      });
+    }
+  }
 
   if (isLoading || isFetching) {
     return <CustomSpinner />;
@@ -100,17 +171,36 @@ const Report = () => {
         <h3>Sections</h3>
         <ul></ul>
       </div> */}
-      <div className={styles.report}>
+      <div className={styles.report} ref={reportRoot}>
         <div className={styles.reportHeader}></div>
         <section>
           <h2>{date} Colleague Feedback Report</h2>
-         <div className={styles.feedbackInfo}><h4>{templateTitle}</h4>
-          <p>For the attention of: {report.reportsTo}</p><p>{userData?.firstName + ' ' + userData?.surname}</p></div>
+          <div className={styles.feedbackInfo}>
+            <h4>{templateTitle}</h4>
+            <p>Reports to: {CM}</p>
+            <p>Reviewee: {userData?.firstName + " " + userData?.surname}</p>
+          </div>
         </section>
-        <section>
-          <ChartBar barChartData={barChartData} />
-          <ChartRadar radarChartData={radarChartData} />
-        </section>
+        {mappedCategories?.map((item: any) => (
+          <section className={styles.section}>
+            <h3>{item.categoryName}</h3>
+            {/* <ChartBar barChartData={barChartData} />*/}
+            <div className={styles.openComments}>
+              <ChartRadar radarChartData={item.chartData} />
+              <p>
+                <span>Own comments: {item.comments?.self}</span>
+              </p>
+              <p>
+                <span>Other comments:{item.comments?.CM}</span>
+              </p>
+            </div>
+          </section>
+        ))}
+
+        <button className={styles.buttonOrange} onClick={makePdf}>
+          {" "}
+          {t("generatePdf")}
+        </button>
       </div>
     </div>
   );

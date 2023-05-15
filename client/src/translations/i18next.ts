@@ -11,20 +11,24 @@ import dashboardUser_en from "./en/dashboardUser.json";
 import dashboardUser_fi from "./fi/dashboardUser.json";
 import userProfile_en from "./en/userProfile.json";
 import userProfile_fi from "./fi/userProfile.json";
+import report_en from "./en/report.json";
+import report_fi from "./fi/report.json";
 
-export const defaultNS = "ns1";
+//export const defaultNS = "ns1";
 export const resources = {
   en: {
     login: login_en,
     header: header_en,
     dashboardUser: dashboardUser_en,
     userProfile: userProfile_en,
+    report: report_en,
   },
   fi: {
     login: login_fi,
     header: header_fi,
     dashboardUser: dashboardUser_fi,
     userProfile: userProfile_fi,
+    report: report_fi,
   },
 };
 
@@ -39,8 +43,10 @@ i18next.use(initReactI18next).init({
     "dashboardUser_fi",
     "userProfile_en",
     "userProfile_fi",
+    "report_en",
+    "report_fi",
   ],
-  defaultNS,
+  //defaultNS,
   resources,
   react: {
     bindI18n: "languageChanged loaded",

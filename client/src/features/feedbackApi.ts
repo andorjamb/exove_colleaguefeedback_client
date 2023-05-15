@@ -25,8 +25,8 @@ export const feedbackApi = createApi({
       query: (docId) => `feedback/${docId}`, //may be erroneous in backend
     }),
     getFeedbacksByName: builder.query<IFeedback[], string>({
-      query: (name) => `feedback/name/${name}`, //ldapUid ??
-    }),
+      query: (name) => `feedback/name/${name}`,
+    }), //ldapUid: returns array of feedback objects where feedbackTo = ldapUid
     getUserTotalFeedbacks: builder.query<IFeedback[], string>({
       query: (name) => `feedback/feed/${name}`, //returns { ...userFeedback, feedbacksCount, requestPicksCount }
     }),

@@ -32,24 +32,24 @@ const ChartRadar = ({ radarChartData }: Props) => {
         <PolarAngleAxis dataKey="question" />
         <PolarRadiusAxis domain={[0, 5]} />
         <Radar
-          name=""
+          name="Self"
           dataKey="self"
-          stroke="#8884d8"
-          fill="#8884d8"
+          stroke="rgb(241,156,91)"
+          fill="rgb(241,156,91)"
           fillOpacity={0.2}
         />
         <Radar
-          name=""
+          name="Colleagues"
           dataKey="colleagueAverage"
-          stroke="#8884d8"
-          fill="#8884d8"
+          stroke="rgb(101,27,222)"
+          fill="rgb(101,27,222)"
           fillOpacity={0.2}
         />
         <Radar
-          name=""
+          name="CM"
           dataKey="CM"
-          stroke="#8884d8"
-          fill="#8884d8"
+          stroke="rgb(99,173,123)"
+          fill="rgb(99,173,123)"
           fillOpacity={0.2}
         />
       </RadarChart>

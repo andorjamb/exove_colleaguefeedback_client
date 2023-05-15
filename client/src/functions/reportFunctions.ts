@@ -1,52 +1,26 @@
-import { IReportData } from "../types/report";
+import { IFeedback } from "../types/feedback";
+import {
+  IReportData,
+  IReportCategory,
 
-interface rangeDataGroup {
-  categoryId: string;
-  categoryName: string;
-  questions: rangeResult[];
-}
-
-interface rangeResult {
-  questionId: string;
-  question: string;
-  colleagues: number[];
-  CM: number;
-  self: number;
-  colleagueAverage: number;
-}
-
-interface stringDataGroup {
-  categoryId: string;
-  categoryName: string;
-  questions: stringResult[];
-}
-interface stringResult {
-  questionId: string;
-  question: string;
-  colleagues: string[];
-  CM: string;
-  self: string;
-}
+} from "../types/report";
 
 export class ReportClass {
   requestPicksId: string | undefined;
   feedbackTo: string | undefined; //ldapUid
   reportsTo: string | undefined; //ldapUid of responsibile CM who will view report
-  rangeDataGroups: rangeDataGroup[];
-  stringDataGroups: stringDataGroup[];
+  categories: IReportCategory[];
 
   constructor(
     requestPicksId: string | undefined,
     feedbackTo: string | undefined,
     reportsTo: string | undefined,
-    rangeDataGroups: rangeDataGroup[],
-    stringDataGroups: stringDataGroup[]
+    categories: IReportCategory[]
   ) {
     this.requestPicksId = requestPicksId;
     this.feedbackTo = feedbackTo;
     this.reportsTo = reportsTo;
-    this.rangeDataGroups = rangeDataGroups;
-    this.stringDataGroups = stringDataGroups;
+    this.categories = categories;
   }
 }
 /**
@@ -65,17 +39,15 @@ export class ReportClass {
       return total/array.length;
     */
 
+export const convertReportData = (data: IFeedback) => {};
+
 export const makeCharts = (data: IReportData) => {};
 //labels array for chart:
 /** const questionNameArray = reportData.rangeDataGroups.map((item)=>{item.questions.question}) */
 
-export const makeOneReport = (requestPickId: string) => {
-  /**PSEUDOCODE
-     * 
-     * assume static number of categories
-     * assume dynamic number of questions per category
+/**PSEUDOCODE
      *  1. CONVERTING FEEDBACK OBJECT TO REPORT OBJECT:
- Function will be triggered by onClick of 'generate report' button
+      Function will be triggered by onClick of 'generate report' button
      * assume 'progress' property of IFeedback object has possible values eg)
      * [null, 'incomplete', 'submitted', 'approved']
      * //[started]
@@ -90,7 +62,6 @@ export const makeOneReport = (requestPickId: string) => {
      * set report.
      * 
      */
-};
 /* Th administrator will only run this function if enough completed feedbacks received, so might assume the check for 'progress' doesn't need to be run? */
 
 /*

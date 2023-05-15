@@ -1,11 +1,9 @@
-interface rangeDataGroup {
-  categoryId: string;
-  categoryName: string;
+/* export interface rangeDataGroup {
   questions: rangeResult[];
-}
+} */
 
-interface rangeResult {
-  questionId: string;
+export interface rangeResult {
+  /*  questionId: string; */
   question: string;
   colleagues: number[];
   CM: number;
@@ -13,13 +11,12 @@ interface rangeResult {
   colleagueAverage: number;
 }
 
-interface stringDataGroup {
-  categoryId: string;
-  categoryName: string;
+/* export interface stringDataGroup {
   questions: stringResult[];
-}
-interface stringResult {
-  questionId: string;
+} */
+
+export interface stringResult {
+  /*   questionId: string; */
   question: string;
   colleagues: string[];
   CM: string | undefined;
@@ -28,8 +25,14 @@ interface stringResult {
 
 export interface IReportData {
   requestPicksId: string | undefined;
-  feedbackTo: string;
+  feedbackTo: string | undefined;
   reportsTo: string | undefined;
-  rangeDataGroups?: rangeDataGroup[];
-  stringDataGroups?: stringDataGroup[];
+  categories: IReportCategory[];
+}
+
+export interface IReportCategory {
+  categoryName: string;
+  categoryId: string;
+  rangeDataGroups?: rangeResult[];
+  stringDataGroups?: stringResult[];
 }

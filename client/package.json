@@ -21,6 +21,7 @@
     "emailjs": "^4.0.1",
     "html-to-image": "^1.11.11",
     "i18next": "^22.4.14",
+    "jspdf": "^2.5.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^12.2.0",
