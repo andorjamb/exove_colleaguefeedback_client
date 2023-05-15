@@ -33,7 +33,7 @@
   gap: 0.5rem;
 }
 
-.picks_container {
+.buttons_container {
   display: flex;
   justify-content: center;
   gap: 0.5rem;
