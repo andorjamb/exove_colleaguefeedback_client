@@ -1,7 +1,7 @@
 .buttons_container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 0.5rem;
 }
 

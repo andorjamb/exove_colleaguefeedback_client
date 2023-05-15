@@ -1,12 +1,12 @@
 .card {
   box-sizing: border-box;
-
   height: 6rem;
   display: flex;
+  gap: 1rem;
   border: 1px solid black;
   align-items: center;
   text-align: left;
-  padding: 0.5rem;
+  padding: 0.75rem;
   width: 18rem;
   cursor: pointer;
 }
@@ -21,14 +21,19 @@
   border: none;
 }
 
-.avatar {
-  margin: 0 1.2rem;
-  height: 80%;
-  width: auto;
-  clip-path: circle();
-  background-color: black;
+.avatar_container {
+  height: 4.5rem;
+  width: 4.5rem;
   border-radius: 50%;
-  border: 3px solid var(--exoveGreen);
+  background-color: black;
+  overflow: hidden;
+}
+
+.avatar {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+  background-color: black;
 }
 
 .name,

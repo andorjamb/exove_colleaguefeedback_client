@@ -12,6 +12,16 @@
   max-width: 1400px;
 }
 
+.search_buttons_container {
+  width: 100%;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 2fr;
+}
+
+.search_buttons_container:first-child {
+}
+
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -22,6 +32,7 @@
   background-color: var(--paleGray);
   padding: 0.7rem 0.3rem;
   text-align: center;
+  font-size: 0.9rem;
 }
 
 .table th:first-child {

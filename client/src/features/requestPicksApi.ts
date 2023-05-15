@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 //Types
-import { IRequestPicks } from "../types/picks";
+import { IRequestPicks, IRequestPicksPatch } from "../types/picks";
 import { IRequestPicksPost } from "../types/picks";
 
 //const serverApi = process.env.REACT_APP_SERVER_API;
@@ -37,17 +37,17 @@ export const requestPicksApi = createApi({
       }),
       invalidatesTags: ["RequestPicks"],
     }),
-    submitPick: builder.mutation<void, { body: IRequestPicksPost; id: string }>(
-      {
-        //for adding picks to list  - should body be an array of strings?
-        query: ({ body, id }) => ({
-          url: `picks/${id}`,
-          method: "PATCH",
-          body,
-        }),
-        invalidatesTags: ["RequestPicks"],
-      }
-    ),
+    submitPick: builder.mutation<
+      void,
+      { body: IRequestPicksPatch; id: string }
+    >({
+      query: ({ body, id }) => ({
+        url: `picks/${id}`,
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: ["RequestPicks"],
+    }),
     approvePick: builder.mutation<void, string>({
       query: (id) => ({
         url: `picks/approve-pick/${id}`,
@@ -62,6 +62,13 @@ export const requestPicksApi = createApi({
       }),
       invalidatesTags: ["RequestPicks"],
     }),
+    finalPickSubmit: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/submit/${id}`,
+        method: "GET",
+      }),
+      invalidatesTags: ["RequestPicks"],
+    }),
   }),
 });
 
@@ -72,6 +79,7 @@ export const {
   useSubmitPickMutation,
   useApprovePickMutation,
   useDeletePickMutation,
+  useFinalPickSubmitMutation,
 } = requestPicksApi;
 
 export default requestPicksApi.reducer;
