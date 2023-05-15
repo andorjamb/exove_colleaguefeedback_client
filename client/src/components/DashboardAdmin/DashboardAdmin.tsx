@@ -114,29 +114,6 @@ const DashboardAdmin = () => {
           user.displayName.toLowerCase().includes(searchInput.toLowerCase())
       );
 
-  const newPick1 = {
-    requestedTo: "tempt",
-  };
-
-  const newPick2 = {
-    requestedTo: "newton",
-  };
-
-  const postPick = async (newPick: { requestedTo: string }) => {
-    try {
-      const { data } = await axios.post(
-        "https://exove.vercel.app/api/picks",
-        { ...newPick },
-        {
-          withCredentials: true,
-        }
-      );
-      console.log("Response", data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   return (
     <div className={styles.dashboard_wrapper}>
       <div className={styles.dashboard_container}>

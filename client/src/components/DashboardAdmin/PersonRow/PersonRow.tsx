@@ -64,7 +64,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
 
   const approvePicks = async () => {
     if (!userPicks) return;
-    await finalPickSubmit({ id: userPicks._id });
+    await finalPickSubmit(userPicks._id);
   };
 
   const toggleExpand = () => {
@@ -94,6 +94,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     const colleaguePicks = userPicks?.SelectedList.filter(
       (pick) => pick.roleLevel === 5
     );
+    console.log("colleaguePicks", colleaguePicks);
     if (!userPicks) return;
     const deletedPicks = colleaguePicks?.filter((pick) =>
       newSelection.find((user) => user.ldapUid === pick.userId)
@@ -106,6 +107,8 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     console.log("added picks", addedPicks);
     console.log("deleted picks", deletedPicks);
     deletedPicks?.forEach((pick) => {
+      // DELETE PICKS 404
+      deletePick(pick._id);
       console.log("pick to delete", pick);
     });
     // await????
@@ -157,71 +160,84 @@ const PersonRow: React.FC<IPersonRowProps> = ({
               .length}
         </td>
         <td>
-          <div className={styles.picks_container}>
-            {/* There is no picks yet */}
-            {!userPicks && (
-              <Tooltip
-                TransitionComponent={Fade}
-                title={`Request colleague picks from ${user.displayName}`}
-                placement="bottom-start"
-              >
-                <button
-                  className={styles.request}
-                  onClick={() => requestPicks({ requestedTo: user.ldapUid })}
-                >
-                  <span className="material-symbols-outlined">send</span>
-                </button>
-              </Tooltip>
-            )}
-            {/* If picks have been requested but not approved yet, display edit button */}
-            {userPicks && !userPicks.submitted && (
-              <Tooltip
-                TransitionComponent={Fade}
-                title={`Edit picks for ${user.displayName}`}
-                placement="bottom-start"
-              >
-                <button onClick={showEditPicksHandler} className={styles.edit}>
-                  <span className="material-symbols-outlined">edit</span>
-                </button>
-              </Tooltip>
-            )}
-            {/* If fewer than 5 collagues are picked, display remind button */}
-            {userPicks &&
-              userPicks.SelectedList &&
-              userPicks.SelectedList.filter(
-                (pick) => pick.roleLevel === 5 && pick.userId !== user.ldapUid
-              ).length < 5 && (
+          {!userPicks?.submitted && (
+            <div className={styles.picks_container}>
+              {/* There is no picks yet */}
+              {!userPicks && (
                 <Tooltip
                   TransitionComponent={Fade}
-                  title={`Remind ${user.displayName} to pick colleagues`}
+                  title={`Request colleague picks from ${user.displayName}`}
                   placement="bottom-start"
                 >
-                  <button className={styles.remind} onClick={remindToPick}>
-                    <span className="material-symbols-outlined">timer</span>
+                  <button
+                    className={styles.request}
+                    onClick={() => requestPicks({ requestedTo: user.ldapUid })}
+                  >
+                    <span className="material-symbols-outlined">send</span>
                   </button>
                 </Tooltip>
               )}
-            {/* If enough collagues picked, display approve option */}
-            {userPicks && userPicks.SelectedList && !userPicks.submitted && (
-              <Tooltip
-                TransitionComponent={Fade}
-                title={`Approve ${user.displayName}'s picks`}
-                placement="bottom-start"
-              >
-                <button className={styles.approve} onClick={approvePicks}>
-                  <span className="material-symbols-outlined">done</span>
-                </button>
-              </Tooltip>
-            )}
-            {userPicks && userPicks.submitted && <p>Picks finalised</p>}
-          </div>
+              {/* If picks have been requested but not approved yet, display edit button */}
+              {userPicks && !userPicks.submitted && (
+                <Tooltip
+                  TransitionComponent={Fade}
+                  title={`Edit picks for ${user.displayName}`}
+                  placement="bottom-start"
+                >
+                  <button
+                    onClick={showEditPicksHandler}
+                    className={styles.edit}
+                  >
+                    <span className="material-symbols-outlined">edit</span>
+                  </button>
+                </Tooltip>
+              )}
+              {/* If fewer than 5 collagues are picked, display remind button */}
+              {userPicks &&
+                userPicks.SelectedList &&
+                userPicks.SelectedList.filter(
+                  (pick) => pick.roleLevel === 5 && pick.userId !== user.ldapUid
+                ).length < 5 && (
+                  <Tooltip
+                    TransitionComponent={Fade}
+                    title={`Remind ${user.displayName} to pick colleagues`}
+                    placement="bottom-start"
+                  >
+                    <button className={styles.remind} onClick={remindToPick}>
+                      <span className="material-symbols-outlined">timer</span>
+                    </button>
+                  </Tooltip>
+                )}
+              {/* If enough collagues picked, display approve option */}
+              {userPicks && userPicks.SelectedList && !userPicks.submitted && (
+                <Tooltip
+                  TransitionComponent={Fade}
+                  title={`Approve ${user.displayName}'s picks`}
+                  placement="bottom-start"
+                >
+                  <button className={styles.approve} onClick={approvePicks}>
+                    <span className="material-symbols-outlined">done</span>
+                  </button>
+                </Tooltip>
+              )}
+              {userPicks && userPicks.submitted && <p>Picks finalised</p>}
+            </div>
+          )}
         </td>
         <td>
           {!userPicks?.submitted && (
             <p className={styles.not_available}>Approve picks first</p>
           )}
           {userPicks?.submitted && userFeedbacks.length === 0 && (
-            <button className={styles.request}>Request reviews</button>
+            <Tooltip
+              TransitionComponent={Fade}
+              title={`Request feedbacks for ${user.displayName}`}
+              placement="bottom-start"
+            >
+              <button className={styles.request}>
+                <span className="material-symbols-outlined">send</span>
+              </button>
+            </Tooltip>
           )}
         </td>
         <td>reports</td>
@@ -315,7 +331,6 @@ const PersonRow: React.FC<IPersonRowProps> = ({
 
       {showModal && (
         <div className={styles.modal_container}>
-          {" "}
           <div className={styles.modal}>
             <button
               className={styles.close_modal_button}

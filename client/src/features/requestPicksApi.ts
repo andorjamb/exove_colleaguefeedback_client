@@ -62,7 +62,7 @@ export const requestPicksApi = createApi({
       }),
       invalidatesTags: ["RequestPicks"],
     }),
-    finalPickSubmit: builder.mutation<void, { id: string }>({
+    finalPickSubmit: builder.mutation<void, string>({
       query: (id) => ({
         url: `/submit/${id}`,
         method: "GET",

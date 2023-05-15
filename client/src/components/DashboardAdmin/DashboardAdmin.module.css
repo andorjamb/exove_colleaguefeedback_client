@@ -13,10 +13,13 @@
 }
 
 .search_buttons_container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
+  width: 100%;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 2fr;
+}
+
+.search_buttons_container:first-child {
 }
 
 .table {
