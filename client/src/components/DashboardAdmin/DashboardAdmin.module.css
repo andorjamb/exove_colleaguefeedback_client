@@ -12,6 +12,13 @@
   max-width: 1400px;
 }
 
+.search_buttons_container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
 .table {
   width: 100%;
   border-collapse: collapse;

@@ -9,6 +9,7 @@ import {
   useApprovePickMutation,
   useCreatePickMutation,
   useDeletePickMutation,
+  useFinalPickSubmitMutation,
   useGetAllRequestPicksQuery,
   useSubmitPickMutation,
 } from "../../../features/requestPicksApi";
@@ -44,6 +45,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
   const [createPick] = useCreatePickMutation();
   const [submitPick] = useSubmitPickMutation();
   const [approvePick] = useApprovePickMutation();
+  const [finalPickSubmit] = useFinalPickSubmitMutation();
   const [deletePick] = useDeletePickMutation();
   const [showModal, setShowModal] = useState(false);
   const usersData = useGetAllUsersQuery();
@@ -62,7 +64,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
 
   const approvePicks = async () => {
     if (!userPicks) return;
-    await approvePick(userPicks._id);
+    await finalPickSubmit({ id: userPicks._id });
   };
 
   const toggleExpand = () => {
@@ -158,18 +160,24 @@ const PersonRow: React.FC<IPersonRowProps> = ({
           <div className={styles.picks_container}>
             {/* There is no picks yet */}
             {!userPicks && (
-              <button
-                className={styles.request}
-                onClick={() => requestPicks({ requestedTo: user.ldapUid })}
+              <Tooltip
+                TransitionComponent={Fade}
+                title={`Request colleague picks from ${user.displayName}`}
+                placement="bottom-start"
               >
-                Request picks
-              </button>
+                <button
+                  className={styles.request}
+                  onClick={() => requestPicks({ requestedTo: user.ldapUid })}
+                >
+                  <span className="material-symbols-outlined">send</span>
+                </button>
+              </Tooltip>
             )}
             {/* If picks have been requested but not approved yet, display edit button */}
             {userPicks && !userPicks.submitted && (
               <Tooltip
                 TransitionComponent={Fade}
-                title={`Request colleague picks from ${user.displayName}`}
+                title={`Edit picks for ${user.displayName}`}
                 placement="bottom-start"
               >
                 <button onClick={showEditPicksHandler} className={styles.edit}>

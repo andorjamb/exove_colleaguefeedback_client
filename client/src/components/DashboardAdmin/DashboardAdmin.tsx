@@ -82,8 +82,10 @@ const DashboardAdmin = () => {
   if (
     activeTemplateData.isFetching ||
     usersData.isFetching ||
+    !usersData.data ||
     feedbackData.isFetching ||
-    picksData.isFetching
+    picksData.isFetching ||
+    !picksData.data
   )
     return (
       <>
@@ -138,11 +140,14 @@ const DashboardAdmin = () => {
   return (
     <div className={styles.dashboard_wrapper}>
       <div className={styles.dashboard_container}>
-        <SearchBar
-          inputValue={searchInput}
-          onChangeHandler={searchChangeHandler}
-        />
-        <BulkButtons />
+        <div className={styles.search_buttons_container}>
+          <SearchBar
+            inputValue={searchInput}
+            onChangeHandler={searchChangeHandler}
+          />
+          <BulkButtons allPicks={picksData.data} allUsers={usersData.data} />
+        </div>
+
         <table className={styles.table}>
           <thead>
             <tr>
