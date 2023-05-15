@@ -1,11 +1,15 @@
 /* globals */
-.h1 {}
+.h1 {
+}
 
-.h1 {}
+.h1 {
+}
 
-.h3 {}
+.h3 {
+}
 
-.h4 {}
+.h4 {
+}
 
 /* main feedback component */
 
@@ -19,7 +23,8 @@
   align-items: flex-start;
 }
 
-.header {}
+.header {
+}
 
 .username {
   color: #6e12e7;
@@ -35,10 +40,10 @@
   display: flex;
   align-items: flex-start;
   text-align: left;
+  word-spacing: 2.5px;
 }
 
 .questionContainer {
-  padding: 4rem 0;
   text-align: left;
   display: flex;
   gap: 2rem;
@@ -106,7 +111,7 @@
   font-size: 20px;
 }
 
-.bolInitial>p {
+.bolInitial > p {
   background: #d5d7d5d1;
 }
 
@@ -136,7 +141,7 @@
   align-items: center;
 }
 
-.rMainDiv>p {
+.rMainDiv > p {
   width: 40%;
 }
 
@@ -170,8 +175,6 @@
   cursor: pointer;
 }
 
-
-
 .loginButton {
   background-color: #45af76;
   box-shadow: 4px 4px black;
@@ -185,8 +188,6 @@
 .loginButton:disabled {
   background-color: #b3b3b3;
   pointer-events: none;
-
-
 }
 
 .loginButton:active {
