@@ -32,7 +32,18 @@ const Card: React.FC<ICardProps> = ({
       }`}
       onClick={clickHandler}
     >
-      <img className={styles.avatar} src={employee.imageUrl} alt="avatar" />
+      <div className={styles.avatar_container}>
+        {employee.imageUrl ? (
+          <img className={styles.avatar} src={employee.imageUrl} alt="avatar" />
+        ) : (
+          <img
+            className={styles.avatar}
+            src="https://www.exove.com/app/uploads/2021/06/Exove-employee-no-image.png"
+            alt="avatar"
+          />
+        )}
+      </div>
+
       <div>
         <h3 className={styles.name}>{employee.displayName}</h3>
         <p className={styles.title}>{employee.title}</p>

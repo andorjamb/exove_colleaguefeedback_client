@@ -1,48 +1,107 @@
 import axios from "axios";
 
-import styles from "./BulkButtons.module.css";
+// Components
+import Tooltip from "@mui/material/Tooltip";
+import Fade from "@mui/material/Fade";
 
-const BulkButtons = () => {
+// Redux, API
+import {
+  useCreatePickMutation,
+  useGetAllRequestPicksQuery,
+} from "../../../features/requestPicksApi";
+import { useGetAllUsersQuery } from "../../../features/userApi";
+
+// Styles
+import styles from "./BulkButtons.module.css";
+import { IRequestPicks } from "../../../types/picks";
+import { IUserDataGet } from "../../../types/users";
+
+interface IBulkButtonsProps {
+  allPicks: IRequestPicks[];
+  allUsers: IUserDataGet[];
+}
+
+const BulkButtons: React.FC<IBulkButtonsProps> = ({ allPicks, allUsers }) => {
+  const [createPick] = useCreatePickMutation();
   const newPick1 = {
     requestedTo: "tempt",
   };
 
-  const newPick2 = {
-    requestedTo: "newton",
+  const requestPicks = async (newPick: { requestedTo: string }) => {
+    await createPick(newPick);
   };
 
-  const postPick = async (newPick: { requestedTo: string }) => {
-    try {
-      const { data } = await axios.post(
-        "https://exove.vercel.app/api/picks",
-        { ...newPick },
-        {
-          withCredentials: true,
-        }
-      );
-      console.log("Response", data);
-    } catch (err) {
-      console.log(err);
-    }
+  const requestAllPicks = () => {
+    const usersWithoutRequests = allUsers.filter(
+      (user) =>
+        allPicks.find((pick) => pick.requestedTo === user.ldapUid) === undefined
+    );
+    console.log("users with no request picks created", usersWithoutRequests);
+    usersWithoutRequests.forEach((user) => {
+      requestPicks({ requestedTo: user.ldapUid });
+    });
   };
+
   return (
     <div className={styles.buttons_container}>
-      <button
-        onClick={() => {
-          postPick(newPick1);
-          postPick(newPick2);
-        }}
-        className={styles.request}
+      <Tooltip
+        TransitionComponent={Fade}
+        title="Request colleague picks from all users"
+        placement="bottom-start"
       >
-        Request picks from all
-      </button>
-      <button className={styles.remind}>Remind all to pick</button>
-      <button className={styles.request}>Request all feedbacks</button>
-      <button className={styles.remind}>Remind all to feedback</button>
-      <button className={styles.warning}>
-        Generate all reports (including incomplete)
-      </button>
-      <button className={styles.approve}> Generate all complete reports</button>
+        <button onClick={requestAllPicks} className={styles.request}>
+          <span className="material-symbols-outlined">group_add</span>
+          <span className="material-symbols-outlined">send</span>
+        </button>
+      </Tooltip>
+      <Tooltip
+        TransitionComponent={Fade}
+        title="Remind all users to pick colleagues"
+        placement="bottom-start"
+      >
+        <button className={styles.remind}>
+          <span className="material-symbols-outlined">group_add</span>
+          <span className="material-symbols-outlined">timer</span>
+        </button>
+      </Tooltip>
+      <Tooltip
+        TransitionComponent={Fade}
+        title="Request feedbacks from all users"
+        placement="bottom-start"
+      >
+        <button className={styles.request}>
+          <span className="material-symbols-outlined">rate_review</span>
+          <span className="material-symbols-outlined">send</span>
+        </button>
+      </Tooltip>
+      <Tooltip
+        TransitionComponent={Fade}
+        title="Remind all users to give feedbacks"
+        placement="bottom-start"
+      >
+        <button className={styles.remind}>
+          <span className="material-symbols-outlined">rate_review</span>
+          <span className="material-symbols-outlined">timer</span>
+        </button>
+      </Tooltip>
+      <Tooltip
+        TransitionComponent={Fade}
+        title="Generate all complete reports and make them available to competence managers"
+        placement="bottom-start"
+      >
+        <button className={styles.approve}>
+          <span className="material-symbols-outlined">description</span>
+        </button>
+      </Tooltip>
+      <Tooltip
+        TransitionComponent={Fade}
+        title="Generate all reports (including incomplete) and make them available to competence managers"
+        placement="bottom-start"
+      >
+        <button className={styles.warning}>
+          <span className="material-symbols-outlined">description</span>
+        </button>
+      </Tooltip>
     </div>
   );
 };

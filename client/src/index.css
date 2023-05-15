@@ -62,3 +62,15 @@ select {
   border: 1px solid black;
   padding: 0 1rem;
 }
+
+.MuiTooltip-popper {
+}
+
+.MuiTooltip-tooltip {
+  background: rgba(0, 0, 0, 0.6) !important;
+  border-radius: 0 !important;
+  padding: 0.5rem 1rem !important;
+  font-size: 0.9rem !important;
+  font-family: inherit !important;
+  margin-top: 0.5rem !important;
+}
