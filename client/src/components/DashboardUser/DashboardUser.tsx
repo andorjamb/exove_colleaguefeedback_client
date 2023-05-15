@@ -72,12 +72,19 @@ const DashboardUser = () => {
 
   const submitHandler = async () => {
     if (!currentUserPick) return;
-    console.log("Submitting:", selected); //debugging
-    const submitBodies = selected.map((user) => {
-      return { userId: user.ldapUid, roleLevel: 5 };
-    });
-    /* "userId": "einstein",
-        "roleLevel": 6 */
+    console.log("Submitting:", selected);
+    // Only submit picks that don't exist in SelectedList yet
+    const submitBodies = selected
+      .filter(
+        (selectedUser) =>
+          currentUserPick.SelectedList.find(
+            (pick) =>
+              pick.userId === selectedUser.ldapUid && pick.roleLevel === 5
+          ) === undefined
+      )
+      .map((user) => {
+        return { userId: user.ldapUid, roleLevel: 5 };
+      });
     setSubmitted(true);
     // Check uniqueness
     submitBodies.forEach((submitBody) =>
