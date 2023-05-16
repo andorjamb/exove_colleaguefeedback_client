@@ -1,9 +1,5 @@
 import { IFeedback } from "../types/feedback";
-import {
-  IReportData,
-  IReportCategory,
-
-} from "../types/report";
+import { IReportData, IReportCategory, IChartData } from "../types/report";
 
 export class ReportClass {
   requestPicksId: string | undefined;
@@ -23,6 +19,22 @@ export class ReportClass {
     this.categories = categories;
   }
 }
+
+export class ChartDataClass {
+  categoryName: string | undefined;
+  chartData: IChartData[] | undefined;
+  comments: { self: string; CM: string; colleagues: string[] };
+
+  constructor(
+    categoryName: string | undefined,
+    chartData: IChartData[] | undefined,
+    comments: { self: string; CM: string; colleagues: string[] }
+  ) {
+    this.categoryName = categoryName;
+    this.chartData = chartData;
+    this.comments = comments;
+  }
+}
 /**
  * - get feedbackdata for this requestPick when essi approves a feedback instance:
  * OR 
@@ -32,7 +44,7 @@ export class ReportClass {
     MAKING CHARTS from report object
 
     /*web chart:
-    for each dataGroup: 
+    calc average for each dataGroup: 
     valueArray =  question.colleagues; 
     let total = 0;
     for (const i=0; i<array.length; i++) { total = total + i;}
@@ -40,10 +52,6 @@ export class ReportClass {
     */
 
 export const convertReportData = (data: IFeedback) => {};
-
-export const makeCharts = (data: IReportData) => {};
-//labels array for chart:
-/** const questionNameArray = reportData.rangeDataGroups.map((item)=>{item.questions.question}) */
 
 /**PSEUDOCODE
      *  1. CONVERTING FEEDBACK OBJECT TO REPORT OBJECT:
@@ -62,13 +70,3 @@ export const makeCharts = (data: IReportData) => {};
      * set report.
      * 
      */
-/* Th administrator will only run this function if enough completed feedbacks received, so might assume the check for 'progress' doesn't need to be run? */
-
-/*
-if (feedback.template !== activeTemplateId) {
-  return;
-}
-if (feedback.progress != { value }) {
-  return;
-}
-*/

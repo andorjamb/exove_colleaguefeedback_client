@@ -8,7 +8,7 @@ import styles from "./Report.module.css";
 
 //Types
 import { IReportData, IReportCategory, rangeResult } from "../../types/report";
-import { IFeedback } from "../../types/feedback";
+import { IFeedback, IFCategory } from "../../types/feedback";
 import { IUserDataGet } from "../../types/users";
 
 //Redux
@@ -29,9 +29,9 @@ import { useTranslation } from "react-i18next";
 import CustomSpinner from "../../components/CustomSpinner/CustomSpinner";
 import ChartBar from "../../charts/ChartBar";
 import ChartRadar from "../../charts/ChartRadar";
-import { ReportClass } from "../../functions/reportFunctions";
-import { testChartData } from "../../testdata/testChartData";
-import { workerData } from "worker_threads";
+import { ReportClass, ChartDataClass } from "../../functions/reportFunctions";
+//import { testChartData } from "../../testdata/testChartData";
+import { IQuestionLang } from "../../types/questions";
 
 //(manager and HR only view)
 //check user: if not correct role level, navigate to login
@@ -48,29 +48,32 @@ import { workerData } from "worker_threads";
  */
 
 const Report = () => {
-  const { pickId } = useParams();
+  const { userId } = useParams();
+  //const { pickId } = useParams();
   const { t } = useTranslation(["report"]);
   const reportRoot = useRef<HTMLDivElement>(null);
   const doc = new jsPDF("landscape", "pt", "a4");
-  const [userId, setUserId] = useState<string | undefined>("");
+  // const [userId, setUserId] = useState<string | undefined>("");
 
   /** jsPDF requires inline styles, doesn't support external css? (seems to be working though)
   //pick-id eg)  52e103e0-1c23-4220-9a47-bed14056cfe3
+  // 8f7ed873-29f1-42d3-8337-1a5ad2af56af
   //pick.requestedTo ->ldapUid
 */
   const allUsers = useGetAllUsersQuery().data;
-  const getPick = useGetRequestPickByDocIdQuery(pickId as any).data;
+  //const getPick = useGetRequestPickByDocIdQuery(pickId as any).data;
   const activeTemplate = useGetActiveTemplateQuery().data;
   const templateTitle = activeTemplate?.templateTitle;
   const categories = activeTemplate?.categories;
   const userData = useGetUserByLdapUidQuery(userId as any).data;
   const date = new Date().getFullYear();
   const { isLoading, isFetching } = useGetFeedbacksByNameQuery(userId as any);
-  const feedbacks: IFeedback[] | undefined =
-    useGetFeedbacksByNameQuery("einstein").data;
+  const feedbacks: IFeedback[] | undefined = useGetFeedbacksByNameQuery(
+    userId as any
+  ).data;
   let mappedCategories: any;
-  //const [reportCategories, setReportCategories] = useState<any>([]);
-  //const [reportSubject, setReportSubject] = useState<IUserDataGet>();
+
+  //can you get feedbacks by pickId?
 
   let rangeResult = [];
   let stringResult = [];
@@ -90,21 +93,42 @@ const Report = () => {
         stringDataGroups: [],
       };
     });
-    //console.log("mapped categories:", mappedCategories);
-    //setReportCategories((reportCategories: any) => mappedCategories);
   }
 
   /*  */
-  useEffect(() => {
+  /*   useEffect(() => {
     setUserId(getPick?.requestedTo);
-  }, [getPick]);
+  }, [getPick]); */
 
   /*   useEffect(() => {
     makeReportCategoriesData(feedbacks);
   }, [feedbacks]); */
 
-  if (feedbacks) {
-    //makeReportCategoriesData(feedbacks);
+  function getName(para: string) {
+    for (const cat of mappedCategories) {
+      if (cat.categoryId === para) {
+        return cat.categoryName;
+      }
+    }
+  }
+  /*
+questions: object array
+{
+answer: "false",
+answeredOn: "2023-05-12T07:38:42.115Z",
+question: "The person produces high quality product",
+type: "boolean",
+_id: "6454aa0d971f4982fdd21b29"
+*/
+
+  function transformQuestions(questions: IQuestionLang[]) {
+    let questionMap = questions.map((question) => {
+      return {
+        ...question,
+        question: question.question,
+      };
+    });
+    return questionMap;
   }
 
   function makeReportCategoriesData(feedbacks: IFeedback[]) {
@@ -127,7 +151,47 @@ const Report = () => {
   );
   console.log("mappedSet", mappedSet);
 
-  // function makeChartData() {}
+  /*feedback.cagories:[]
+  {
+    category: 'b10e82d5-03be-45c3-85a5-363f2533a908', 
+    questions: Array(0), 
+    _id: '645e25c0235706de4691dcf1'
+  },
+  category: "b10e82d5-03be-45c3-85a5-363f2533a908"
+  questions: []
+  _id: "645e25c0235706de4691dcf1"
+  */
+  let chartDataArray = [];
+
+  function transformMap(values: IFCategory, key: string | undefined) {
+    switch (key) {
+      case userId:
+        console.log("self evaluation");
+        transformQuestions(values.questions);
+        break;
+      case CM:
+        console.log("CM evaluation");
+        break;
+      default:
+        console.log("colleague evaluation");
+
+        return {};
+    }
+  }
+
+  mappedSet.forEach(transformMap);
+
+  mappedSet.forEach((item) => {
+    console.log(item.length);
+    let m = item.map((category) => {
+      return {
+        categoryId: category.category,
+        chartData: transformQuestions(category.questions),
+      };
+    });
+    console.log(m);
+    chartDataArray.push(m);
+  });
 
   /**OBJECT ARRAY
    * mappedcategories = [
@@ -145,10 +209,7 @@ const Report = () => {
         },
         {},
         {}
-   * ]
-        
-   * 
-   * 
+   * ] 
    */
 
   function makePdf() {
@@ -156,7 +217,7 @@ const Report = () => {
       doc.html(reportRoot.current, {
         html2canvas: { scale: 0.8 },
         async callback(doc) {
-          await doc.save(`report_${pickId}`);
+          await doc.save(`report_${userId}`);
         },
       });
     }

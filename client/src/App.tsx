@@ -41,7 +41,7 @@ const router = createBrowserRouter(
           <Route path="/feedback" element={<Feedback />}></Route>
           <Route path="/template" element={<Template />}></Route>
           <Route path="/profile" element={<Profile />}></Route>
-          <Route path="/report/:pickId" element={<Report />}></Route>
+          <Route path="/report/:userId" element={<Report />}></Route>
           <Route path="/profiles/:id" element={<Profile />}></Route>
           <Route path="/*" element={<Navigate to="/" replace />}></Route>
         </Route>
@@ -60,9 +60,9 @@ const App = () => {
     console.log("loggedInUser", userDetails);
   };
 
-  useEffect(()=>{
-    getUserInfo()
-  },[])
+  useEffect(() => {
+    getUserInfo();
+  }, []);
 
   return (
     <Provider store={store}>
