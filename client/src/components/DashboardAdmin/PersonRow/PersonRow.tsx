@@ -27,12 +27,15 @@ import { IUserDataGet } from "../../../types/users";
 
 // Styles
 import styles from "./PersonRow.module.css";
+import { template } from "../../FeedbackForm/Data";
+import CustomSpinner from "../../CustomSpinner/CustomSpinner";
 
 interface IPersonRowProps {
   userPicks: IRequestPicks | undefined;
   user: IUserDataGet;
   userFeedbacks: IFeedback[];
   allUsersData: IUserDataGet[];
+  currentTemplateId: string;
   /* showEditPicks: () => void; */
 }
 
@@ -41,6 +44,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
   userPicks,
   userFeedbacks,
   allUsersData,
+  currentTemplateId,
   /* showEditPicks, */
 }) => {
   const [expand, setExpand] = useState(false);
@@ -54,8 +58,12 @@ const PersonRow: React.FC<IPersonRowProps> = ({
 
   console.log("user feedbacks for", user.displayName, userFeedbacks);
 
-  const requestPicks = async (newPick: { requestedTo: string }) => {
+  const requestPicks = async (userId: string) => {
     setIsLoading(true);
+    const newPick = {
+      requestedTo: userId,
+      template: currentTemplateId,
+    };
     await createPick(newPick);
     setIsLoading(false);
   };
@@ -79,12 +87,43 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     setShowModal(true);
   };
 
+  const getDotColour = (userId: string, pickRoleLevel: number) => {
+    let colour = "black";
+    if (userPicks) {
+      const feedbackFound = userFeedbacks.find(
+        (feedback) =>
+          feedback.requestpicksId === userPicks._id &&
+          feedback.roleLevel === pickRoleLevel
+      );
+      if (feedbackFound) colour = "green";
+      else colour = "red";
+    }
+    return colour;
+    /* 
+    if (!userPicks) return colour;
+    const pickFound = userPicks.SelectedList.find(
+      (pick) => pick.userId === userId && pick.roleLevel === pickRoleLevel
+    );
+    console.log("pick found:", pickFound);
+    if (!pickFound) return "black";
+    if (!userPicks.submitted) return "black";
+    const feedbackFound = userFeedbacks.find(
+      (feedback) => feedback.requestpicksId === userPicks._id
+    );
+    console.log("feedback found:", feedbackFound);
+    if (!feedbackFound) return "red";
+    else return "green"; */
+  };
+
   // Returns an array of picked users with given level
   const getUserArrayByRoleLevel = (level: number) => {
     if (!userPicks) return [];
     let res: IUserDataGet[] = [];
     const filteredPicks = userPicks.SelectedList.filter(
-      (pick) => pick.roleLevel === level && pick.userId !== user.ldapUid
+      (pick) =>
+        pick.roleLevel === level &&
+        pick.userId !== user.ldapUid &&
+        pick.selectionStatus
     );
     filteredPicks.forEach((pick) => {
       const userFound = allUsersData.find(
@@ -105,7 +144,9 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     const requestBody = {
       userId: userId,
       selectionStatus: false,
+      roleLevel: pickRoleLevel,
     };
+    // approvePick
     await approvePick({ body: requestBody, id: userPicks._id });
   };
 
@@ -121,6 +162,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         const requestBody = {
           userId: userId,
           selectionStatus: true,
+          roleLevel: pickRoleLevel,
         };
         await approvePick({ body: requestBody, id: userPicks._id });
       }
@@ -128,6 +170,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
       const requestBody = {
         userId: userId,
         roleLevel: pickRoleLevel,
+        selectionStatus: true,
       };
       await submitPick({ body: requestBody, id: userPicks._id });
     }
@@ -138,10 +181,23 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     await updatePicksByRoleLevel(newSelection, 5);
   };
 
+  const updateSubordinatePicks = async (newSelection: IUserDataGet[]) => {
+    await updatePicksByRoleLevel(newSelection, 6);
+  };
+
+  const updatePMPicks = async (newSelection: IUserDataGet[]) => {
+    await updatePicksByRoleLevel(newSelection, 4);
+  };
+
+  const updateCMPicks = async (newSelection: IUserDataGet[]) => {
+    await updatePicksByRoleLevel(newSelection, 3);
+  };
+
   const updatePicksByRoleLevel = async (
     newSelection: IUserDataGet[],
     pickRoleLevel: number
   ) => {
+    console.log("new Selection", newSelection);
     if (!userPicks) return;
     const colleaguePicks = userPicks.SelectedList.filter(
       (pick) => pick.roleLevel === pickRoleLevel
@@ -154,14 +210,19 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         colleaguePicks.find((user) => user.userId === pick.ldapUid) ===
         undefined
     );
+    console.log("deletedPicks", deletedPicks);
+    console.log("addedPicks", addedPicks);
+    setIsLoading(true);
     for (const pick of deletedPicks) {
       await deactivatePick(pick.userId, pickRoleLevel);
     }
-    // await????
     for (const pick of addedPicks) {
       await activatePick(pick.ldapUid, pickRoleLevel);
     }
+    setIsLoading(false);
   };
+
+  if (isLoading) return <p>Row is updating.....</p>;
 
   return (
     <>
@@ -180,26 +241,32 @@ const PersonRow: React.FC<IPersonRowProps> = ({
           {userPicks &&
             userPicks.SelectedList &&
             userPicks.SelectedList.filter(
-              (pick) => pick.roleLevel === 5 && pick.userId !== user.ldapUid
+              (pick) =>
+                pick.roleLevel === 5 &&
+                pick.userId !== user.ldapUid &&
+                pick.selectionStatus
             ).length}
         </td>
         <td>
           {userPicks &&
             userPicks.SelectedList &&
-            userPicks.SelectedList.filter((pick) => pick.roleLevel === 6)
-              .length}
+            userPicks.SelectedList.filter(
+              (pick) => pick.roleLevel === 6 && pick.selectionStatus
+            ).length}
         </td>
         <td>
           {userPicks &&
             userPicks.SelectedList &&
-            userPicks.SelectedList.filter((pick) => pick.roleLevel === 4)
-              .length}
+            userPicks.SelectedList.filter(
+              (pick) => pick.roleLevel === 4 && pick.selectionStatus
+            ).length}
         </td>
         <td>
           {userPicks &&
             userPicks.SelectedList &&
-            userPicks.SelectedList.filter((pick) => pick.roleLevel === 3)
-              .length}
+            userPicks.SelectedList.filter(
+              (pick) => pick.roleLevel === 3 && pick.selectionStatus
+            ).length}
         </td>
         <td>
           {!userPicks?.submitted && (
@@ -213,7 +280,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
                 >
                   <button
                     className={styles.request}
-                    onClick={() => requestPicks({ requestedTo: user.ldapUid })}
+                    onClick={() => requestPicks(user.ldapUid)}
                   >
                     <span className="material-symbols-outlined">send</span>
                   </button>
@@ -334,13 +401,20 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         userPicks &&
         userPicks.SelectedList &&
         userPicks.SelectedList.filter(
-          (pick) => pick.roleLevel === 5 && pick.userId !== user.ldapUid
+          (pick) =>
+            pick.roleLevel === 5 &&
+            pick.userId !== user.ldapUid &&
+            pick.selectionStatus
         ).map((pick) => (
           <tr className={styles.table_row_sub}>
             <td>{pick.userId}</td>
             <td>
               <div className={styles.dot_container}>
-                <div className={styles.dot}></div>
+                <div
+                  className={`${styles.dot} ${
+                    styles[getDotColour(pick.userId, 5)]
+                  }`}
+                ></div>
               </div>
             </td>
             <td></td>
@@ -354,68 +428,80 @@ const PersonRow: React.FC<IPersonRowProps> = ({
       {expand &&
         userPicks &&
         userPicks.SelectedList &&
-        userPicks.SelectedList.filter((pick) => pick.roleLevel === 6).map(
-          (pick) => (
-            <tr className={styles.table_row_sub}>
-              <td>{pick.userId}</td>
-              <td></td>
-              <td>
-                <div className={styles.dot_container}>
-                  <div className={styles.dot}></div>
-                </div>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          )
-        )}
+        userPicks.SelectedList.filter(
+          (pick) => pick.roleLevel === 6 && pick.selectionStatus
+        ).map((pick) => (
+          <tr className={styles.table_row_sub}>
+            <td>{pick.userId}</td>
+            <td></td>
+            <td>
+              <div className={styles.dot_container}>
+                <div
+                  className={`${styles.dot} ${
+                    styles[getDotColour(pick.userId, 6)]
+                  }`}
+                ></div>
+              </div>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        ))}
 
       {expand &&
         userPicks &&
         userPicks.SelectedList &&
-        userPicks.SelectedList.filter((pick) => pick.roleLevel === 4).map(
-          (pick) => (
-            <tr className={styles.table_row_sub}>
-              <td>{pick.userId}</td>
-              <td></td>
-              <td></td>
-              <td>
-                <div className={styles.dot_container}>
-                  <div className={styles.dot}></div>
-                </div>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          )
-        )}
+        userPicks.SelectedList.filter(
+          (pick) => pick.roleLevel === 4 && pick.selectionStatus
+        ).map((pick) => (
+          <tr className={styles.table_row_sub}>
+            <td>{pick.userId}</td>
+            <td></td>
+            <td></td>
+            <td>
+              <div className={styles.dot_container}>
+                <div
+                  className={`${styles.dot} ${
+                    styles[getDotColour(pick.userId, 4)]
+                  }`}
+                ></div>
+              </div>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        ))}
 
       {expand &&
         userPicks &&
         userPicks.SelectedList &&
-        userPicks.SelectedList.filter((pick) => pick.roleLevel === 3).map(
-          (pick) => (
-            <tr className={styles.table_row_sub}>
-              <td>{pick.userId}</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>
-                <div className={styles.dot_container}>
-                  <div className={styles.dot}></div>
-                </div>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          )
-        )}
+        userPicks.SelectedList.filter(
+          (pick) => pick.roleLevel === 3 && pick.selectionStatus
+        ).map((pick) => (
+          <tr className={styles.table_row_sub}>
+            <td>{pick.userId}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+              <div className={styles.dot_container}>
+                <div
+                  className={`${styles.dot} ${
+                    styles[getDotColour(pick.userId, 3)]
+                  }`}
+                ></div>
+              </div>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        ))}
 
       {showModal && (
         <div className={styles.modal_container}>
@@ -442,7 +528,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
                 (pick) => pick.ldapUid !== user.ldapUid
               )}
               editHandler={() => {}}
-              doneHandler={() => {}}
+              doneHandler={updateSubordinatePicks}
               heading="Subordinates"
               defaultEditing={false}
               defaultSelection={getUserArrayByRoleLevel(6)}
@@ -452,7 +538,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
                 (pick) => pick.ldapUid !== user.ldapUid
               )}
               editHandler={() => {}}
-              doneHandler={() => {}}
+              doneHandler={updatePMPicks}
               heading="PM"
               defaultEditing={false}
               defaultSelection={getUserArrayByRoleLevel(4)}
@@ -462,7 +548,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
                 (pick) => pick.ldapUid !== user.ldapUid
               )}
               editHandler={() => {}}
-              doneHandler={() => {}}
+              doneHandler={updateCMPicks}
               heading="CM"
               defaultEditing={false}
               defaultSelection={getUserArrayByRoleLevel(3)}

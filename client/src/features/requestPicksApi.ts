@@ -37,7 +37,7 @@ export const requestPicksApi = createApi({
     }),
     createPick: builder.mutation<void, IRequestPicksPost>({
       query: (body) => ({
-        url: "picks/createreqpick",
+        url: "picks/",
         method: "POST",
         body,
       }),
