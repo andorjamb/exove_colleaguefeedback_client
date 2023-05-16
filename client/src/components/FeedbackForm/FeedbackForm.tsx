@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import style from "./FeedbackForm.module.css";
 import StringQuestions from "./StringQuestions";
 import RangeQuestions from "./RangeQuestions";
-import BoleanQuestions from "./BoleanQuestions";
+import BooleanQuestions from "./BooleanQuestions";
 import { useGetActiveTemplateQuery } from "../../features/templateApi";
 import { ITemplate } from "../../types/template";
 import { useDispatch, useSelector } from "react-redux";
@@ -167,7 +167,7 @@ const FeedbackForm = () => {
                           }
                         />
                       ) : (
-                        <BoleanQuestions
+                        <BooleanQuestions
                           key={quiz._id}
                           category={quiz.category}
                           questions={
