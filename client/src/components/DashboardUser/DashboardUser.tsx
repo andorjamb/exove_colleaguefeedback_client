@@ -41,6 +41,7 @@ const DashboardUser = () => {
   const [selected, setSelected] = useState<IUserDataGet[]>([]);
   const [currentUserInfo, setCurrentUserInfo] = useState<loggedInUser>();
   const [currentUserPick, setCurrentUserPick] = useState<IRequestPicks>();
+  // replace with navigate later?
   const [submitted, setSubmitted] = useState(false);
 
   const getUserInfo = async () => {
@@ -48,14 +49,15 @@ const DashboardUser = () => {
     console.log("picksData", picksData.data);
     if (picksData.isFetching || !picksData.data) return;
     const userDetails: loggedInUser = await getSecureUserUid();
+    console.log("userDetails awaited", userDetails);
     setCurrentUserInfo(userDetails);
     console.log("loggedInUser", userDetails);
     console.log(
-      "Pick for this user found:",
-      picksData.data.find((pick) => pick.requestedTo === currentUserInfo?.uid)
+      "Picks for this user found and set:",
+      picksData.data.find((pick) => pick.requestedTo === userDetails.uid)
     );
     setCurrentUserPick(
-      picksData.data.find((pick) => pick.requestedTo === currentUserInfo?.uid)
+      picksData.data.find((pick) => pick.requestedTo === userDetails.uid)
     );
   };
 
@@ -76,6 +78,16 @@ const DashboardUser = () => {
     console.log();
     return <p>Loading user dashboard...</p>;
   }
+
+  if (
+    currentUserPick?.SelectedList.filter(
+      (pick) =>
+        pick.roleLevel === 5 &&
+        pick.userId !== currentUserInfo.uid &&
+        pick.selectionStatus
+    )
+  )
+    return <p>Picks done already</p>;
 
   const activatePick = async (userId: string, pickRoleLevel: number) => {
     if (!currentUserPick) return;
