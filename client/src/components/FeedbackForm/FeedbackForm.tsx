@@ -134,9 +134,11 @@ const FeedbackForm = () => {
           <CustomSpinner />
         ) : (
           <div className={style.questionContainer}>
-            <h3 className={style.instructionsTitle}>Instruction</h3>
+            <div className={style.instructionsContainer}>
+              <h3 className={style.instructionsTitle}>Instruction</h3>
 
-            <p className={style.instructions}>{qTemplate?.instructions}</p>
+              <p className={style.instructions}>{qTemplate?.instructions}</p>
+            </div>
             {qTemplate &&
               qTemplate.categories?.map((cat) => (
                 <div className={style.catQuest} key={cat.category._id}>

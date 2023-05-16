@@ -31,7 +31,6 @@
 }
 
 .instructionsTitle {
-  padding: 2rem 0 0 0;
   display: flex;
   align-items: flex-start;
 }
@@ -41,8 +40,14 @@
   align-items: flex-start;
   text-align: left;
   word-spacing: 2.5px;
+  padding-top: 2rem;
 }
 
+.instructionsContainer {
+  margin: 2rem -3rem 0 -3rem;
+  padding: 1rem 3rem;
+  background-color: #f2f2f2;
+}
 .questionContainer {
   text-align: left;
   display: flex;
@@ -90,7 +95,7 @@
 }
 
 .bolTrue {
-  background:#63ad7b;
+  background: #63ad7b;
 }
 
 .bolFalse {
