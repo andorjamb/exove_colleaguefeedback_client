@@ -42,6 +42,7 @@ export interface IChartData {
   self: number;
 }*/
 
+/** for Charts creation only  */
 export class ChartDataClass {
   categoryName: string | undefined;
   chartData: IChartData[] | undefined;
@@ -57,6 +58,22 @@ export class ChartDataClass {
     this.comments = comments;
   }
 }
+
+/* export class ChartDataClass {
+  categoryName: string | undefined;
+  chartData: IChartData[] | undefined;
+  comments: { self: string; CM: string; colleagues: string[] };
+
+  constructor(
+    categoryName: string | undefined,
+    chartData: IChartData[] | undefined,
+    comments: { self: string; CM: string; colleagues: string[] }
+  ) {
+    this.categoryName = categoryName;
+    this.chartData = chartData;
+    this.comments = comments;
+  }
+} */
 
 // MAKING CHARTS from report object
 
@@ -86,8 +103,7 @@ function makeReportCategoriesData(feedbacks: IFeedback[]) {
 }
  */
 
-
-  /*   
+/*   
   function manipulate(value: any, key: string[]) {
     let m = value.map((object: any) => {
       return {
@@ -99,4 +115,50 @@ function makeReportCategoriesData(feedbacks: IFeedback[]) {
     chartDataArray.push(m);
   } */
 
-  // );
+// );
+
+/*
+function mapByRole(values: IFCategory[], key: any) {
+  let bla = new ChartDataClass();
+
+  //make object skeleton here
+  if (key[1] === revieweeId) {
+    console.log("self evaluation:", values); //array of feedback objects
+
+    values.forEach((value) => {
+      mappedCategories?.forEach((category: any) => {
+
+        if (category.categoryId === value.category) {
+          console.log("category chart data:", category.chartData);
+          console.log(value.questions);
+          value.questions.forEach((question) => {
+            if (question.type === "number") {
+              let newQuestionObject = {
+                question: question.question,
+                self: quesiton.answer,
+              };
+            }
+            if (question.type === "string") {
+            }
+
+            //make new let chartDataCopy = [...chartData]
+
+            console.log(question.question, question.answer);
+          });
+          let newData = new ChartDataClass(category.categoryName);
+        }
+      });
+
+      //transformQuestions(value.questions);
+    });
+  }
+  if (key[0] < 5) {
+    console.log("CM evaluation: by ", key[1], values); //array of feedback objects
+
+    setCM((CM) => key[1]);
+  } else {
+    console.log("colleague evaluation");
+  }
+}
+
+*/

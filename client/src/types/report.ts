@@ -22,17 +22,4 @@ export interface IReportCategory {
   stringResult: stringResult[]; */
 }
 
-/* export interface rangeResult {
-  question: string;
-  colleagues: number[];
-  CM: number;
-  self: number;
-  colleagueAverage: number;
-}
 
-export interface stringResult {
-  question: string;
-  colleagues: string[];
-  CM: string | undefined;
-  self: string;
-} */

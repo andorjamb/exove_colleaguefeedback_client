@@ -85,33 +85,88 @@ const Report = () => {
     return mappedSet;
   }
 
+  /*   export interface IChartData {
+    question: string;
+    colleagueAverage: number;
+    colleagues: number[];
+    CM: number;
+    self: number;
+  } */
+
+  /*   categoryName: string | undefined;
+  chartData: IChartData[] | undefined;
+  comments: { self: string; CM: string; colleagues: string[] }; */
+
   /** organise the map according to role of reviewer */
   /** iterated for each key/value pair of map */
-  function mapByRole(values: IFCategory[], key: any) {
-    if (key[1] === revieweeId) {
-      console.log("self evaluation:", values); //array of feedback objects
-      values.forEach((value) => {
-        mappedCategories?.forEach((category: any) => {
-          if (category.category === value.category) {
-            console.log("category chart data:", category.chartData);
-            console.log(value.questions);
-            value.questions.forEach((question) => {
-              //make new
-              console.log(question.question, question.answer);
-            });
-          }
-        });
 
-        //transformQuestions(value.questions);
+  function mapByRole(
+    values: IFCategory[],
+    key: (string | number | undefined)[],
+    map: Map<(string | number | undefined)[], IFCategory[]>
+  ) {
+    //for each category of one feedback:
+    values.forEach((value) => {
+      mappedCategories?.forEach((category: any) => {
+        //select where categoryId values correspond:
+        if (category.categoryId === value.category) {
+          console.log("category chart data:", category.chartData); //debugging:  empty array?
+          //for each question of the matching category:
+
+          value.questions.forEach((question) => {
+            //make a new chart data object:
+            let bla: IChartData = {
+              question: "",
+              colleagueAverage: 0,
+              colleagues: [],
+              CM: 0,
+              self: 0,
+            };
+            bla.question = question.question as string;
+
+            if (key[1] && key[1] === revieweeId) {
+              console.log("self evaluation:", values); //array of feedback objects
+              if (question.type === "number" && question.answer) {
+                bla.self = +question?.answer as number;
+              }
+              if (question.type === "string") {
+                //add comment to category's comment object
+                category.comments = {
+                  ...category.comments,
+                  self: question.answer,
+                };
+              }
+            }
+
+            if (key[0] && key[0] < 5) {
+              console.log("CM evaluation: by ", key[1], values); //array of feedback objects
+              setCM((CM) => key[1] as string | undefined);
+              if (question.type === "number" && question.answer) {
+                bla.CM = +question.answer as number;
+              }
+              if (question.type === "string") {
+                //add comment to category's comment object
+                category.comments = {
+                  ...category.comments,
+                  CM: question.answer,
+                };
+              }
+            } else {
+              console.log("colleague evaluation");
+              if (question.type === "number" && question.answer) {
+                bla.colleagues.push(+question.answer as number);
+              }
+              if (question.type === "string") {
+                category.comments = {
+                  /*   ...category.comments,
+                  colleagues: [...[colleagues], question.answer], */
+                };
+              }
+            }
+          });
+        }
       });
-    }
-    if (key[0] < 5) {
-      console.log("CM evaluation: by ", key[1], values); //array of feedback objects
-
-      setCM((CM) => key[1]);
-    } else {
-      console.log("colleague evaluation");
-    }
+    });
   }
 
   function transformQuestions(questions: IQuestionLang[]) {
@@ -151,6 +206,7 @@ const Report = () => {
         comments: [],
       };
     });
+    console.log("mapped catogories", mappedCategories);
     setMappedCategories(mappedCategories);
   }, [categories]);
 
