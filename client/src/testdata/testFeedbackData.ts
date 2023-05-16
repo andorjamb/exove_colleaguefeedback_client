@@ -3,7 +3,7 @@ import { IFeedback } from "../types/feedback";
  *  _id: string;
   lang: string;
   question?: string;
-  answer?: string;
+  answer?: string | number;
   answeredOn?: Date;
   type: string;
 
@@ -14,43 +14,57 @@ export const testFeedbackData: IFeedback[] = [
     responseDateLog: [],
     template: "",
     progress: "",
-    feedbackTo: "newton",
-    roleLevel: 1,
+    feedbackTo: "curie",
+    roleLevel: 3,
     categories: [
       {
-        category: "",
+        category: "b10e82d5-03be-45c3-85a5-363f2533a908",
         questions: [
           {
-            question: "",
+            question: "Produces work of a high standard",
             type: "number",
             _id: "",
-            answer: "",
+            answer: "5",
             lang: "Eng",
           },
           {
-            question: "",
+            question: "Complies with client requirements",
             type: "number",
             _id: "",
-            answer: "",
+            answer: "4",
+            lang: "Eng",
+          },
+          {
+            question: "Other comments about quality focus",
+            type: "string",
+            _id: "",
+            answer: "Performs very well under the circumstances",
             lang: "Eng",
           },
         ],
       },
       {
-        category: "",
+        category: "2ca3b93b-159f-4788-9a2b-c152eb82de24",
         questions: [
           {
-            question: "",
+            question: "The person competently directs their own work",
             type: "number",
             _id: "",
-            answer: "",
+            answer: "4",
             lang: "Eng",
           },
           {
-            question: "",
+            question: "The person is not afraid to ask for help",
             type: "number",
             _id: "",
-            answer: "",
+            answer: "3",
+            lang: "Eng",
+          },
+          {
+            question: "Other comments about self-guidance",
+            type: "string",
+            _id: "",
+            answer: "Motivated, self-starter",
             lang: "Eng",
           },
         ],
@@ -58,52 +72,130 @@ export const testFeedbackData: IFeedback[] = [
     ],
   },
   {
-    userId: "newton",
+    userId: "gauss",
     responseDateLog: [],
     template: "",
     progress: "",
-    feedbackTo: "newton",
-    roleLevel: 1,
+    feedbackTo: "curie",
+    roleLevel: 5,
     categories: [
       {
         category: "",
         questions: [
           {
-            question: "",
+            question: "Produces work of a high standard",
             type: "number",
             _id: "",
-            answer: "",
+            answer: "4",
             lang: "Eng",
           },
           {
-            question: "",
+            question: "Complies with client requirements",
             type: "number",
             _id: "",
-            answer: "",
+            answer: "4",
+            lang: "Eng",
+          },
+          {
+            question: "Other comments about quality focus",
+            type: "string",
+            _id: "",
+            answer: "Wonderful team member, produces high quality work",
             lang: "Eng",
           },
         ],
       },
       {
-        category: "",
+        category: "2ca3b93b-159f-4788-9a2b-c152eb82de24",
         questions: [
           {
-            question: "",
+            question: "The person competently directs their own work",
             type: "number",
             _id: "",
-            answer: "",
+            answer: "3",
             lang: "Eng",
           },
           {
-            question: "",
+            question: "The person is not afraid to ask for help",
             type: "number",
             _id: "",
-            answer: "",
+            answer: "4",
+            lang: "Eng",
+          },
+          {
+            question: "Other comments about self-guidance",
+            type: "string",
+            _id: "",
+            answer: "Diligent and self-directing",
             lang: "Eng",
           },
         ],
       },
-    ],},
+    ],
+  },
+  {
+    userId: "curie",
+    responseDateLog: [],
+    template: "",
+    progress: "",
+    feedbackTo: "curie",
+    roleLevel: 5,
+    categories: [
+      {
+        category: "",
+        questions: [
+          {
+            question: "Produces work of a high standard",
+            type: "number",
+            _id: "",
+            answer: "3",
+            lang: "Eng",
+          },
+          {
+            question: "Complies with client requirements",
+            type: "number",
+            _id: "",
+            answer: "5",
+            lang: "Eng",
+          },
+          {
+            question: "Other comments about quality focus",
+            type: "string",
+            _id: "",
+            answer: "I am very focused on producing high quality work",
+            lang: "Eng",
+          },
+        ],
+      },
+      {
+        category: "2ca3b93b-159f-4788-9a2b-c152eb82de24",
+        questions: [
+          {
+            question: "The person competently directs their own work",
+            type: "number",
+            _id: "",
+            answer: "4",
+            lang: "Eng",
+          },
+          {
+            question: "The person is not afraid to ask for help",
+            type: "number",
+            _id: "",
+            answer: "2",
+            lang: "Eng",
+          },
+          {
+            question: "Other comments about self-guidance",
+            type: "string",
+            _id: "",
+            answer:
+              "I feel that I work well independently, however I should ask my colleagues for help more often",
+            lang: "Eng",
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 /*
@@ -127,3 +219,14 @@ category: "b10e82d5-03be-45c3-85a5-363f2533a908"
 questions: []
 _id: "645e25c0235706de4691dcf1"
 */
+
+/**
+ * Endpoints:
+ *
+ * feedback/  - get all
+ * feedback/:id - get one by doc Id /? or requestPick id?)
+ * feedback/name/name  -  get feedbacks by userId (ldapuid?)
+ * POST feedback/:id -  post feedback by requestId
+ * DELETE feedback/:id -
+ * PATCH feedback/submit/:id - requestPicksId: submits a feedback (is this action completed by Essi after approval?)
+ */
