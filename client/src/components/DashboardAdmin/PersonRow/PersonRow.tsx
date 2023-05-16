@@ -140,7 +140,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     const pickFound = userPicks.SelectedList.find(
       (pick) => pick.userId === userId && pick.roleLevel === pickRoleLevel
     );
-    if (!pickFound) return;
+    if (!pickFound || !pickFound.selectionStatus) return;
     const requestBody = {
       userId: userId,
       selectionStatus: false,
@@ -157,7 +157,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
       (pick) => pick.userId === userId && pick.roleLevel === pickRoleLevel
     );
     if (pickFound) {
-      if (pickFound.selectionStatus === true) return;
+      if (pickFound.selectionStatus) return;
       else {
         const requestBody = {
           userId: userId,
@@ -199,16 +199,17 @@ const PersonRow: React.FC<IPersonRowProps> = ({
   ) => {
     console.log("new Selection", newSelection);
     if (!userPicks) return;
-    const colleaguePicks = userPicks.SelectedList.filter(
-      (pick) => pick.roleLevel === pickRoleLevel
+    // Filter picks to only have active pick of needed level
+    const levelPicks = userPicks.SelectedList.filter(
+      (pick) => pick.roleLevel === pickRoleLevel && pick.selectionStatus
     );
-    const deletedPicks = colleaguePicks.filter((pick) =>
-      newSelection.find((user) => user.ldapUid === pick.userId)
+    const deletedPicks = levelPicks.filter(
+      (pick) =>
+        newSelection.find((user) => user.ldapUid === pick.userId) === undefined
     );
     const addedPicks = newSelection.filter(
       (pick) =>
-        colleaguePicks.find((user) => user.userId === pick.ldapUid) ===
-        undefined
+        levelPicks.find((user) => user.userId === pick.ldapUid) === undefined
     );
     console.log("deletedPicks", deletedPicks);
     console.log("addedPicks", addedPicks);
@@ -222,7 +223,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     setIsLoading(false);
   };
 
-  if (isLoading) return <p>Row is updating.....</p>;
+  if (isLoading) return <tr>Row is updating.....</tr>;
 
   return (
     <>
