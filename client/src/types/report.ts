@@ -1,25 +1,9 @@
 export interface IChartData {
-  question: string,
-  colleagueAverage: number,
-  colleagues: number[],
-  CM: number,
-  self: number,
-}
-
-
-export interface rangeResult {
   question: string;
+  colleagueAverage: number;
   colleagues: number[];
   CM: number;
   self: number;
-  colleagueAverage: number;
-}
-
-export interface stringResult {
-  question: string;
-  colleagues: string[];
-  CM: string | undefined;
-  self: string;
 }
 
 export interface IReportData {
@@ -32,6 +16,23 @@ export interface IReportData {
 export interface IReportCategory {
   categoryName: string;
   categoryId: string;
+  questions: IChartData[];
+  /*   
   rangeResult: rangeResult[];
-  stringResult: stringResult[];
+  stringResult: stringResult[]; */
 }
+
+/* export interface rangeResult {
+  question: string;
+  colleagues: number[];
+  CM: number;
+  self: number;
+  colleagueAverage: number;
+}
+
+export interface stringResult {
+  question: string;
+  colleagues: string[];
+  CM: string | undefined;
+  self: string;
+} */

@@ -30,7 +30,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const [userInfo, setUserInfo] = useState<loggedInUser>();
 
-  const lang = useSelector((state: any) => state.header.lang);
+  //const lang = useSelector((state: any) => state.header.lang);
   const loggedIn = useSelector((state: any) => state.auth.loggedIn);
   const isAdmin = useSelector((state: any) => state.auth.isAdmin);
 
@@ -92,16 +92,18 @@ const Header = () => {
           FI
         </button>
       </div>
-      {loggedIn || sessionStorage.getItem("loggedIn") === "true" ? (
-        <>
-          <span className={styles.displayName}>{userInfo?.displayName}</span>
-          <button className={styles.loginButton} onClick={logout}>
-            {t("logout")}
-          </button>
-        </>
-      ) : (
-        <></>
-      )}
+      <div className={styles.headerBar}>
+        {loggedIn || sessionStorage.getItem("loggedIn") === "true" ? (
+          <>
+            <span className={styles.displayName}>{userInfo?.displayName}</span>
+            <button className={styles.loginButton} onClick={logout}>
+              {t("logout")}
+            </button>
+          </>
+        ) : (
+          <></>
+        )}
+      </div>
     </div>
   );
 };

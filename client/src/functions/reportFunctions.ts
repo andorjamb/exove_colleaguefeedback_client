@@ -1,6 +1,19 @@
 import { IFeedback } from "../types/feedback";
 import { IReportData, IReportCategory, IChartData } from "../types/report";
 
+/**
+ * export const reportSchema = new mongoose.Schema({
+    _id: { type: String, required: true },
+    feedbacks: { type: [mongoose.Schema.Types.String], ref: "FeedBacks" },
+    templates: { type: [mongoose.Schema.Types.String], ref: "Template" },
+    createdBy: { type: String, required: true },
+    createdOn: { type: Date, default: Date.now },
+    userId: { type: String, required: true },
+    requestPicks: { type: String, required: true },
+    
+})
+*/
+
 export class ReportClass {
   requestPicksId: string | undefined;
   feedbackTo: string | undefined; //ldapUid
@@ -20,6 +33,15 @@ export class ReportClass {
   }
 }
 
+/*
+export interface IChartData {
+  question: string;
+  colleagueAverage: number;
+  colleagues: number[];
+  CM: number;
+  self: number;
+}*/
+
 export class ChartDataClass {
   categoryName: string | undefined;
   chartData: IChartData[] | undefined;
@@ -35,38 +57,46 @@ export class ChartDataClass {
     this.comments = comments;
   }
 }
-/**
- * - get feedbackdata for this requestPick when essi approves a feedback instance:
- * OR 
- * - automatically when reviewer submits form ?
- * add data to ReportData object:
-    
-    MAKING CHARTS from report object
 
-    /*web chart:
-    calc average for each dataGroup: 
+// MAKING CHARTS from report object
+
+/* calculating average
     valueArray =  question.colleagues; 
     let total = 0;
     for (const i=0; i<array.length; i++) { total = total + i;}
       return total/array.length;
     */
 
-export const convertReportData = (data: IFeedback) => {};
+function makeReportCategoriesData(feedbacks: IFeedback[]) {
+  let reduction = feedbacks.reduce((accumulator: any, currentValue: any) => {
+    return {
+      ...accumulator,
+      ...{ [currentValue.user._id]: currentValue.categories },
+    };
+  }, {});
+}
 
-/**PSEUDOCODE
-     *  1. CONVERTING FEEDBACK OBJECT TO REPORT OBJECT:
-      Function will be triggered by onClick of 'generate report' button
-     * assume 'progress' property of IFeedback object has possible values eg)
-     * [null, 'incomplete', 'submitted', 'approved']
-     * //[started]
-     * for each feedback: 
-     * if (userId === feedbackTo){
-     * 
-     * }
-     * if (userId === reportsTo) {
-     * }
-     * if (roleLevel = 'self') {}
-     * 
-     * set report.
-     * 
-     */
+/* for returning category name if only category id is present  */
+/* function getCatName(para: string) {
+  for (const cat of mappedCategories) {
+    if (cat.categoryId === para) {
+      return cat.categoryName;
+    }
+  }
+}
+ */
+
+
+  /*   
+  function manipulate(value: any, key: string[]) {
+    let m = value.map((object: any) => {
+      return {
+        categoryId: object.category,
+        chartData: transformQuestions(object.questions),
+      };
+    });
+    console.log(m);
+    chartDataArray.push(m);
+  } */
+
+  // );
