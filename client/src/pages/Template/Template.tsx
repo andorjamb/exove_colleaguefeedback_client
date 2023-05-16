@@ -122,18 +122,23 @@ const Template = () => {
     categories?.forEach((category) => {
       let questionArray: ITemplateQuestion[] = [];
       questions?.forEach((question) => {
-        if (question.category === category._id) {
+        //makes assumption that questions will only be 'number' or 'string' type
+        if (
+          question.category === category._id &&
+          question.type.toLowerCase().startsWith("n")
+        ) {
           arrayQuestion = {
             ...arrayQuestion,
             id: question._id,
             question: question.question[0].question as string, //TOFIX: this could cause bugs if 'Eng' is not first in array
             isFreeForm: false,
-            //makes assumption that questions will only be one of two types
           };
 
-          if (question.type.startsWith("s".toLowerCase())) {
+          if (question.type.toLowerCase().startsWith("s")) {
             arrayQuestion = {
               ...arrayQuestion,
+              id: question._id,
+              question: question.question[0].question as string,
               isFreeForm: true,
             };
           }
@@ -177,11 +182,11 @@ const Template = () => {
 
       if (value === "on") {
         setNewQuestionState((newQuestionState) => {
-          return { ...newQuestionState, type: "String" };
+          return { ...newQuestionState, type: "string" };
         });
       } else {
         setNewQuestionState((newQuestionState) => {
-          return { ...newQuestionState, type: "Number" };
+          return { ...newQuestionState, type: "number" };
         });
       }
     }
@@ -253,7 +258,7 @@ const Template = () => {
     //dispatch(updateTemplateSelection(checkboxStateCopy));
   }
 
-  /* onSubmit handler for saving template to db  */
+  //convert activeCheckboxState to db form
   function postCategoryConverter(obj: ActiveCheckboxes) {
     let categoryArray: ICategoryPost[] = [];
     let categoryIds = Object.keys(activeCheckboxState);
@@ -266,10 +271,9 @@ const Template = () => {
     return categoryArray;
   }
 
+  /* onSubmit handler for saving template to db  */
   async function saveTemplate(e: any) {
     e.preventDefault();
-
-    //need to convert activeCheckboxState to db-friendly form
     console.log(activeCheckboxState);
     let categoryArray = postCategoryConverter(activeCheckboxState);
     let newTemplate: ITemplatePost = {

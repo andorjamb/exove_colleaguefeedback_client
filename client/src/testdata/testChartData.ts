@@ -1,5 +1,5 @@
 import { IReportData } from "../types/report";
-
+/* 
 export const testChartData: IReportData = {
     requestPicksId: "pickId",
     feedbackTo: "userId",
@@ -8,7 +8,7 @@ export const testChartData: IReportData = {
       {
         categoryName: "Quality Focus",
         categoryId: "",
-        rangeDataGroups: [
+        chartData: [
           {
             question: "Q1",
             colleagueAverage: 4,
@@ -45,14 +45,14 @@ export const testChartData: IReportData = {
             self: 3,
           },
         ],
-        stringDataGroups: [
+        comments: [
           { question: "Q6", colleagues: [""], CM: "", self: "" },
         ],
       },
       {
         categoryName: "Leadership",
         categoryId: "",
-        rangeDataGroups: [
+        chartData: [
           {
             question: "Q1",
             colleagueAverage: 4,
@@ -89,9 +89,9 @@ export const testChartData: IReportData = {
             self: 3,
           },
         ],
-        stringDataGroups: [
+        comments: [
           { question: "Q6", colleagues: [""], CM: "", self: "" },
         ],
       },
     ],
-  };
+  }; */

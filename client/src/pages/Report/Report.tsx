@@ -7,8 +7,8 @@ import { jsPDF } from "jspdf";
 import styles from "./Report.module.css";
 
 //Types
-import { IReportData, IReportCategory, rangeResult } from "../../types/report";
-import { IFeedback } from "../../types/feedback";
+import { IReportData, IReportCategory, IChartData } from "../../types/report";
+import { IFeedback, IFCategory } from "../../types/feedback";
 import { IUserDataGet } from "../../types/users";
 
 //Redux
@@ -29,9 +29,9 @@ import { useTranslation } from "react-i18next";
 import CustomSpinner from "../../components/CustomSpinner/CustomSpinner";
 import ChartBar from "../../charts/ChartBar";
 import ChartRadar from "../../charts/ChartRadar";
-import { ReportClass } from "../../functions/reportFunctions";
-import { testChartData } from "../../testdata/testChartData";
-import { workerData } from "worker_threads";
+import { ReportClass, ChartDataClass } from "../../functions/reportFunctions";
+import { testFeedbackData } from "../../testdata/testFeedbackData";
+import { IQuestionLang } from "../../types/questions";
 
 //(manager and HR only view)
 //check user: if not correct role level, navigate to login
@@ -48,53 +48,115 @@ import { workerData } from "worker_threads";
  */
 
 const Report = () => {
-  const { pickId } = useParams();
+  const { userId } = useParams();
+  //const { pickId } = useParams();
+  let pickId = "52e103e0-1c23-4220-9a47-bed14056cfe3"; //for testing
   const { t } = useTranslation(["report"]);
   const reportRoot = useRef<HTMLDivElement>(null);
   const doc = new jsPDF("landscape", "pt", "a4");
-  const [userId, setUserId] = useState<string | undefined>("");
+  const [revieweeId, setUserId] = useState<string | undefined>("");
 
   /** jsPDF requires inline styles, doesn't support external css? (seems to be working though)
   //pick-id eg)  52e103e0-1c23-4220-9a47-bed14056cfe3
+  // 8f7ed873-29f1-42d3-8337-1a5ad2af56af
   //pick.requestedTo ->ldapUid
 */
-  const allUsers = useGetAllUsersQuery().data;
+  //const allUsers = useGetAllUsersQuery().data;
   const getPick = useGetRequestPickByDocIdQuery(pickId as any).data;
   const activeTemplate = useGetActiveTemplateQuery().data;
   const templateTitle = activeTemplate?.templateTitle;
   const categories = activeTemplate?.categories;
-  const userData = useGetUserByLdapUidQuery(userId as any).data;
+  const userData = useGetUserByLdapUidQuery(revieweeId as any).data;
   const date = new Date().getFullYear();
-  const { isLoading, isFetching } = useGetFeedbacksByNameQuery(userId as any);
-  const feedbacks: IFeedback[] | undefined =
-    useGetFeedbacksByNameQuery("einstein").data;
+  const { isLoading, isFetching } = useGetFeedbacksByNameQuery(
+    revieweeId as any
+  );
+  let feedbacks: IFeedback[] | undefined = useGetFeedbacksByNameQuery(
+    revieweeId as any
+  ).data;
+  console.log("reviewee", revieweeId);
+
+  if (feedbacks && feedbacks?.length === 0) {
+    feedbacks = testFeedbackData;
+  }
+  console.log("feedbacks", feedbacks); //debugging
+
   let mappedCategories: any;
-  //const [reportCategories, setReportCategories] = useState<any>([]);
-  //const [reportSubject, setReportSubject] = useState<IUserDataGet>();
-
-  let rangeResult = [];
-  let stringResult = [];
+  let chartDataArray = [];
   let CM: string = "";
-  /*   if (userData?.workId) {
-    console.log("workId object:", userData.workId);
-  } */
-  // console.log(allUsers);
 
-  console.log("feedbacks", feedbacks);
   if (categories) {
     mappedCategories = categories?.map((category) => {
       return {
         categoryName: category.category.categoryName,
         categoryId: category.category._id,
-        rangeDataGroups: [],
-        stringDataGroups: [],
+        chartData: [],
+        comments: [],
       };
     });
-    //console.log("mapped categories:", mappedCategories);
-    //setReportCategories((reportCategories: any) => mappedCategories);
+    console.log("line 90", mappedCategories);
   }
 
-  /*  */
+  /** organise the map according to role of reviewer */
+  /** iterated for each key/value pair of map */
+  function mapByRole(values: IFCategory[], key: any) {
+    if (key[1] === revieweeId) {
+      console.log("self evaluation:", values); //array of feedback objects
+      values.forEach((value) => {
+        mappedCategories.forEach((category: any) => {
+          if (category.category === value.category) {
+            console.log("category chartdata:", category.chartData);
+            console.log(value.questions);
+            value.questions.forEach((question) => {
+              //make new
+            });
+          }
+        });
+
+        transformQuestions(value.questions);
+      });
+    }
+    if (key[0] < 5) {
+      console.log("CM evaluation: by ", key[1], values); //array of feedback objects
+      CM = key[1];
+    }
+  }
+
+  function transformQuestions(questions: IQuestionLang[]) {
+    let questionMap = questions.map((question) => {
+      return {
+        ...question,
+        question: question.question,
+      };
+    });
+    return questionMap;
+  }
+
+  function makePdf() {
+    if (reportRoot.current) {
+      doc.html(reportRoot.current, {
+        html2canvas: { scale: 0.8 },
+        async callback(doc) {
+          await doc.save(`report_${userId}`);
+        },
+      });
+    }
+  }
+
+  useEffect(() => {
+    /** create a map from all feedbacks for this reviewee  */
+    let mappedSet = new Map(
+      feedbacks?.map((feedback) => {
+        let key = [feedback.roleLevel, feedback.userId];
+        return [key, feedback.categories];
+      })
+    );
+    console.log("mappedSet", mappedSet);
+    mappedSet.forEach(mapByRole);
+
+    //eslint-disable-next-line
+  }, [feedbacks]);
+
   useEffect(() => {
     setUserId(getPick?.requestedTo);
   }, [getPick]);
@@ -103,74 +165,12 @@ const Report = () => {
     makeReportCategoriesData(feedbacks);
   }, [feedbacks]); */
 
-  if (feedbacks) {
-    //makeReportCategoriesData(feedbacks);
-  }
-
-  function makeReportCategoriesData(feedbacks: IFeedback[]) {
-    let CMFeedback = feedbacks?.find((feedback) => feedback.userId === CM);
-    console.log(CMFeedback);
-    let selfFeedback = feedbacks.filter(
-      (feedback) => feedback.userId === feedback.feedbackTo
-    )[0];
-    let reduction = feedbacks.reduce((accumulator: any, currentValue: any) => {
-      return {
-        ...accumulator,
-        ...{ [currentValue.user._id]: currentValue.categories },
-      };
-    }, {});
-    console.log("reduction", reduction);
-  }
-
-  let mappedSet = new Map(
-    feedbacks?.map((feedback) => [feedback.userId, feedback.categories])
-  );
-  console.log("mappedSet", mappedSet);
-
-  // function makeChartData() {}
-
-  /**OBJECT ARRAY
-   * mappedcategories = [
-   * {categoryName: "",
-   * chartData: [{
-            question: "Q1",
-            colleagueAverage: 4,
-            colleagues: [3, 4, 5, 1],
-            CM: 3,
-            self: 5,
-          },{},{},{}],
-      comments: {self: "",
-    CM: "",
-  colleagues: ["",""]}
-        },
-        {},
-        {}
-   * ]
-        
-   * 
-   * 
-   */
-
-  function makePdf() {
-    if (reportRoot.current) {
-      doc.html(reportRoot.current, {
-        html2canvas: { scale: 0.8 },
-        async callback(doc) {
-          await doc.save(`report_${pickId}`);
-        },
-      });
-    }
-  }
-
   if (isLoading || isFetching) {
     return <CustomSpinner />;
   }
+
   return (
     <div className={styles.container}>
-      {/*  <div className={styles.sidebar}>
-        <h3>Sections</h3>
-        <ul></ul>
-      </div> */}
       <div className={styles.report} ref={reportRoot}>
         <div className={styles.reportHeader}></div>
         <section>
