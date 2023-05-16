@@ -133,12 +133,19 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     }
   };
 
+  // Updates picks according to new selection
   const updateColleaguePicks = async (newSelection: IUserDataGet[]) => {
+    await updatePicksByRoleLevel(newSelection, 5);
+  };
+
+  const updatePicksByRoleLevel = async (
+    newSelection: IUserDataGet[],
+    pickRoleLevel: number
+  ) => {
     if (!userPicks) return;
     const colleaguePicks = userPicks.SelectedList.filter(
-      (pick) => pick.roleLevel === 5
+      (pick) => pick.roleLevel === pickRoleLevel
     );
-    console.log("colleaguePicks", colleaguePicks);
     const deletedPicks = colleaguePicks.filter((pick) =>
       newSelection.find((user) => user.ldapUid === pick.userId)
     );
@@ -147,17 +154,13 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         colleaguePicks.find((user) => user.userId === pick.ldapUid) ===
         undefined
     );
-    console.log("added picks", addedPicks);
-    console.log("deleted picks", deletedPicks);
-    deletedPicks.forEach((pick) => {
-      deactivatePick(pick.userId, 5);
-      console.log("pick to delete", pick);
-    });
+    for (const pick of deletedPicks) {
+      await deactivatePick(pick.userId, pickRoleLevel);
+    }
     // await????
-    addedPicks.forEach((pick) => {
-      console.log("pick to add", pick);
-      activatePick(pick.ldapUid, 5);
-    });
+    for (const pick of addedPicks) {
+      await activatePick(pick.ldapUid, pickRoleLevel);
+    }
   };
 
   return (
@@ -297,7 +300,16 @@ const PersonRow: React.FC<IPersonRowProps> = ({
           <div className={styles.buttons_container}>
             <Tooltip
               TransitionComponent={Fade}
-              title={`Preview ${user.displayName}'s report`}
+              title={`Finalise ${user.displayName}'s feedback process`}
+              placement="bottom-start"
+            >
+              <button className={styles.request}>
+                <span className="material-symbols-outlined">description</span>
+              </button>
+            </Tooltip>
+            <Tooltip
+              TransitionComponent={Fade}
+              title={`View ${user.displayName}'s report`}
               placement="bottom-start"
             >
               <button className={styles.edit}>
@@ -306,11 +318,13 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             </Tooltip>
             <Tooltip
               TransitionComponent={Fade}
-              title="Generate report and make it available to competence manager"
+              title={`Make ${user.displayName}'s report available to CM`}
               placement="bottom-start"
             >
               <button className={styles.approve}>
-                <span className="material-symbols-outlined">description</span>
+                <span className="material-symbols-outlined">
+                  supervisor_account
+                </span>
               </button>
             </Tooltip>
           </div>
