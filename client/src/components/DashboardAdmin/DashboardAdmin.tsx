@@ -45,7 +45,10 @@ const DashboardAdmin = () => {
       </>
     );
 
-  if (!activeTemplateData.data) return <p>No active templates</p>;
+  if (!activeTemplateData.data)
+    return <p>No active templates. Create one here</p>;
+
+  // Filtering picks to only contain active ones
 
   const searchChangeHandler = (e: React.FormEvent<HTMLInputElement>) => {
     setSearchInput(e.currentTarget.value);
@@ -99,6 +102,7 @@ const DashboardAdmin = () => {
               return (
                 <PersonRow
                   key={currUser._id}
+                  currentTemplateId={activeTemplateData.data!._id}
                   user={currUser}
                   userPicks={picksData.data!.find(
                     (pick) => pick.requestedTo === currUser.ldapUid

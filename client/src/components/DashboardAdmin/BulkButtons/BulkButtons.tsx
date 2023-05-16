@@ -31,15 +31,15 @@ const BulkButtons: React.FC<IBulkButtonsProps> = ({ allPicks, allUsers }) => {
     await createPick(newPick);
   };
 
-  const requestAllPicks = () => {
+  const requestAllPicks = async () => {
     const usersWithoutRequests = allUsers.filter(
       (user) =>
         allPicks.find((pick) => pick.requestedTo === user.ldapUid) === undefined
     );
     console.log("users with no request picks created", usersWithoutRequests);
-    usersWithoutRequests.forEach((user) => {
-      requestPicks({ requestedTo: user.ldapUid });
-    });
+    for (const user of usersWithoutRequests) {
+      await requestPicks({ requestedTo: user.ldapUid });
+    }
   };
 
   return (

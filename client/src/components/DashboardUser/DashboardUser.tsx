@@ -41,34 +41,53 @@ const DashboardUser = () => {
   const [selected, setSelected] = useState<IUserDataGet[]>([]);
   const [currentUserInfo, setCurrentUserInfo] = useState<loggedInUser>();
   const [currentUserPick, setCurrentUserPick] = useState<IRequestPicks>();
+  // replace with navigate later?
   const [submitted, setSubmitted] = useState(false);
 
   const getUserInfo = async () => {
+    console.log("trying to get user info");
+    console.log("picksData", picksData.data);
     if (picksData.isFetching || !picksData.data) return;
     const userDetails: loggedInUser = await getSecureUserUid();
+    console.log("userDetails awaited", userDetails);
     setCurrentUserInfo(userDetails);
     console.log("loggedInUser", userDetails);
     console.log(
-      "Pick for this user found:",
-      picksData.data.find((pick) => pick.requestedTo === currentUserInfo?.uid)
+      "Picks for this user found and set:",
+      picksData.data.find((pick) => pick.requestedTo === userDetails.uid)
     );
     setCurrentUserPick(
-      picksData.data.find((pick) => pick.requestedTo === currentUserInfo?.uid)
+      picksData.data.find((pick) => pick.requestedTo === userDetails.uid)
     );
   };
 
   useEffect(() => {
     try {
       getUserInfo();
-      // getting 403 error here
     } catch (err) {
       console.log("error getting user", err);
     }
-  }, []);
+  }, [picksData]);
 
   // Differenciate between loading and no pick found?
-  if (usersData.isFetching || !usersData.data || !currentUserInfo)
+  if (usersData.isFetching || !usersData.data || !currentUserInfo) {
+    // Debugging loading
+    if (usersData.isFetching || !usersData.data)
+      console.log("usersData", usersData);
+    if (!currentUserInfo) console.log("currentUserInfo", currentUserInfo);
+    console.log();
     return <p>Loading user dashboard...</p>;
+  }
+
+  if (
+    currentUserPick?.SelectedList.filter(
+      (pick) =>
+        pick.roleLevel === 5 &&
+        pick.userId !== currentUserInfo.uid &&
+        pick.selectionStatus
+    )
+  )
+    return <p>Picks done already</p>;
 
   const activatePick = async (userId: string, pickRoleLevel: number) => {
     if (!currentUserPick) return;
@@ -88,6 +107,7 @@ const DashboardUser = () => {
       const requestBody = {
         userId: userId,
         roleLevel: pickRoleLevel,
+        selectionStatus: true,
       };
       await submitPick({ body: requestBody, id: currentUserPick._id });
     }
@@ -98,7 +118,9 @@ const DashboardUser = () => {
     if (!currentUserPick) return;
     console.log("Submitting:", selected);
     setSubmitted(true);
-    selected.forEach((selectedUser) => activatePick(selectedUser.ldapUid, 5));
+    for (const selectedUser of selected) {
+      await activatePick(selectedUser.ldapUid, 5);
+    }
   };
 
   const doneHandler = (picksSelected: IUserDataGet[]) => {
