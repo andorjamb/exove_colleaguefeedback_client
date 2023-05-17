@@ -13,11 +13,11 @@
 .login {
   height: auto;
   width: 50%;
-  max-width: 400px;
-  padding: 2rem;
+  max-width: 24rem;
+  padding: 2.5rem;
   background-color: white;
-  background-color: var(--medGray);
-  box-shadow: 4px 4px var(--exovePurple);
+  background-color: var(--lightGray);
+  box-shadow: 5px 5px var(--exovePurple);
 }
 
 .formContainer {
@@ -27,7 +27,7 @@
 }
 
 .form {
-  width: 90%;
+  width: 100%;
   display: grid;
   grid-template-columns: auto;
   grid-template-rows: 1fr 1fr 1fr;
@@ -42,38 +42,36 @@
   display: inline-block;
   border: none;
   width: 100%;
-  height: 2.5rem;
+  height: 3rem;
   padding: 0 1rem;
 }
 
 .label {
   display: block;
-  font-size: smaller;
+  font-size: 0.9rem;
   width: 100%;
   text-align: left;
-  margin-top: 1rem;
+  margin: 1rem 0 0.2rem;
 }
 
 .button {
-  width: 5rem;
-  height: 2.5rem;
+  height: 3rem;
   cursor: pointer;
 }
 
 .loginButton {
   background-color: var(--exovePurple);
-  box-shadow: 4px 4px black;
+  box-shadow: 5px 5px black;
   color: white;
   position: absolute;
-  transition: all ease-in-out 0.2s;
+  transition: all ease-in-out 0.25s;
   border: none;
   bottom: 0;
   right: 0;
 }
 
-.loginButton:active {
-  background-color: black;
-  transform: translate(4px, 4px);
+.loginButton:hover {
+  transform: translate(5px, 5px);
   box-shadow: none;
 }
 

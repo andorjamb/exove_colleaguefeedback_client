@@ -1,167 +1,59 @@
-//React
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-
-// Redux
-import { useSelector } from "react-redux";
-import { useGetAllUsersQuery } from "../../features/userApi";
+// API, redux
+import { useGetAllFeedbacksQuery } from "../../features/feedbackApi";
 import {
   useGetAllRequestPicksQuery,
-  useSubmitPickMutation,
-  useApprovePickMutation,
+  useGetRequestPickByUserIdQuery,
 } from "../../features/requestPicksApi";
-import { getSecureUserUid } from "../../functions/secureUser";
-import { useGetRequestPickByUserIdQuery } from "../../features/requestPicksApi";
+import { useGetAllUsersQuery } from "../../features/userApi";
+import { useGetActiveTemplateQuery } from "../../features/templateApi";
 
-//Pages and Components
-import Card from "../Card/Card";
-import SearchBar from "../DashboardAdmin/SearchBar/SearchBar";
-import UserPickBlock from "./UserPickBlock";
+import CustomSpinner from "../CustomSpinner/CustomSpinner";
 
-//Styling
-import styles from "./DashboardUser.module.css";
+//
+import PicksUser from "./PicksUser";
+import { loggedInUser } from "../../types/users";
 
-//Translations
-import "../../translations/i18next";
-import { useTranslation } from "react-i18next";
-
-//Types
-import { IUserDataGet, loggedInUser } from "../../types/users";
-import { IRequestPicks } from "../../types/picks";
-import Submitted from "./Submitted";
-
-const DashboardUser = () => {
-  const navigate = useNavigate();
-  const { t } = useTranslation(["dashboardUser"]);
-  const usersData = useGetAllUsersQuery();
+const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
+  currentUserInfo,
+}) => {
+  const feedbackData = useGetAllFeedbacksQuery();
   const picksData = useGetAllRequestPicksQuery();
-  const [approvePick] = useApprovePickMutation();
-  const [submitPick] = useSubmitPickMutation();
-  const [selected, setSelected] = useState<IUserDataGet[]>([]);
-  const [currentUserInfo, setCurrentUserInfo] = useState<loggedInUser>();
-  const [currentUserPick, setCurrentUserPick] = useState<IRequestPicks>();
-  // replace with navigate later?
-  const [submitted, setSubmitted] = useState(false);
+  const activeTemplateData = useGetActiveTemplateQuery();
 
-  const getUserInfo = async () => {
-    console.log("trying to get user info");
-    console.log("picksData", picksData.data);
-    if (picksData.isFetching || !picksData.data) return;
-    const userDetails: loggedInUser = await getSecureUserUid();
-    console.log("userDetails awaited", userDetails);
-    setCurrentUserInfo(userDetails);
-    console.log("loggedInUser", userDetails);
-    console.log(
-      "Picks for this user found and set:",
-      picksData.data.find((pick) => pick.requestedTo === userDetails.uid)
-    );
-    setCurrentUserPick(
-      picksData.data.find((pick) => pick.requestedTo === userDetails.uid)
-    );
-  };
-
-  useEffect(() => {
-    try {
-      getUserInfo();
-    } catch (err) {
-      console.log("error getting user", err);
-    }
-  }, [picksData]);
-
-  // Differenciate between loading and no pick found?
-  if (usersData.isFetching || !usersData.data || !currentUserInfo) {
-    // Debugging loading
-    if (usersData.isFetching || !usersData.data)
-      console.log("usersData", usersData);
-    if (!currentUserInfo) console.log("currentUserInfo", currentUserInfo);
-    console.log();
-    return <p>Loading user dashboard...</p>;
-  }
-
-  if (!currentUserPick) return <p>Nothing to pick yet</p>;
-
-  const picksDone = () => {
+  if (
+    activeTemplateData.isFetching ||
+    feedbackData.isFetching ||
+    picksData.isFetching ||
+    !picksData.data
+  )
     return (
-      currentUserPick.SelectedList.filter(
-        (pick) =>
-          pick.roleLevel === 5 &&
-          pick.userId !== currentUserInfo.uid &&
-          pick.selectionStatus
-      ).length >= 5
+      <>
+        <CustomSpinner />
+        <p>Loading dashboard...</p>
+      </>
     );
-  };
 
-  if (picksDone()) return <p>Picks done already</p>;
+  if (!activeTemplateData.data)
+    return <p>No feedback action is going on right now.</p>;
 
-  const activatePick = async (userId: string, pickRoleLevel: number) => {
-    if (!currentUserPick) return;
-    const pickFound = currentUserPick.SelectedList.find(
-      (pick) => pick.userId === userId && pick.roleLevel === pickRoleLevel
-    );
-    if (pickFound) {
-      if (pickFound.selectionStatus === true) return;
-      else {
-        const requestBody = {
-          userId: userId,
-          selectionStatus: true,
-        };
-        await approvePick({ body: requestBody, id: currentUserPick._id });
-      }
-    } else {
-      const requestBody = {
-        userId: userId,
-        roleLevel: pickRoleLevel,
-        selectionStatus: true,
-      };
-      await submitPick({ body: requestBody, id: currentUserPick._id });
-    }
-  };
+  if (!picksData || !feedbackData.data)
+    return <p>Nothing to yet, please wait for HR to notify you</p>;
 
-  const submitHandler = async () => {
-    console.log("currentUserPick", currentUserPick);
-    if (!currentUserPick) return;
-    console.log("Submitting:", selected);
-    setSubmitted(true);
-    for (const selectedUser of selected) {
-      await activatePick(selectedUser.ldapUid, 5);
-    }
-  };
+  // Feedbacks from current user on current template
+  const userFeedbacks = feedbackData.data.filter(
+    (feedback) =>
+      feedback.userId === currentUserInfo.uid &&
+      feedback.template === activeTemplateData.data?._id
+  );
 
-  const doneHandler = (picksSelected: IUserDataGet[]) => {
-    setSelected([...picksSelected]);
-  };
+  console.log("Feedbacks given by user:", userFeedbacks);
 
   return (
-    <div className={styles.container}>
-      {submitted ? (
-        <Submitted />
-      ) : (
-        <div className={styles.mainContent}>
-          <UserPickBlock
-            users={usersData.data.filter(
-              (user) => user.ldapUid !== currentUserInfo.uid
-            )}
-            editHandler={doneHandler}
-            doneHandler={() => {}}
-            heading={t("title")}
-            defaultEditing={true}
-            defaultSelection={[]}
-          />
-          <div className={styles.submit_container}>
-            <button
-              type="button"
-              className={`${styles.submitButton} ${
-                selected.length < 5 && styles.inactive
-              }`}
-              disabled={selected.length < 5}
-              onClick={submitHandler}
-            >
-              {t("submit")}
-            </button>
-          </div>
-        </div>
-      )}
+    <div>
+      <h1>User dashboard</h1>
+      <h2>Picks</h2>
+      <PicksUser />
+      <h2>Feedbacks to do</h2>
     </div>
   );
 };
