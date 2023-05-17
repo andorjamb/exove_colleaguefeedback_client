@@ -124,6 +124,8 @@
   flex-direction: column;
   gap: 2rem;
   position: relative;
+  max-height: calc(100vh - 3rem);
+  overflow-y: auto;
 }
 
 .close_modal_button {

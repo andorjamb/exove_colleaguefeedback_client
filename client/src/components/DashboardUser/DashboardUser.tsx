@@ -79,15 +79,20 @@ const DashboardUser = () => {
     return <p>Loading user dashboard...</p>;
   }
 
-  if (
-    currentUserPick?.SelectedList.filter(
-      (pick) =>
-        pick.roleLevel === 5 &&
-        pick.userId !== currentUserInfo.uid &&
-        pick.selectionStatus
-    )
-  )
-    return <p>Picks done already</p>;
+  if (!currentUserPick) return <p>Nothing to pick yet</p>;
+
+  const picksDone = () => {
+    return (
+      currentUserPick.SelectedList.filter(
+        (pick) =>
+          pick.roleLevel === 5 &&
+          pick.userId !== currentUserInfo.uid &&
+          pick.selectionStatus
+      ).length >= 5
+    );
+  };
+
+  if (picksDone()) return <p>Picks done already</p>;
 
   const activatePick = async (userId: string, pickRoleLevel: number) => {
     if (!currentUserPick) return;

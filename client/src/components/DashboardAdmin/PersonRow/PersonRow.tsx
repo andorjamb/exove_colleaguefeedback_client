@@ -58,10 +58,10 @@ const PersonRow: React.FC<IPersonRowProps> = ({
 
   console.log("user feedbacks for", user.displayName, userFeedbacks);
 
-  const requestPicks = async (userId: string) => {
+  const requestPicks = async () => {
     setIsLoading(true);
     const newPick = {
-      requestedTo: userId,
+      requestedTo: user.ldapUid,
       template: currentTemplateId,
     };
     await createPick(newPick);
@@ -74,6 +74,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
 
   const approvePicks = async () => {
     if (!userPicks) return;
+    console.log("approving the following pick object", userPicks);
     setIsLoading(true);
     await finalPickSubmit(userPicks._id);
     setIsLoading(false);
@@ -99,20 +100,6 @@ const PersonRow: React.FC<IPersonRowProps> = ({
       else colour = "red";
     }
     return colour;
-    /* 
-    if (!userPicks) return colour;
-    const pickFound = userPicks.SelectedList.find(
-      (pick) => pick.userId === userId && pick.roleLevel === pickRoleLevel
-    );
-    console.log("pick found:", pickFound);
-    if (!pickFound) return "black";
-    if (!userPicks.submitted) return "black";
-    const feedbackFound = userFeedbacks.find(
-      (feedback) => feedback.requestpicksId === userPicks._id
-    );
-    console.log("feedback found:", feedbackFound);
-    if (!feedbackFound) return "red";
-    else return "green"; */
   };
 
   // Returns an array of picked users with given level
@@ -164,7 +151,9 @@ const PersonRow: React.FC<IPersonRowProps> = ({
           selectionStatus: true,
           roleLevel: pickRoleLevel,
         };
+        setIsLoading(true);
         await approvePick({ body: requestBody, id: userPicks._id });
+        setIsLoading(false);
       }
     } else {
       const requestBody = {
@@ -172,7 +161,9 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         roleLevel: pickRoleLevel,
         selectionStatus: true,
       };
+      setIsLoading(true);
       await submitPick({ body: requestBody, id: userPicks._id });
+      setIsLoading(false);
     }
   };
 
@@ -279,10 +270,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
                   title={`Request colleague picks from ${user.displayName}`}
                   placement="bottom-start"
                 >
-                  <button
-                    className={styles.request}
-                    onClick={() => requestPicks(user.ldapUid)}
-                  >
+                  <button className={styles.request} onClick={requestPicks}>
                     <span className="material-symbols-outlined">send</span>
                   </button>
                 </Tooltip>
@@ -339,8 +327,8 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             {!userPicks?.submitted && (
               <p className={styles.not_available}>unavailable</p>
             )}
-            {
-              /* userPicks?.submitted && userFeedbacks.length === 0  &&*/ <Tooltip
+            {userPicks?.submitted && !userFeedbacks && (
+              <Tooltip
                 TransitionComponent={Fade}
                 title={`Request feedbacks for ${user.displayName}`}
                 placement="bottom-start"
@@ -349,19 +337,20 @@ const PersonRow: React.FC<IPersonRowProps> = ({
                   <span className="material-symbols-outlined">send</span>
                 </button>
               </Tooltip>
-            }
-            {
-              /* userPicks &&
-              userPicks?.SelectedList.length > userFeedbacks.length && */ <Tooltip
-                TransitionComponent={Fade}
-                title={`Remind everyone to feedback ${user.displayName}`}
-                placement="bottom-start"
-              >
-                <button className={styles.remind}>
-                  <span className="material-symbols-outlined">timer</span>
-                </button>
-              </Tooltip>
-            }
+            )}
+            {userPicks &&
+              userPicks?.SelectedList.filter((pick) => pick.selectionStatus)
+                .length > userFeedbacks.length && (
+                <Tooltip
+                  TransitionComponent={Fade}
+                  title={`Remind everyone to feedback ${user.displayName}`}
+                  placement="bottom-start"
+                >
+                  <button className={styles.remind}>
+                    <span className="material-symbols-outlined">timer</span>
+                  </button>
+                </Tooltip>
+              )}
           </div>
         </td>
         <td>
