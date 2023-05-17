@@ -30,14 +30,21 @@
 
 .lightGray {
   background-color: var(--lightGray);
-  box-shadow: 5px 5px var(--medGray);
+  color: black;
+}
+
+.fancyButton[disabled] {
+  background-color: white;
+  color: var(--darkGray);
+  box-shadow: 5px 5px var(--darkGray);
+  cursor: auto;
 }
 
 .medGray {
+  color: black;
   background-color: var(--medGray);
 }
 
 .darkGray {
   background-color: var(--medBlack);
-  color: white;
 }

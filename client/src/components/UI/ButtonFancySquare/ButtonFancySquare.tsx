@@ -18,6 +18,7 @@ const ButtonFancySquare: React.FC<IButtonProps> = ({
   children,
   disabled,
 }) => {
+  console.log("disabled:", disabled);
   return (
     <button
       className={[styles[color], styles.fancyButton].join(" ")}

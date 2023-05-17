@@ -31,6 +31,7 @@ const Login = () => {
   const loggedIn = useSelector((state: any) => state.auth.loggedIn);
   const isAdmin = useSelector((state: any) => state.auth.isAdmin);
   //const { error } = useSelector((state: any) => state.auth);
+  const [isLoading, setIsLoading] = useState(false);
 
   const devLoginEndpoint = "https://exove.vercel.app/api/";
   // `${process.env.REACT_APP_SERVER_URL}/api/login` as string;
@@ -49,6 +50,7 @@ const Login = () => {
   };
 
   const userLogin = async (e: any) => {
+    setIsLoading(true);
     e.preventDefault();
     console.log({ loginParams }); //debugging
 
@@ -74,11 +76,13 @@ const Login = () => {
         .then(() => {
           sessionStorage.setItem("loggedIn", "true");
           dispatch(setLoggedIn(true));
+          setIsLoading(false);
         });
       // setLoginParams({ username: "", password: "" });
     } catch (err) {
       console.log(err);
       setLoginParams({ username: "", password: "" });
+      setIsLoading(false);
     }
   };
 
@@ -124,13 +128,20 @@ const Login = () => {
                 color="purple"
                 clickHandler={userLogin}
                 children={
-                  <span className="material-symbols-outlined">
-                    arrow_forward
-                  </span>
+                  isLoading ? (
+                    <span className="material-symbols-outlined">
+                      hourglass_top
+                    </span>
+                  ) : (
+                    <span className="material-symbols-outlined">
+                      arrow_forward
+                    </span>
+                  )
                 }
                 disabled={
-                  loginParams.password.length > 0 &&
-                  loginParams.username.length > 0
+                  loginParams.password.length === 0 ||
+                  loginParams.username.length === 0 ||
+                  isLoading
                 }
               />
             </div>
