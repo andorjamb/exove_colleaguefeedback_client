@@ -1,11 +1,7 @@
 import { DefaultTFuncReturn } from "i18next";
-import styles from "./ButtonFancy.module.css";
+import styles from "./ButtonFancySquare.module.css";
 
-import {
-  DetailedHTMLProps,
-  ButtonHTMLAttributes,
-  MouseEventHandler,
-} from "react";
+import { MouseEventHandler } from "react";
 
 interface IButtonProps {
   type: "button" | "submit" | "reset" | undefined;
@@ -15,7 +11,7 @@ interface IButtonProps {
   disabled: boolean;
 }
 
-const ButtonFancy: React.FC<IButtonProps> = ({
+const ButtonFancySquare: React.FC<IButtonProps> = ({
   type,
   color,
   clickHandler,
@@ -34,4 +30,4 @@ const ButtonFancy: React.FC<IButtonProps> = ({
   );
 };
 
-export default ButtonFancy;
+export default ButtonFancySquare;

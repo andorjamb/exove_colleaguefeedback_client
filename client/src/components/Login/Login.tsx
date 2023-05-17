@@ -17,6 +17,7 @@ import styles from "./Login.module.css";
 import { AppDispatch } from "../../app/store";
 import { secureUserUid } from "../../functions/secureUser";
 import ButtonFancy from "../UI/ButtonFancy/ButtonFancy";
+import ButtonFancySquare from "../UI/ButtonFancySquare/ButtonFancySquare";
 
 interface ILoginParams {
   username: string;
@@ -118,7 +119,7 @@ const Login = () => {
               ></input>
             </div>
             <div className={styles.formElements}>
-              <ButtonFancy
+              <ButtonFancySquare
                 type="submit"
                 color="purple"
                 clickHandler={userLogin}
@@ -126,6 +127,10 @@ const Login = () => {
                   <span className="material-symbols-outlined">
                     arrow_forward
                   </span>
+                }
+                disabled={
+                  loginParams.password.length > 0 &&
+                  loginParams.username.length > 0
                 }
               />
             </div>

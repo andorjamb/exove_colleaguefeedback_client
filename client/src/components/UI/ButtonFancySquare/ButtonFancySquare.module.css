@@ -4,6 +4,7 @@
   background-color: var(--lightGray);
   box-shadow: 5px 5px black;
   color: white;
+  position: absolute;
   transition: all ease-in-out 0.25s;
   border: none;
   bottom: 0;
@@ -11,6 +12,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 3rem;
 }
 
 .fancyButton:hover {
@@ -28,21 +30,14 @@
 
 .lightGray {
   background-color: var(--lightGray);
-  color: black;
-}
-
-.fancyButton[disabled] {
-  background-color: var(--lightGray);
-  color: var(--darkGray);
-  box-shadow: 5px 5px var(--darkGray);
-  cursor: auto;
+  box-shadow: 5px 5px var(--medGray);
 }
 
 .medGray {
-  color: black;
   background-color: var(--medGray);
 }
 
 .darkGray {
   background-color: var(--medBlack);
+  color: white;
 }
