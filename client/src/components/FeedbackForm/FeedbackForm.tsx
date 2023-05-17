@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import style from "./FeedbackForm.module.css";
 import StringQuestions from "./StringQuestions";
 import RangeQuestions from "./RangeQuestions";
-import BoleanQuestions from "./BoleanQuestions";
+import BooleanQuestions from "./BooleanQuestions";
 import { useGetActiveTemplateQuery } from "../../features/templateApi";
 import { ITemplate } from "../../types/template";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,12 +13,13 @@ import { getSecureUserUid } from "../../functions/secureUser";
 import { loggedInUser } from "../../types/users";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import CustomSpinner from "../../components/CustomSpinner/CustomSpinner";
 
 const FeedbackForm = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { data } = useGetActiveTemplateQuery() || [];
 
-  const [loadigState, setLoadingState] = useState<boolean>(true);
+  const [loadingState, setLoadingState] = useState<boolean>(true);
   const [qTemplate, setActiveTmpt] = useState<ITemplate>();
   const [userInfo, setUserInfo] = useState<loggedInUser>();
   const { feedback } = useSelector((state: any) => state.feedback);
@@ -128,16 +129,16 @@ const FeedbackForm = () => {
         </h2>
       </div>
 
-      <h3 className={style.instructionsTitle}>Instruction</h3>
-
-      <p className={style.instructions}>{qTemplate?.instructions}</p>
       <>
-        {loadigState ? (
-          <>
-            <h1>Getting Data .........</h1>
-          </>
+        {loadingState ? (
+          <CustomSpinner />
         ) : (
           <div className={style.questionContainer}>
+            <div className={style.instructionsContainer}>
+              <h3 className={style.instructionsTitle}>Instruction</h3>
+
+              <p className={style.instructions}>{qTemplate?.instructions}</p>
+            </div>
             {qTemplate &&
               qTemplate.categories?.map((cat) => (
                 <div className={style.catQuest} key={cat.category._id}>
@@ -168,7 +169,7 @@ const FeedbackForm = () => {
                           }
                         />
                       ) : (
-                        <BoleanQuestions
+                        <BooleanQuestions
                           key={quiz._id}
                           category={quiz.category}
                           questions={
@@ -182,19 +183,18 @@ const FeedbackForm = () => {
                   ))}
                 </div>
               ))}
+            <div className={style.formElements}>
+              <button
+                className={[style.button, style.loginButton].join(" ")}
+                onClick={(e) => handleSubmitFeedBack(e)}
+                disabled={unAnsweredQuestions !== 0}
+              >
+                Submit
+              </button>
+            </div>
           </div>
         )}
       </>
-
-      <div className={style.formElements}>
-        <button
-          className={[style.button, style.loginButton].join(" ")}
-          onClick={(e) => handleSubmitFeedBack(e)}
-          disabled={unAnsweredQuestions !== 0}
-        >
-          Submit
-        </button>
-      </div>
     </div>
   );
 };

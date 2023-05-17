@@ -1,11 +1,15 @@
 /* globals */
-.h1 {}
+.h1 {
+}
 
-.h1 {}
+.h1 {
+}
 
-.h3 {}
+.h3 {
+}
 
-.h4 {}
+.h4 {
+}
 
 /* main feedback component */
 
@@ -19,14 +23,14 @@
   align-items: flex-start;
 }
 
-.header {}
+.header {
+}
 
 .username {
   color: #6e12e7;
 }
 
 .instructionsTitle {
-  padding: 2rem 0 0 0;
   display: flex;
   align-items: flex-start;
 }
@@ -35,10 +39,16 @@
   display: flex;
   align-items: flex-start;
   text-align: left;
+  word-spacing: 2.5px;
+  padding-top: 2rem;
 }
 
+.instructionsContainer {
+  margin: 2rem -3rem 0 -3rem;
+  padding: 1rem 3rem;
+  background-color: #f2f2f2;
+}
 .questionContainer {
-  padding: 4rem 0;
   text-align: left;
   display: flex;
   gap: 2rem;
@@ -85,11 +95,11 @@
 }
 
 .bolTrue {
-  background: green;
+  background: #63ad7b;
 }
 
 .bolFalse {
-  background: #7a75ddd1;
+  background: #f85b6bcf;
 }
 
 .bolCircle {
@@ -106,7 +116,7 @@
   font-size: 20px;
 }
 
-.bolInitial>p {
+.bolInitial > p {
   background: #d5d7d5d1;
 }
 
@@ -114,8 +124,8 @@
 
 .rLabel {
   cursor: pointer;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
 }
 
@@ -136,7 +146,7 @@
   align-items: center;
 }
 
-.rMainDiv>p {
+.rMainDiv > p {
   width: 40%;
 }
 
@@ -147,7 +157,7 @@
   width: 50%;
   border-radius: 100px;
   align-items: center;
-  max-height: 60px;
+  max-height: 10px;
 }
 
 /* String questions css */
@@ -170,8 +180,6 @@
   cursor: pointer;
 }
 
-
-
 .loginButton {
   background-color: #45af76;
   box-shadow: 4px 4px black;
@@ -185,8 +193,6 @@
 .loginButton:disabled {
   background-color: #b3b3b3;
   pointer-events: none;
-
-
 }
 
 .loginButton:active {

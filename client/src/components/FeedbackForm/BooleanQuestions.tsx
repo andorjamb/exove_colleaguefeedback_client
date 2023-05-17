@@ -11,7 +11,7 @@ interface question {
   category:string,
 
 }
-const BoleanQuestions = ({ questions, category }: question) => {
+const BooleanQuestions = ({ questions, category }: question) => {
   const dispatch =useDispatch()
   const [switchState, setSwitchState] = useState(true);
   const [booleanState, setBooleanState]= useState("")
@@ -62,4 +62,4 @@ style={{ flexDirection: rows, transition: "flexDirection ease 4s" }}
     );
 };
 
-export default BoleanQuestions;
+export default BooleanQuestions;

@@ -105,8 +105,7 @@ const RangeQuestions = ({ questions, category }: question) => {
 
   return (
     <div className={styles.rMainDiv}>
-      <p>{questions.question}</p>
-      {!validateSelection() && <span style={{ color: "red" }}>*</span>}
+      <p>{questions.question} {!validateSelection() && <span style={{ color: "red" }}>*</span>}</p>
       <div className={styles.rAnswer} style={{ ...getGradientStyle() }}>
         {[1, 2, 3, 4, 5].map((index) => renderRadio(index))}
       </div>
