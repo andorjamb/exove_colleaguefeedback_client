@@ -294,10 +294,11 @@ const Report = () => {
           </section>
         ))}
 
+      </div>
         <button className={styles.buttonOrange} onClick={makePdf}>
           {t("generatePdf")}
         </button>
-      </div>
+
     </div>
   );
 };

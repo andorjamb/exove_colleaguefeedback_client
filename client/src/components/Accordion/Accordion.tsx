@@ -22,7 +22,6 @@ interface Props {
     e: React.ChangeEvent<HTMLInputElement>,
     cat: string,
     value: string
-    // type: string
   ) => void;
   createQuestion: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
@@ -38,7 +37,7 @@ const Accordion = ({
   const activeCategories = useSelector(
     (state: any) => state.template.templateSelection
   );
-  //console.log(activeCategories); //debugging
+
 
   return (
     <div>
