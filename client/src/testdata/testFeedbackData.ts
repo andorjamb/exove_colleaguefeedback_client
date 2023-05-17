@@ -1,4 +1,5 @@
 import { IFeedback } from "../types/feedback";
+import { IQuestionLang } from "../types/questions";
 /** IQuestionLang
  *  _id: string;
   lang: string;
@@ -21,14 +22,15 @@ export const testFeedbackData: IFeedback[] = [
         category: "b10e82d5-03be-45c3-85a5-363f2533a908",
         questions: [
           {
-            question: "Produces work of a high standard",
+            question: "The person produces high quality product",
             type: "number",
             _id: "",
             answer: "5",
             lang: "Eng",
           },
           {
-            question: "Complies with client requirements",
+            question:
+              "The person aims to improve the quality of the end result beyond expressed requirements",
             type: "number",
             _id: "",
             answer: "4",
@@ -80,27 +82,27 @@ export const testFeedbackData: IFeedback[] = [
     roleLevel: 5,
     categories: [
       {
-        category: "",
+        category: "2ca3b93b-159f-4788-9a2b-c152eb82de24",
         questions: [
           {
-            question: "Produces work of a high standard",
+            question: "The person has a positive attitude",
             type: "number",
             _id: "",
             answer: "4",
             lang: "Eng",
           },
           {
-            question: "Complies with client requirements",
+            question: "The person has a proactive way to take things forward",
             type: "number",
             _id: "",
             answer: "4",
             lang: "Eng",
           },
           {
-            question: "Other comments about quality focus",
+            question: "Other feedback about self-guidance",
             type: "string",
             _id: "",
-            answer: "Wonderful team member, produces high quality work",
+            answer: "A joy to work with",
             lang: "Eng",
           },
         ],
@@ -230,3 +232,21 @@ _id: "645e25c0235706de4691dcf1"
  * DELETE feedback/:id -
  * PATCH feedback/submit/:id - requestPicksId: submits a feedback (is this action completed by Essi after approval?)
  */
+
+/* export interface IFeedback {
+  _id?: string; //Out generated
+  template: string;
+  userId?: string; // get current user
+  requestpicksId?: string;
+  feedbackTo: string;
+  progress: string;
+  responseByDate?: string;
+  responseDateLog: string[]; //logs dates of changes
+  categories: IFCategory[];
+  roleLevel?: number;
+}
+
+export interface IFCategory {
+  category: string;
+  questions: IQuestionLang[];
+} */

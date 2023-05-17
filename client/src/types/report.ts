@@ -1,3 +1,15 @@
+/* mongoose schema */
+
+export interface IReport {
+  _id: string;
+  feedbacks: string[]; //not populated, ids only
+  template: string;
+  createdBy?: string;
+  userId: string; //ldapUid of reviewee
+  requestPicks: string;
+  createdOn?: Date;
+}
+
 export interface IChartData {
   question: string;
   questionId: string;
@@ -22,5 +34,3 @@ export interface IReportCategory {
   rangeResult: rangeResult[];
   stringResult: stringResult[]; */
 }
-
-

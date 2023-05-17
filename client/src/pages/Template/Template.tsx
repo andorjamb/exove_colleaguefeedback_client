@@ -6,6 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "../../pages/Template/Template.module.css";
 import "../../pages/Template/Template.css";
 
+//Translations
+import "../../translations/i18next";
+import { useTranslation } from "react-i18next";
+
 //Types
 import {
   ITemplatePost,
@@ -54,6 +58,7 @@ class SectionClass {
 
 const Template = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation(["template"]);
 
   /** data fetching and state */
   const getActiveTemplate = useGetActiveTemplateQuery();
@@ -229,21 +234,25 @@ const Template = () => {
     questionId: string
   ) {
     let checkboxStateCopy = { ...activeCheckboxState };
+    console.log("cbs copy", checkboxStateCopy); //debugging
     Object.isExtensible(checkboxStateCopy);
     // console.log(checkboxStateCopy); //debugging - working
 
     if (e.target.checked) {
-      let questionArray = [...checkboxStateCopy[categoryId]];
-      //console.log("current state", questionArray);
-      let newQuestionArray = [...questionArray, e.target.value];
-      //console.log("after adding:", newQuestionArray);
-      checkboxStateCopy = {
-        ...checkboxStateCopy,
-        [categoryId]: newQuestionArray,
-      };
+      if (checkboxStateCopy[categoryId]) {
+        console.log("found category in state");
+        let questionArray = [...checkboxStateCopy[categoryId]];
+        //console.log("current state", questionArray);
+        let newQuestionArray = [...questionArray, e.target.value];
+        //console.log("after adding:", newQuestionArray);
+        checkboxStateCopy = {
+          ...checkboxStateCopy,
+          [categoryId]: newQuestionArray,
+        };
 
-      dispatch(updateTemplateSelection(checkboxStateCopy));
-      console.log("adding item,", checkboxStateCopy); //debugging
+        dispatch(updateTemplateSelection(checkboxStateCopy));
+        console.log("adding item,", checkboxStateCopy); //debugging
+      }
     } else {
       let questionArray = [...checkboxStateCopy[categoryId]];
       //console.log(questionArray);
@@ -330,11 +339,11 @@ const Template = () => {
 
   return (
     <div className={"container"}>
-      <h1>New feedback template</h1>
+      <h1>{t("pageTitle")}</h1>
       <form className={"form"}>
         <div className={"formRow"}>
           <label htmlFor="templateTitle">
-            <h3 className={"h3"}>Template title</h3>
+            <h3 className={"h3"}>{t("templateTitle")}</h3>
           </label>
         </div>
         <div className={"formRow"}>
@@ -343,7 +352,7 @@ const Template = () => {
             name="templateTitle"
             value={templateTitle}
             onChange={titleChangeHandler}
-          />{" "}
+          />
           <div className={"iconDiv"}>
             <span className={"materialIcons"}>edit</span>
           </div>
@@ -351,9 +360,9 @@ const Template = () => {
         <section>
           <div className={"formRow"}>
             <label htmlFor="preface">
-              <h3 className={"h3"}>Introductory text</h3>
+              <h3 className={"h3"}>{t("introductoryText")}</h3>
             </label>
-            <span>Please consult a developer to edit this text</span>
+            <span>{t("noEdit")}</span>
           </div>
           <div className={`${"noedit"} ${"preface"}`}>{preface}</div>
         </section>
@@ -361,15 +370,15 @@ const Template = () => {
         <section>
           <div className={"formRow"}>
             <label htmlFor="gradingGuidance">
-              <h3 className={"h3"}>Grading Guidance</h3>
+              <h3 className={"h3"}>{t("gradingGuidance")}</h3>
             </label>
-            <span>Please consult a developer to edit this text</span>
+            <span>{t("noEdit")}</span>
           </div>
           <div className={`${"noedit"} ${"preface"}`}>{gradingGuidance}</div>
         </section>
         {/* END SECTION */}
         <div className={"formRow"}>
-          <h3 className={"h3"}>Feedback Questions</h3>
+          <h3 className={"h3"}>{t("questions")}</h3>
         </div>
         {/* ACCORDIONS */}
         {isLoading ? (
@@ -402,9 +411,9 @@ const Template = () => {
             type="submit"
             onClick={saveTemplate}
           >
-            Save
+            {t("save")}
           </button>
-          <button type="button">Preview</button>
+          <button type="button">{t("preview")}</button>
         </div>
       </form>
     </div>

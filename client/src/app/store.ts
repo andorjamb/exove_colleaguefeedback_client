@@ -10,6 +10,7 @@ import { requestPicksApi } from "../features/requestPicksApi";
 import { feedbackApi } from "../features/feedbackApi";
 import { categoryApi } from "../features/categoryApi";
 import { questionApi } from "../features/questionApi";
+import { reportApi } from "../features/reportApi";
 import feedBackSlice from "../features/feedBackSlice";
 import { isTemplateMiddle } from "typescript";
 
@@ -25,6 +26,7 @@ export const store = configureStore({
     [feedbackApi.reducerPath]: feedbackApi.reducer,
     [categoryApi.reducerPath]: categoryApi.reducer,
     [questionApi.reducerPath]: questionApi.reducer,
+    [reportApi.reducerPath]: reportApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -33,7 +35,8 @@ export const store = configureStore({
       .concat(requestPicksApi.middleware)
       .concat(feedbackApi.middleware)
       .concat(questionApi.middleware)
-      .concat(categoryApi.middleware),
+      .concat(categoryApi.middleware)
+      .concat(reportApi.middleware),
 });
 
 setupListeners(store.dispatch);

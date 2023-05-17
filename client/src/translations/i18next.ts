@@ -13,6 +13,8 @@ import userProfile_en from "./en/userProfile.json";
 import userProfile_fi from "./fi/userProfile.json";
 import report_en from "./en/report.json";
 import report_fi from "./fi/report.json";
+import template_en from "./en/template.json";
+import template_fi from "./fi/template.json";
 
 //export const defaultNS = "ns1";
 export const resources = {
@@ -22,6 +24,7 @@ export const resources = {
     dashboardUser: dashboardUser_en,
     userProfile: userProfile_en,
     report: report_en,
+    template: template_en,
   },
   fi: {
     login: login_fi,
@@ -29,6 +32,7 @@ export const resources = {
     dashboardUser: dashboardUser_fi,
     userProfile: userProfile_fi,
     report: report_fi,
+    template: template_fi,
   },
 };
 
@@ -45,6 +49,8 @@ i18next.use(initReactI18next).init({
     "userProfile_fi",
     "report_en",
     "report_fi",
+    "template_en",
+    "template_fi",
   ],
   //defaultNS,
   resources,
