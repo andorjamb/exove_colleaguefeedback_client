@@ -1,5 +1,7 @@
 import { IFeedback } from "../types/feedback";
 import { IReportData, IReportCategory, IChartData } from "../types/report";
+import { jsPDF } from "jspdf";
+import * as htmlToImage from "html-to-image";
 
 /**
  * export const reportSchema = new mongoose.Schema({
@@ -59,22 +61,6 @@ export class ChartDataClass {
   }
 }
 
-/* export class ChartDataClass {
-  categoryName: string | undefined;
-  chartData: IChartData[] | undefined;
-  comments: { self: string; CM: string; colleagues: string[] };
-
-  constructor(
-    categoryName: string | undefined,
-    chartData: IChartData[] | undefined,
-    comments: { self: string; CM: string; colleagues: string[] }
-  ) {
-    this.categoryName = categoryName;
-    this.chartData = chartData;
-    this.comments = comments;
-  }
-} */
-
 // MAKING CHARTS from report object
 
 /* calculating average
@@ -102,20 +88,6 @@ function makeReportCategoriesData(feedbacks: IFeedback[]) {
   }
 }
  */
-
-/*   
-  function manipulate(value: any, key: string[]) {
-    let m = value.map((object: any) => {
-      return {
-        categoryId: object.category,
-        chartData: transformQuestions(object.questions),
-      };
-    });
-    console.log(m);
-    chartDataArray.push(m);
-  } */
-
-// );
 
 /*
 function mapByRole(values: IFCategory[], key: any) {
@@ -162,3 +134,44 @@ function mapByRole(values: IFCategory[], key: any) {
 }
 
 */
+
+export async function chartsToPdf({
+  doc,
+  charts,
+}: {
+  doc: jsPDF;
+  charts: HTMLCollectionOf<Element>;
+}) {
+  let top = 30;
+  let padding = 16;
+
+  for (let i = 0; i < charts.length; i++) {
+    const chart = charts[i] as HTMLElement;
+    const imgData = await htmlToImage.toPng(chart);
+
+    const pageWidth = doc.internal.pageSize.getWidth(); //px scaled to pdf pt
+    console.log(pageWidth);
+
+    let chartHeight = chart.offsetHeight; //pixels
+    let chartWidth = chart.offsetWidth; //pixels
+
+    if (chartWidth > pageWidth) {
+      const ratio = pageWidth / chartWidth;
+
+      chartHeight = chartHeight * ratio - padding;
+      chartWidth = chartWidth * ratio - padding;
+    }
+    if (imgData) {
+      doc.addImage(
+        imgData,
+        "PNG",
+        10,
+        top,
+        chartWidth,
+        chartHeight,
+        `chart${i}`
+      );
+      top += chartHeight + 40;
+    }
+  }
+}

@@ -11,7 +11,9 @@ import {
 interface Props {
   radarChartData: {
     question: string;
+    questionId: string;
     colleagueAverage: number;
+    colleagues: number;
     CM: number;
     self: number;
   }[];
@@ -19,34 +21,34 @@ interface Props {
 
 const ChartRadar = ({ radarChartData }: Props) => {
   return (
-    <div>
+    <div className="reportChart">
       <RadarChart
-        cx={300}
-        cy={250}
-        outerRadius={150}
-        width={500}
-        height={500}
+        cx="50%"
+        cy="50%"
+        outerRadius="80%"
+        width={300}
+        height={300}
         data={radarChartData}
       >
         <PolarGrid />
         <PolarAngleAxis dataKey="question" />
         <PolarRadiusAxis domain={[0, 5]} />
         <Radar
-          name="Self"
+          name=""
           dataKey="self"
           stroke="rgb(241,156,91)"
           fill="rgb(241,156,91)"
           fillOpacity={0.2}
         />
         <Radar
-          name="Colleagues"
+          name=""
           dataKey="colleagueAverage"
           stroke="rgb(101,27,222)"
           fill="rgb(101,27,222)"
           fillOpacity={0.2}
         />
         <Radar
-          name="CM"
+          name=""
           dataKey="CM"
           stroke="rgb(99,173,123)"
           fill="rgb(99,173,123)"

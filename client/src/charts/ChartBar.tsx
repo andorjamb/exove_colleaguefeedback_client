@@ -3,10 +3,13 @@ import { Legend, Bar, BarChart, XAxis, YAxis, Tooltip } from "recharts";
 
 //import * as htmlToImage from "html-to-image";
 
+
 interface Props {
   barChartData: {
     question: string;
-    colleagues: number;
+    questionId: string,
+    colleagueAverage: number,
+    colleagues: number; //
     CM: number;
     self: number;
   }[];
@@ -15,8 +18,7 @@ interface Props {
 const ChartBar = ({ barChartData }: Props) => {
   return (
     <>
-      <div></div>
-      <div>
+      <div className="reportChart">
         <BarChart
           width={400}
           height={200}

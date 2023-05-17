@@ -1,5 +1,6 @@
 export interface IChartData {
   question: string;
+  questionId: string;
   colleagueAverage: number;
   colleagues: number[];
   CM: number;

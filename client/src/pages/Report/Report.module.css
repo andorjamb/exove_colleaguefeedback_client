@@ -11,25 +11,15 @@
   padding: 1rem 2rem;
 }
 
+.charts {
+  display: flex;
+}
+
 .report {
   height: 100%;
   width: 90%;
   border: 1px solid black;
   margin: 3rem auto;
-}
-
-/* .sidebar {
-  width: 30vw;
-  height: 100vh;
-  background-color: var(--medblack);
-  color: white;
-} */
-
-.sidebarUl {
-  padding: 0.5rem;
-  display: flex;
-  height: 0.75rem;
-  color: white;
 }
 
 .a {
@@ -44,8 +34,8 @@
 }
 .feedbackInfo {
   border: 1px solid black;
-  height: 120px;
-  width: 280px;
+  height: 135px;
+  min-width: 290px;
   margin: 1rem;
   padding: 1rem;
   text-align: left;
@@ -55,4 +45,13 @@
   width: 20rem;
   background-color: var(--exoveOrange);
   cursor: pointer;
+  box-shadow: 4px 4px black;
+  transition: all ease-in-out 0.2s;
+}
+
+.buttonOrange:active {
+  background-color: black;
+  transform: translate(4px, 4px);
+  box-shadow: none;
+  color: white;
 }
