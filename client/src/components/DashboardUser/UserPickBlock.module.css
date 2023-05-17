@@ -11,6 +11,7 @@
   flex-direction: row;
   justify-content: space-between;
   gap: 1rem;
+  text-align: left;
 }
 
 .search_container {
@@ -33,6 +34,7 @@
   background-color: var(--darkGray);
   color: white;
 }
+
 .done {
   height: 2.5rem;
   background-color: var(--exovePurple);
