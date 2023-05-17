@@ -74,6 +74,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
 
   const approvePicks = async () => {
     if (!userPicks) return;
+    console.log("approving the following pick object", userPicks);
     setIsLoading(true);
     await finalPickSubmit(userPicks._id);
     setIsLoading(false);
@@ -339,8 +340,8 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             {!userPicks?.submitted && (
               <p className={styles.not_available}>unavailable</p>
             )}
-            {
-              /* userPicks?.submitted && userFeedbacks.length === 0  &&*/ <Tooltip
+            {userPicks?.submitted && !userFeedbacks && (
+              <Tooltip
                 TransitionComponent={Fade}
                 title={`Request feedbacks for ${user.displayName}`}
                 placement="bottom-start"
@@ -349,19 +350,20 @@ const PersonRow: React.FC<IPersonRowProps> = ({
                   <span className="material-symbols-outlined">send</span>
                 </button>
               </Tooltip>
-            }
-            {
-              /* userPicks &&
-              userPicks?.SelectedList.length > userFeedbacks.length && */ <Tooltip
-                TransitionComponent={Fade}
-                title={`Remind everyone to feedback ${user.displayName}`}
-                placement="bottom-start"
-              >
-                <button className={styles.remind}>
-                  <span className="material-symbols-outlined">timer</span>
-                </button>
-              </Tooltip>
-            }
+            )}
+            {userPicks &&
+              userPicks?.SelectedList.filter((pick) => pick.selectionStatus)
+                .length > userFeedbacks.length && (
+                <Tooltip
+                  TransitionComponent={Fade}
+                  title={`Remind everyone to feedback ${user.displayName}`}
+                  placement="bottom-start"
+                >
+                  <button className={styles.remind}>
+                    <span className="material-symbols-outlined">timer</span>
+                  </button>
+                </Tooltip>
+              )}
           </div>
         </td>
         <td>
