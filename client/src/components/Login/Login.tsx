@@ -58,13 +58,12 @@ const Login = () => {
         })
         .then(async (res) => {
           console.log("login res", res);
-          await secureUserUid(
-            {
-              uid: res.data?.uid,
-              roleLevel: res.data?.rolesId?.roleLevel,
-              displayName: res.data.displayName,
-              imageUrl:res.data.imageUrl || ''
-            })
+          await secureUserUid({
+            uid: res.data?.uid,
+            roleLevel: res.data?.rolesId?.roleLevel,
+            displayName: res.data.displayName,
+            imageUrl: res.data.imageUrl || "",
+          });
           if (res.data?.rolesId?.roleLevel < 3) {
             sessionStorage.setItem("isAdmin", "true");
             dispatch(setIsAdmin(true));
@@ -123,7 +122,7 @@ const Login = () => {
                 type="submit"
                 onClick={(e) => userLogin(e)}
               >
-                {t("signIn")}
+                <span className="material-symbols-outlined">arrow_forward</span>
               </button>
             </div>
           </form>
