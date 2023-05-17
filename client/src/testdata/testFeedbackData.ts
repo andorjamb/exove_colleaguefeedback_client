@@ -1,350 +1,232 @@
-import { IFeedback, IFCategory } from "../types/feedback";
-import { IQuestionLang } from "../types/questions";
-import { IReportData } from "../types/report";
-/*
-const testReportData: IReportData = {
-  _id: "234", //this report represents all the data needed for a single report
-  requestPicksId: "456",
-  feedbackId: "",
-  feedbackTo: "ivan01",
-
-  rangeCategories: [
-    {
-      category1: {
-        question1: {
-          colleagues: [4, 3, 3, 3, 3],
-          CM: 4,
-          self: 3,
-         colleagueAverage: 4, 
-          //ceiling or floor?
-        },
-        question2: {
-          colleagues: [4, 4, 4, 5, 4],
-          CM: 4,
-          self: 4,
-          colleagueAverage: 4,
-        },
-        question3: {
-          colleagues: [3, 2, 3, 4, 4],
-          CM: 3,
-          self: 4,
-          colleagueAverage: 3,
-        },
-        question4: {
-          colleagues: [3, 4, 4, 3, 3],
-          CM: 3,
-          self: 3,
-          colleagueAverage: 3,
-        },
-      },
-    },
-    {
-      category2: {
-        question1: {
-          colleagues: [4, 3, 3, 3, 3],
-          CM: 4,
-          self: 3,
-          colleagueAverage: 4, //ceiling or floor?
-        },
-        question2: {
-          colleagues: [4, 4, 4, 5, 4],
-          CM: 4,
-          self: 4,
-          colleagueAverage: 4,
-        },
-        question3: {
-          colleagues: [3, 2, 3, 4, 4],
-          CM: 3,
-          self: 4,
-          colleagueAverage: 3,
-        },
-        question4: {
-          colleagues: [3, 4, 4, 3, 3],
-          CM: 3,
-          self: 3,
-          colleagueAverage: 3,
-        },
-      },
-    },
-    {
-      category3: {
-        question1: {
-          colleagues: [4, 3, 3, 3, 3],
-          CM: 4,
-          self: 3,
-          colleagueAverage: 4, //ceiling or floor?
-        },
-        question2: {
-          colleagues: [4, 4, 4, 5, 4],
-          CM: 4,
-          self: 4,
-          colleagueAverage: 4,
-        },
-        question3: {
-          colleagues: [3, 2, 3, 4, 4],
-          CM: 3,
-          self: 4,
-          colleagueAverage: 3,
-        },
-        question4: {
-          colleagues: [3, 4, 4, 3, 3],
-          CM: 3,
-          self: 3,
-          colleagueAverage: 3,
-        },
-      },
-    },
-    {
-      category4: {
-        question1: {
-          colleagues: [4, 3, 3, 3, 3],
-          CM: 4,
-          self: 3,
-          colleagueAverage: 4, //ceiling or floor?
-        },
-        question2: {
-          colleagues: [4, 4, 4, 5, 4],
-          CM: 4,
-          self: 4,
-          colleagueAverage: 4,
-        },
-        question3: {
-          colleagues: [3, 2, 3, 4, 4],
-          CM: 3,
-          self: 4,
-          colleagueAverage: 3,
-        },
-        question4: {
-          colleagues: [3, 4, 4, 3, 3],
-          CM: 3,
-          self: 3,
-          colleagueAverage: 3,
-        },
-      },
-    },
-  ],
-  textcategorys: [
-    {
-      //for text responses
-      category1: {
-        colleagues: ["good job", "works too hard", "could do better"],
-        CM: "great team member",
-        self: "I know I have areas to improve",
-      },
-      category2: {
-        colleagues: ["good job", "works too hard", "could do better"],
-        CM: "great team member",
-        self: "I know I have areas to improve",
-      },
-      category3: {
-        colleagues: ["good job", "works too hard", "could do better"],
-        CM: "great team member",
-        self: "I know I have areas to improve",
-      },
-      category4: {
-        colleagues: ["good job", "works too hard", "could do better"],
-        CM: "great team member",
-        self: "I know I have areas to improve",
-      },
-      category5: {
-        weaknesses: {
-          colleagues: ["should arrive earlier", "sometimes indecisive"],
-          CM: "could contribute more at meetings",
-          self: "I want to be more organised",
-        },
-        strengths: {
-          colleagues: [
-            "Makes intelligent contributions",
-            "Keeps desk fairly clean",
-          ],
-          CM: "Has a positive attitude",
-          self: "I am always ready to improve",
-        },
-      },
-    },
-  ],
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-export const testFeedbackData = {
-  _id: "123",
-  template: "feedback summer 2023",
-  userId: "anna01", //employee completing the survey instance
-  requestpicksId: "456",
-  feedbackTo: "ivan01", //employee the feedback is about
-  progress: "",
-  responseByDate: new Date(),
-  responseDateLog: [],
-  categories: [
-    {
-      category: "Quality Focus",
-      questions: [
-        //IQuestionLang
-        {
-          _id: "340",
-          lang: "en",
-          question: "The person produces high quality product",
-          answer: "4",
-          answeredOn: new Date(),
-        },
-        {
-          _id: "341",
-          lang: "en",
-          question:
-            "The person aims to improve the quality of the end result beyond expressed requirements",
-          answer: "3",
-          answeredOn: new Date(),
-        },
-        {
-          _id: "341",
-          lang: "en",
-          question: "The person is aligned with company best practices",
-          answer: "3",
-          answeredOn: new Date(),
-        },
-        {
-          _id: "341",
-          lang: "en",
-          question:
-            "The person delivers quality even with limited resources (time, resources, information, guidance)",
-          answer: "3",
-          answeredOn: new Date(),
-        },
-        {
-          _id: "341",
-          lang: "en",
-          question: "Feedback about the person's quality focus (freeform)",
-          answer: "Shows a good focus of the quality of the product",
-          answeredOn: new Date(),
-        },
-      ],
-    },
-    {
-      category: "People Skills",
-      questions: [
-        {
-          _id: "342",
-          lang: "en",
-          question: "The person communicates effectively",
-          answer: "5",
-          answeredOn: new Date(),
-        },
-        {
-          _id: "343",
-          lang: "en",
-          question: "The person is willingly helping others",
-          answer: "4",
-          answeredOn: new Date(),
-        },
-        {
-          _id: "343",
-          lang: "en",
-          question: "The person takes other people’s views into consideration",
-          answer: "4",
-          answeredOn: new Date(),
-        },
-        {
-          _id: "343",
-          lang: "en",
-          question: "The person isn’t afraid to ask for help from others",
-          answer: "4",
-          answeredOn: new Date(),
-        },
-        {
-          _id: "343",
-          lang: "en",
-          question:
-            "The person has a good attitude towards all the aspects of their work",
-          answer: "4",
-          answeredOn: new Date(),
-        },
-        {
-          _id: "343",
-          lang: "en",
-          question: "The person shares knowledge openly to others",
-          answer: "4",
-          answeredOn: new Date(),
-        },
-        {
-          _id: "343",
-          lang: "en",
-          question: "Other feedback about the persons people skills (freeform)",
-          answer: "4",
-          answeredOn: new Date(),
-        },
-      ],
-    },
-    {
-      category: "Leadership",
-      questions: [
-        {
-          _id: "344",
-          lang: "en",
-          question: "The person is able to effectively direct their own work",
-          answer: "5",
-          answeredOn: new Date(),
-        },
-        {
-          _id: "345",
-          lang: "en",
-          question: "The person actively engages in new learning",
-          answer: "4",
-          answeredOn: new Date(),
-        },
-      ],
-    },
-    {
-      category: "Self Guidance",
-      questions: [
-        {
-          _id: "344",
-          lang: "en",
-          question: "The person is able to effectively direct their own work",
-          answer: "5",
-          answeredOn: new Date(),
-        },
-        {
-          _id: "345",
-          lang: "en",
-          question: "The person actively engages in new learning",
-          answer: "4",
-          answeredOn: new Date(),
-        },
-      ],
-    },
-    {
-      category: "General Evaluation",
-      questions: [
-        {
-          _id: "344",
-          lang: "en",
-          question: "The person's personal strengths are: (freeform)",
-          answer: "Good chess player",
-          answeredOn: new Date(),
-        },
-        {
-          _id: "345",
-          lang: "en",
-          question: "The person should improve in:",
-          answer: "Personal hygiene",
-          answeredOn: new Date(),
-        },
-      ],
-    },
-  ],
-};
+import { IFeedback } from "../types/feedback";
+/** IQuestionLang
+ *  _id: string;
+  lang: string;
+  question?: string;
+  answer?: string | number;
+  answeredOn?: Date;
+  type: string;
 
 */
+export const testFeedbackData: IFeedback[] = [
+  {
+    userId: "newton",
+    responseDateLog: [],
+    template: "",
+    progress: "",
+    feedbackTo: "curie",
+    roleLevel: 3,
+    categories: [
+      {
+        category: "b10e82d5-03be-45c3-85a5-363f2533a908",
+        questions: [
+          {
+            question: "Produces work of a high standard",
+            type: "number",
+            _id: "",
+            answer: "5",
+            lang: "Eng",
+          },
+          {
+            question: "Complies with client requirements",
+            type: "number",
+            _id: "",
+            answer: "4",
+            lang: "Eng",
+          },
+          {
+            question: "Other comments about quality focus",
+            type: "string",
+            _id: "",
+            answer: "Performs very well under the circumstances",
+            lang: "Eng",
+          },
+        ],
+      },
+      {
+        category: "2ca3b93b-159f-4788-9a2b-c152eb82de24",
+        questions: [
+          {
+            question: "The person competently directs their own work",
+            type: "number",
+            _id: "",
+            answer: "4",
+            lang: "Eng",
+          },
+          {
+            question: "The person is not afraid to ask for help",
+            type: "number",
+            _id: "",
+            answer: "3",
+            lang: "Eng",
+          },
+          {
+            question: "Other comments about self-guidance",
+            type: "string",
+            _id: "",
+            answer: "Motivated, self-starter",
+            lang: "Eng",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    userId: "gauss",
+    responseDateLog: [],
+    template: "",
+    progress: "",
+    feedbackTo: "curie",
+    roleLevel: 5,
+    categories: [
+      {
+        category: "",
+        questions: [
+          {
+            question: "Produces work of a high standard",
+            type: "number",
+            _id: "",
+            answer: "4",
+            lang: "Eng",
+          },
+          {
+            question: "Complies with client requirements",
+            type: "number",
+            _id: "",
+            answer: "4",
+            lang: "Eng",
+          },
+          {
+            question: "Other comments about quality focus",
+            type: "string",
+            _id: "",
+            answer: "Wonderful team member, produces high quality work",
+            lang: "Eng",
+          },
+        ],
+      },
+      {
+        category: "2ca3b93b-159f-4788-9a2b-c152eb82de24",
+        questions: [
+          {
+            question: "The person competently directs their own work",
+            type: "number",
+            _id: "",
+            answer: "3",
+            lang: "Eng",
+          },
+          {
+            question: "The person is not afraid to ask for help",
+            type: "number",
+            _id: "",
+            answer: "4",
+            lang: "Eng",
+          },
+          {
+            question: "Other comments about self-guidance",
+            type: "string",
+            _id: "",
+            answer: "Diligent and self-directing",
+            lang: "Eng",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    userId: "curie",
+    responseDateLog: [],
+    template: "",
+    progress: "",
+    feedbackTo: "curie",
+    roleLevel: 5,
+    categories: [
+      {
+        category: "",
+        questions: [
+          {
+            question: "Produces work of a high standard",
+            type: "number",
+            _id: "",
+            answer: "3",
+            lang: "Eng",
+          },
+          {
+            question: "Complies with client requirements",
+            type: "number",
+            _id: "",
+            answer: "5",
+            lang: "Eng",
+          },
+          {
+            question: "Other comments about quality focus",
+            type: "string",
+            _id: "",
+            answer: "I am very focused on producing high quality work",
+            lang: "Eng",
+          },
+        ],
+      },
+      {
+        category: "2ca3b93b-159f-4788-9a2b-c152eb82de24",
+        questions: [
+          {
+            question: "The person competently directs their own work",
+            type: "number",
+            _id: "",
+            answer: "4",
+            lang: "Eng",
+          },
+          {
+            question: "The person is not afraid to ask for help",
+            type: "number",
+            _id: "",
+            answer: "2",
+            lang: "Eng",
+          },
+          {
+            question: "Other comments about self-guidance",
+            type: "string",
+            _id: "",
+            answer:
+              "I feel that I work well independently, however I should ask my colleagues for help more often",
+            lang: "Eng",
+          },
+        ],
+      },
+    ],
+  },
+];
+
+/*
+feedbacks questions: object array
+{
+answer: "false",
+answeredOn: "2023-05-12T07:38:42.115Z",
+question: "The person produces high quality product",
+type: "boolean",
+_id: "6454aa0d971f4982fdd21b29"
+*/
+
+//feedbacks data shape:
+/*feedback.cagories:[]
+{
+  category: 'b10e82d5-03be-45c3-85a5-363f2533a908', 
+  questions: Array(0), 
+  _id: '645e25c0235706de4691dcf1'
+},
+category: "b10e82d5-03be-45c3-85a5-363f2533a908"
+questions: []
+_id: "645e25c0235706de4691dcf1"
+*/
+
+/**
+ * Endpoints:
+ *
+ * feedback/  - get all
+ * feedback/:id - get one by doc Id /? or requestPick id?)
+ * feedback/name/name  -  get feedbacks by userId (ldapuid?)
+ * POST feedback/:id -  post feedback by requestId
+ * DELETE feedback/:id -
+ * PATCH feedback/submit/:id - requestPicksId: submits a feedback (is this action completed by Essi after approval?)
+ */

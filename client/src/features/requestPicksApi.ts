@@ -1,12 +1,15 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 //Types
-import { IRequestPicks, IRequestPicksPatch } from "../types/picks";
-import { IRequestPicksPost } from "../types/picks";
+import {
+  IRequestPicks,
+  IRequestPicksPost,
+  IRequestPicksPatch,
+  IRequestPicksApprove,
+} from "../types/picks";
 
 //const serverApi = process.env.REACT_APP_SERVER_API;
 const serverApi = "https://exove.vercel.app/api/";
-//const serverApi = "http://localhost:4000/";
 
 export const requestPicksApi = createApi({
   reducerPath: "requestPicksApi",
@@ -17,21 +20,24 @@ export const requestPicksApi = createApi({
     },
     credentials: "include",
   }), //for testing
-  tagTypes: ["RequestPicks"],
+  tagTypes: ["RequestPicks", "UserRequestPicks", "DocIdRequestPicks"],
   endpoints: (builder) => ({
     getAllRequestPicks: builder.query<IRequestPicks[], void>({
       query: () => "picks",
       providesTags: ["RequestPicks"],
     }),
     getRequestPickByUserId: builder.query<IRequestPicks, string>({
+      /** fetches pick object where user=person selected to pick */
       query: (userId) => `picks/${userId}`,
+      providesTags: ["RequestPicks"],
     }),
     getRequestPickByDocId: builder.query<IRequestPicks, string>({
-      query: (id) => `pick-id/${id}`,
+      query: (id) => `picks/pick-id/${id}`,
+      providesTags: ["RequestPicks"],
     }),
     createPick: builder.mutation<void, IRequestPicksPost>({
       query: (body) => ({
-        url: "picks/createreqpick",
+        url: "picks/",
         method: "POST",
         body,
       }),
@@ -48,10 +54,14 @@ export const requestPicksApi = createApi({
       }),
       invalidatesTags: ["RequestPicks"],
     }),
-    approvePick: builder.mutation<void, string>({
-      query: (id) => ({
+    approvePick: builder.mutation<
+      void,
+      { body: IRequestPicksApprove; id: string }
+    >({
+      query: ({ body, id }) => ({
         url: `picks/approve-pick/${id}`,
         method: "PATCH",
+        body,
       }),
       invalidatesTags: ["RequestPicks"],
     }),
@@ -75,6 +85,7 @@ export const requestPicksApi = createApi({
 export const {
   useGetAllRequestPicksQuery,
   useGetRequestPickByUserIdQuery,
+  useGetRequestPickByDocIdQuery,
   useCreatePickMutation,
   useSubmitPickMutation,
   useApprovePickMutation,

@@ -24,6 +24,14 @@
   border-radius: 100rem;
 }
 
+.red {
+  background-color: red;
+}
+
+.green {
+  background-color: green;
+}
+
 .table_row button {
   text-transform: none;
   width: 2rem;
@@ -33,7 +41,7 @@
   gap: 0.5rem;
 }
 
-.picks_container {
+.buttons_container {
   display: flex;
   justify-content: center;
   gap: 0.5rem;

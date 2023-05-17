@@ -9,6 +9,7 @@ import { useGetAllUsersQuery } from "../../features/userApi";
 import {
   useGetAllRequestPicksQuery,
   useSubmitPickMutation,
+  useApprovePickMutation,
 } from "../../features/requestPicksApi";
 import { getSecureUserUid } from "../../functions/secureUser";
 import { useGetRequestPickByUserIdQuery } from "../../features/requestPicksApi";
@@ -33,58 +34,93 @@ import Submitted from "./Submitted";
 const DashboardUser = () => {
   const navigate = useNavigate();
   const { t } = useTranslation(["dashboardUser"]);
-  const serverEndpoint = "https://exove.vercel.app/api";
   const usersData = useGetAllUsersQuery();
   const picksData = useGetAllRequestPicksQuery();
+  const [approvePick] = useApprovePickMutation();
   const [submitPick] = useSubmitPickMutation();
-  const employeesList: IUserDataGet[] = [];
   const [selected, setSelected] = useState<IUserDataGet[]>([]);
   const [currentUserInfo, setCurrentUserInfo] = useState<loggedInUser>();
   const [currentUserPick, setCurrentUserPick] = useState<IRequestPicks>();
+  // replace with navigate later?
   const [submitted, setSubmitted] = useState(false);
 
   const getUserInfo = async () => {
+    console.log("trying to get user info");
+    console.log("picksData", picksData.data);
     if (picksData.isFetching || !picksData.data) return;
     const userDetails: loggedInUser = await getSecureUserUid();
+    console.log("userDetails awaited", userDetails);
     setCurrentUserInfo(userDetails);
     console.log("loggedInUser", userDetails);
     console.log(
-      "Pick for this user found:",
-      picksData.data.find((pick) => pick.requestedTo === currentUserInfo?.uid)
+      "Picks for this user found and set:",
+      picksData.data.find((pick) => pick.requestedTo === userDetails.uid)
     );
     setCurrentUserPick(
-      picksData.data.find((pick) => pick.requestedTo === currentUserInfo?.uid)
+      picksData.data.find((pick) => pick.requestedTo === userDetails.uid)
     );
   };
 
   useEffect(() => {
     try {
       getUserInfo();
-      // getting 403 error here
     } catch (err) {
       console.log("error getting user", err);
     }
-  }, []);
+  }, [picksData]);
 
   // Differenciate between loading and no pick found?
-  if (usersData.isFetching || !usersData.data || !currentUserInfo)
-    return <p>Loading...</p>;
+  if (usersData.isFetching || !usersData.data || !currentUserInfo) {
+    // Debugging loading
+    if (usersData.isFetching || !usersData.data)
+      console.log("usersData", usersData);
+    if (!currentUserInfo) console.log("currentUserInfo", currentUserInfo);
+    console.log();
+    return <p>Loading user dashboard...</p>;
+  }
+
+  if (
+    currentUserPick?.SelectedList.filter(
+      (pick) =>
+        pick.roleLevel === 5 &&
+        pick.userId !== currentUserInfo.uid &&
+        pick.selectionStatus
+    )
+  )
+    return <p>Picks done already</p>;
+
+  const activatePick = async (userId: string, pickRoleLevel: number) => {
+    if (!currentUserPick) return;
+    const pickFound = currentUserPick.SelectedList.find(
+      (pick) => pick.userId === userId && pick.roleLevel === pickRoleLevel
+    );
+    if (pickFound) {
+      if (pickFound.selectionStatus === true) return;
+      else {
+        const requestBody = {
+          userId: userId,
+          selectionStatus: true,
+        };
+        await approvePick({ body: requestBody, id: currentUserPick._id });
+      }
+    } else {
+      const requestBody = {
+        userId: userId,
+        roleLevel: pickRoleLevel,
+        selectionStatus: true,
+      };
+      await submitPick({ body: requestBody, id: currentUserPick._id });
+    }
+  };
 
   const submitHandler = async () => {
+    console.log("currentUserPick", currentUserPick);
     if (!currentUserPick) return;
-    console.log("Submitting:", selected); //debugging
-    const submitBodies = selected.map((user) => {
-      return { userId: user.ldapUid, roleLevel: 5 };
-    });
-    /* "userId": "einstein",
-        "roleLevel": 6 */
+    console.log("Submitting:", selected);
     setSubmitted(true);
-    // Check uniqueness
-    submitBodies.forEach((submitBody) =>
-      submitPick({ body: submitBody, id: currentUserPick._id })
-    );
-    /*  axios.patch(`${serverEndpoint}/picks/${currentUserInfo.uid}`, {});
-    axios.patch(`${serverEndpoint}/picks/${currentUserInfo}`, {}); */
+    for (const selectedUser of selected) {
+      await activatePick(selectedUser.ldapUid, 5);
+    }
   };
 
   const doneHandler = (picksSelected: IUserDataGet[]) => {
