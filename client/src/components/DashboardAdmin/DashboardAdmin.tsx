@@ -80,6 +80,11 @@ const DashboardAdmin = () => {
   return (
     <div className={styles.dashboard_wrapper}>
       <div className={styles.dashboard_container}>
+        <h1>
+          {activeTemplateData.data
+            ? activeTemplateData.data.templateTitle
+            : "No active template"}
+        </h1>
         <div className={styles.search_buttons_container}>
           <SearchBar
             inputValue={searchInput}

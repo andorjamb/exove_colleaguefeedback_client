@@ -15,7 +15,12 @@
   padding: 2rem 0;
 }
 
-.submitButton {
+.submit_container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* .submitButton {
   background-color: var(--exoveGreen);
   color: white;
   float: right;
@@ -23,7 +28,7 @@
   text-transform: uppercase;
   font-weight: 800;
   border: none;
-}
+} */
 
 .inactive {
   background-color: var(--darkGray);
