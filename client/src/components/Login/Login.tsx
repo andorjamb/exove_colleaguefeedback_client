@@ -16,6 +16,7 @@ import { setIsAdmin, setLoggedIn } from "../../features/authSlice";
 import styles from "./Login.module.css";
 import { AppDispatch } from "../../app/store";
 import { secureUserUid } from "../../functions/secureUser";
+import ButtonFancy from "../UI/ButtonFancy/ButtonFancy";
 
 interface ILoginParams {
   username: string;
@@ -117,13 +118,16 @@ const Login = () => {
               ></input>
             </div>
             <div className={styles.formElements}>
-              <button
-                className={[styles.button, styles.loginButton].join(" ")}
+              <ButtonFancy
                 type="submit"
-                onClick={(e) => userLogin(e)}
-              >
-                <span className="material-symbols-outlined">arrow_forward</span>
-              </button>
+                color="purple"
+                clickHandler={userLogin}
+                children={
+                  <span className="material-symbols-outlined">
+                    arrow_forward
+                  </span>
+                }
+              />
             </div>
           </form>
         </div>

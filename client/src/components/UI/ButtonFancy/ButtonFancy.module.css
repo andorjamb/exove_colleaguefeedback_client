@@ -1,0 +1,39 @@
+.fancyButton {
+  height: 3rem;
+  cursor: pointer;
+  background-color: var(--lightGray);
+  box-shadow: 5px 5px black;
+  color: white;
+  position: absolute;
+  transition: all ease-in-out 0.25s;
+  border: none;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3rem;
+}
+
+.fancyButton:hover {
+  transform: translate(5px, 5px);
+  box-shadow: none;
+}
+
+.purple {
+  background-color: var(--exovePurple);
+}
+
+.lightGray {
+  background-color: var(--lightGray);
+  box-shadow: 5px 5px var(--medGray);
+}
+
+.medGray {
+  background-color: var(--medGray);
+}
+
+.darkGray {
+  background-color: var(--medBlack);
+  color: white;
+}
