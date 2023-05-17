@@ -1,6 +1,6 @@
 // React
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { NavLink } from "react-router-dom";
 
 // API, redux
 import { useGetAllFeedbacksQuery } from "../../features/feedbackApi";
@@ -16,6 +16,7 @@ import CustomSpinner from "../CustomSpinner/CustomSpinner";
 
 // Types
 import { IUserDataGet } from "../../types/users";
+import { IRequestPicks } from "../../types/picks";
 
 // Styles
 import styles from "./DashboardAdmin.module.css";
@@ -46,9 +47,11 @@ const DashboardAdmin = () => {
     );
 
   if (!activeTemplateData.data)
-    return <p>No active templates. Create one here</p>;
-
-  // Filtering picks to only contain active ones
+    return (
+      <p>
+        No active templates. Create one <NavLink to="/template">here</NavLink>
+      </p>
+    );
 
   const searchChangeHandler = (e: React.FormEvent<HTMLInputElement>) => {
     setSearchInput(e.currentTarget.value);
@@ -82,7 +85,11 @@ const DashboardAdmin = () => {
             inputValue={searchInput}
             onChangeHandler={searchChangeHandler}
           />
-          <BulkButtons allPicks={picksData.data} allUsers={usersData.data} />
+          <BulkButtons
+            allPicks={picksData.data}
+            allUsers={usersData.data}
+            currentTemplateId={activeTemplateData.data._id}
+          />
         </div>
         <table className={styles.table}>
           <thead>
@@ -105,7 +112,8 @@ const DashboardAdmin = () => {
                   currentTemplateId={activeTemplateData.data!._id}
                   user={currUser}
                   userPicks={picksData.data!.find(
-                    (pick) => pick.requestedTo === currUser.ldapUid
+                    (pick: IRequestPicks) =>
+                      pick.requestedTo === currUser.ldapUid
                   )}
                   userFeedbacks={feedbackData.data!.filter(
                     (feedback) => feedback.feedbackTo === currUser.ldapUid

@@ -23,6 +23,7 @@ import DashboardUser from "./components/DashboardUser/DashboardUser";
 import Feedback from "./pages/Feedback/Feedback";
 import Profile from "./pages/Profile/Profile";
 import Report from "./pages/Report/Report";
+import PicksUser from "./components/DashboardUser/PicksUser";
 
 // Types
 import { loggedInUser } from "./types/users";
@@ -37,7 +38,8 @@ const router = createBrowserRouter(
         <Route path="/" element={<Login />}></Route>
         <Route element={<ProtectedRoutes />}>
           <Route path="/dashboard" element={<Dashboard />}></Route>
-          <Route path="/userview" element={<DashboardUser />}></Route>
+          <Route path="/picking" element={<PicksUser />}></Route>
+          {/* <Route path="/userview" element={<DashboardUser />}></Route> */}
           <Route path="/feedback" element={<Feedback />}></Route>
           <Route path="/template" element={<Template />}></Route>
           <Route path="/profile" element={<Profile />}></Route>

@@ -41,6 +41,9 @@
   font-weight: 800;
   align-items: center;
   width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .displayName {

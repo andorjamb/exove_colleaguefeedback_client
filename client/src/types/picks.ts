@@ -21,14 +21,17 @@ export interface IRequestPicks {
 
 export interface IRequestPicksPost {
   requestedTo: string;
+  template: string;
 }
 
 export interface IRequestPicksPatch {
   userId: string;
   roleLevel: number;
+  selectionStatus: boolean;
 }
 
 export interface IRequestPicksApprove {
   userId: string;
+  roleLevel: number;
   selectionStatus: boolean;
 }

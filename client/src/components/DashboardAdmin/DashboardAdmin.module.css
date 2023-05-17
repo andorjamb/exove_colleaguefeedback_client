@@ -1,6 +1,7 @@
 .dashboard_wrapper {
   display: flex;
   justify-content: center;
+  padding: 0 0 1rem;
 }
 
 .dashboard_container {
