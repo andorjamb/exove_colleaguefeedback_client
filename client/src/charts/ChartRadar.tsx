@@ -54,6 +54,7 @@ const ChartRadar = ({ radarChartData }: Props) => {
           fill="rgb(99,173,123)"
           fillOpacity={0.2}
         />
+        <Legend /> 
       </RadarChart>
     </div>
   );

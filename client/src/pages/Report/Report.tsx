@@ -222,7 +222,7 @@ const Report = () => {
         html2canvas: { scale: 0.5 },
         async callback(doc) {
           await chartsToPdf({ doc, charts }).then(() =>
-            doc.save(`report_${revieweeId}_${date}`)
+            setTimeout(()=>doc.save(`report_${revieweeId}_${date}`), 25000)
           );
         },
       });
