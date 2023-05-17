@@ -6,6 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "../../pages/Template/Template.module.css";
 import "../../pages/Template/Template.css";
 
+//Translations
+import "../../translations/i18next";
+import { useTranslation } from "react-i18next";
+
 //Types
 import {
   ITemplatePost,
@@ -54,6 +58,7 @@ class SectionClass {
 
 const Template = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation(["template"]);
 
   /** data fetching and state */
   const getActiveTemplate = useGetActiveTemplateQuery();
@@ -330,7 +335,7 @@ const Template = () => {
 
   return (
     <div className={"container"}>
-      <h1>New feedback template</h1>
+      <h1>{t("pageTitle")}</h1>
       <form className={"form"}>
         <div className={"formRow"}>
           <label htmlFor="templateTitle">
@@ -343,7 +348,7 @@ const Template = () => {
             name="templateTitle"
             value={templateTitle}
             onChange={titleChangeHandler}
-          />{" "}
+          />
           <div className={"iconDiv"}>
             <span className={"materialIcons"}>edit</span>
           </div>
@@ -351,9 +356,9 @@ const Template = () => {
         <section>
           <div className={"formRow"}>
             <label htmlFor="preface">
-              <h3 className={"h3"}>Introductory text</h3>
+              <h3 className={"h3"}>{t("introductoryText")}</h3>
             </label>
-            <span>Please consult a developer to edit this text</span>
+            <span>{t("noEdit")}</span>
           </div>
           <div className={`${"noedit"} ${"preface"}`}>{preface}</div>
         </section>
@@ -363,7 +368,7 @@ const Template = () => {
             <label htmlFor="gradingGuidance">
               <h3 className={"h3"}>Grading Guidance</h3>
             </label>
-            <span>Please consult a developer to edit this text</span>
+            <span>{t("noEdit")}</span>
           </div>
           <div className={`${"noedit"} ${"preface"}`}>{gradingGuidance}</div>
         </section>
