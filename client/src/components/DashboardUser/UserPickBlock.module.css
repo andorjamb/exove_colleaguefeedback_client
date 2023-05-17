@@ -34,6 +34,7 @@
   background-color: var(--darkGray);
   color: white;
 }
+
 .done {
   height: 2.5rem;
   background-color: var(--exovePurple);

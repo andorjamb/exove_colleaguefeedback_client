@@ -11,6 +11,7 @@
   --exoveOrange: #f19c5b; /**rgb(241,156,91) */
   --darkGray: rgb(168, 168, 168);
   --medGray: rgb(216, 216, 215);
+  --lightGray: rgb(232, 232, 232);
   --paleGray: rgb(242, 242, 242);
   /* gradient colors */
   --color1: #4bebdec3;
@@ -18,6 +19,10 @@
   --color3: #e130a3c1;
   --color4: #f85b6bcf;
   --color5: #fff94dc4;
+}
+
+html {
+  font-size: 15px;
 }
 
 * {
@@ -48,6 +53,10 @@ li {
   list-style-type: none;
 }
 
+h1 {
+  font-size: 2.2rem;
+}
+
 select,
 textarea,
 input,
@@ -70,4 +79,12 @@ select {
   font-size: 0.9rem !important;
   font-family: inherit !important;
   margin-top: 0.5rem !important;
+}
+
+/* turns off blue autofill colour in Chrome */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
 }
