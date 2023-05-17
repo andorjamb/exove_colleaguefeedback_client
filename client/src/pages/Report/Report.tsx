@@ -9,11 +9,11 @@ import styles from "./Report.module.css";
 //Types
 import { IReportData, IReportCategory, IChartData } from "../../types/report";
 import { IFeedback, IFCategory } from "../../types/feedback";
-import { IUserDataGet } from "../../types/users";
+//import { IUserDataGet } from "../../types/users";
 
 //Redux
 import { useSelector } from "react-redux";
-import { useGetRequestPickByDocIdQuery } from "../../features/requestPicksApi";
+//import { useGetRequestPickByDocIdQuery } from "../../features/requestPicksApi";
 import { useGetFeedbacksByNameQuery } from "../../features/feedbackApi";
 import { useGetUserByLdapUidQuery } from "../../features/userApi";
 import { useGetActiveTemplateQuery } from "../../features/templateApi";
@@ -83,18 +83,17 @@ const testing = [
 ];
 
 const Report = () => {
-  //const { userId } = useParams();
-  //const { pickId } = useParams();
-  let pickId = "52e103e0-1c23-4220-9a47-bed14056cfe3"; //for testing
   const { t } = useTranslation(["report"]);
+  const { revieweeId } = useParams();
+  //const { pickId } = useParams();
   const reportRoot = useRef<HTMLDivElement>(null);
   const doc = new jsPDF("portrait", "px", "a4");
 
-  const [revieweeId, setRevieweeId] = useState<string | undefined>("");
+  //const [revieweeId, setRevieweeId] = useState<string | undefined>("");
   const [CM, setCM] = useState<string | undefined>("");
   const [mappedCategories, setMappedCategories] = useState<any>([]);
 
-  const getPick = useGetRequestPickByDocIdQuery(pickId as any).data;
+  //const getPick = useGetRequestPickByDocIdQuery(pickId as any).data;
   const activeTemplate = useGetActiveTemplateQuery().data;
   const templateTitle = activeTemplate?.templateTitle;
   const categories = activeTemplate?.categories;
@@ -222,7 +221,7 @@ const Report = () => {
         html2canvas: { scale: 0.5 },
         async callback(doc) {
           await chartsToPdf({ doc, charts }).then(() =>
-            setTimeout(()=>doc.save(`report_${revieweeId}_${date}`), 25000)
+            setTimeout(() => doc.save(`report_${revieweeId}_${date}`), 25000)
           );
         },
       });
@@ -249,10 +248,11 @@ const Report = () => {
     setMappedCategories(mappedCategories);
   }, [categories]);
 
-  useEffect(() => {
+  /* if not using params to get revieweeId  */
+  /*   useEffect(() => {
     setRevieweeId(getPick?.requestedTo);
   }, [getPick]);
-
+ */
   if (isLoading || isFetching) {
     return <CustomSpinner />;
   }
@@ -265,7 +265,7 @@ const Report = () => {
           <h2>{date} Colleague Feedback Report</h2>
 
           <div className={styles.feedbackInfo}>
-            <h4>{templateTitle}</h4>
+            <h4>Template: {templateTitle}</h4>
             <p>
               Competence Manager: {CMData?.firstName + " " + CMData?.surname}
             </p>
@@ -285,20 +285,24 @@ const Report = () => {
             </div>
             <div className={styles.openComments}>
               <p>
-                <span>Own comments: {item.comments?.self}</span>
+                <span className={styles.commentSpan}>
+                  Own comments: {item.comments?.self}
+                </span>
               </p>
               <p>
-                <span>Other comments:{item.comments?.CM}</span>
+                <span className={styles.commentSpan}>
+                  Other comments:{item.comments?.CM}
+                </span>
               </p>
             </div>
           </section>
         ))}
-
       </div>
+      <div className={styles.buttonContainer}>
         <button className={styles.buttonOrange} onClick={makePdf}>
           {t("generatePdf")}
         </button>
-
+      </div>
     </div>
   );
 };

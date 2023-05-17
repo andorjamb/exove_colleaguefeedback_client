@@ -1,9 +1,10 @@
 {
   "pageTitle": "Luo Uuden Palautusmallin",
   "noEdit": "Ota yhteyttä kehittäjäälle muokkaa tätä tekstiä",
-  "Questions": "Palautekysymykset",
-  "TemplateTitle": "Mallin nimi",
-  "IntroductoryText": "Aloitusteksti",
-  "GradingGuidance": "Opas arviointiin",
-  "Save": "Tallenna"
+  "questions": "Palautekysymykset",
+  "templateTitle": "Mallin nimi",
+  "introductoryText": "Aloitusteksti",
+  "gradingGuidance": "Opas arviointiin",
+  "save": "Tallenna",
+  "preview": "Esikatselu"
 }

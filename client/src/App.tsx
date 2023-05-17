@@ -43,7 +43,7 @@ const router = createBrowserRouter(
           <Route path="/feedback" element={<Feedback />}></Route>
           <Route path="/template" element={<Template />}></Route>
           <Route path="/profile" element={<Profile />}></Route>
-          <Route path="/report/:revieweeId/:reportId" element={<Report />}></Route>
+          <Route path="/report/:revieweeId" element={<Report />}></Route>
           <Route path="/profiles/:id" element={<Profile />}></Route>
           <Route path="/*" element={<Navigate to="/" replace />}></Route>
         </Route>

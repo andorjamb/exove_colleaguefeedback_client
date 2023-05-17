@@ -234,21 +234,25 @@ const Template = () => {
     questionId: string
   ) {
     let checkboxStateCopy = { ...activeCheckboxState };
+    console.log("cbs copy", checkboxStateCopy); //debugging
     Object.isExtensible(checkboxStateCopy);
     // console.log(checkboxStateCopy); //debugging - working
 
     if (e.target.checked) {
-      let questionArray = [...checkboxStateCopy[categoryId]];
-      //console.log("current state", questionArray);
-      let newQuestionArray = [...questionArray, e.target.value];
-      //console.log("after adding:", newQuestionArray);
-      checkboxStateCopy = {
-        ...checkboxStateCopy,
-        [categoryId]: newQuestionArray,
-      };
+      if (checkboxStateCopy[categoryId]) {
+        console.log("found category in state");
+        let questionArray = [...checkboxStateCopy[categoryId]];
+        //console.log("current state", questionArray);
+        let newQuestionArray = [...questionArray, e.target.value];
+        //console.log("after adding:", newQuestionArray);
+        checkboxStateCopy = {
+          ...checkboxStateCopy,
+          [categoryId]: newQuestionArray,
+        };
 
-      dispatch(updateTemplateSelection(checkboxStateCopy));
-      console.log("adding item,", checkboxStateCopy); //debugging
+        dispatch(updateTemplateSelection(checkboxStateCopy));
+        console.log("adding item,", checkboxStateCopy); //debugging
+      }
     } else {
       let questionArray = [...checkboxStateCopy[categoryId]];
       //console.log(questionArray);
@@ -339,7 +343,7 @@ const Template = () => {
       <form className={"form"}>
         <div className={"formRow"}>
           <label htmlFor="templateTitle">
-            <h3 className={"h3"}>Template title</h3>
+            <h3 className={"h3"}>{t("templateTitle")}</h3>
           </label>
         </div>
         <div className={"formRow"}>
@@ -366,7 +370,7 @@ const Template = () => {
         <section>
           <div className={"formRow"}>
             <label htmlFor="gradingGuidance">
-              <h3 className={"h3"}>Grading Guidance</h3>
+              <h3 className={"h3"}>{t("gradingGuidance")}</h3>
             </label>
             <span>{t("noEdit")}</span>
           </div>
@@ -374,7 +378,7 @@ const Template = () => {
         </section>
         {/* END SECTION */}
         <div className={"formRow"}>
-          <h3 className={"h3"}>Feedback Questions</h3>
+          <h3 className={"h3"}>{t("questions")}</h3>
         </div>
         {/* ACCORDIONS */}
         {isLoading ? (
@@ -407,9 +411,9 @@ const Template = () => {
             type="submit"
             onClick={saveTemplate}
           >
-            Save
+            {t("save")}
           </button>
-          <button type="button">Preview</button>
+          <button type="button">{t("preview")}</button>
         </div>
       </form>
     </div>
