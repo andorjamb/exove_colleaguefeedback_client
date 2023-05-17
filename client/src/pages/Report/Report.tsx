@@ -30,6 +30,7 @@ import {
   ReportClass,
   ChartDataClass,
   chartsToPdf,
+  scoreAverage,
 } from "../../functions/reportFunctions";
 import { testFeedbackData } from "../../testdata/testFeedbackData";
 import { IQuestionLang } from "../../types/questions";
@@ -103,18 +104,17 @@ const Report = () => {
   const { isLoading, isFetching } = useGetFeedbacksByNameQuery(
     revieweeId as any
   );
-  console.log("reviewee", revieweeId);
 
   //let feedbacks = testFeedbackData;
   let feedbacks: IFeedback[] | undefined = useGetFeedbacksByNameQuery(
     revieweeId as any
   ).data;
 
-  if (feedbacks && feedbacks?.length === 0) {
+  if (!feedbacks || (feedbacks && feedbacks?.length) === 0) {
     feedbacks = testFeedbackData;
   }
 
-  console.log("feedbacks", feedbacks); //debugging
+  //console.log("feedbacks", feedbacks); //debugging
   //let mappedCategories: any;
 
   /** create a map from all feedbacks for this reviewee  */
@@ -209,6 +209,8 @@ const Report = () => {
               console.log(chartObj);
             });
           }
+        } else {
+          console.log("no matching category found");
         }
       });
     });
@@ -218,7 +220,7 @@ const Report = () => {
     let charts = document.getElementsByClassName("reportChart");
     if (reportRoot.current) {
       doc.html(reportRoot.current, {
-        html2canvas: { scale: 0.5 },
+        html2canvas: { scale: 0.4 },
         async callback(doc) {
           await chartsToPdf({ doc, charts }).then(() =>
             setTimeout(() => doc.save(`report_${revieweeId}_${date}`), 25000)

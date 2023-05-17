@@ -7,11 +7,58 @@
 
 .profile {
   display: flex;
+  height: auto;
   flex-direction: column;
   margin: 3rem auto;
   height: 100%;
   width: 80vw;
   border: 1px solid black;
+}
+
+.profileHeader {
+  display: grid;
+  grid-template-rows: 50% 50%;
+  grid-template-columns: 1fr 4fr;
+  background: var(--paleGray);
+  width: 100%;
+  height: 200px;
+  border: none;
+  margin: none;
+}
+
+.headerTitleDiv {
+  padding: 1rem 1.5rem;
+  grid-column: 2 / 4;
+}
+
+.avatarDiv {
+  padding: 1.5rem;
+  margin: auto;
+}
+.avatarLarge {
+  height: 140px;
+  width: 140px;
+  object-fit: cover;
+  grid-row: 1 / 3;
+  border-radius: 50%;
+  border: 3px solid var(--exoveGreen);
+}
+
+.headerButtonDiv {
+  grid-column: 2 / 4;
+  grid-row: 2;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.selectionContainer {
+  width: 100%;
+  height: auto;
+}
+
+.selectionBlock {
+  margin: 1.5rem 2rem;
 }
 
 .buttonOrange {
@@ -31,16 +78,13 @@
 }
 
 .backButton {
-  height: 2.4rem;
-  width: 2.8rem;
+  height: 2rem;
+  width: 2rem;
   border: 1px solid black;
   background-color: white;
   position: absolute;
-  display:flex;
- align-items: center;
- justify-content: center;
-  top: 0;
-  left: 2rem;
+  top: 6rem;
+  left: 1.5rem;
 }
 
 .backButton:active {
