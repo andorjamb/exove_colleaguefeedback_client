@@ -18,7 +18,7 @@ export interface IFCategory {
   questions: IQuestionLang[];
 }
 
-export interface ITableEntry {
+/* export interface ITableEntry {
   _id: string;
   emp_id: string;
   emp_name: string;
@@ -38,3 +38,4 @@ export interface ITableEntry {
     approved: boolean;
   };
 }
+ */
