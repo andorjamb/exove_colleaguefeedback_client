@@ -19,26 +19,38 @@ import { IUserDataGet } from "../../../types/users";
 interface IBulkButtonsProps {
   allPicks: IRequestPicks[];
   allUsers: IUserDataGet[];
+  currentTemplateId: string;
 }
 
-const BulkButtons: React.FC<IBulkButtonsProps> = ({ allPicks, allUsers }) => {
+const BulkButtons: React.FC<IBulkButtonsProps> = ({
+  allPicks,
+  allUsers,
+  currentTemplateId,
+}) => {
   const [createPick] = useCreatePickMutation();
   const newPick1 = {
     requestedTo: "tempt",
   };
 
-  const requestPicks = async (newPick: { requestedTo: string }) => {
-    await createPick(newPick);
-  };
-
   const requestAllPicks = async () => {
-    const usersWithoutRequests = allUsers.filter(
-      (user) =>
-        allPicks.find((pick) => pick.requestedTo === user.ldapUid) === undefined
-    );
-    console.log("users with no request picks created", usersWithoutRequests);
-    for (const user of usersWithoutRequests) {
-      await requestPicks({ requestedTo: user.ldapUid });
+    try {
+      const usersWithoutRequests = [...allUsers]
+        .slice(0, 3)
+        .filter(
+          (user) =>
+            allPicks.find((pick) => pick.requestedTo === user.ldapUid) ===
+            undefined
+        );
+      console.log("users with no request picks yet:", usersWithoutRequests);
+      for (const user of usersWithoutRequests) {
+        console.log("creating pick for", user.displayName);
+        await createPick({
+          requestedTo: user.ldapUid,
+          template: currentTemplateId,
+        });
+      }
+    } catch (err: any) {
+      console.log("error requesting some picks", err.message);
     }
   };
 

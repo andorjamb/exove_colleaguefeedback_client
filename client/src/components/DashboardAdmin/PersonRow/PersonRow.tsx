@@ -64,10 +64,10 @@ const PersonRow: React.FC<IPersonRowProps> = ({
       requestedTo: user.ldapUid,
       template: currentTemplateId,
     };
+    console.log("creating new pick", newPick);
     await createPick(newPick);
     setIsLoading(false);
   };
-
   const remindToPick = async () => {
     console.log("reminding");
   };
@@ -396,7 +396,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             pick.userId !== user.ldapUid &&
             pick.selectionStatus
         ).map((pick) => (
-          <tr className={styles.table_row_sub}>
+          <tr key={pick._id} className={styles.table_row_sub}>
             <td>{pick.userId}</td>
             <td>
               <div className={styles.dot_container}>
@@ -421,7 +421,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         userPicks.SelectedList.filter(
           (pick) => pick.roleLevel === 6 && pick.selectionStatus
         ).map((pick) => (
-          <tr className={styles.table_row_sub}>
+          <tr key={pick._id} className={styles.table_row_sub}>
             <td>{pick.userId}</td>
             <td></td>
             <td>
@@ -447,7 +447,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         userPicks.SelectedList.filter(
           (pick) => pick.roleLevel === 4 && pick.selectionStatus
         ).map((pick) => (
-          <tr className={styles.table_row_sub}>
+          <tr key={pick._id} className={styles.table_row_sub}>
             <td>{pick.userId}</td>
             <td></td>
             <td></td>
@@ -473,7 +473,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         userPicks.SelectedList.filter(
           (pick) => pick.roleLevel === 3 && pick.selectionStatus
         ).map((pick) => (
-          <tr className={styles.table_row_sub}>
+          <tr key={pick._id} className={styles.table_row_sub}>
             <td>{pick.userId}</td>
             <td></td>
             <td></td>
