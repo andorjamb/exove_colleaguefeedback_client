@@ -58,10 +58,10 @@ const PersonRow: React.FC<IPersonRowProps> = ({
 
   console.log("user feedbacks for", user.displayName, userFeedbacks);
 
-  const requestPicks = async (userId: string) => {
+  const requestPicks = async () => {
     setIsLoading(true);
     const newPick = {
-      requestedTo: userId,
+      requestedTo: user.ldapUid,
       template: currentTemplateId,
     };
     await createPick(newPick);
@@ -100,20 +100,6 @@ const PersonRow: React.FC<IPersonRowProps> = ({
       else colour = "red";
     }
     return colour;
-    /* 
-    if (!userPicks) return colour;
-    const pickFound = userPicks.SelectedList.find(
-      (pick) => pick.userId === userId && pick.roleLevel === pickRoleLevel
-    );
-    console.log("pick found:", pickFound);
-    if (!pickFound) return "black";
-    if (!userPicks.submitted) return "black";
-    const feedbackFound = userFeedbacks.find(
-      (feedback) => feedback.requestpicksId === userPicks._id
-    );
-    console.log("feedback found:", feedbackFound);
-    if (!feedbackFound) return "red";
-    else return "green"; */
   };
 
   // Returns an array of picked users with given level
@@ -165,7 +151,9 @@ const PersonRow: React.FC<IPersonRowProps> = ({
           selectionStatus: true,
           roleLevel: pickRoleLevel,
         };
+        setIsLoading(true);
         await approvePick({ body: requestBody, id: userPicks._id });
+        setIsLoading(false);
       }
     } else {
       const requestBody = {
@@ -173,7 +161,9 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         roleLevel: pickRoleLevel,
         selectionStatus: true,
       };
+      setIsLoading(true);
       await submitPick({ body: requestBody, id: userPicks._id });
+      setIsLoading(false);
     }
   };
 
@@ -280,10 +270,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
                   title={`Request colleague picks from ${user.displayName}`}
                   placement="bottom-start"
                 >
-                  <button
-                    className={styles.request}
-                    onClick={() => requestPicks(user.ldapUid)}
-                  >
+                  <button className={styles.request} onClick={requestPicks}>
                     <span className="material-symbols-outlined">send</span>
                   </button>
                 </Tooltip>
