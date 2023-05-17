@@ -63,7 +63,6 @@ export const requestPicksApi = createApi({
         method: "PATCH",
         body,
       }),
-      invalidatesTags: ["RequestPicks"],
     }),
     deletePick: builder.mutation<void, string>({
       query: (id) => ({
@@ -74,8 +73,8 @@ export const requestPicksApi = createApi({
     }),
     finalPickSubmit: builder.mutation<void, string>({
       query: (id) => ({
-        url: `/submit/${id}`,
-        method: "GET",
+        url: `/picks/submit/${id}`,
+        method: "PATCH",
       }),
       invalidatesTags: ["RequestPicks"],
     }),
