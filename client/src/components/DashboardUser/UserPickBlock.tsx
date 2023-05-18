@@ -82,7 +82,7 @@ const UserPickBlock: React.FC<IUserPickBlockProps> = ({
         {!editing ? (
           <ButtonFancy
             type="button"
-            color="lightGray"
+            color="medGray"
             children="Edit"
             disabled={false}
             clickHandler={() => setEditing(true)}

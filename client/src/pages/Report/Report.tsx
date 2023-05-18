@@ -181,7 +181,7 @@ const Report = () => {
                 }
               }
 
-              if (key[0] && key[0] < 5) {
+              if (key[0] && +key[0] < 5) {
                 console.log("CM evaluation: by ", key[1], values); //array of feedback objects
                 setCM((CM) => key[1] as string | undefined);
                 if (question.type === "number" && question.answer) {

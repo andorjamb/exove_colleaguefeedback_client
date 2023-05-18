@@ -124,7 +124,9 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
                   <NavLink
                     to={`/feedback?id=${pick._id}&to=${pick.requestedTo}&role=${feedbackNeeded.roleLevel}`}
                   >
-                    Give feedback to {pick.requestedTo} as a{" "}
+                    Give feedback to{" "}
+                    <span className={styles.username}>{pick.requestedTo}</span>{" "}
+                    as a{" "}
                     <span className={styles.keyword}>
                       {getRoleTitle(feedbackNeeded.roleLevel)}
                     </span>
