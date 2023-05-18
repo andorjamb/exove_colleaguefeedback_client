@@ -36,7 +36,7 @@ import { testFeedbackData } from "../../testdata/testFeedbackData";
 import { IQuestionLang } from "../../types/questions";
 
 //(manager and HR only view)
-//check user: if not correct role level, navigate to login
+//TODO: check user: if not correct role level, navigate to login
 
 /** jsPDF requires inline styles, doesn't support external css? (seems to be working though
  */
@@ -89,7 +89,7 @@ const Report = () => {
   const reportRoot = useRef<HTMLDivElement>(null);
 
   //einstein pickId 421bbda0-fb06-4342-a493-2791b87550e3
-  //const [revieweeId, setRevieweeId] = useState<string | undefined>("");
+
   const [CM, setCM] = useState<string | undefined>("");
   const [mappedCategories, setMappedCategories] = useState<any>([]);
 
@@ -103,32 +103,61 @@ const Report = () => {
   const { isLoading, isFetching } = useGetFeedbacksByNameQuery(
     revieweeId as any
   );
+  //console.log("pick", getPick);  //debugging
 
   //let feedbacks = testFeedbackData;
   let feedbacks: IFeedback[] | undefined = useGetFeedbacksByNameQuery(
     revieweeId as any
   ).data;
 
-  if (!feedbacks || (feedbacks && feedbacks?.length) === 0) {
+if (!feedbacks || (feedbacks && feedbacks?.length) === 0) {
     feedbacks = testFeedbackData;
   }
-
+ 
   //console.log("feedbacks", feedbacks); //debugging
   //let mappedCategories: any;
 
   /** create a map from all feedbacks for this reviewee  */
-  function prepareFeedbacks(feedbacks: IFeedback[] | undefined) {
+  function prepareFeedbacks(feedbacks: IFeedback[]) {
     let mappedSet = new Map(
-      feedbacks?.map((feedback) => {
+      feedbacks.map((feedback) => {
         let key = [feedback.roleLevel, feedback.userId];
         return [key, feedback.categories];
       })
     );
     console.log("mappedSet", mappedSet);
+
     return mappedSet;
   }
 
   /** iterated for each key/value pair of map */
+
+  function testMap(
+    values: IFCategory[],
+    key: (string | number | undefined)[],
+    map: Map<(string | number | undefined)[], IFCategory[]>
+  ) {
+    console.log("mappedCategories in testMap:", mappedCategories);
+    for (let [value] of map) {
+      console.log(
+        "value being looped over",
+        "key",
+        key,
+        "value",
+        value,
+        "map",
+        map
+      );
+      let catIndex = mappedCategories?.findIndex(
+        (category) => category.categoryId === value.category
+      );
+      if (catIndex) {
+        console.log(catIndex);
+        console.log(mappedCategories[catIndex]); //debugging
+      }
+      
+    }
+  }
 
   function mapByRole(
     values: IFCategory[],
@@ -234,10 +263,21 @@ const Report = () => {
     }
   }
 
+  /*   async function mapSet() {
+    let mappedSet = await prepareFeedbacks(feedbacks);
+    mappedSet.forEach(mapByRole); //Map.prototype.forEach()
+  } */
+
+  useEffect(() => {}, []);
+
   useEffect(() => {
+    console.log("feedbacks:", feedbacks);
     /** create a map from all feedbacks for this reviewee  */
-    let mappedSet = prepareFeedbacks(feedbacks);
-    mappedSet.forEach(mapByRole);
+
+    if (mappedCategories !== undefined) {
+      prepareFeedbacks(feedbacks).forEach(testMap);
+    }
+    /*  mapSet();*/
     //eslint-disable-next-line
   }, [feedbacks]);
 
@@ -253,6 +293,10 @@ const Report = () => {
     console.log("mapped catogories", mappedCategories);
     setMappedCategories(mappedCategories);
   }, [categories]);
+
+  useEffect(() => {
+    //get CM
+  }, [revieweeData]);
 
   if (isLoading || isFetching) {
     return (
@@ -280,12 +324,7 @@ const Report = () => {
             </p>
           </div>
         </section>
-        <div className={styles.charts}>
-          <ChartBar barChartData={testing} />
-          <ChartRadar radarChartData={testing} />
-        </div>
-
-        {/*       {mappedCategories?.map((item: any) => (
+        {mappedCategories?.map((item: any) => (
           <section className={styles.section} key={item.categoryId}>
             <div>
               <h3>{item.categoryName}</h3>
@@ -307,7 +346,7 @@ const Report = () => {
               </p>
             </div>
           </section>
-        ))} */}
+        ))}
       </div>
       <div className={styles.buttonContainer}>
         <button className={styles.buttonOrange} onClick={makePdf}>
