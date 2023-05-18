@@ -87,7 +87,6 @@ const Report = () => {
   const { t } = useTranslation(["report"]);
   const { revieweeId } = useParams();
   const reportRoot = useRef<HTMLDivElement>(null);
-  const doc = new jsPDF("portrait", "px", "a4");
 
   //const [revieweeId, setRevieweeId] = useState<string | undefined>("");
   const [CM, setCM] = useState<string | undefined>("");
@@ -142,8 +141,8 @@ const Report = () => {
         if (category.categoryId === value.category) {
           console.log("category chart data:", category.chartData); //debugging
           //for each question of the matching category:
-          if (value.questions.length) {
-            value.questions.forEach((question) => {
+          if (value.questions?.length) {
+            value.questions?.forEach((question) => {
               //first check if question already exists in mappedCategories:
 
               let chartObj = category.chartData.forEach((datum: any) => {
@@ -217,14 +216,21 @@ const Report = () => {
 
   async function makePdf() {
     if (reportRoot.current) {
-      let top = 30;
-      const pageWidth = doc.internal.pageSize.getWidth();
-      const pageHeight = doc.internal.pageSize.getHeight();
+      const doc = new jsPDF("portrait", "px", "a4");
+
       console.log(reportRoot.current);
       html2canvas(reportRoot.current).then((canvas) => {
-        document.body.appendChild(canvas);
-        let page = canvas.toDataURL("image/png");
-        doc.addImage(page, "PNG", 10, top, pageWidth, pageHeight);
+        // document.body.appendChild(canvas);
+        let pageImage = canvas.toDataURL("image/png");
+        let imageDimensions = doc.getImageProperties(pageImage);
+        console.log("image dimensions", imageDimensions);
+        const divWidth = reportRoot.current!.clientWidth;
+        const docWidth = doc.internal.pageSize.getWidth();
+        console.log("pagewidth:", docWidth, "divWidth", divWidth);
+        let docHeight =
+          (imageDimensions.height * docWidth) / imageDimensions.width;
+
+        doc.addImage(pageImage, "PNG", 0, 0, docWidth, docHeight);
         doc.save(`report_${revieweeId}_${date}`);
       });
     }
@@ -250,11 +256,6 @@ const Report = () => {
     setMappedCategories(mappedCategories);
   }, [categories]);
 
-  /* if not using params to get revieweeId  */
-  /*   useEffect(() => {
-    setRevieweeId(getPick?.requestedTo);
-  }, [getPick]);
- */
   if (isLoading || isFetching) {
     return (
       <div className="loading_container">
