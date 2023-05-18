@@ -161,3 +161,9 @@
   color: var(--exoveGreen);
   font-weight: 800;
 }
+
+.table_row td:nth-child(6),
+.table_row td:nth-child(7),
+.table_row td:nth-child(8) {
+  padding: 0.3rem 2rem;
+}
