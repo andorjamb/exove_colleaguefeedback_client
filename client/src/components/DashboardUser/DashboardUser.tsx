@@ -1,76 +1,125 @@
-//React
-import React, { useState } from "react";
+// API, redux
+import { useGetAllFeedbacksQuery } from "../../features/feedbackApi";
+import {
+  useGetAllRequestPicksQuery,
+  useGetRequestPickByUserIdQuery,
+  useGetRequestPicksByUserFeedbacksQuery,
+} from "../../features/requestPicksApi";
+import { useGetAllUsersQuery } from "../../features/userApi";
+import { useGetActiveTemplateQuery } from "../../features/templateApi";
 
-import axios from "axios";
-
-//Pages and Components
-import Card from "../Card/Card";
-import Searchbar from "../Searchbar/Searchbar";
-
-//Styling
+import CustomSpinner from "../CustomSpinner/CustomSpinner";
 import styles from "./DashboardUser.module.css";
+//
+import PicksUser from "./PicksUser";
+import { loggedInUser } from "../../types/users";
+import { NavLink } from "react-router-dom";
 
-//Translations
-import "../../translations/i18next";
-import { useTranslation } from "react-i18next";
+const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
+  currentUserInfo,
+}) => {
+  const feedbackData = useGetAllFeedbacksQuery();
+  const picksData = useGetAllRequestPicksQuery();
+  const activeTemplateData = useGetActiveTemplateQuery();
+  const feedbacksNeededData = useGetRequestPicksByUserFeedbacksQuery(
+    currentUserInfo.uid
+  );
+  const usersData = useGetAllUsersQuery();
 
-//Types
-import { IUserData } from "../../types/users";
+  if (
+    activeTemplateData.isFetching ||
+    feedbackData.isFetching ||
+    picksData.isFetching ||
+    !picksData.data ||
+    feedbacksNeededData.isFetching ||
+    !feedbacksNeededData.data ||
+    usersData.isFetching ||
+    !usersData.data
+  )
+    return (
+      <>
+        <CustomSpinner />
+        <p>Loading your dashboard...</p>
+      </>
+    );
 
-//Testing data
-import { testEmployeeData } from "../../testdata/testEmployeeData";
+  if (!activeTemplateData.data)
+    return <h1>No feedback action going on right now. Yay!</h1>;
 
-const DashboardUser = () => {
-  const { t, i18n } = useTranslation(["dashboardUser"]);
-  const serverEndpoint = process.env.REACT_APP_SERVER_ENDPOINT; //
-  const emp_id = ""; //replace with actual uid when available
+  if (!picksData || !feedbackData.data)
+    return (
+      <h1>
+        Nothing to do here yet, you will be notified when any action is needed.
+      </h1>
+    );
 
-  const employees: IUserData[] = [];
-  /** this will be fetched using RTK Query */
+  // Feedbacks from current user on current template
+  const userFeedbacks = feedbackData.data.filter(
+    (feedback) =>
+      feedback.userId === currentUserInfo.uid &&
+      feedback.template === activeTemplateData.data?._id
+  );
 
-  const [selected, setSelected] = useState<string[]>([]);
+  console.log("Feedbacks given by user:", userFeedbacks);
+  console.log("feedbacksNeededData.data", feedbacksNeededData.data);
 
-  function clickHandler(e: React.MouseEvent<HTMLDivElement>, id: string) {
-    console.log(e.currentTarget); //debugging
-    console.log(id); //debugging
-    setSelected((selected) => [...selected, id]);
-  }
+  const feedbacksNum = feedbacksNeededData.data.reduce(
+    (sum, pick) => sum + pick.SelectedList.length,
+    0
+  );
 
-  function submitHandler() {
-    console.log(selected); //debugging
-    axios.patch(`${serverEndpoint}/picks/${emp_id}`, {});
-  }
-
-  function changeHandler(e: React.ChangeEvent<HTMLInputElement>) {
-    console.log(e.target.value); //debugging
-  }
+  const getRoleTitle = (pickRoleLevel: number) => {
+    let title = "";
+    switch (pickRoleLevel) {
+      case 6:
+        title = "subordinate";
+        break;
+      case 5:
+        title = "colleague";
+        break;
+      case 4:
+        title = "Project Manager";
+        break;
+      case 3:
+        title = "Competence Manager";
+        break;
+      default:
+        title = "Colleague";
+    }
+    return title;
+  };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.mainContent}>
-        <div>
-          <h3>{t("title")}</h3>
-        </div>
-        <Searchbar onChange={(e: any) => changeHandler(e)} />
-        <div className={styles.selectionGrid}>
-          {testEmployeeData?.map((item) => (
-            <Card
-              key={item.id}
-              employee={item}
-              clickCallback={(e: any) => clickHandler(e, item.id)}
-            />
+    <div className={styles.user_dashboard}>
+      <h1>Hi, {currentUserInfo.displayName}!</h1>
+      <PicksUser />
+      <h2>
+        You need to give {feedbacksNum}{" "}
+        <span className={styles.keyword}>feedbacks</span> to{" "}
+        {feedbacksNeededData.data.length} people:
+      </h2>
+      <p></p>
+      <ul className={styles.feedbacks_needed_list}>
+        {feedbacksNeededData.data
+          .filter((pick) => pick.requestedTo === currentUserInfo.uid)
+          .map(() => (
+            <NavLink to="#">
+              <li>Evaluate your own performance</li>
+            </NavLink>
           ))}
-        </div>
-        <div>
-          <button
-            type="button"
-            className={styles.submitButton}
-            onClick={submitHandler}
-          >
-            {t("submit")}
-          </button>
-        </div>
-      </div>
+        {feedbacksNeededData.data
+          .filter((pick) => pick.requestedTo !== currentUserInfo.uid)
+          .map((pick) =>
+            pick.SelectedList.map((feedbackNeeded) => (
+              <li>
+                <NavLink to="#">
+                  Give feedback to {pick.requestedTo} as{" "}
+                  {getRoleTitle(feedbackNeeded.roleLevel)}
+                </NavLink>
+              </li>
+            ))
+          )}
+      </ul>
     </div>
   );
 };
