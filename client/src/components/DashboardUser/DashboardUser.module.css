@@ -1,6 +1,11 @@
 .user_dashboard {
+  padding: 2rem;
+  width: 80%;
   max-width: 1200px;
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .feedbacks_needed_list {
@@ -15,4 +20,9 @@
 
 .keyword {
   color: var(--exovePurple);
+}
+
+.user_dashboard_block {
+  background-color: var(--paleGray);
+  padding: 3rem 4rem;
 }
