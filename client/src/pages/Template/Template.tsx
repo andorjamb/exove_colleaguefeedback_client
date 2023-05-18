@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //Styles
-import styles from "../../pages/Template/Template.module.css";
 import "../../pages/Template/Template.css";
 
 //Translations
@@ -12,6 +11,7 @@ import { useTranslation } from "react-i18next";
 
 //Types
 import {
+  ITemplate,
   ITemplatePost,
   ITemplateQuestion,
   IQuestionPost,
@@ -77,7 +77,8 @@ const Template = () => {
   const lang = useSelector((state: any) => state.header.lang);
 
   console.log("activeCheckboxState", activeCheckboxState); //debugging  - working
-
+  const categories = getCategories.data;
+  const questions = getQuestions.data;
   const [newQuestionState, setNewQuestionState] = useState<{
     categoryId: string;
     value: string;
@@ -88,18 +89,18 @@ const Template = () => {
     type: "",
   });
 
-  const activeTemplate = getActiveTemplate.data;
-  const categories = getCategories.data;
-  const questions = getQuestions.data;
-
   /** data manipulations  */
   let newCategoryArray: ISection[] = dataParser();
 
   /** used to set default checked value of checkboxes,
    *  returns all active questions indexed by category  */
-  function makeActiveCategoryObject(activeTemplate: any) {
-    if (activeTemplate?.categories.length) {
-      let activeCategoryObject = activeTemplate?.categories.reduce(
+  function makeActiveCategoryObject(activeTemplate: ITemplate) {
+    if (
+      getActiveTemplate.data !== undefined &&
+      getActiveTemplate.data.categories.length
+    ) {
+      console.log(getActiveTemplate.data.categories);
+      let activeCategoryObject = getActiveTemplate.data.categories.reduce(
         (accumulator: any, currentValue: any) => {
           return {
             ...accumulator,
@@ -108,7 +109,7 @@ const Template = () => {
         },
         {}
       );
-      console.log("active  category object", activeCategoryObject); //debugging
+
       dispatch(updateTemplateSelection(activeCategoryObject));
       return activeCategoryObject;
     } else {
@@ -321,21 +322,31 @@ const Template = () => {
     //eslint-disable-next-line
   }, [categories]);
 
-  /* for rendering active template questions */
+  /* for rendering active template categories and questions */
   useEffect(() => {
-    if (activeTemplate?.categories.length) {
-      makeActiveCategoryObject(activeTemplate);
+    if (
+      getActiveTemplate.data !== undefined &&
+      getActiveTemplate.data.categories.length
+    ) {
+      console.log("active template categories found"); //debugging
+      makeActiveCategoryObject(getActiveTemplate.data!);
+    } else {
+      console.log("active template categories unavailable");
     }
     //eslint-disable-next-line
-  }, [activeTemplate]);
+  }, [getActiveTemplate]);
 
   /* for rendering active template title */
   useEffect(() => {
-    if (activeTemplate?.templateTitle) {
-      setTemplateTitle((title) => activeTemplate.templateTitle);
+    if (
+      getActiveTemplate.data !== undefined &&
+      getActiveTemplate.data.templateTitle
+    ) {
+      console.log("title found"); //debugging
+      setTemplateTitle((title) => getActiveTemplate.data!.templateTitle);
     }
     //eslint-disable-next-line
-  }, [activeTemplate]);
+  }, [getActiveTemplate]);
 
   return (
     <div className={"container"}>

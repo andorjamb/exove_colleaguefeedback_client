@@ -2,6 +2,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 
 //styles
 import styles from "./Report.module.css";
@@ -29,7 +30,7 @@ import ChartRadar from "../../charts/ChartRadar";
 import {
   ReportClass,
   ChartDataClass,
-  chartsToPdf,
+  scoreAverage,
 } from "../../functions/reportFunctions";
 import { testFeedbackData } from "../../testdata/testFeedbackData";
 import { IQuestionLang } from "../../types/questions";
@@ -85,9 +86,7 @@ const testing = [
 const Report = () => {
   const { t } = useTranslation(["report"]);
   const { revieweeId } = useParams();
-  //const { pickId } = useParams();
   const reportRoot = useRef<HTMLDivElement>(null);
-  const doc = new jsPDF("portrait", "px", "a4");
 
   //const [revieweeId, setRevieweeId] = useState<string | undefined>("");
   const [CM, setCM] = useState<string | undefined>("");
@@ -103,18 +102,17 @@ const Report = () => {
   const { isLoading, isFetching } = useGetFeedbacksByNameQuery(
     revieweeId as any
   );
-  console.log("reviewee", revieweeId);
 
   //let feedbacks = testFeedbackData;
   let feedbacks: IFeedback[] | undefined = useGetFeedbacksByNameQuery(
     revieweeId as any
   ).data;
 
-  if (feedbacks && feedbacks?.length === 0) {
+  if (!feedbacks || (feedbacks && feedbacks?.length) === 0) {
     feedbacks = testFeedbackData;
   }
 
-  console.log("feedbacks", feedbacks); //debugging
+  //console.log("feedbacks", feedbacks); //debugging
   //let mappedCategories: any;
 
   /** create a map from all feedbacks for this reviewee  */
@@ -143,7 +141,8 @@ const Report = () => {
         if (category.categoryId === value.category) {
           console.log("category chart data:", category.chartData); //debugging
           //for each question of the matching category:
-          if (value.questions.length) {
+
+          if (value.questions && value.questions.length) {
             value.questions.forEach((question) => {
               //first check if question already exists in mappedCategories:
 
@@ -167,6 +166,7 @@ const Report = () => {
 
               chartObj.question = question.question as string;
               /** organise the data according to role of reviewer */
+
               if (key[1] && key[1] === revieweeId) {
                 console.log("self evaluation:", values); //array of feedback objects
                 if (question.type === "number" && question.answer) {
@@ -206,6 +206,7 @@ const Report = () => {
                   };
                 }
               }
+
               console.log(chartObj);
             });
           }
@@ -214,16 +215,20 @@ const Report = () => {
     });
   }
 
-  function makePdf() {
-    let charts = document.getElementsByClassName("reportChart");
+  async function makePdf() {
     if (reportRoot.current) {
-      doc.html(reportRoot.current, {
-        html2canvas: { scale: 0.5 },
-        async callback(doc) {
-          await chartsToPdf({ doc, charts }).then(() =>
-            setTimeout(() => doc.save(`report_${revieweeId}_${date}`), 25000)
-          );
-        },
+      const doc = new jsPDF("portrait", "px", "a4");
+
+      console.log(reportRoot.current);
+      html2canvas(reportRoot.current).then((canvas) => {
+        let pageImage = canvas.toDataURL("image/png");
+        let imageDimensions = doc.getImageProperties(pageImage);
+        const docWidth = doc.internal.pageSize.getWidth();
+        let docHeight =
+          (imageDimensions.height * docWidth) / imageDimensions.width;
+
+        doc.addImage(pageImage, "PNG", 0, 0, docWidth, docHeight);
+        doc.save(`report_${revieweeId}_${date}`);
       });
     }
   }
@@ -248,11 +253,6 @@ const Report = () => {
     setMappedCategories(mappedCategories);
   }, [categories]);
 
-  /* if not using params to get revieweeId  */
-  /*   useEffect(() => {
-    setRevieweeId(getPick?.requestedTo);
-  }, [getPick]);
- */
   if (isLoading || isFetching) {
     return (
       <div className="loading_container">
@@ -279,7 +279,12 @@ const Report = () => {
             </p>
           </div>
         </section>
-        {mappedCategories?.map((item: any) => (
+        <div className={styles.charts}>
+          <ChartBar barChartData={testing} />
+          <ChartRadar radarChartData={testing} />
+        </div>
+
+        {/*       {mappedCategories?.map((item: any) => (
           <section className={styles.section} key={item.categoryId}>
             <div>
               <h3>{item.categoryName}</h3>
@@ -301,7 +306,7 @@ const Report = () => {
               </p>
             </div>
           </section>
-        ))}
+        ))} */}
       </div>
       <div className={styles.buttonContainer}>
         <button className={styles.buttonOrange} onClick={makePdf}>

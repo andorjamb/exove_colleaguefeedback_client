@@ -22,8 +22,17 @@ interface Props {
 
 const ChartRadar = ({ radarChartData }: Props) => {
   return (
-    <div className="reportChart" style={{border:"1px solid gray", margin: "1rem", padding:"1rem"}}>
-{/*       <ResponsiveContainer width={300}> */}
+    <div
+      className="reportChart"
+      style={{
+        height: "300px",
+        width: "300px",
+        border: "1px solid gray",
+        margin: "1rem",
+        padding: "1rem",
+      }}
+    >
+      <ResponsiveContainer width="100%" height="100%">
         <RadarChart
           cx="50%"
           cy="50%"
@@ -58,7 +67,7 @@ const ChartRadar = ({ radarChartData }: Props) => {
           />
           <Legend />
         </RadarChart>
-  {/*     </ResponsiveContainer> */}
+      </ResponsiveContainer>
     </div>
   );
 };

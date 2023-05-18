@@ -1,35 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 //Types
-import { IQuestionTextGet, ICategoryGet, IQCategory } from "../types/template";
-
-/* enum QuestionType {
-  range = "Number",
-  open = "String",
-  truefalse = "Boolean",
-}
-
-export interface IQuestionTextGet {
-  _id: string;
-  lang: string;
-  question: string;
-}
-
-export interface IQuesionGet {
-  _id: string;
-  category: string;
-  createdBy: string;
-  createdOn: string;
-  active: boolean;
-  type: QuestionType;
-  question: IQuestionTextGet[];
-}
-
-export interface ICategoryGet {
-  _id: string;
-  category: string;
-  questions: IQuesionGet[];
-} */
+import { IQCategory } from "../types/template";
 
 interface ICategoryBody {
   categoryName: string;
@@ -54,7 +26,7 @@ export const categoryApi = createApi({
       query: () => "category",
       providesTags: ["Categories"],
     }),
-    /*  getCategoryById: builder.query<ICategoryGet, string>({
+    /*  getCategoryById: builder.query<ICategory, string>({
       query: (id) => `question/${id}`,
     }), */ //no server endpoint
     addCategory: builder.mutation<void, ICategoryBody>({

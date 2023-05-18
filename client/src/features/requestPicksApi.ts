@@ -26,10 +26,10 @@ export const requestPicksApi = createApi({
       query: () => "picks",
       providesTags: ["RequestPicks"],
     }),
-    getRequestPickByUserId: builder.query<IRequestPicks, string>({
+    getRequestPickByUserId: builder.query<IRequestPicks[], string>({
       /** fetches pick object where user=person selected to pick */
       query: (userId) => `picks/${userId}`,
-      providesTags: ["RequestPicks"],
+      providesTags: ["UserRequestPicks"],
     }),
     getRequestPickByDocId: builder.query<IRequestPicks, string>({
       query: (id) => `picks/pick-id/${id}`,

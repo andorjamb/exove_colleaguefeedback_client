@@ -1,6 +1,4 @@
 import { IReportData, IReportCategory, IChartData } from "../types/report";
-import { jsPDF } from "jspdf";
-import * as htmlToImage from "html-to-image";
 
 export class ReportClass {
   requestPicksId: string | undefined;
@@ -21,6 +19,15 @@ export class ReportClass {
   }
 }
 
+export function scoreAverage(valueArray: number[]) {
+  //valueArray =  question.colleagues;
+  let total = 0;
+  for (let i = 0; i < valueArray.length; i++) {
+    total = total + i;
+  }
+  return total / valueArray.length;
+}
+
 /** for Charts creation only  */
 export class ChartDataClass {
   categoryName: string | undefined;
@@ -38,48 +45,7 @@ export class ChartDataClass {
   }
 }
 
-export async function chartsToPdf({
-  doc,
-  charts,
-}: {
-  doc: jsPDF;
-  charts: HTMLCollectionOf<Element>;
-}) {
-  let top = 30;
-  let padding = 16;
-
-  for (let i = 0; i < charts.length; i++) {
-    const chart = charts[i] as HTMLElement;
-    const imgData = await htmlToImage.toPng(chart);
-
-    const pageWidth = doc.internal.pageSize.getWidth(); //px scaled to pdf pt
-    console.log(pageWidth);
-
-    let chartHeight = chart.offsetHeight; //pixels
-    let chartWidth = chart.offsetWidth; //pixels
-
-    if (chartWidth > pageWidth) {
-      const ratio = pageWidth / chartWidth;
-
-      chartHeight = chartHeight * ratio - padding;
-      chartWidth = chartWidth * ratio - padding;
-    }
-    if (imgData) {
-      doc.addImage(
-        imgData,
-        "PNG",
-        10,
-        top,
-        chartWidth,
-        chartHeight,
-        `chart${i}`
-      );
-      top += chartHeight + 40;
-    }
-  }
-}
-
-/*Backup of modifid function
+/*Backup of modify data  function
   function mapByRole(values: IFCategory[], key: any) {
     let bla = new ChartDataClass();
   
@@ -122,17 +88,7 @@ export async function chartsToPdf({
       console.log("colleague evaluation");
     }
   }
-  
   */
-
-// MAKING CHARTS from report object
-
-/* calculating average
-    valueArray =  question.colleagues; 
-    let total = 0;
-    for (const i=0; i<array.length; i++) { total = total + i;}
-      return total/array.length;
-    */
 
 /* for returning category name if only category id is present  */
 /* function getCatName(para: string) {
