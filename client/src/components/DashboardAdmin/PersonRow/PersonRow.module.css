@@ -39,6 +39,11 @@
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
+  transition: 0.2 ease;
+}
+
+.table_row button:hover {
+  filter: brightness(90%);
 }
 
 .buttons_container {

@@ -1,10 +1,22 @@
 .container {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   height: 3.5rem;
   width: 100%;
   border-bottom: 1px solid black;
+}
+
+.logo_nav_container {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+}
+.lang_login_container {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .loginButton {
@@ -14,6 +26,7 @@
   height: 2rem;
   cursor: pointer;
   margin: 0 1rem;
+  transition: 0.3s ease;
 }
 
 .loginButton:active {
@@ -22,8 +35,8 @@
 }
 
 .loginButton:hover {
-  background-color: white;
-  color: black;
+  background-color: var(--exovePurple);
+  color: white;
 }
 
 .button {
@@ -45,6 +58,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: 0.3s ease;
+}
+
+.langButton:hover {
+  background-color: var(--medGray);
 }
 
 .displayName {

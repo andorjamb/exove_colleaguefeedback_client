@@ -16,4 +16,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: 0.2 ease;
+}
+
+.search_container button:hover {
+  filter: brightness(90%);
 }
