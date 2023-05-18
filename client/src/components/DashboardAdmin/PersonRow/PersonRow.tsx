@@ -238,7 +238,10 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     if (!userPicks) return;
     // Filter picks to only have active pick of needed level
     const levelPicks = userPicks.SelectedList.filter(
-      (pick) => pick.roleLevel === pickRoleLevel && pick.selectionStatus
+      (pick) =>
+        pick.roleLevel === pickRoleLevel &&
+        pick.selectionStatus &&
+        pick.userId !== user.ldapUid
     );
     const deletedPicks = levelPicks.filter(
       (pick) =>
@@ -250,6 +253,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     );
     console.log("deletedPicks", deletedPicks);
     console.log("addedPicks", addedPicks);
+    if (deletedPicks.length === 0 && addedPicks.length === 0) return;
     setIsLoading(true);
     for (const pick of deletedPicks) {
       await deactivatePick(pick.userId, pickRoleLevel);

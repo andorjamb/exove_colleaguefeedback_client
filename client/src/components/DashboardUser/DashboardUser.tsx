@@ -65,7 +65,10 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
 
   const feedbacksNum = feedbacksNeededData.data
     .filter((feedbackNeeded) => feedbackNeeded.submitted)
-    .reduce((sum, pick) => sum + pick.SelectedList.length, 0);
+    .reduce((sum, pick) => {
+      console.log(pick.SelectedList);
+      return sum + pick.SelectedList.length;
+    }, 0);
 
   const getRoleTitle = (pickRoleLevel: number) => {
     let title = "";
