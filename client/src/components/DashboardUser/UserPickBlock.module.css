@@ -28,15 +28,3 @@
   flex-wrap: wrap;
   gap: 1rem;
 }
-
-.edit {
-  height: 2.5rem;
-  background-color: var(--darkGray);
-  color: white;
-}
-
-.done {
-  height: 2.5rem;
-  background-color: var(--exovePurple);
-  color: white;
-}
