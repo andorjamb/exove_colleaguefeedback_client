@@ -101,18 +101,22 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
       <p></p>
       <ul className={styles.feedbacks_needed_list}>
         {feedbacksNeededData.data
-          .filter((pick) => pick.requestedTo === currentUserInfo.uid)
-          .map(() => (
-            <NavLink to="#">
+          .filter((firstPick) => firstPick.requestedTo === currentUserInfo.uid)
+          .map((pick) => (
+            <NavLink
+              to={`/feedback?id=${pick._id}&to=${currentUserInfo.uid}&role=5`}
+            >
               <li>Evaluate your own performance</li>
             </NavLink>
           ))}
         {feedbacksNeededData.data
-          .filter((pick) => pick.requestedTo !== currentUserInfo.uid)
+          .filter((firstPick) => firstPick.requestedTo !== currentUserInfo.uid)
           .map((pick) =>
             pick.SelectedList.map((feedbackNeeded) => (
               <li>
-                <NavLink to="#">
+                <NavLink
+                  to={`/feedback?id=${pick._id}&to=${pick.requestedTo}&role=${feedbackNeeded.roleLevel}`}
+                >
                   Give feedback to {pick.requestedTo} as a{" "}
                   <span className={styles.keyword}>
                     {getRoleTitle(feedbackNeeded.roleLevel)}

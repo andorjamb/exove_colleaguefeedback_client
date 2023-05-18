@@ -14,6 +14,7 @@
   height: 2rem;
   cursor: pointer;
   margin: 0 1rem;
+  transition: 0.3s ease;
 }
 
 .loginButton:active {
@@ -22,8 +23,8 @@
 }
 
 .loginButton:hover {
-  background-color: white;
-  color: black;
+  background-color: var(--exovePurple);
+  color: white;
 }
 
 .button {
@@ -45,6 +46,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: 0.3s ease;
+}
+
+.langButton:hover {
+  background-color: var(--medGray);
 }
 
 .displayName {
