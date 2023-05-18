@@ -106,6 +106,30 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     return colour;
   };
 
+  const getCountColour = (pickRoleLevel: number): string => {
+    let colour = "numberBlack";
+    if (
+      userFeedbacks &&
+      userFeedbacks.length &&
+      userPicks &&
+      userPicks.SelectedList
+    ) {
+      const feedbacksGiven = userFeedbacks.filter(
+        (userFeedback) =>
+          userFeedback.roleLevel === pickRoleLevel &&
+          userFeedback.feedbackTo === user.ldapUid
+      );
+      const feedbacksNeeded = userPicks.SelectedList.filter(
+        (pick) => pick.roleLevel === pickRoleLevel && pick.selectionStatus
+      );
+      console.log("feedbacksGiven", feedbacksGiven);
+      console.log("feedbacksNeeded", feedbacksNeeded);
+      if (feedbacksGiven.length < feedbacksNeeded.length) colour = "numberRed";
+      else colour = "numberGreen";
+    }
+    return colour;
+  };
+
   // Returns an array of picked users with given level
   const getUserArrayByRoleLevel = (level: number) => {
     if (!userPicks) return [];
@@ -281,7 +305,19 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             {user.firstName} {user.surname}
           </div>
         </td>
-        <td onClick={toggleExpand}>
+        <td className={styles[getCountColour(5)]} onClick={toggleExpand}>
+          {userFeedbacks && userFeedbacks.length > 0 && (
+            <>
+              {
+                userFeedbacks.filter(
+                  (userFeedback) =>
+                    userFeedback.roleLevel === 5 &&
+                    userFeedback.feedbackTo === user.ldapUid
+                ).length
+              }
+              /
+            </>
+          )}
           {userPicks &&
             userPicks.SelectedList &&
             userPicks.SelectedList.filter(
@@ -291,21 +327,57 @@ const PersonRow: React.FC<IPersonRowProps> = ({
                 pick.selectionStatus
             ).length}
         </td>
-        <td onClick={toggleExpand}>
+        <td className={styles[getCountColour(6)]} onClick={toggleExpand}>
+          {userFeedbacks && userFeedbacks.length > 0 && (
+            <>
+              {
+                userFeedbacks.filter(
+                  (userFeedback) =>
+                    userFeedback.roleLevel === 6 &&
+                    userFeedback.feedbackTo === user.ldapUid
+                ).length
+              }
+              /
+            </>
+          )}
           {userPicks &&
             userPicks.SelectedList &&
             userPicks.SelectedList.filter(
               (pick) => pick.roleLevel === 6 && pick.selectionStatus
             ).length}
         </td>
-        <td onClick={toggleExpand}>
+        <td className={styles[getCountColour(4)]} onClick={toggleExpand}>
+          {userFeedbacks && userFeedbacks.length > 0 && (
+            <>
+              {
+                userFeedbacks.filter(
+                  (userFeedback) =>
+                    userFeedback.roleLevel === 4 &&
+                    userFeedback.feedbackTo === user.ldapUid
+                ).length
+              }
+              /
+            </>
+          )}
           {userPicks &&
             userPicks.SelectedList &&
             userPicks.SelectedList.filter(
               (pick) => pick.roleLevel === 4 && pick.selectionStatus
             ).length}
         </td>
-        <td onClick={toggleExpand}>
+        <td className={styles[getCountColour(3)]} onClick={toggleExpand}>
+          {userFeedbacks && userFeedbacks.length > 0 && (
+            <>
+              {
+                userFeedbacks.filter(
+                  (userFeedback) =>
+                    userFeedback.roleLevel === 3 &&
+                    userFeedback.feedbackTo === user.ldapUid
+                ).length
+              }
+              /
+            </>
+          )}
           {userPicks &&
             userPicks.SelectedList &&
             userPicks.SelectedList.filter(
@@ -389,6 +461,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             )}
             {userPicks &&
               userPicks?.submitted &&
+              !userReport &&
               userPicks?.SelectedList.filter((pick) => pick.selectionStatus)
                 .length > userFeedbacks.length && (
                 <Tooltip
@@ -405,15 +478,17 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         </td>
         <td>
           <div className={styles.buttons_container}>
-            <Tooltip
-              TransitionComponent={Fade}
-              title={`Finalise ${user.displayName}'s feedback process`}
-              placement="bottom-start"
-            >
-              <button onClick={generateReport} className={styles.request}>
-                <span className="material-symbols-outlined">description</span>
-              </button>
-            </Tooltip>
+            {userFeedbacks.length > 0 && (
+              <Tooltip
+                TransitionComponent={Fade}
+                title={`Finalise ${user.displayName}'s feedback process`}
+                placement="bottom-start"
+              >
+                <button onClick={generateReport} className={styles.request}>
+                  <span className="material-symbols-outlined">description</span>
+                </button>
+              </Tooltip>
+            )}
             {userReport && (
               <>
                 <Tooltip
@@ -579,7 +654,6 @@ const PersonRow: React.FC<IPersonRowProps> = ({
               defaultEditing={false}
               defaultSelection={getUserArrayByRoleLevel(6)}
             />
-
             <UserPickBlock
               users={allUsersData.filter(
                 (pick) => pick.ldapUid !== user.ldapUid
