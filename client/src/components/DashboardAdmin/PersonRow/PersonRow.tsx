@@ -90,7 +90,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
 
   const getDotColour = (userId: string, pickRoleLevel: number) => {
     let colour = "black";
-    if (userPicks) {
+    if (userPicks && userPicks.submitted) {
       const feedbackFound = userFeedbacks.find(
         (feedback) =>
           feedback.requestpicksId === userPicks._id &&
