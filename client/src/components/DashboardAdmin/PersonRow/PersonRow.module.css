@@ -25,11 +25,11 @@
 }
 
 .red {
-  background-color: red;
+  background-color: var(--exoveRed);
 }
 
 .green {
-  background-color: green;
+  background-color: var(--exoveGreen);
 }
 
 .table_row button {
@@ -150,4 +150,20 @@
 .row_loading {
   background-color: var(--paleGray);
   height: 2rem;
+}
+
+.numberRed {
+  color: var(--exoveRed);
+  font-weight: 800;
+}
+
+.numberGreen {
+  color: var(--exoveGreen);
+  font-weight: 800;
+}
+
+.table_row td:nth-child(6),
+.table_row td:nth-child(7),
+.table_row td:nth-child(8) {
+  padding: 0.3rem 2rem;
 }

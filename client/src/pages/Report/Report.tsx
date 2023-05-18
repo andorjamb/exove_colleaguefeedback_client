@@ -14,7 +14,7 @@ import { IFeedback, IFCategory } from "../../types/feedback";
 
 //Redux
 import { useSelector } from "react-redux";
-//import { useGetRequestPickByDocIdQuery } from "../../features/requestPicksApi";
+import { useGetRequestPickByDocIdQuery } from "../../features/requestPicksApi";
 import { useGetFeedbacksByNameQuery } from "../../features/feedbackApi";
 import { useGetUserByLdapUidQuery } from "../../features/userApi";
 import { useGetActiveTemplateQuery } from "../../features/templateApi";
@@ -85,14 +85,15 @@ const testing = [
 
 const Report = () => {
   const { t } = useTranslation(["report"]);
-  const { revieweeId } = useParams();
+  const { revieweeId, pickId } = useParams();
   const reportRoot = useRef<HTMLDivElement>(null);
 
+  //einstein pickId 421bbda0-fb06-4342-a493-2791b87550e3
   //const [revieweeId, setRevieweeId] = useState<string | undefined>("");
   const [CM, setCM] = useState<string | undefined>("");
   const [mappedCategories, setMappedCategories] = useState<any>([]);
 
-  //const getPick = useGetRequestPickByDocIdQuery(pickId as any).data;
+  const getPick = useGetRequestPickByDocIdQuery(pickId as any).data;
   const activeTemplate = useGetActiveTemplateQuery().data;
   const templateTitle = activeTemplate?.templateTitle;
   const categories = activeTemplate?.categories;

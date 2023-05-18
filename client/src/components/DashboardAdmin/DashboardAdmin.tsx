@@ -127,6 +127,11 @@ const DashboardAdmin = () => {
                   userFeedbacks={feedbackData.data!.filter(
                     (feedback) => feedback.feedbackTo === currUser.ldapUid
                   )}
+                  userReport={reportsData.data?.find(
+                    (report) =>
+                      report.userId === currUser.ldapUid &&
+                      report.template === activeTemplateData.data?._id
+                  )}
                   allUsersData={usersData.data ? usersData.data : []}
                   /* showEditPicks={() => setShowModal(true)} */
                 />

@@ -117,8 +117,6 @@ const Template = () => {
     }
   }
 
-  /** set initial open state of accordion divs when categories are fetched */
-
   /** used to manipulate fetched template data into a form useful for rendering  */
   function dataParser() {
     let categoryArray: ISection[] = [];
@@ -166,7 +164,7 @@ const Template = () => {
     return categoryArray;
   }
 
-  /** event handlers */
+  /////** event handlers *///////
 
   function titleChangeHandler(e: any) {
     //console.log(e.target.value);
@@ -213,7 +211,7 @@ const Template = () => {
     }
   };
 
-  /** submit function for new question  */
+  /** submit function for creating new question  */
   function createQuestion() {
     //console.log("adding question", newQuestionState); //debugging
     if (validator(newQuestionState)) {
@@ -228,7 +226,7 @@ const Template = () => {
     } else alert("Unable to send, incomplete data");
   }
 
-  /* onChange event handler for selecting questions to be added to template  */
+  /* onChange event handler for selecting/deselecting questions to be added to template  */
   function checkboxChangeHandler(
     e: any,
     categoryId: string, //passed from mapped all-category values
@@ -237,7 +235,6 @@ const Template = () => {
     let checkboxStateCopy = { ...activeCheckboxState };
     console.log("cbs copy", checkboxStateCopy); //debugging
     Object.isExtensible(checkboxStateCopy);
-    // console.log(checkboxStateCopy); //debugging - working
 
     if (e.target.checked) {
       if (checkboxStateCopy[categoryId]) {
@@ -252,27 +249,34 @@ const Template = () => {
         };
 
         dispatch(updateTemplateSelection(checkboxStateCopy));
-        console.log("adding item,", checkboxStateCopy); //debugging
+        console.log("/////adding item/////,", checkboxStateCopy); //debugging
       }
     } else {
+      console.log(`question ${questionId} deselected`); //debugging
+      if (checkboxStateCopy[categoryId]) {
+        console.log("checking for cateogry id, found");
+      }
       let questionArray = [...checkboxStateCopy[categoryId]];
-      //console.log(questionArray);
+
+      //error handler for case where this category does not exist in current active template?
+
+      console.log("question array before filtering", questionArray); //debugging
       let newQuestionArray = questionArray.filter((item) => {
         return item !== e.target.value;
       });
-      console.log("after filtering:", newQuestionArray);
+      console.log("copy, after filtering:", newQuestionArray);
       checkboxStateCopy = {
         ...checkboxStateCopy,
         [categoryId]: newQuestionArray,
       };
       dispatch(updateTemplateSelection(checkboxStateCopy));
-      // console.log(activeCheckboxState); //debugging
+      console.log("active checkbox state after update:", activeCheckboxState); //debugging
     }
 
     //dispatch(updateTemplateSelection(checkboxStateCopy));
   }
 
-  //convert activeCheckboxState to db form
+  //convert activeCheckboxState to db post form
   function postCategoryConverter(obj: ActiveCheckboxes) {
     let categoryArray: ICategoryPost[] = [];
     let categoryIds = Object.keys(activeCheckboxState);
@@ -288,7 +292,6 @@ const Template = () => {
   /* onSubmit handler for saving template to db  */
   async function saveTemplate(e: any) {
     e.preventDefault();
-
     let categoryArray = postCategoryConverter(activeCheckboxState);
     let newTemplate: ITemplatePost = {
       templateTitle: templateTitle,
@@ -311,6 +314,7 @@ const Template = () => {
     });
   }
 
+  /** set initial open state of accordion divs when categories are fetched */
   useEffect(() => {
     if (categories?.length) {
       let accordionCopy = [...accordion];

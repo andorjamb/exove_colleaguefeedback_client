@@ -27,6 +27,9 @@ import { IUserDataGet } from "../../../types/users";
 
 // Styles
 import styles from "./PersonRow.module.css";
+import { usePostReportMutation } from "../../../features/reportApi";
+import { IReport } from "../../../types/report";
+import { NavLink, useNavigate } from "react-router-dom";
 
 interface IPersonRowProps {
   userPicks: IRequestPicks | undefined;
@@ -34,6 +37,7 @@ interface IPersonRowProps {
   userFeedbacks: IFeedback[];
   allUsersData: IUserDataGet[];
   currentTemplateId: string;
+  userReport: IReport | undefined;
   /* showEditPicks: () => void; */
 }
 
@@ -43,8 +47,10 @@ const PersonRow: React.FC<IPersonRowProps> = ({
   userFeedbacks,
   allUsersData,
   currentTemplateId,
+  userReport,
   /* showEditPicks, */
 }) => {
+  const navigate = useNavigate();
   const [expand, setExpand] = useState(false);
   const [createPick] = useCreatePickMutation();
   const [submitPick] = useSubmitPickMutation();
@@ -53,6 +59,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
   const [deletePick] = useDeletePickMutation();
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [postReport] = usePostReportMutation();
 
   console.log("user feedbacks for", user.displayName, userFeedbacks);
 
@@ -92,10 +99,35 @@ const PersonRow: React.FC<IPersonRowProps> = ({
       const feedbackFound = userFeedbacks.find(
         (feedback) =>
           feedback.requestpicksId === userPicks._id &&
+          feedback.userId === userId &&
           feedback.roleLevel === pickRoleLevel
       );
       if (feedbackFound) colour = "green";
       else colour = "red";
+    }
+    return colour;
+  };
+
+  const getCountColour = (pickRoleLevel: number): string => {
+    let colour = "numberBlack";
+    if (
+      userFeedbacks &&
+      userFeedbacks.length &&
+      userPicks &&
+      userPicks.SelectedList
+    ) {
+      const feedbacksGiven = userFeedbacks.filter(
+        (userFeedback) =>
+          userFeedback.roleLevel === pickRoleLevel &&
+          userFeedback.feedbackTo === user.ldapUid
+      );
+      const feedbacksNeeded = userPicks.SelectedList.filter(
+        (pick) => pick.roleLevel === pickRoleLevel && pick.selectionStatus
+      );
+      console.log("feedbacksGiven", feedbacksGiven);
+      console.log("feedbacksNeeded", feedbacksNeeded);
+      if (feedbacksGiven.length < feedbacksNeeded.length) colour = "numberRed";
+      else colour = "numberGreen";
     }
     return colour;
   };
@@ -228,6 +260,32 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     setIsLoading(false);
   };
 
+  const getFullName = (userId: string) => {
+    const userFound = allUsersData.find((user) => user.ldapUid === userId);
+    if (!userFound) return userId;
+    return userFound.firstName + " " + userFound.surname;
+  };
+
+  const generateReport = async () => {
+    if (!userPicks || !userFeedbacks || !currentTemplateId) return;
+    setIsLoading(true);
+    const body = {
+      feedbacks: userFeedbacks.map((feedback) => feedback._id),
+      template: currentTemplateId,
+      userId: user.ldapUid,
+      requestPicks: userPicks._id,
+    };
+    console.log("body", body);
+    await postReport({ body: body });
+    setIsLoading(false);
+  };
+
+  if (user.ldapUid === "einstein") {
+    console.log("EINSTEIN");
+    console.log("userReport", userReport);
+    console.log("userPicks", userPicks);
+  }
+
   if (isLoading)
     return (
       <tr className={styles.row_loading}>
@@ -255,7 +313,19 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             {user.firstName} {user.surname}
           </div>
         </td>
-        <td onClick={toggleExpand}>
+        <td className={styles[getCountColour(5)]} onClick={toggleExpand}>
+          {userFeedbacks && userFeedbacks.length > 0 && (
+            <>
+              {
+                userFeedbacks.filter(
+                  (userFeedback) =>
+                    userFeedback.roleLevel === 5 &&
+                    userFeedback.feedbackTo === user.ldapUid
+                ).length
+              }
+              /
+            </>
+          )}
           {userPicks &&
             userPicks.SelectedList &&
             userPicks.SelectedList.filter(
@@ -265,21 +335,57 @@ const PersonRow: React.FC<IPersonRowProps> = ({
                 pick.selectionStatus
             ).length}
         </td>
-        <td onClick={toggleExpand}>
+        <td className={styles[getCountColour(6)]} onClick={toggleExpand}>
+          {userFeedbacks && userFeedbacks.length > 0 && (
+            <>
+              {
+                userFeedbacks.filter(
+                  (userFeedback) =>
+                    userFeedback.roleLevel === 6 &&
+                    userFeedback.feedbackTo === user.ldapUid
+                ).length
+              }
+              /
+            </>
+          )}
           {userPicks &&
             userPicks.SelectedList &&
             userPicks.SelectedList.filter(
               (pick) => pick.roleLevel === 6 && pick.selectionStatus
             ).length}
         </td>
-        <td onClick={toggleExpand}>
+        <td className={styles[getCountColour(4)]} onClick={toggleExpand}>
+          {userFeedbacks && userFeedbacks.length > 0 && (
+            <>
+              {
+                userFeedbacks.filter(
+                  (userFeedback) =>
+                    userFeedback.roleLevel === 4 &&
+                    userFeedback.feedbackTo === user.ldapUid
+                ).length
+              }
+              /
+            </>
+          )}
           {userPicks &&
             userPicks.SelectedList &&
             userPicks.SelectedList.filter(
               (pick) => pick.roleLevel === 4 && pick.selectionStatus
             ).length}
         </td>
-        <td onClick={toggleExpand}>
+        <td className={styles[getCountColour(3)]} onClick={toggleExpand}>
+          {userFeedbacks && userFeedbacks.length > 0 && (
+            <>
+              {
+                userFeedbacks.filter(
+                  (userFeedback) =>
+                    userFeedback.roleLevel === 3 &&
+                    userFeedback.feedbackTo === user.ldapUid
+                ).length
+              }
+              /
+            </>
+          )}
           {userPicks &&
             userPicks.SelectedList &&
             userPicks.SelectedList.filter(
@@ -363,6 +469,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             )}
             {userPicks &&
               userPicks?.submitted &&
+              !userReport &&
               userPicks?.SelectedList.filter((pick) => pick.selectionStatus)
                 .length > userFeedbacks.length && (
                 <Tooltip
@@ -379,35 +486,45 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         </td>
         <td>
           <div className={styles.buttons_container}>
-            <Tooltip
-              TransitionComponent={Fade}
-              title={`Finalise ${user.displayName}'s feedback process`}
-              placement="bottom-start"
-            >
-              <button className={styles.request}>
-                <span className="material-symbols-outlined">description</span>
-              </button>
-            </Tooltip>
-            <Tooltip
-              TransitionComponent={Fade}
-              title={`View ${user.displayName}'s report`}
-              placement="bottom-start"
-            >
-              <button className={styles.edit}>
-                <span className="material-symbols-outlined">visibility</span>
-              </button>
-            </Tooltip>
-            <Tooltip
-              TransitionComponent={Fade}
-              title={`Make ${user.displayName}'s report available to CM`}
-              placement="bottom-start"
-            >
-              <button className={styles.approve}>
-                <span className="material-symbols-outlined">
-                  supervisor_account
-                </span>
-              </button>
-            </Tooltip>
+            {userFeedbacks.length > 0 && !userReport && (
+              <Tooltip
+                TransitionComponent={Fade}
+                title={`Finalise ${user.displayName}'s feedback process`}
+                placement="bottom-start"
+              >
+                <button onClick={generateReport} className={styles.request}>
+                  <span className="material-symbols-outlined">description</span>
+                </button>
+              </Tooltip>
+            )}
+            {userReport && userPicks && (
+              <>
+                <Tooltip
+                  TransitionComponent={Fade}
+                  title={`View ${user.displayName}'s report`}
+                  placement="bottom-start"
+                >
+                  <NavLink to={`/report/${user.ldapUid}/${userPicks?._id}`}>
+                    <button className={styles.edit}>
+                      <span className="material-symbols-outlined">
+                        visibility
+                      </span>
+                    </button>
+                  </NavLink>
+                </Tooltip>
+                <Tooltip
+                  TransitionComponent={Fade}
+                  title={`Make ${user.displayName}'s report available to CM`}
+                  placement="bottom-start"
+                >
+                  <button className={styles.approve}>
+                    <span className="material-symbols-outlined">
+                      supervisor_account
+                    </span>
+                  </button>
+                </Tooltip>
+              </>
+            )}
           </div>
         </td>
       </tr>
@@ -421,7 +538,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             pick.selectionStatus
         ).map((pick) => (
           <tr key={pick._id} className={styles.table_row_sub}>
-            <td>{pick.userId}</td>
+            <td>{getFullName(pick.userId)}</td>
             <td>
               <div className={styles.dot_container}>
                 <div
@@ -446,7 +563,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
           (pick) => pick.roleLevel === 6 && pick.selectionStatus
         ).map((pick) => (
           <tr key={pick._id} className={styles.table_row_sub}>
-            <td>{pick.userId}</td>
+            <td>{getFullName(pick.userId)}</td>
             <td></td>
             <td>
               <div className={styles.dot_container}>
@@ -472,7 +589,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
           (pick) => pick.roleLevel === 4 && pick.selectionStatus
         ).map((pick) => (
           <tr key={pick._id} className={styles.table_row_sub}>
-            <td>{pick.userId}</td>
+            <td>{getFullName(pick.userId)}</td>
             <td></td>
             <td></td>
             <td>
@@ -498,7 +615,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
           (pick) => pick.roleLevel === 3 && pick.selectionStatus
         ).map((pick) => (
           <tr key={pick._id} className={styles.table_row_sub}>
-            <td>{pick.userId}</td>
+            <td>{getFullName(pick.userId)}</td>
             <td></td>
             <td></td>
             <td></td>
