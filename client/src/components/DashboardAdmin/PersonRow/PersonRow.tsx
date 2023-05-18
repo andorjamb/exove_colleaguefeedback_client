@@ -230,8 +230,15 @@ const PersonRow: React.FC<IPersonRowProps> = ({
 
   if (isLoading)
     return (
-      <tr>
+      <tr className={styles.row_loading}>
         <td>Row is updating.....</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
     );
 
