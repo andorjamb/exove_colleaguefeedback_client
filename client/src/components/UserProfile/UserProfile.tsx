@@ -17,6 +17,7 @@ import { useGetUserByLdapUidQuery } from "../../features/userApi";
 import styles from "./UserProfile.module.css";
 //Types
 import { IUserDataGet, loggedInUser } from "../../types/users";
+import { IRequestPicks } from "../../types/picks";
 
 //Components
 import UserPickBlock from "../DashboardUser/UserPickBlock";
@@ -39,19 +40,18 @@ const UserProfile = () => {
   const { t } = useTranslation(["userProfile"]);
   const { userId } = useParams();
   console.log(userId);
-  const getUser = useGetUserByLdapUidQuery(userId as any);
-  const userPicks = useGetRequestPickByUserIdQuery(userId as any).data;
-  const user = getUser.data;
-  console.log("userPicks", userPicks);
-
+  const user = useGetUserByLdapUidQuery(userId as any).data;
   const usersData = useGetAllUsersQuery();
   const allPicks = useGetAllRequestPicksQuery().data;
+  const getUserPicks = useGetRequestPickByUserIdQuery(userId as any);
+
   const [currentUserInfo, setCurrentUserInfo] = useState<loggedInUser>();
+  const [userPicks, setUserPicks] = useState<IRequestPicks>();
   const [selectedUserData, setSelectedUserData] = useState<IUserDataGet[]>([]);
+  const [selectedIdArray, setSelectedIdArray] = useState<string[]>([]);
   const [selectedListArray, setSelectedListArray] = useState<selectedList[]>(
     []
   );
-  const [selectedIdArray, setSelectedIdArray] = useState<string[]>([]);
   console.log(user);
   console.log("all picks", allPicks);
   const getUserInfo = async () => {
@@ -60,20 +60,26 @@ const UserProfile = () => {
     setCurrentUserInfo(userDetails);
   };
   //requestedBy = HR
-  let userSelectedPicks = userPicks[0].SelectedList
 
-
-  console.log("users picks", userSelectedPicks);
   console.log();
   const doneHandler = (picksSelected: IUserDataGet[]) => {
     setSelectedUserData([...picksSelected]);
   };
 
   useEffect(() => {
-    let selectedUserIdArray = userPicks[0].SelectedList.map((item)=>item.userId)
-    console.log("array", selectedUserIdArray);
-    setSelectedIdArray(selectedUserIdArray);
-  }, [allPicks, userPicks]);
+    if (allPicks && user) {
+      let userPicks = allPicks.filter(
+        (pick) => pick.requestedTo === user.ldapUid
+      );
+      console.log("filtered userpicks", userPicks);
+      setUserPicks(userPicks[0]);
+  /*     let selectedUserIdArray = userPicks!.SelectedList.map(
+        (item) => item.userId
+      );
+      console.log("array", selectedUserIdArray);
+      setSelectedIdArray(selectedUserIdArray); */
+    }
+  }, [allPicks]);
 
   useEffect(() => {
     try {
