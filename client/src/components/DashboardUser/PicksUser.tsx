@@ -107,7 +107,7 @@ const PicksUser = () => {
   if (picksDone())
     return (
       <h2>
-        You have done your <span className={styles.keyword}>picks</span>{" "}
+        You have submitted your <span className={styles.keyword}>picks</span>{" "}
         already, thank you!
       </h2>
     );

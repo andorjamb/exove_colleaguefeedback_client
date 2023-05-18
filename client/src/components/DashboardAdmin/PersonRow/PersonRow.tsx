@@ -350,9 +350,6 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         </td>
         <td>
           <div className={styles.buttons_container}>
-            {!userPicks?.submitted && (
-              <p className={styles.not_available}>unavailable</p>
-            )}
             {userPicks?.submitted && !userFeedbacks && (
               <Tooltip
                 TransitionComponent={Fade}

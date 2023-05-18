@@ -69,42 +69,47 @@ const Header = () => {
 
   return (
     <div className={styles.container}>
-      <Logo />
-      {loggedIn || sessionStorage.getItem("loggedIn") === "true" ? (
-        isAdmin || sessionStorage.getItem("isAdmin") === "true" ? (
-          <AdminNav />
-        ) : (
-          <Nav />
-        )
-      ) : (
-        <></>
-      )}
-
-      <div className={styles.langButtonDiv}>
-        <button
-          className={[styles.button, styles.langButton].join(" ")}
-          onClick={selectEng}
-        >
-          EN
-        </button>
-        <button
-          className={[styles.button, styles.langButton].join(" ")}
-          onClick={selectFi}
-        >
-          FI
-        </button>
-      </div>
-      <div className={styles.headerBar}>
+      <div className={styles.logo_nav_container}>
+        <Logo />
         {loggedIn || sessionStorage.getItem("loggedIn") === "true" ? (
-          <>
-            <span className={styles.displayName}>{userInfo?.displayName}</span>
-            <button className={styles.loginButton} onClick={logout}>
-              {t("logout")}
-            </button>
-          </>
+          isAdmin || sessionStorage.getItem("isAdmin") === "true" ? (
+            <AdminNav />
+          ) : (
+            <Nav />
+          )
         ) : (
           <></>
         )}
+      </div>
+      <div className={styles.lang_login_container}>
+        <div className={styles.langButtonDiv}>
+          <button
+            className={[styles.button, styles.langButton].join(" ")}
+            onClick={selectEng}
+          >
+            EN
+          </button>
+          <button
+            className={[styles.button, styles.langButton].join(" ")}
+            onClick={selectFi}
+          >
+            FI
+          </button>
+        </div>
+        <div className={styles.headerBar}>
+          {loggedIn || sessionStorage.getItem("loggedIn") === "true" ? (
+            <>
+              <span className={styles.displayName}>
+                {userInfo?.displayName}
+              </span>
+              <button className={styles.loginButton} onClick={logout}>
+                {t("logout")}
+              </button>
+            </>
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -92,36 +92,48 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
   return (
     <div className={styles.user_dashboard}>
       <h1>Hi, {currentUserInfo.displayName}!</h1>
-      <PicksUser />
-      <h2>
-        You need to give {feedbacksNum}{" "}
-        <span className={styles.keyword}>feedbacks</span> to{" "}
-        {feedbacksNeededData.data.length} people:
-      </h2>
-      <p></p>
-      <ul className={styles.feedbacks_needed_list}>
-        {feedbacksNeededData.data
-          .filter((pick) => pick.requestedTo === currentUserInfo.uid)
-          .map(() => (
-            <NavLink to="#">
-              <li>Evaluate your own performance</li>
-            </NavLink>
-          ))}
-        {feedbacksNeededData.data
-          .filter((pick) => pick.requestedTo !== currentUserInfo.uid)
-          .map((pick) =>
-            pick.SelectedList.map((feedbackNeeded) => (
-              <li>
-                <NavLink to="#">
-                  Give feedback to {pick.requestedTo} as a{" "}
-                  <span className={styles.keyword}>
-                    {getRoleTitle(feedbackNeeded.roleLevel)}
-                  </span>
-                </NavLink>
-              </li>
-            ))
-          )}
-      </ul>
+      <div className={styles.user_dashboard_block}>
+        <PicksUser />
+      </div>
+      <div className={styles.user_dashboard_block}>
+        <h2>
+          Please give {feedbacksNum}{" "}
+          <span className={styles.keyword}>feedbacks</span> to{" "}
+          {feedbacksNeededData.data.length} people:
+        </h2>
+        <p></p>
+        <ul className={styles.feedbacks_needed_list}>
+          {feedbacksNeededData.data
+            .filter(
+              (firstPick) => firstPick.requestedTo === currentUserInfo.uid
+            )
+            .map((pick) => (
+              <NavLink
+                to={`/feedback?id=${pick._id}&to=${currentUserInfo.uid}&role=5`}
+              >
+                <li>Evaluate your own performance</li>
+              </NavLink>
+            ))}
+          {feedbacksNeededData.data
+            .filter(
+              (firstPick) => firstPick.requestedTo !== currentUserInfo.uid
+            )
+            .map((pick) =>
+              pick.SelectedList.map((feedbackNeeded) => (
+                <li>
+                  <NavLink
+                    to={`/feedback?id=${pick._id}&to=${pick.requestedTo}&role=${feedbackNeeded.roleLevel}`}
+                  >
+                    Give feedback to {pick.requestedTo} as a{" "}
+                    <span className={styles.keyword}>
+                      {getRoleTitle(feedbackNeeded.roleLevel)}
+                    </span>
+                  </NavLink>
+                </li>
+              ))
+            )}
+        </ul>
+      </div>
     </div>
   );
 };
