@@ -12,7 +12,10 @@ export const templateSlice = createSlice({
       state,
       action: PayloadAction<ActiveCheckboxes>
     ) => {
-      state.templateSelection = { ...action.payload };
+      state.templateSelection = {
+        ...state.templateSelection,
+        ...action.payload,
+      };
     },
     setActiveTemplateId: (state, action: PayloadAction<string>) => {
       state.activeTemplateId = action.payload;

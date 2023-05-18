@@ -141,8 +141,9 @@ const Report = () => {
         if (category.categoryId === value.category) {
           console.log("category chart data:", category.chartData); //debugging
           //for each question of the matching category:
-          if (value.questions?.length) {
-            value.questions?.forEach((question) => {
+
+          if (value.questions && value.questions.length) {
+            value.questions.forEach((question) => {
               //first check if question already exists in mappedCategories:
 
               let chartObj = category.chartData.forEach((datum: any) => {
@@ -165,6 +166,7 @@ const Report = () => {
 
               chartObj.question = question.question as string;
               /** organise the data according to role of reviewer */
+
               if (key[1] && key[1] === revieweeId) {
                 console.log("self evaluation:", values); //array of feedback objects
                 if (question.type === "number" && question.answer) {
@@ -204,11 +206,10 @@ const Report = () => {
                   };
                 }
               }
+
               console.log(chartObj);
             });
           }
-        } else {
-          console.log("no matching category found");
         }
       });
     });
@@ -220,13 +221,9 @@ const Report = () => {
 
       console.log(reportRoot.current);
       html2canvas(reportRoot.current).then((canvas) => {
-        // document.body.appendChild(canvas);
         let pageImage = canvas.toDataURL("image/png");
         let imageDimensions = doc.getImageProperties(pageImage);
-        console.log("image dimensions", imageDimensions);
-        const divWidth = reportRoot.current!.clientWidth;
         const docWidth = doc.internal.pageSize.getWidth();
-        console.log("pagewidth:", docWidth, "divWidth", divWidth);
         let docHeight =
           (imageDimensions.height * docWidth) / imageDimensions.width;
 

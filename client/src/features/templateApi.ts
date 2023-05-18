@@ -1,12 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 //Types
-import {
-  ITemplateGet,
-  ITemplatePost,
-  IActiveTemplateGet,
-  ITemplate,
-} from "../types/template";
+import { ITemplatePost, ITemplate } from "../types/template";
 
 //const serverApi = process.env.REACT_APP_SERVER_API;
 const serverApi = "https://exove.vercel.app/api/";
@@ -22,7 +17,7 @@ export const templateApi = createApi({
   }),
   tagTypes: ["Templates", "ActiveTemplate"],
   endpoints: (builder) => ({
-    getAllTemplates: builder.query<IActiveTemplateGet[], void>({
+    getAllTemplates: builder.query<ITemplate[], void>({
       query: () => `template/`,
       providesTags: ["Templates"],
     }),

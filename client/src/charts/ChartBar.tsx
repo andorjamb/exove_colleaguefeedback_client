@@ -26,12 +26,18 @@ const ChartBar = ({ barChartData }: Props) => {
   return (
     <div
       className="reportChart"
-      style={{ border: "1px solid gray", margin: "1rem", padding: "1rem" }}
+      style={{
+        height: "300px",
+        width: "400px",
+        border: "1px solid gray",
+        margin: "1rem",
+        padding: "1rem",
+      }}
     >
-      <ResponsiveContainer width="100%" height={200} className="reportChart">
+      <ResponsiveContainer width="100%" height={250}>
         <BarChart
-          width={300}
-          height={200}
+          width={350}
+          height={250}
           data={barChartData}
           margin={{
             top: 30,

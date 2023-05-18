@@ -1,46 +1,4 @@
 import { IReportData, IReportCategory, IChartData } from "../types/report";
-import { jsPDF } from "jspdf";
-import * as htmlToImage from "html-to-image";
-
-import { useCallback, useEffect } from "react";
-
-/* export const useDownloadPdf = (name: string, isReady: boolean) => {
-  useEffect(() => {
-    if (isReady) {
-      const fileName = `${name}.pdf`;
-      const pdf = new JsPDF({
-        orientation: "p",
-        unit: "mm",
-        format: "a4",
-        putOnlyUsedFonts: true,
-      });
-
-      const convertElements = document.querySelectorAll(".reportChart");
-      const elements = Array.from(convertElements) as HTMLElement[];
-
-      if (elements.length > 0) {
-        Promise.all(
-          elements.map(async (element) => {
-            const canvas = await html2canvas(element);
-            element.replaceWith(canvas);
-          })
-        ).then(() => {
-          pdf.html(document.body, {
-            callback: (generatedPdf) => {
-              generatedPdf.save(fileName);
-            },
-          });
-        });
-      } else {
-        pdf.html(document.body, {
-          callback: (generatedPdf) => {
-            generatedPdf.save(fileName);
-          },
-        });
-      }
-    }
-  }, [isReady, name, setAtribute]);
-}; */
 
 export class ReportClass {
   requestPicksId: string | undefined;
@@ -86,8 +44,6 @@ export class ChartDataClass {
     this.comments = comments;
   }
 }
-
-
 
 /*Backup of modify data  function
   function mapByRole(values: IFCategory[], key: any) {
