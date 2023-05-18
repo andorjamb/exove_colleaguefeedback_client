@@ -20,6 +20,10 @@
   align-items: center;
 }
 
+.navlink {
+  transition: 0.3s ease;
+}
+
 .navlink:hover {
   background-color: black;
   color: white;

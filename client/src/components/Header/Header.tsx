@@ -23,6 +23,7 @@ import { useTranslation } from "react-i18next";
 
 import axios from "axios";
 import { setLanguage } from "../../features/headerSlice";
+import Logo from "./Logo";
 
 const Header = () => {
   const { t, i18n } = useTranslation(["header"]);
@@ -68,6 +69,7 @@ const Header = () => {
 
   return (
     <div className={styles.container}>
+      <Logo />
       {loggedIn || sessionStorage.getItem("loggedIn") === "true" ? (
         isAdmin || sessionStorage.getItem("isAdmin") === "true" ? (
           <AdminNav />
