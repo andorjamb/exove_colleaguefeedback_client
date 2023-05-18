@@ -63,10 +63,9 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
   console.log("Feedbacks given by user:", userFeedbacks);
   console.log("feedbacksNeededData.data", feedbacksNeededData.data);
 
-  const feedbacksNum = feedbacksNeededData.data.reduce(
-    (sum, pick) => sum + pick.SelectedList.length,
-    0
-  );
+  const feedbacksNum = feedbacksNeededData.data
+    .filter((feedbackNeeded) => feedbackNeeded.submitted)
+    .reduce((sum, pick) => sum + pick.SelectedList.length, 0);
 
   const getRoleTitle = (pickRoleLevel: number) => {
     let title = "";
@@ -99,7 +98,12 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
         <h2>
           Please give {feedbacksNum}{" "}
           <span className={styles.keyword}>feedbacks</span> to{" "}
-          {feedbacksNeededData.data.length} people:
+          {
+            feedbacksNeededData.data.filter(
+              (feedbackNeeded) => feedbackNeeded.submitted
+            ).length
+          }{" "}
+          people:
         </h2>
         <p></p>
         <ul className={styles.feedbacks_needed_list}>
@@ -116,7 +120,9 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
             ))}
           {feedbacksNeededData.data
             .filter(
-              (firstPick) => firstPick.requestedTo !== currentUserInfo.uid
+              (firstPick) =>
+                firstPick.requestedTo !== currentUserInfo.uid &&
+                firstPick.submitted
             )
             .map((pick) =>
               pick.SelectedList.map((feedbackNeeded) => (
