@@ -29,6 +29,7 @@ import { IUserDataGet } from "../../../types/users";
 import styles from "./PersonRow.module.css";
 import { usePostReportMutation } from "../../../features/reportApi";
 import { IReport } from "../../../types/report";
+import { NavLink, useNavigate } from "react-router-dom";
 
 interface IPersonRowProps {
   userPicks: IRequestPicks | undefined;
@@ -49,6 +50,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
   userReport,
   /* showEditPicks, */
 }) => {
+  const navigate = useNavigate();
   const [expand, setExpand] = useState(false);
   const [createPick] = useCreatePickMutation();
   const [submitPick] = useSubmitPickMutation();
@@ -278,6 +280,12 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     setIsLoading(false);
   };
 
+  if (user.ldapUid === "einstein") {
+    console.log("EINSTEIN");
+    console.log("userReport", userReport);
+    console.log("userPicks", userPicks);
+  }
+
   if (isLoading)
     return (
       <tr className={styles.row_loading}>
@@ -489,18 +497,20 @@ const PersonRow: React.FC<IPersonRowProps> = ({
                 </button>
               </Tooltip>
             )}
-            {userReport && (
+            {userReport && userPicks && (
               <>
                 <Tooltip
                   TransitionComponent={Fade}
                   title={`View ${user.displayName}'s report`}
                   placement="bottom-start"
                 >
-                  <button className={styles.edit}>
-                    <span className="material-symbols-outlined">
-                      visibility
-                    </span>
-                  </button>
+                  <NavLink to={`/report/${user.ldapUid}/${userPicks?._id}`}>
+                    <button className={styles.edit}>
+                      <span className="material-symbols-outlined">
+                        visibility
+                      </span>
+                    </button>
+                  </NavLink>
                 </Tooltip>
                 <Tooltip
                   TransitionComponent={Fade}
