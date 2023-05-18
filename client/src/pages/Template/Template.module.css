@@ -120,3 +120,7 @@
   font-style: italic;
   font-weight: 700;
 }
+
+.fieldset {
+  list-style-type: none;
+}
