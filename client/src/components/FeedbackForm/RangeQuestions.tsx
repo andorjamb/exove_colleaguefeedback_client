@@ -13,13 +13,10 @@ const RangeQuestions = ({ questions, category }: question) => {
   const [selectedValue, setSelectedValue] = useState<number>();
   const dispatch = useDispatch();
 
-  console.log("value:", value);
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setValue(Number(e.target.value));
     setSelectedValue(Number(e.target.value));
-    console.log(selectedValue);
     const question: IQuestionLang = {
       _id: questions._id,
       lang: questions.lang,

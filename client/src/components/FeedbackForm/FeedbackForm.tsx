@@ -96,7 +96,6 @@ const FeedbackForm = () => {
         { ...feedback },
         { withCredentials: true }
       );
-      console.log(data);
       alert(data);
     } catch (error) {}
   };
