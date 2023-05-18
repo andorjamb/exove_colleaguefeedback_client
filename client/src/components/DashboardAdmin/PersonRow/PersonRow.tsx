@@ -27,8 +27,6 @@ import { IUserDataGet } from "../../../types/users";
 
 // Styles
 import styles from "./PersonRow.module.css";
-import { template } from "../../FeedbackForm/Data";
-import CustomSpinner from "../../CustomSpinner/CustomSpinner";
 
 interface IPersonRowProps {
   userPicks: IRequestPicks | undefined;
@@ -230,7 +228,12 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     setIsLoading(false);
   };
 
-  if (isLoading) return <tr>Row is updating.....</tr>;
+  if (isLoading)
+    return (
+      <tr>
+        <td>Row is updating.....</td>
+      </tr>
+    );
 
   return (
     <>

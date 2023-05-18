@@ -27,6 +27,9 @@ export const reportApi = createApi({
     getReportSummaryById: builder.query<IReport, string>({
       query: (id) => `summary/${id}`,
     }),
+    getReportSummaryByName: builder.query<IReport[], string>({
+      query: (userId) => `name/${userId}`,
+    }),
     postReport: builder.mutation<void, { body: IReport }>({
       query: ({ body }) => ({
         url: `report`,
@@ -40,6 +43,7 @@ export const reportApi = createApi({
         url: `report/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["Reports"],
     }),
   }),
 });

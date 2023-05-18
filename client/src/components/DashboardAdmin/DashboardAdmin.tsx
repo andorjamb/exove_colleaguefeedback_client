@@ -52,9 +52,9 @@ const DashboardAdmin = () => {
 
   if (!activeTemplateData.data)
     return (
-      <p>
+      <h2>
         No active templates. Create one <NavLink to="/template">here</NavLink>
-      </p>
+      </h2>
     );
 
   const searchChangeHandler = (e: React.FormEvent<HTMLInputElement>) => {
