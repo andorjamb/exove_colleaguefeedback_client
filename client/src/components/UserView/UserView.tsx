@@ -1,7 +1,42 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-const UserView = () => {
-  return <div>User view</div>;
+import { useGetRequestPicksByUserFeedbacksQuery } from "../../features/requestPicksApi";
+
+import { loggedInUser } from "../../types/users";
+import { getSecureUserUid } from "../../functions/secureUser";
+import CustomSpinner from "../CustomSpinner/CustomSpinner";
+import DashboardUser from "../DashboardUser/DashboardUser";
+
+const UserView: React.FC = () => {
+  const [currentUserInfo, setCurrentUserInfo] = useState<loggedInUser>();
+
+  const getUserInfo = async () => {
+    const userDetails: loggedInUser = await getSecureUserUid();
+    setCurrentUserInfo(userDetails);
+  };
+
+  useEffect(() => {
+    try {
+      getUserInfo();
+    } catch (err) {
+      console.log("error getting user", err);
+    }
+  }, []);
+
+  if (!currentUserInfo)
+    return (
+      <>
+        <CustomSpinner />
+        <p>User info loading...</p>
+      </>
+    );
+
+  return (
+    <div>
+      User view
+      <DashboardUser currentUserInfo={currentUserInfo} />
+    </div>
+  );
 };
 
 export default UserView;

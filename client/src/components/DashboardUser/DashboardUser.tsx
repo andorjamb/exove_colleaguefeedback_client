@@ -3,6 +3,7 @@ import { useGetAllFeedbacksQuery } from "../../features/feedbackApi";
 import {
   useGetAllRequestPicksQuery,
   useGetRequestPickByUserIdQuery,
+  useGetRequestPicksByUserFeedbacksQuery,
 } from "../../features/requestPicksApi";
 import { useGetAllUsersQuery } from "../../features/userApi";
 import { useGetActiveTemplateQuery } from "../../features/templateApi";
@@ -19,6 +20,9 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
   const feedbackData = useGetAllFeedbacksQuery();
   const picksData = useGetAllRequestPicksQuery();
   const activeTemplateData = useGetActiveTemplateQuery();
+  const dataFeedbacksNeeded = useGetRequestPicksByUserFeedbacksQuery(
+    currentUserInfo.uid
+  );
 
   if (
     activeTemplateData.isFetching ||
