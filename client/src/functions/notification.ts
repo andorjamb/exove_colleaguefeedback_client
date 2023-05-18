@@ -31,24 +31,19 @@ try {
 	    link: details.link,
 	    to: details.emailTo,
 	    from:details.from_name,
-	    applicationId: details.applicationId,
+	    applicationid: details.applicationid,
 	    entityname: details.entityname || "RequestPicks",
 	    notifierstatus: true,
 	    sendOn: new Date(),
 	  };
-	
     
-      console.log('emailParameters ******************************',emailParameters, 'notifyData ********************************************************',notifyData)
-    
-	  emailjs.send(serviceId, templateId, emailParameters, publicKey).then(
+    emailjs.send(serviceId, templateId, emailParameters, publicKey)
+        .then(
 	    async (res) => {
 	      console.log(`Email status ... ;  ${res.status}`);
-	      console.log(`Email Sent Successfully ${res.text}`);
-	      const { data } = await axios.post(
-	        "https://exove.vercel.app/api/notify",
-	        notifyData,
-	        { withCredentials: true }
-	      );
+                console.log(`Email Sent Successfully ${res.text}`);
+                const postUrl = `https://exove.vercel.app/api/notify`
+	      const { data } = await axios.post(postUrl,{...notifyData},{withCredentials:true} );
 	         
 	          console.log(data)
 	   return data.toString()
