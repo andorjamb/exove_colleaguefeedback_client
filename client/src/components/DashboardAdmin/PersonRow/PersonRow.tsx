@@ -27,6 +27,8 @@ import { IUserDataGet } from "../../../types/users";
 
 // Styles
 import styles from "./PersonRow.module.css";
+import { usePostReportMutation } from "../../../features/reportApi";
+import { IReport } from "../../../types/report";
 
 interface IPersonRowProps {
   userPicks: IRequestPicks | undefined;
@@ -34,6 +36,7 @@ interface IPersonRowProps {
   userFeedbacks: IFeedback[];
   allUsersData: IUserDataGet[];
   currentTemplateId: string;
+  userReport: IReport | undefined;
   /* showEditPicks: () => void; */
 }
 
@@ -43,6 +46,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
   userFeedbacks,
   allUsersData,
   currentTemplateId,
+  userReport,
   /* showEditPicks, */
 }) => {
   const [expand, setExpand] = useState(false);
@@ -53,6 +57,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
   const [deletePick] = useDeletePickMutation();
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [postReport] = usePostReportMutation();
 
   console.log("user feedbacks for", user.displayName, userFeedbacks);
 
@@ -235,6 +240,20 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     return userFound.firstName + " " + userFound.surname;
   };
 
+  const generateReport = async () => {
+    if (!userPicks || !userFeedbacks || !currentTemplateId) return;
+    setIsLoading(true);
+    const body = {
+      feedbacks: userFeedbacks.map((feedback) => feedback._id),
+      template: currentTemplateId,
+      userId: user.ldapUid,
+      requestPicks: userPicks._id,
+    };
+    console.log("body", body);
+    await postReport({ body: body });
+    setIsLoading(false);
+  };
+
   if (isLoading)
     return (
       <tr className={styles.row_loading}>
@@ -391,30 +410,36 @@ const PersonRow: React.FC<IPersonRowProps> = ({
               title={`Finalise ${user.displayName}'s feedback process`}
               placement="bottom-start"
             >
-              <button className={styles.request}>
+              <button onClick={generateReport} className={styles.request}>
                 <span className="material-symbols-outlined">description</span>
               </button>
             </Tooltip>
-            <Tooltip
-              TransitionComponent={Fade}
-              title={`View ${user.displayName}'s report`}
-              placement="bottom-start"
-            >
-              <button className={styles.edit}>
-                <span className="material-symbols-outlined">visibility</span>
-              </button>
-            </Tooltip>
-            <Tooltip
-              TransitionComponent={Fade}
-              title={`Make ${user.displayName}'s report available to CM`}
-              placement="bottom-start"
-            >
-              <button className={styles.approve}>
-                <span className="material-symbols-outlined">
-                  supervisor_account
-                </span>
-              </button>
-            </Tooltip>
+            {userReport && (
+              <>
+                <Tooltip
+                  TransitionComponent={Fade}
+                  title={`View ${user.displayName}'s report`}
+                  placement="bottom-start"
+                >
+                  <button className={styles.edit}>
+                    <span className="material-symbols-outlined">
+                      visibility
+                    </span>
+                  </button>
+                </Tooltip>
+                <Tooltip
+                  TransitionComponent={Fade}
+                  title={`Make ${user.displayName}'s report available to CM`}
+                  placement="bottom-start"
+                >
+                  <button className={styles.approve}>
+                    <span className="material-symbols-outlined">
+                      supervisor_account
+                    </span>
+                  </button>
+                </Tooltip>
+              </>
+            )}
           </div>
         </td>
       </tr>
@@ -554,6 +579,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
               defaultEditing={false}
               defaultSelection={getUserArrayByRoleLevel(6)}
             />
+
             <UserPickBlock
               users={allUsersData.filter(
                 (pick) => pick.ldapUid !== user.ldapUid
