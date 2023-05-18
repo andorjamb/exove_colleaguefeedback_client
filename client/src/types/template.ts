@@ -197,10 +197,6 @@ export interface SingleQuiz {
 
 interface IQuiz {
   _id: string;
-  category: string;
-  createdBy: string;
-  createdOn: string;
-  active: boolean;
   type: string;
   question: SingleQuiz[];
 }
@@ -208,7 +204,7 @@ export interface ITemplate {
   _id: string;
   templateTitle: string;
   instructions: string;
-  createdOn: Date;
+  createdOn: string;
   createdBy: string;
   categories: ICategory[];
   active: boolean;
@@ -216,10 +212,16 @@ export interface ITemplate {
 
 export interface ICategory {
   category: IICategory;
+  questions:IQuiz[];
+  _id: string;
 }
 
+
+
 interface IICategory {
+  
   _id: string;
   categoryName: string;
-  questions: IQuiz[];
+  
+  
 }
