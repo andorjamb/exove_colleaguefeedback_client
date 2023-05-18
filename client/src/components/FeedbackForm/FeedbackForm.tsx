@@ -18,7 +18,7 @@ import {setLanguage} from "../../features/headerSlice";
 
 const FeedbackForm = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { data } = useGetActiveTemplateQuery() || [];
+  const  {data}  = useGetActiveTemplateQuery() || [];
 
   const [loadingState, setLoadingState] = useState<boolean>(true);
   const [qTemplate, setActiveTmpt] = useState<ITemplate>();
@@ -31,7 +31,7 @@ const FeedbackForm = () => {
   useEffect(() => {
     if (data) {
       const categories: IFCategory[] = [];
-
+console.log(data)
       data.categories.forEach((cat) => {
         const cate: IFCategory = {
           category: cat.category._id,
@@ -64,8 +64,8 @@ console.log(lang)
     const validateNumber = () => {
       const stringQuestions =
         qTemplate?.categories?.flatMap((cat) =>
-          cat.category.questions.filter(
-            (quiz) => quiz.type.toLowerCase() === "number"
+          cat.questions.filter(
+            (quiz: { type: string; }) => quiz.type.toLowerCase() === "number"
           )
         ) || [];
       const feedbacked: IFeedback = feedback;
@@ -147,16 +147,16 @@ console.log(lang)
                 <div className={style.catQuest} key={cat.category._id}>
                   <h2>{cat.category.categoryName}</h2>
 
-                  {cat.category.questions.map((quiz) => (
+                  {cat.questions.map((quiz) => (
                     <div key={quiz._id}>
                       {quiz.type.toLowerCase() === "string" ? (
                         <>
                           <StringQuestions
                             key={quiz._id}
-                            category={quiz.category}
+                            category={cat.category._id}
                             questions={
                               quiz.question.find(
-                                (quiz) => quiz.lang === lang
+                                (quiz: { lang: any; }) => quiz.lang === lang
                               )!
                             }
                           />
@@ -164,20 +164,20 @@ console.log(lang)
                       ) : quiz.type.toLowerCase() === "number" ? (
                         <RangeQuestions
                           key={quiz._id}
-                          category={quiz.category}
+                          category={cat.category._id}
                           questions={
                             quiz.question.find(
-                              (quiz) => quiz.lang === lang
+                              (quiz: { lang: any; }) => quiz.lang === lang
                             )!
                           }
                         />
                       ) : (
                         <BooleanQuestions
                           key={quiz._id}
-                          category={quiz.category}
+                          category={cat.category._id}
                           questions={
                             quiz.question.find(
-                              (quiz) => quiz.lang === lang
+                              (quiz: { lang: any; }) => quiz.lang === lang
                             )!
                           }
                         />
