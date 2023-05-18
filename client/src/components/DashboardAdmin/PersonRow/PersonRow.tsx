@@ -504,7 +504,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
                   title={`View ${user.displayName}'s report`}
                   placement="bottom-start"
                 >
-                  <NavLink to={`/report/${user.ldapUid}/${userPicks?._id}`}>
+                  <NavLink to={`/report/${user.ldapUid}`}>
                     <button className={styles.edit}>
                       <span className="material-symbols-outlined">
                         visibility
