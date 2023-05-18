@@ -31,14 +31,14 @@
 }
 
 .backButton {
-  height: 2.4rem;
-  width: 2.8rem;
+  height: 2.5rem;
+  width: 2.5rem;
   border: 1px solid black;
   background-color: white;
   position: absolute;
-  display:flex;
- align-items: center;
- justify-content: center;
+  text-align: center;
+  line-height: 2.5rem;
+  font-family: "material-symbols-outline";
   top: 0;
   left: 2rem;
 }

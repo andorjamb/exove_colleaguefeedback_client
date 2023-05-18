@@ -2,6 +2,46 @@ import { IReportData, IReportCategory, IChartData } from "../types/report";
 import { jsPDF } from "jspdf";
 import * as htmlToImage from "html-to-image";
 
+import { useCallback, useEffect } from "react";
+
+/* export const useDownloadPdf = (name: string, isReady: boolean) => {
+  useEffect(() => {
+    if (isReady) {
+      const fileName = `${name}.pdf`;
+      const pdf = new JsPDF({
+        orientation: "p",
+        unit: "mm",
+        format: "a4",
+        putOnlyUsedFonts: true,
+      });
+
+      const convertElements = document.querySelectorAll(".reportChart");
+      const elements = Array.from(convertElements) as HTMLElement[];
+
+      if (elements.length > 0) {
+        Promise.all(
+          elements.map(async (element) => {
+            const canvas = await html2canvas(element);
+            element.replaceWith(canvas);
+          })
+        ).then(() => {
+          pdf.html(document.body, {
+            callback: (generatedPdf) => {
+              generatedPdf.save(fileName);
+            },
+          });
+        });
+      } else {
+        pdf.html(document.body, {
+          callback: (generatedPdf) => {
+            generatedPdf.save(fileName);
+          },
+        });
+      }
+    }
+  }, [isReady, name, setAtribute]);
+}; */
+
 export class ReportClass {
   requestPicksId: string | undefined;
   feedbackTo: string | undefined; //ldapUid
@@ -47,47 +87,7 @@ export class ChartDataClass {
   }
 }
 
-export async function chartsToPdf({
-  doc,
-  charts,
-}: {
-  doc: jsPDF;
-  charts: HTMLCollectionOf<Element>;
-}) {
-  let top = 30;
-  //let padding = 16;
 
-  for (let i = 0; i < charts.length; i++) {
-    const chart = charts[i] as HTMLElement;
-    const imgData = await htmlToImage.toPng(chart);
-
-    const pageWidth = doc.internal.pageSize.getWidth(); //px scaled to pdf pt
-    console.log(pageWidth);
-
-    let chartHeight = chart.offsetHeight; //pixels
-    let chartWidth = chart.offsetWidth; //pixels
-    /* 
-    if (chartWidth > pageWidth) {
-      const ratio = pageWidth / chartWidth;
-
-      chartHeight = chartHeight * ratio - padding;
-      chartWidth = chartWidth * ratio - padding;
-    } */
-
-    if (imgData) {
-      doc.addImage(
-        imgData,
-        "PNG",
-        10,
-        top,
-        chartWidth,
-        chartHeight,
-        `chart${i}`
-      );
-      top += chartHeight + 16;
-    }
-  }
-}
 
 /*Backup of modify data  function
   function mapByRole(values: IFCategory[], key: any) {

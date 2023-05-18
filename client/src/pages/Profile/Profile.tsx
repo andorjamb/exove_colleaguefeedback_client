@@ -35,15 +35,16 @@ const Profile = () => {
       <button className={styles.backButton} onClick={() => navigate(-1)}>
         <span className="material-symbols-outlined">arrow_back_ios</span>
       </button>
-      {data ? (
-        <div className={styles.profile}>
+      <div className={styles.profile}>
+        {" "}
+        {data ? (
           <UserProfile />
-        </div>
-      ) : { isFetching } ? (
-        <CustomSpinner />
-      ) : (
-        <></>
-      )}
+        ) : { isFetching } ? (
+          <CustomSpinner />
+        ) : (
+          <></>
+        )}{" "}
+      </div>
     </div>
   );
 };

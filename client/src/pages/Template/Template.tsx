@@ -108,7 +108,7 @@ const Template = () => {
         },
         {}
       );
-      console.log("active  category object", activeCategoryObject); //debugging
+
       dispatch(updateTemplateSelection(activeCategoryObject));
       return activeCategoryObject;
     } else {

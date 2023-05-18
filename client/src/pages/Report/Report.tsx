@@ -2,6 +2,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 
 //styles
 import styles from "./Report.module.css";
@@ -29,7 +30,6 @@ import ChartRadar from "../../charts/ChartRadar";
 import {
   ReportClass,
   ChartDataClass,
-  chartsToPdf,
   scoreAverage,
 } from "../../functions/reportFunctions";
 import { testFeedbackData } from "../../testdata/testFeedbackData";
@@ -86,7 +86,6 @@ const testing = [
 const Report = () => {
   const { t } = useTranslation(["report"]);
   const { revieweeId } = useParams();
-  //const { pickId } = useParams();
   const reportRoot = useRef<HTMLDivElement>(null);
   const doc = new jsPDF("portrait", "px", "a4");
 
@@ -216,16 +215,17 @@ const Report = () => {
     });
   }
 
-  function makePdf() {
-    let charts = document.getElementsByClassName("reportChart");
+  async function makePdf() {
     if (reportRoot.current) {
-      doc.html(reportRoot.current, {
-        html2canvas: { scale: 0.4 },
-        async callback(doc) {
-          await chartsToPdf({ doc, charts }).then(() =>
-            setTimeout(() => doc.save(`report_${revieweeId}_${date}`), 25000)
-          );
-        },
+      let top = 30;
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      console.log(reportRoot.current);
+      html2canvas(reportRoot.current).then((canvas) => {
+        document.body.appendChild(canvas);
+        let page = canvas.toDataURL("image/png");
+        doc.addImage(page, "PNG", 10, top, pageWidth, pageHeight);
+        doc.save(`report_${revieweeId}_${date}`);
       });
     }
   }
@@ -281,7 +281,12 @@ const Report = () => {
             </p>
           </div>
         </section>
-        {mappedCategories?.map((item: any) => (
+        <div className={styles.charts}>
+          <ChartBar barChartData={testing} />
+          <ChartRadar radarChartData={testing} />
+        </div>
+
+        {/*       {mappedCategories?.map((item: any) => (
           <section className={styles.section} key={item.categoryId}>
             <div>
               <h3>{item.categoryName}</h3>
@@ -303,7 +308,7 @@ const Report = () => {
               </p>
             </div>
           </section>
-        ))}
+        ))} */}
       </div>
       <div className={styles.buttonContainer}>
         <button className={styles.buttonOrange} onClick={makePdf}>

@@ -59,7 +59,7 @@ const UserProfile = () => {
     const userDetails: loggedInUser = await getSecureUserUid();
     setCurrentUserInfo(userDetails);
   };
-  //requestedBy = HR
+
 
   console.log();
   const doneHandler = (picksSelected: IUserDataGet[]) => {
