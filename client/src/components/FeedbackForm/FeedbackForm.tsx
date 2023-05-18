@@ -7,18 +7,17 @@ import { useGetActiveTemplateQuery } from "../../features/templateApi";
 import { ITemplate } from "../../types/template";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../app/store";
-import { IFCategory, IFeedback } from "../../types/feedback";
+import { IFCategory, IFeedback, ISearchParams } from "../../types/feedback";
 import { newfeedback } from "../../features/feedBackSlice";
 import { getSecureUserUid } from "../../functions/secureUser";
 import { loggedInUser } from "../../types/users";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import CustomSpinner from "../../components/CustomSpinner/CustomSpinner";
-import {setLanguage} from "../../features/headerSlice";
 
 const FeedbackForm = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const  {data}  = useGetActiveTemplateQuery() || [];
+  const { data } = useGetActiveTemplateQuery() || [];
 
   const [loadingState, setLoadingState] = useState<boolean>(true);
   const [qTemplate, setActiveTmpt] = useState<ITemplate>();
@@ -27,11 +26,19 @@ const FeedbackForm = () => {
   const lang = useSelector((state: any) => state.header.lang);
   const navigate = useNavigate();
   const [unAnsweredQuestions, setUnAnsweredQuestions] = useState<number>();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+
+  const request: string | null = params.get("id");
+  const feed: string | null = params.get("to");
+  const role: string | null = params.get("role");
+  let requestpicksId: string = "";
+  let feedbackTo: string = "";
+  let roleLevel: number;
 
   useEffect(() => {
     if (data) {
       const categories: IFCategory[] = [];
-console.log(data)
       data.categories.forEach((cat) => {
         const cate: IFCategory = {
           category: cat.category._id,
@@ -41,14 +48,15 @@ console.log(data)
       });
       const newFeedbacks: IFeedback = {
         template: data._id,
-        requestpicksId: "da3040ce-43e9-4d2b-89a1-cefe27563492",
-        feedbackTo: "einstein",
+        requestpicksId,
+        feedbackTo,
         progress: "started",
         responseDateLog: [new Date().toISOString()],
         categories: categories,
-        roleLevel: 5,
+        roleLevel,
         userId: userInfo?.uid,
       };
+
       dispatch(newfeedback(newFeedbacks));
       setActiveTmpt(data);
 
@@ -58,14 +66,12 @@ console.log(data)
     }
   }, [data, dispatch, userInfo?.uid]);
 
-console.log(lang)
-
   useEffect(() => {
     const validateNumber = () => {
       const stringQuestions =
         qTemplate?.categories?.flatMap((cat) =>
           cat.questions.filter(
-            (quiz: { type: string; }) => quiz.type.toLowerCase() === "number"
+            (quiz: { type: string }) => quiz.type.toLowerCase() === "number"
           )
         ) || [];
       const feedbacked: IFeedback = feedback;
@@ -92,14 +98,13 @@ console.log(lang)
     }
 
     try {
-      const url =
-        "https://exove.vercel.app/api/feedback/da3040ce-43e9-4d2b-89a1-cefe27563492";
+      const url = `https://exove.vercel.app/api/feedback/${requestpicksId}`;
       const { data } = await axios.post(
         url,
         { ...feedback },
         { withCredentials: true }
       );
-      console.log(data);
+
       alert(data);
     } catch (error) {}
   };
@@ -122,6 +127,23 @@ console.log(lang)
     };
     getUser();
   }, [navigate]);
+
+  if (
+    request === "null" ||
+    feedbackTo === null ||
+    role === null ||
+    parseInt(role!) === 0
+  ) {
+    return (
+      <>
+        <h1>You don't have a feedback to submit.</h1>
+      </>
+    );
+  } else {
+    requestpicksId = request!;
+    feedbackTo = feed!;
+    roleLevel = parseInt(role!);
+  }
 
   return (
     <div className={style.main}>
@@ -156,7 +178,7 @@ console.log(lang)
                             category={cat.category._id}
                             questions={
                               quiz.question.find(
-                                (quiz: { lang: any; }) => quiz.lang === lang
+                                (quiz: { lang: any }) => quiz.lang === lang
                               )!
                             }
                           />
@@ -167,7 +189,7 @@ console.log(lang)
                           category={cat.category._id}
                           questions={
                             quiz.question.find(
-                              (quiz: { lang: any; }) => quiz.lang === lang
+                              (quiz: { lang: any }) => quiz.lang === lang
                             )!
                           }
                         />
@@ -177,7 +199,7 @@ console.log(lang)
                           category={cat.category._id}
                           questions={
                             quiz.question.find(
-                              (quiz: { lang: any; }) => quiz.lang === lang
+                              (quiz: { lang: any }) => quiz.lang === lang
                             )!
                           }
                         />
