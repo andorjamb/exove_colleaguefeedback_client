@@ -478,7 +478,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         </td>
         <td>
           <div className={styles.buttons_container}>
-            {userFeedbacks.length > 0 && (
+            {userFeedbacks.length > 0 && !userReport && (
               <Tooltip
                 TransitionComponent={Fade}
                 title={`Finalise ${user.displayName}'s feedback process`}
