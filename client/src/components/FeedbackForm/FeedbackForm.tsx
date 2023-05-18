@@ -105,9 +105,11 @@ const FeedbackForm = () => {
         { ...feedback },
         { withCredentials: true }
       );
-      toast.success(data)
+      toast.success(data);
       navigate("/");
-    } catch (error) {toast.error("Sorry ran into an error")}
+    } catch (error) {
+      toast.error("Sorry ran into an error");
+    }
   };
 
   useEffect(() => {
