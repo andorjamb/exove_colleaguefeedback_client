@@ -10,3 +10,11 @@
 .logo {
   background-color: black;
 }
+
+.logo_link path {
+  transition: 0.3s ease;
+}
+
+.logo_link:hover path {
+  fill: var(--exovePurple);
+}
