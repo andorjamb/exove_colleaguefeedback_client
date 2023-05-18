@@ -1,0 +1,12 @@
+.logo_link {
+  background-color: black;
+  height: 100%;
+  width: 3.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  background-color: black;
+}
