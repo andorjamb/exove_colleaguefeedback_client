@@ -18,6 +18,7 @@ import { useGetRequestPickByUserIdQuery } from "../../features/requestPicksApi";
 import Card from "../Card/Card";
 import SearchBar from "../DashboardAdmin/SearchBar/SearchBar";
 import UserPickBlock from "./UserPickBlock";
+import CustomSpinner from "../CustomSpinner/CustomSpinner";
 
 //Styling
 import styles from "./PicksUser.module.css";
@@ -77,10 +78,20 @@ const PicksUser = () => {
       console.log("usersData", usersData);
     if (!currentUserInfo) console.log("currentUserInfo", currentUserInfo);
     console.log();
-    return <p>Loading user dashboard...</p>;
+    return (
+      <div className="loading_container">
+        <CustomSpinner />
+        <p>Loading your dashboard...</p>
+      </div>
+    );
   }
 
-  if (!currentUserPick) return <p>Nothing to pick yet</p>;
+  if (!currentUserPick)
+    return (
+      <p>
+        No <span className={styles.keyword}>picks</span> needed just yet.
+      </p>
+    );
 
   const picksDone = () => {
     return (
@@ -93,7 +104,13 @@ const PicksUser = () => {
     );
   };
 
-  if (picksDone()) return <p>Picks done already</p>;
+  if (picksDone())
+    return (
+      <h2>
+        You have done your <span className={styles.keyword}>picks</span>{" "}
+        already, thank you!
+      </h2>
+    );
 
   const activatePick = async (userId: string, pickRoleLevel: number) => {
     if (!currentUserPick) return;

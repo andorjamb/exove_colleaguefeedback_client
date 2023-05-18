@@ -62,8 +62,7 @@ const BulkButtons: React.FC<IBulkButtonsProps> = ({
         placement="bottom-start"
       >
         <button onClick={requestAllPicks} className={styles.request}>
-          <span className="material-symbols-outlined">group_add</span>
-          <span className="material-symbols-outlined">send</span>
+          <span className="material-symbols-outlined">send</span> Request picks
         </button>
       </Tooltip>
       <Tooltip
@@ -72,18 +71,17 @@ const BulkButtons: React.FC<IBulkButtonsProps> = ({
         placement="bottom-start"
       >
         <button className={styles.remind}>
-          <span className="material-symbols-outlined">group_add</span>
-          <span className="material-symbols-outlined">timer</span>
+          <span className="material-symbols-outlined">timer</span> Remind to
+          pick
         </button>
       </Tooltip>
       <Tooltip
         TransitionComponent={Fade}
-        title="Request feedbacks from all users"
+        title="Approve all picsk and request feedbacks from all users"
         placement="bottom-start"
       >
-        <button className={styles.request}>
-          <span className="material-symbols-outlined">rate_review</span>
-          <span className="material-symbols-outlined">send</span>
+        <button className={styles.approve}>
+          <span className="material-symbols-outlined">done</span> Approve picks
         </button>
       </Tooltip>
       <Tooltip
@@ -92,8 +90,8 @@ const BulkButtons: React.FC<IBulkButtonsProps> = ({
         placement="bottom-start"
       >
         <button className={styles.remind}>
-          <span className="material-symbols-outlined">rate_review</span>
-          <span className="material-symbols-outlined">timer</span>
+          <span className="material-symbols-outlined">timer</span> Remind to
+          feedback
         </button>
       </Tooltip>
       <Tooltip

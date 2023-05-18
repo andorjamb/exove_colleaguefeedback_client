@@ -20,6 +20,7 @@ import { IRequestPicks } from "../../types/picks";
 
 // Styles
 import styles from "./DashboardAdmin.module.css";
+import { useGetAllReportsQuery } from "../../features/reportApi";
 
 const DashboardAdmin = () => {
   const [searchInput, setSearchInput] = useState<string>("");
@@ -27,6 +28,7 @@ const DashboardAdmin = () => {
   const usersData = useGetAllUsersQuery();
   const picksData = useGetAllRequestPicksQuery();
   const activeTemplateData = useGetActiveTemplateQuery();
+  const reportsData = useGetAllReportsQuery();
   console.log("activeTemplateData", activeTemplateData.data);
   const [showModal, setShowModal] = useState(false);
 
@@ -37,20 +39,22 @@ const DashboardAdmin = () => {
     !usersData.data ||
     feedbackData.isFetching ||
     picksData.isFetching ||
-    !picksData.data
+    !picksData.data ||
+    reportsData.isFetching ||
+    !reportsData.data
   )
     return (
-      <>
+      <div className="loading_container">
         <CustomSpinner />
-        <p>Loading...</p>
-      </>
+        <p>Loading dashboard...</p>
+      </div>
     );
 
   if (!activeTemplateData.data)
     return (
-      <p>
+      <h2>
         No active templates. Create one <NavLink to="/template">here</NavLink>
-      </p>
+      </h2>
     );
 
   const searchChangeHandler = (e: React.FormEvent<HTMLInputElement>) => {
@@ -71,10 +75,10 @@ const DashboardAdmin = () => {
 
   if (!usersData.data)
     return (
-      <>
+      <div className="loading_container">
         <CustomSpinner />
         <p>Loading...</p>
-      </>
+      </div>
     );
 
   return (

@@ -382,10 +382,10 @@ const Template = () => {
         </div>
         {/* ACCORDIONS */}
         {isLoading ? (
-          <>
-            <h4>Fetching questions</h4>
+          <div className="loading_container">
             <CustomSpinner />
-          </>
+            <p>Fetching questions...</p>
+          </div>
         ) : (
           <>
             {newCategoryArray.map((item, i) => (
