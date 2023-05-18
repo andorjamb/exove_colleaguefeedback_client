@@ -92,6 +92,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
       const feedbackFound = userFeedbacks.find(
         (feedback) =>
           feedback.requestpicksId === userPicks._id &&
+          feedback.userId === userId &&
           feedback.roleLevel === pickRoleLevel
       );
       if (feedbackFound) colour = "green";
@@ -226,6 +227,12 @@ const PersonRow: React.FC<IPersonRowProps> = ({
       await activatePick(pick.ldapUid, pickRoleLevel);
     }
     setIsLoading(false);
+  };
+
+  const getFullName = (userId: string) => {
+    const userFound = allUsersData.find((user) => user.ldapUid === userId);
+    if (!userFound) return userId;
+    return userFound.firstName + " " + userFound.surname;
   };
 
   if (isLoading)
@@ -421,7 +428,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             pick.selectionStatus
         ).map((pick) => (
           <tr key={pick._id} className={styles.table_row_sub}>
-            <td>{pick.userId}</td>
+            <td>{getFullName(pick.userId)}</td>
             <td>
               <div className={styles.dot_container}>
                 <div
@@ -446,7 +453,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
           (pick) => pick.roleLevel === 6 && pick.selectionStatus
         ).map((pick) => (
           <tr key={pick._id} className={styles.table_row_sub}>
-            <td>{pick.userId}</td>
+            <td>{getFullName(pick.userId)}</td>
             <td></td>
             <td>
               <div className={styles.dot_container}>
@@ -472,7 +479,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
           (pick) => pick.roleLevel === 4 && pick.selectionStatus
         ).map((pick) => (
           <tr key={pick._id} className={styles.table_row_sub}>
-            <td>{pick.userId}</td>
+            <td>{getFullName(pick.userId)}</td>
             <td></td>
             <td></td>
             <td>
@@ -498,7 +505,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
           (pick) => pick.roleLevel === 3 && pick.selectionStatus
         ).map((pick) => (
           <tr key={pick._id} className={styles.table_row_sub}>
-            <td>{pick.userId}</td>
+            <td>{getFullName(pick.userId)}</td>
             <td></td>
             <td></td>
             <td></td>

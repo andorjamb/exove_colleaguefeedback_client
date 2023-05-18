@@ -25,11 +25,11 @@
 }
 
 .red {
-  background-color: red;
+  background-color: var(--exoveRed);
 }
 
 .green {
-  background-color: green;
+  background-color: var(--exoveGreen);
 }
 
 .table_row button {
