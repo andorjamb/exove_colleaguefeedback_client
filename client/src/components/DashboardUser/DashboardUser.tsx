@@ -37,10 +37,10 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
     !usersData.data
   )
     return (
-      <>
+      <div className="loading_container">
         <CustomSpinner />
         <p>Loading your dashboard...</p>
-      </>
+      </div>
     );
 
   if (!activeTemplateData.data)
@@ -78,13 +78,13 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
         title = "colleague";
         break;
       case 4:
-        title = "Project Manager";
+        title = "project manager";
         break;
       case 3:
-        title = "Competence Manager";
+        title = "competence manager";
         break;
       default:
-        title = "Colleague";
+        title = "colleague";
     }
     return title;
   };
@@ -113,8 +113,10 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
             pick.SelectedList.map((feedbackNeeded) => (
               <li>
                 <NavLink to="#">
-                  Give feedback to {pick.requestedTo} as{" "}
-                  {getRoleTitle(feedbackNeeded.roleLevel)}
+                  Give feedback to {pick.requestedTo} as a{" "}
+                  <span className={styles.keyword}>
+                    {getRoleTitle(feedbackNeeded.roleLevel)}
+                  </span>
                 </NavLink>
               </li>
             ))

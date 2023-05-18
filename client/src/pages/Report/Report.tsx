@@ -254,7 +254,12 @@ const Report = () => {
   }, [getPick]);
  */
   if (isLoading || isFetching) {
-    return <CustomSpinner />;
+    return (
+      <div className="loading_container">
+        <CustomSpinner />
+        <p>Loading reports...</p>
+      </div>
+    );
   }
 
   return (

@@ -27,10 +27,10 @@ const UserView: React.FC = () => {
 
   if (!currentUserInfo)
     return (
-      <>
+      <div className="loading_container">
         <CustomSpinner />
         <p>User info loading...</p>
-      </>
+      </div>
     );
 
   return (
