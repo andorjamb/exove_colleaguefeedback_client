@@ -112,12 +112,17 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         pick.userId !== user.ldapUid &&
         pick.selectionStatus
     );
+    if (user.ldapUid === "euler") console.log("filteredPicks", filteredPicks);
     filteredPicks.forEach((pick) => {
-      const userFound = allUsersData.find(
-        (user) => user.ldapUid === pick.userId
-      );
+      console.log("pick.userId", pick.userId);
+      const userFound = allUsersData.find((userData) => {
+        console.log("userData", userData);
+        return userData.ldapUid === pick.userId;
+      });
+      console.log("user found", userFound);
       if (userFound) res.push(userFound);
     });
+    console.log("res", level, res);
     return res;
   };
 

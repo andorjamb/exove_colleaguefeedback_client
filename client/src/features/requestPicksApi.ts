@@ -63,6 +63,7 @@ export const requestPicksApi = createApi({
         method: "PATCH",
         body,
       }),
+      invalidatesTags: ["RequestPicks"],
     }),
     deletePick: builder.mutation<void, string>({
       query: (id) => ({
