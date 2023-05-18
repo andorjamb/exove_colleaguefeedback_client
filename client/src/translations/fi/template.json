@@ -6,5 +6,6 @@
   "introductoryText": "Aloitusteksti",
   "gradingGuidance": "Opas arviointiin",
   "save": "Tallenna",
-  "preview": "Esikatselu"
+  "preview": "Esikatselu",
+  "howTo": "Valitut kysymykset tallennetaan uuteen malliin, kun napsautat alla olevaa Tallenna-nappias"
 }

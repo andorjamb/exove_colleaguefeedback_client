@@ -9,6 +9,10 @@ import "../../pages/Template/Template.css";
 //Types
 import { ISection } from "../../types/template";
 
+//Translations
+import "../../translations/i18next";
+import { useTranslation } from "react-i18next";
+
 interface Props {
   category: ISection; //all available categories, all questions per category
   clickHandler: any;
@@ -34,9 +38,18 @@ const Accordion = ({
   createQuestionChangeHandler,
   createQuestion,
 }: Props) => {
+  const { t } = useTranslation(["template"]);
   const activeCategories = useSelector(
     (state: any) => state.template.templateSelection
   );
+  console.log("accordion category prop:", category);
+ // console.log("id of accordion category prop:", category.id);
+
+
+/*  let answer = activeCategories[category.id].findIndex(
+    (el: any) => el.id === "746c6638-e3b3-41ee-8f5c-8dc09b3cff21"
+  );
+  console.log("test:", answer); //debugging */ 
 
   return (
     <div>
@@ -52,10 +65,7 @@ const Accordion = ({
           {isOpen ? (
             <>
               <ul className={styles.accordionContent}>
-                <h3 className={styles.howTo}>
-                  Checked questions will be saved to new template when you click
-                  'Save' below
-                </h3>
+                <h3 className={styles.howTo}>{t("howTo")}</h3>
                 <fieldset className={styles.fieldset}>
                   {category.questions?.map((q) => (
                     <li key={q.id}>
@@ -70,9 +80,9 @@ const Accordion = ({
                             value={q.id}
                             id={q.id}
                             defaultChecked={
-                              activeCategories[category.id]
-                                ? activeCategories[category.id].includes(q.id)
-                                : false
+                              true
+                              /*  activeCategories[category.id] ? activeCategories[category.id].includes(q._id)
+                                : false */
                             }
                             className={styles.input}
                           />
