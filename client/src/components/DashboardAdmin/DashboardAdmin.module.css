@@ -9,7 +9,7 @@
   align-items: center;
   flex-direction: column;
   gap: 1rem;
-  width: 80%;
+  min-width: 80%;
   max-width: 1400px;
 }
 
@@ -52,6 +52,8 @@
   padding: 0.3rem;
   text-align: center;
 }
-
-.table td:nth-child(2n) {
+.table th:nth-child(6),
+.table th:nth-child(7),
+.table th:nth-child(8) {
+  padding: 0.3rem 2rem;
 }
