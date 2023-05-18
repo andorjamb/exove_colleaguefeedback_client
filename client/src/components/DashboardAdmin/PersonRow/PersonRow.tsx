@@ -125,6 +125,11 @@ const PersonRow: React.FC<IPersonRowProps> = ({
           console.log("userData", userData);
           return userData.ldapUid === "galieleo";
         });
+      if (pick.userId === "eintein")
+        userFound = allUsersData.find((userData) => {
+          console.log("userData", userData);
+          return userData.ldapUid === "einstein";
+        });
       console.log("user found", userFound);
       if (userFound) res.push(userFound);
     });

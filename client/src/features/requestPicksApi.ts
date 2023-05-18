@@ -35,7 +35,7 @@ export const requestPicksApi = createApi({
       query: (id) => `picks/pick-id/${id}`,
       providesTags: ["RequestPicks"],
     }),
-    getRequestPicksByUserFeedbacks: builder.query<IRequestPicks, string>({
+    getRequestPicksByUserFeedbacks: builder.query<IRequestPicks[], string>({
       query: (userId) => ({
         url: `picks/feeds_to/${userId}`,
         method: "GET",

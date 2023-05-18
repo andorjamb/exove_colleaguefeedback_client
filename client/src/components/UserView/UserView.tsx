@@ -7,6 +7,8 @@ import { getSecureUserUid } from "../../functions/secureUser";
 import CustomSpinner from "../CustomSpinner/CustomSpinner";
 import DashboardUser from "../DashboardUser/DashboardUser";
 
+import styles from "./UserView.module.css";
+
 const UserView: React.FC = () => {
   const [currentUserInfo, setCurrentUserInfo] = useState<loggedInUser>();
 
@@ -32,8 +34,7 @@ const UserView: React.FC = () => {
     );
 
   return (
-    <div>
-      User view
+    <div className={styles.user_view_container}>
       <DashboardUser currentUserInfo={currentUserInfo} />
     </div>
   );
