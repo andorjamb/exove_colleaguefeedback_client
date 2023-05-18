@@ -35,6 +35,12 @@ export const requestPicksApi = createApi({
       query: (id) => `picks/pick-id/${id}`,
       providesTags: ["RequestPicks"],
     }),
+    getRequestPicksByUserFeedbacks: builder.query<IRequestPicks[], string>({
+      query: (userId) => ({
+        url: `picks/feeds_to/${userId}`,
+        method: "GET",
+      }),
+    }),
     createPick: builder.mutation<void, IRequestPicksPost>({
       query: (body) => ({
         url: "picks/",
@@ -63,6 +69,7 @@ export const requestPicksApi = createApi({
         method: "PATCH",
         body,
       }),
+      invalidatesTags: ["RequestPicks"],
     }),
     deletePick: builder.mutation<void, string>({
       query: (id) => ({
@@ -85,6 +92,7 @@ export const {
   useGetAllRequestPicksQuery,
   useGetRequestPickByUserIdQuery,
   useGetRequestPickByDocIdQuery,
+  useGetRequestPicksByUserFeedbacksQuery,
   useCreatePickMutation,
   useSubmitPickMutation,
   useApprovePickMutation,

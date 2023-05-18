@@ -1,0 +1,18 @@
+.user_dashboard {
+  max-width: 1200px;
+  text-align: left;
+}
+
+.feedbacks_needed_list {
+  text-align: left;
+  list-style-position: inside;
+  font-size: 1.2rem;
+}
+
+.feedbacks_needed_list a {
+  text-decoration: underline;
+}
+
+.keyword {
+  color: var(--exovePurple);
+}

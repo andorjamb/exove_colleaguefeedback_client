@@ -21,7 +21,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Fade from "@mui/material/Fade";
 
 // Types
-import { IRequestPicks } from "../../../types/picks";
+import { IRequestPicks, IRequestPicksPost } from "../../../types/picks";
 import { IFeedback } from "../../../types/feedback";
 import { IUserDataGet } from "../../../types/users";
 
@@ -65,7 +65,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
       template: currentTemplateId,
     };
     console.log("creating new pick", newPick);
-    await createPick(newPick);
+    await createPick(newPick as IRequestPicksPost);
     setIsLoading(false);
   };
   const remindToPick = async () => {
@@ -90,7 +90,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
 
   const getDotColour = (userId: string, pickRoleLevel: number) => {
     let colour = "black";
-    if (userPicks) {
+    if (userPicks && userPicks.submitted) {
       const feedbackFound = userFeedbacks.find(
         (feedback) =>
           feedback.requestpicksId === userPicks._id &&
@@ -112,12 +112,28 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         pick.userId !== user.ldapUid &&
         pick.selectionStatus
     );
+    if (user.ldapUid === "euler") console.log("filteredPicks", filteredPicks);
     filteredPicks.forEach((pick) => {
-      const userFound = allUsersData.find(
-        (user) => user.ldapUid === pick.userId
-      );
+      console.log("pick.userId", pick.userId);
+
+      let userFound = allUsersData.find((userData) => {
+        console.log("userData", userData);
+        return userData.ldapUid === pick.userId;
+      });
+      if (pick.userId === "galileo")
+        userFound = allUsersData.find((userData) => {
+          console.log("userData", userData);
+          return userData.ldapUid === "galieleo";
+        });
+      if (pick.userId === "eintein")
+        userFound = allUsersData.find((userData) => {
+          console.log("userData", userData);
+          return userData.ldapUid === "einstein";
+        });
+      console.log("user found", userFound);
       if (userFound) res.push(userFound);
     });
+    console.log("res", level, res);
     return res;
   };
 
@@ -229,7 +245,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             {user.firstName} {user.surname}
           </div>
         </td>
-        <td>
+        <td onClick={toggleExpand}>
           {userPicks &&
             userPicks.SelectedList &&
             userPicks.SelectedList.filter(
@@ -239,28 +255,28 @@ const PersonRow: React.FC<IPersonRowProps> = ({
                 pick.selectionStatus
             ).length}
         </td>
-        <td>
+        <td onClick={toggleExpand}>
           {userPicks &&
             userPicks.SelectedList &&
             userPicks.SelectedList.filter(
               (pick) => pick.roleLevel === 6 && pick.selectionStatus
             ).length}
         </td>
-        <td>
+        <td onClick={toggleExpand}>
           {userPicks &&
             userPicks.SelectedList &&
             userPicks.SelectedList.filter(
               (pick) => pick.roleLevel === 4 && pick.selectionStatus
             ).length}
         </td>
-        <td>
+        <td onClick={toggleExpand}>
           {userPicks &&
             userPicks.SelectedList &&
             userPicks.SelectedList.filter(
               (pick) => pick.roleLevel === 3 && pick.selectionStatus
             ).length}
         </td>
-        <td>
+        <td onClick={toggleExpand}>
           {!userPicks?.submitted && (
             <div className={styles.buttons_container}>
               {/* There is no picks yet */}
@@ -339,6 +355,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
               </Tooltip>
             )}
             {userPicks &&
+              userPicks?.submitted &&
               userPicks?.SelectedList.filter((pick) => pick.selectionStatus)
                 .length > userFeedbacks.length && (
                 <Tooltip

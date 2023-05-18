@@ -35,6 +35,10 @@
   cursor: auto;
 }
 
+.keyword {
+  color: var(--exovePurple);
+}
+
 @media screen and (max-width: 940px) {
   .selectionGrid {
     grid-gap: 1.5rem;
