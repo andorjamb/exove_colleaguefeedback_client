@@ -2,11 +2,12 @@ import React from "react";
 
 //Components
 import FeedbackForm from "../../components/FeedbackForm/FeedbackForm";
+import { toast } from "react-toastify";
 // import { functionData } from "../../types/notification";
 // import { sendNotification } from "../../functions/notification";
 
 const Feedback = () => {
-  // const sendEmail = async () => {
+  const sendEmail = async () => {
   //   const details:functionData = {
   //     link: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQScA7p2q5GDil58X2C_xhJ9BrsRAR2YFt1O9MqAbJxPEr8hYi7",
   //     emailTo: 'lera.vagapova@gmail.com',
@@ -21,9 +22,14 @@ const Feedback = () => {
   //   const sendemail =await  sendNotification(details)
   //   console.log('sendemail ****************',sendemail)
   // }
+
+
+
+  toast.success('Success message')}
+  
   return (
     <div>
-      {/* <button onClick={sendEmail}>send email</button> */}
+      <button onClick={sendEmail}>send email</button> 
       <FeedbackForm />
     </div>
   );

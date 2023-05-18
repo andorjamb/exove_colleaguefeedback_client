@@ -14,6 +14,7 @@ import { loggedInUser } from "../../types/users";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import CustomSpinner from "../../components/CustomSpinner/CustomSpinner";
+import { toast } from "react-toastify";
 
 const FeedbackForm = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -104,9 +105,9 @@ const FeedbackForm = () => {
         { ...feedback },
         { withCredentials: true }
       );
-
-      alert(data);
-    } catch (error) {}
+      toast.success(data)
+      navigate("/");
+    } catch (error) {toast.error("Sorry ran into an error")}
   };
 
   useEffect(() => {
