@@ -38,7 +38,6 @@ const Accordion = ({
     (state: any) => state.template.templateSelection
   );
 
-
   return (
     <div>
       <div className={styles.accordionContainer}>
@@ -53,10 +52,10 @@ const Accordion = ({
           {isOpen ? (
             <>
               <ul className={styles.accordionContent}>
-                <p className={styles.howTo}>
+                <h3 className={styles.howTo}>
                   Checked questions will be saved to new template when you click
                   'Save' below
-                </p>
+                </h3>
                 <fieldset className={styles.fieldset}>
                   {category.questions?.map((q) => (
                     <li key={q.id}>

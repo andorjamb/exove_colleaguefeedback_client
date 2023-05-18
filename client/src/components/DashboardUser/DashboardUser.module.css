@@ -7,11 +7,16 @@
   flex-direction: column;
   gap: 1rem;
 }
+.user_dashboard h1 {
+  margin: 1.5rem 0 2rem;
+}
 
 .feedbacks_needed_list {
+  margin-top: 1.5rem;
   text-align: left;
   list-style-position: inside;
   font-size: 1.2rem;
+  line-height: 2;
 }
 
 .feedbacks_needed_list a {
@@ -20,6 +25,10 @@
 
 .keyword {
   color: var(--exovePurple);
+}
+
+.username {
+  font-weight: 800;
 }
 
 .user_dashboard_block {

@@ -54,7 +54,9 @@
   display: flex;
   background-color: var(--paleGray);
   text-transform: uppercase;
+  font-weight: 800;
   cursor: pointer;
+  padding: 0.5rem;
 }
 
 .accordionItem {
@@ -79,11 +81,14 @@
 
 .accordionContent {
   margin-top: 0;
-  padding: 1rem;
-  min-height: 4rem;
+  padding: 2rem;
   display: block;
   line-height: normal;
   text-align: left;
+}
+
+.accordionContent:last-child {
+  padding-top: 0.5rem;
 }
 
 .input[type="checkbox"] {
@@ -96,6 +101,7 @@
 
 .fieldset {
   border: none;
+  list-style-type: none;
 }
 
 .addButton {
@@ -117,6 +123,6 @@
 }
 
 .howTo {
-  font-style: italic;
-  font-weight: 700;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
 }
