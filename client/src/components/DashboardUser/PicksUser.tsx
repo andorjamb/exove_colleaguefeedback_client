@@ -30,6 +30,7 @@ import { useTranslation } from "react-i18next";
 import { IUserDataGet, loggedInUser } from "../../types/users";
 import { IRequestPicks } from "../../types/picks";
 import Submitted from "./Submitted";
+import ButtonFancy from "../UI/ButtonFancy/ButtonFancy";
 
 const PicksUser = () => {
   const navigate = useNavigate();
@@ -150,7 +151,14 @@ const PicksUser = () => {
             defaultSelection={[]}
           />
           <div className={styles.submit_container}>
-            <button
+            <ButtonFancy
+              type="button"
+              disabled={selected.length < 5}
+              clickHandler={submitHandler}
+              children={t("submit")}
+              color="green"
+            />
+            {/* <button
               type="button"
               className={`${styles.submitButton} ${
                 selected.length < 5 && styles.inactive
@@ -159,7 +167,7 @@ const PicksUser = () => {
               onClick={submitHandler}
             >
               {t("submit")}
-            </button>
+            </button> */}
           </div>
         </div>
       )}

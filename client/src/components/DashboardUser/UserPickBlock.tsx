@@ -20,6 +20,7 @@ import { IUserDataGet } from "../../types/users";
 
 //Testing data
 import { useGetAllUsersQuery } from "../../features/userApi";
+import ButtonFancy from "../UI/ButtonFancy/ButtonFancy";
 
 interface IUserPickBlockProps {
   users: IUserDataGet[];
@@ -79,19 +80,24 @@ const UserPickBlock: React.FC<IUserPickBlockProps> = ({
       <div className={styles.heading}>
         <h2>{heading}</h2>
         {!editing ? (
-          <button className={styles.edit} onClick={() => setEditing(true)}>
-            Edit
-          </button>
+          <ButtonFancy
+            type="button"
+            color="lightGray"
+            children="Edit"
+            disabled={false}
+            clickHandler={() => setEditing(true)}
+          ></ButtonFancy>
         ) : (
-          <button
-            className={styles.done}
-            onClick={() => {
+          <ButtonFancy
+            type="button"
+            color="purple"
+            children="Done"
+            disabled={false}
+            clickHandler={() => {
               setEditing(false);
               doneHandler(selected);
             }}
-          >
-            Done
-          </button>
+          ></ButtonFancy>
         )}
       </div>
 

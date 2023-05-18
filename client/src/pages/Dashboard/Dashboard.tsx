@@ -13,6 +13,7 @@ import { getSecureUserUid } from "../../functions/secureUser";
 
 //Styling
 import styles from "./Dashboard.module.css";
+import CustomSpinner from "../../components/CustomSpinner/CustomSpinner";
 
 const Dashboard = () => {
   const [currentUserInfo, setCurrentUserInfo] = useState<loggedInUser>();
@@ -40,11 +41,16 @@ const Dashboard = () => {
     else setIsHR(false);
   }, [currentUserInfo]);
 
-  if (!currentUserInfo) return <p>user info loading...</p>;
+  if (!currentUserInfo)
+    return (
+      <>
+        <CustomSpinner />
+        <p>User info loading...</p>
+      </>
+    );
 
   return (
     <div className={styles.container}>
-      <h1>Dashboard</h1>
       {isHR ? (
         <DashboardAdmin />
       ) : (

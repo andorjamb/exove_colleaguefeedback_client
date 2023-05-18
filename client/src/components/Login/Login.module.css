@@ -68,6 +68,10 @@
   border: none;
   bottom: 0;
   right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3rem;
 }
 
 .loginButton:hover {

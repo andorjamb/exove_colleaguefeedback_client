@@ -16,6 +16,8 @@ import { setIsAdmin, setLoggedIn } from "../../features/authSlice";
 import styles from "./Login.module.css";
 import { AppDispatch } from "../../app/store";
 import { secureUserUid } from "../../functions/secureUser";
+import ButtonFancy from "../UI/ButtonFancy/ButtonFancy";
+import ButtonFancySquare from "../UI/ButtonFancySquare/ButtonFancySquare";
 
 interface ILoginParams {
   username: string;
@@ -29,6 +31,7 @@ const Login = () => {
   const loggedIn = useSelector((state: any) => state.auth.loggedIn);
   const isAdmin = useSelector((state: any) => state.auth.isAdmin);
   //const { error } = useSelector((state: any) => state.auth);
+  const [isLoading, setIsLoading] = useState(false);
 
   const devLoginEndpoint = "https://exove.vercel.app/api/";
   // `${process.env.REACT_APP_SERVER_URL}/api/login` as string;
@@ -47,6 +50,7 @@ const Login = () => {
   };
 
   const userLogin = async (e: any) => {
+    setIsLoading(true);
     e.preventDefault();
     console.log({ loginParams }); //debugging
 
@@ -58,13 +62,12 @@ const Login = () => {
         })
         .then(async (res) => {
           console.log("login res", res);
-          await secureUserUid(
-            {
-              uid: res.data?.uid,
-              roleLevel: res.data?.rolesId?.roleLevel,
-              displayName: res.data.displayName,
-              imageUrl:res.data.imageUrl || ''
-            })
+          await secureUserUid({
+            uid: res.data?.uid,
+            roleLevel: res.data?.rolesId?.roleLevel,
+            displayName: res.data.displayName,
+            imageUrl: res.data.imageUrl || "",
+          });
           if (res.data?.rolesId?.roleLevel < 3) {
             sessionStorage.setItem("isAdmin", "true");
             dispatch(setIsAdmin(true));
@@ -73,11 +76,13 @@ const Login = () => {
         .then(() => {
           sessionStorage.setItem("loggedIn", "true");
           dispatch(setLoggedIn(true));
+          setIsLoading(false);
         });
       // setLoginParams({ username: "", password: "" });
     } catch (err) {
       console.log(err);
       setLoginParams({ username: "", password: "" });
+      setIsLoading(false);
     }
   };
 
@@ -118,13 +123,27 @@ const Login = () => {
               ></input>
             </div>
             <div className={styles.formElements}>
-              <button
-                className={[styles.button, styles.loginButton].join(" ")}
+              <ButtonFancySquare
                 type="submit"
-                onClick={(e) => userLogin(e)}
-              >
-                {t("signIn")}
-              </button>
+                color="purple"
+                clickHandler={userLogin}
+                children={
+                  isLoading ? (
+                    <span className="material-symbols-outlined">
+                      hourglass_top
+                    </span>
+                  ) : (
+                    <span className="material-symbols-outlined">
+                      arrow_forward
+                    </span>
+                  )
+                }
+                disabled={
+                  loginParams.password.length === 0 ||
+                  loginParams.username.length === 0 ||
+                  isLoading
+                }
+              />
             </div>
           </form>
         </div>
