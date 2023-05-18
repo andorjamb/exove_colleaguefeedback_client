@@ -1,6 +1,8 @@
 // React
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
+import { sendNotification } from "../../../functions/notification";
 // Axios
 import axios from "axios";
 
@@ -24,6 +26,7 @@ import Fade from "@mui/material/Fade";
 import { IRequestPicks, IRequestPicksPost } from "../../../types/picks";
 import { IFeedback } from "../../../types/feedback";
 import { IUserDataGet } from "../../../types/users";
+import { functionData } from "../../../types/notification";
 
 // Styles
 import styles from "./PersonRow.module.css";
@@ -63,6 +66,22 @@ const PersonRow: React.FC<IPersonRowProps> = ({
 
   console.log("user feedbacks for", user.displayName, userFeedbacks);
 
+  const sendPicksEmail = async (pickId: string) => {
+    const details: functionData = {
+      link: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQScA7p2q5GDil58X2C_xhJ9BrsRAR2YFt1O9MqAbJxPEr8hYi7",
+      emailTo: user.email,
+      from_name: "Exove HR Office",
+      messageBody: `Hi, ${user.displayName}! Please log in at http://localhost:3000/ and select a list of minimum 5 individuals who will access you`,
+      applicationid: pickId,
+      entityname: "RequestPicks",
+      subject: "Submit Reviewee",
+      reply_to: "lera.vagapova@gmail.com",
+    };
+    const sendemail = await sendNotification(details);
+    console.log("sendemail ****************", sendemail);
+    toast.success("Email sent successfully");
+  };
+
   const requestPicks = async () => {
     setIsLoading(true);
     const newPick = {
@@ -70,11 +89,20 @@ const PersonRow: React.FC<IPersonRowProps> = ({
       template: currentTemplateId,
     };
     console.log("creating new pick", newPick);
-    await createPick(newPick as IRequestPicksPost);
+    try {
+      const res = await createPick(newPick as IRequestPicksPost);
+      console.log("PICKID", res);
+      if (typeof res === "string") await sendPicksEmail(res);
+    } catch (err: any) {
+      console.log(err.message);
+    }
     setIsLoading(false);
   };
+
   const remindToPick = async () => {
-    console.log("reminding");
+    setIsLoading(true);
+    console.log("reminding about picks");
+    setIsLoading(false);
   };
 
   const approvePicks = async () => {
@@ -460,7 +488,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         </td>
         <td>
           <div className={styles.buttons_container}>
-            {userPicks?.submitted && !userFeedbacks && (
+            {/*             {userPicks?.submitted && !userFeedbacks && (
               <Tooltip
                 TransitionComponent={Fade}
                 title={`Request feedbacks for ${user.displayName}`}
@@ -470,7 +498,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
                   <span className="material-symbols-outlined">send</span>
                 </button>
               </Tooltip>
-            )}
+            )} */}
             {userPicks &&
               userPicks?.submitted &&
               !userReport &&
