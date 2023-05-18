@@ -43,10 +43,10 @@ const Dashboard = () => {
 
   if (!currentUserInfo)
     return (
-      <>
+      <div className="loading_container">
         <CustomSpinner />
         <p>User info loading...</p>
-      </>
+      </div>
     );
 
   return (

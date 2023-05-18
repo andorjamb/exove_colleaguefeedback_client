@@ -44,10 +44,10 @@ const DashboardAdmin = () => {
     !reportsData.data
   )
     return (
-      <>
+      <div className="loading_container">
         <CustomSpinner />
-        <p>Loading...</p>
-      </>
+        <p>Loading dashboard...</p>
+      </div>
     );
 
   if (!activeTemplateData.data)
@@ -75,10 +75,10 @@ const DashboardAdmin = () => {
 
   if (!usersData.data)
     return (
-      <>
+      <div className="loading_container">
         <CustomSpinner />
         <p>Loading...</p>
-      </>
+      </div>
     );
 
   return (
