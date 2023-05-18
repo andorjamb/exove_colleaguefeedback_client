@@ -21,7 +21,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Fade from "@mui/material/Fade";
 
 // Types
-import { IRequestPicks } from "../../../types/picks";
+import { IRequestPicks, IRequestPicksPost } from "../../../types/picks";
 import { IFeedback } from "../../../types/feedback";
 import { IUserDataGet } from "../../../types/users";
 
@@ -65,7 +65,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
       template: currentTemplateId,
     };
     console.log("creating new pick", newPick);
-    await createPick(newPick);
+    await createPick(newPick as IRequestPicksPost);
     setIsLoading(false);
   };
   const remindToPick = async () => {
@@ -240,7 +240,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             {user.firstName} {user.surname}
           </div>
         </td>
-        <td>
+        <td onClick={toggleExpand}>
           {userPicks &&
             userPicks.SelectedList &&
             userPicks.SelectedList.filter(
@@ -250,28 +250,28 @@ const PersonRow: React.FC<IPersonRowProps> = ({
                 pick.selectionStatus
             ).length}
         </td>
-        <td>
+        <td onClick={toggleExpand}>
           {userPicks &&
             userPicks.SelectedList &&
             userPicks.SelectedList.filter(
               (pick) => pick.roleLevel === 6 && pick.selectionStatus
             ).length}
         </td>
-        <td>
+        <td onClick={toggleExpand}>
           {userPicks &&
             userPicks.SelectedList &&
             userPicks.SelectedList.filter(
               (pick) => pick.roleLevel === 4 && pick.selectionStatus
             ).length}
         </td>
-        <td>
+        <td onClick={toggleExpand}>
           {userPicks &&
             userPicks.SelectedList &&
             userPicks.SelectedList.filter(
               (pick) => pick.roleLevel === 3 && pick.selectionStatus
             ).length}
         </td>
-        <td>
+        <td onClick={toggleExpand}>
           {!userPicks?.submitted && (
             <div className={styles.buttons_container}>
               {/* There is no picks yet */}
@@ -350,6 +350,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
               </Tooltip>
             )}
             {userPicks &&
+              userPicks?.submitted &&
               userPicks?.SelectedList.filter((pick) => pick.selectionStatus)
                 .length > userFeedbacks.length && (
                 <Tooltip
