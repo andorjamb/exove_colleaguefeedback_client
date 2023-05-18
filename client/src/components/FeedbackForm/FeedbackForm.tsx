@@ -14,6 +14,7 @@ import { loggedInUser } from "../../types/users";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CustomSpinner from "../../components/CustomSpinner/CustomSpinner";
+import {setLanguage} from "../../features/headerSlice";
 
 const FeedbackForm = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -23,8 +24,8 @@ const FeedbackForm = () => {
   const [qTemplate, setActiveTmpt] = useState<ITemplate>();
   const [userInfo, setUserInfo] = useState<loggedInUser>();
   const { feedback } = useSelector((state: any) => state.feedback);
+  const lang = useSelector((state: any) => state.header.lang);
   const navigate = useNavigate();
-  const [language, setLang] = useState<string>("Eng");
   const [unAnsweredQuestions, setUnAnsweredQuestions] = useState<number>();
 
   useEffect(() => {
@@ -56,6 +57,8 @@ const FeedbackForm = () => {
       setLoadingState(true);
     }
   }, [data, dispatch, userInfo?.uid]);
+
+console.log(lang)
 
   useEffect(() => {
     const validateNumber = () => {
@@ -96,6 +99,7 @@ const FeedbackForm = () => {
         { ...feedback },
         { withCredentials: true }
       );
+      console.log(data);
       alert(data);
     } catch (error) {}
   };
@@ -152,7 +156,7 @@ const FeedbackForm = () => {
                             category={quiz.category}
                             questions={
                               quiz.question.find(
-                                (quiz) => quiz.lang === language
+                                (quiz) => quiz.lang === lang
                               )!
                             }
                           />
@@ -163,7 +167,7 @@ const FeedbackForm = () => {
                           category={quiz.category}
                           questions={
                             quiz.question.find(
-                              (quiz) => quiz.lang === language
+                              (quiz) => quiz.lang === lang
                             )!
                           }
                         />
@@ -173,7 +177,7 @@ const FeedbackForm = () => {
                           category={quiz.category}
                           questions={
                             quiz.question.find(
-                              (quiz) => quiz.lang === language
+                              (quiz) => quiz.lang === lang
                             )!
                           }
                         />
