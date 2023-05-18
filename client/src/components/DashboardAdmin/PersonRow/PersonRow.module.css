@@ -141,3 +141,8 @@
   color: white;
   border-radius: 100rem;
 }
+
+.row_loading {
+  background-color: var(--paleGray);
+  height: 2rem;
+}
