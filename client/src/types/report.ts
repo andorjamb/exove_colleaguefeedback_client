@@ -1,13 +1,22 @@
 /* mongoose schema */
 
+import { IFeedback } from "./feedback";
+
 export interface IReport {
   _id: string;
-  feedbacks: string[]; //not populated, ids only
+  feedbacks: IFeedback[]; //not populated, ids only
   template: string;
   createdBy?: string;
   userId: string; //ldapUid of reviewee
   requestPicks: string;
   createdOn?: Date;
+}
+
+export interface IReportPost {
+  feedbacks: (string | undefined)[];
+  template: string;
+  userId: string;
+  requestPicks: string;
 }
 
 export interface IChartData {

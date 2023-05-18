@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 //Types
-import { IReport } from "../types/report";
+import { IReport, IReportPost } from "../types/report";
 
 //const serverApi = process.env.REACT_APP_SERVER_API;
 const serverApi = "https://exove.vercel.app/api/";
@@ -30,7 +30,7 @@ export const reportApi = createApi({
     getReportSummaryByName: builder.query<IReport[], string>({
       query: (userId) => `name/${userId}`,
     }),
-    postReport: builder.mutation<void, { body: IReport }>({
+    postReport: builder.mutation<void, { body: IReportPost }>({
       query: ({ body }) => ({
         url: `report`,
         method: "POST",
