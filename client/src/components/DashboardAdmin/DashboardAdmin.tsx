@@ -89,8 +89,7 @@ const DashboardAdmin = () => {
         <button
           onClick={() => {
             toast.success("Email sent successfully", {
-              className: "toast-success-message",
-              autoClose: 50000,
+              className: "toast-message",
             });
           }}
         >

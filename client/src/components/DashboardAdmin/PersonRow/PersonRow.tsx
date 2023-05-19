@@ -28,11 +28,25 @@ import { IFeedback } from "../../../types/feedback";
 import { IUserDataGet } from "../../../types/users";
 import { functionData } from "../../../types/notification";
 
+import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
+import { SerializedError } from "@reduxjs/toolkit";
+
 // Styles
 import styles from "./PersonRow.module.css";
 import { usePostReportMutation } from "../../../features/reportApi";
 import { IReport } from "../../../types/report";
 import { NavLink, useNavigate } from "react-router-dom";
+
+/* interface ICreatePickData {
+  data: string;
+}
+
+interface ICreatePickErr {
+  error: FetchBaseQueryError | SerializedError;
+}
+interface ICreatePickResponse {
+  res: ICreatePickData | ICreatePickErr;
+} */
 
 interface IPersonRowProps {
   userPicks: IRequestPicks | undefined;
@@ -79,7 +93,9 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     };
     const sendemail = await sendNotification(details);
     console.log("sendemail ****************", sendemail);
-    toast.success("Email sent successfully");
+    toast.success("Email sent successfully", {
+      className: "toast-message",
+    });
   };
 
   const requestPicks = async () => {
@@ -91,8 +107,8 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     console.log("creating new pick", newPick);
     try {
       const res = await createPick(newPick as IRequestPicksPost);
-      console.log("PICKID", res);
-      if (typeof res === "string") await sendPicksEmail(res);
+      console.log("CREATE PICK RES", res);
+      /* await sendPicksEmail(res.data); */
     } catch (err: any) {
       console.log(err.message);
     }

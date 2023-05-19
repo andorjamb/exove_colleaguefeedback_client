@@ -97,7 +97,7 @@ input:-webkit-autofill:active {
   margin-top: 10rem;
 }
 
-.toast-success-message {
+.toast-message {
   font-family: Jost, sans-serif;
 }
 .Toastify__progress-bar {
