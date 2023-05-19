@@ -40,7 +40,7 @@
 }
 
 .role {
-  text-decoration: underline;
+  color: var(--exoveOrange);
 }
 
 .instructionsTitle {
