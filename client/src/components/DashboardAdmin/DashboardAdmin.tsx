@@ -1,6 +1,7 @@
 // React
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
 
 // API, redux
 import { useGetAllFeedbacksQuery } from "../../features/feedbackApi";
@@ -21,6 +22,7 @@ import { IRequestPicks } from "../../types/picks";
 // Styles
 import styles from "./DashboardAdmin.module.css";
 import { useGetAllReportsQuery } from "../../features/reportApi";
+import { IFeedback } from "../../types/feedback";
 
 const DashboardAdmin = () => {
   const [searchInput, setSearchInput] = useState<string>("");
@@ -84,6 +86,15 @@ const DashboardAdmin = () => {
   return (
     <div className={styles.dashboard_wrapper}>
       <div className={styles.dashboard_container}>
+        <button
+          onClick={() => {
+            toast.success("Email sent successfully", {
+              className: "toast-message",
+            });
+          }}
+        >
+          toast
+        </button>
         <h1>
           {activeTemplateData.data
             ? activeTemplateData.data.templateTitle
@@ -125,7 +136,8 @@ const DashboardAdmin = () => {
                       pick.requestedTo === currUser.ldapUid
                   )}
                   userFeedbacks={feedbackData.data!.filter(
-                    (feedback) => feedback.feedbackTo === currUser.ldapUid
+                    (feedback: IFeedback) =>
+                      feedback.feedbackTo === currUser.ldapUid
                   )}
                   userReport={reportsData.data?.find(
                     (report) =>

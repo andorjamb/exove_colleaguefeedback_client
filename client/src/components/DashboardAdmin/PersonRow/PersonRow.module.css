@@ -5,6 +5,7 @@
 .table_row_sub {
   background-color: var(--paleGray);
   border-bottom: 1px solid var(--darkGray);
+  height: 2.5rem;
 }
 
 .table_row_sub td:first-child {

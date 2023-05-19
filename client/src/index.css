@@ -96,3 +96,14 @@ input:-webkit-autofill:active {
   justify-content: center;
   margin-top: 10rem;
 }
+
+.toast-message {
+  font-family: Jost, sans-serif;
+}
+.Toastify__progress-bar {
+  background-color: var(--exoveGreen) !important;
+}
+
+.Toastify__toast-icon svg {
+  fill: var(--exoveGreen) !important;
+}
