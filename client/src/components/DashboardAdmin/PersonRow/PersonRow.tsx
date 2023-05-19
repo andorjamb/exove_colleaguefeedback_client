@@ -139,6 +139,12 @@ const PersonRow: React.FC<IPersonRowProps> = ({
 
   const getDotColour = (userId: string, pickRoleLevel: number) => {
     let colour = "black";
+
+    console.log(userId, "DOT");
+    console.log("userFeedbacks", userFeedbacks);
+    console.log("userPicks", userPicks);
+    console.log("pickRoleLevel", pickRoleLevel);
+
     if (userPicks && userPicks.submitted) {
       const feedbackFound = userFeedbacks.find(
         (feedback) =>
@@ -363,7 +369,8 @@ const PersonRow: React.FC<IPersonRowProps> = ({
                 userFeedbacks.filter(
                   (userFeedback) =>
                     userFeedback.roleLevel === 5 &&
-                    userFeedback.feedbackTo === user.ldapUid
+                    userFeedback.feedbackTo === user.ldapUid &&
+                    userFeedback.requestpicksId === userPicks._id
                 ).length
               }
               /
@@ -385,7 +392,8 @@ const PersonRow: React.FC<IPersonRowProps> = ({
                 userFeedbacks.filter(
                   (userFeedback) =>
                     userFeedback.roleLevel === 6 &&
-                    userFeedback.feedbackTo === user.ldapUid
+                    userFeedback.feedbackTo === user.ldapUid &&
+                    userFeedback.requestpicksId === userPicks._id
                 ).length
               }
               /
@@ -404,7 +412,8 @@ const PersonRow: React.FC<IPersonRowProps> = ({
                 userFeedbacks.filter(
                   (userFeedback) =>
                     userFeedback.roleLevel === 4 &&
-                    userFeedback.feedbackTo === user.ldapUid
+                    userFeedback.feedbackTo === user.ldapUid &&
+                    userFeedback.requestpicksId === userPicks._id
                 ).length
               }
               /
@@ -423,7 +432,8 @@ const PersonRow: React.FC<IPersonRowProps> = ({
                 userFeedbacks.filter(
                   (userFeedback) =>
                     userFeedback.roleLevel === 3 &&
-                    userFeedback.feedbackTo === user.ldapUid
+                    userFeedback.feedbackTo === user.ldapUid &&
+                    userFeedback.requestpicksId === userPicks._id
                 ).length
               }
               /

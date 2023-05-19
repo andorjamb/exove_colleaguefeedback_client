@@ -11,6 +11,7 @@ export interface IFeedback {
   responseDateLog: string[]; //logs dates of changes
   categories: IFCategory[];
   roleLevel?: number;
+  submitted?: boolean;
 }
 
 export interface IFCategory {
