@@ -86,23 +86,22 @@ const testing = [
   },
 ];
 
+//einstein pickId 421bbda0-fb06-4342-a493-2791b87550e3
+
 const Report = () => {
   const { t } = useTranslation(["report"]);
   const { revieweeId, pickId } = useParams();
   const reportRoot = useRef<HTMLDivElement>(null);
   const date = new Date().getFullYear();
 
-  //einstein pickId 421bbda0-fb06-4342-a493-2791b87550e3
-
   const [CompMan, setCompMan] = useState<string | undefined>("");
   const [mappedCategories, setMappedCategories] = useState<any>([]);
   const [template, setTemplate] = useState<ITemplate>();
+  const categories = template?.categories;
 
   const getPick = useGetRequestPickByDocIdQuery(pickId as string).data;
   const activeTemplate = useGetActiveTemplateQuery().data;
   const allTemplates = useGetAllTemplatesQuery().data;
-  const templateTitle = template?.templateTitle;
-  const categories = template?.categories;
   const revieweeData = useGetUserByLdapUidQuery(revieweeId as string).data;
   const CompManData = useGetUserByLdapUidQuery(CompMan as string).data;
   const reportSummary = useGetReportSummaryByNameQuery(
@@ -113,7 +112,6 @@ const Report = () => {
     revieweeId as any
   );
 
-  //let feedbacks = testFeedbackData;
   let feedbacks: IFeedback[] | undefined = useGetFeedbacksByNameQuery(
     revieweeId as string
   ).data;
@@ -122,68 +120,64 @@ const Report = () => {
     feedbacks = testFeedbackData;
   }
 
-  //console.log("feedbacks", feedbacks); //debugging
-  //let mappedCategories: any;
+  /////** Data manipulation functions  *///////
 
   /** create a map from all feedbacks for this reviewee  */
   function prepareFeedbacks(feedbacks: IFeedback[]) {
-    let mappedSet = new Map(
-      feedbacks.map((feedback) => {
-        let key = [feedback.roleLevel, feedback.userId];
-        return [key, feedback.categories];
-      })
-    );
-    console.log("mappedSet", mappedSet); //debugging
-    return mappedSet;
+    let mappedFeedbacks = new Map();
+
+    feedbacks.forEach((feedback) => {
+      let key = [feedback.roleLevel, feedback.userId];
+      mappedFeedbacks.set(key, feedback.categories);
+    });
+
+    console.log("mappedFeedbacks", mappedFeedbacks); //debugging
+    return mappedFeedbacks;
   }
 
   /** iterated for each key/value pair of map */
-
-  function testMap(
-    values: IFCategory[],
-    key: (string | number | undefined)[],
-    map: Map<(string | number | undefined)[], IFCategory[]>
-  ) {
-    console.log("mappedCategories in testMap:", mappedCategories);
-    for (let [value] of map) {
-      console.log(
-        "value being looped over",
-        "key",
-        key,
-        "value",
-        value,
-        "map",
-        map
-      );
-      /*    let catIndex = mappedCategories?.findIndex(
-        (category) => category.categoryId === value.category
-      );
-      if (catIndex) {
-        console.log(catIndex);
-        console.log(mappedCategories[catIndex]); //debugging
-      }
-      } */
-    }
-  }
-
+  /** for testing of map iteration only  */
   function mapByRole(
     values: IFCategory[],
     key: (string | number | undefined)[],
     map: Map<(string | number | undefined)[], IFCategory[]>
   ) {
-    //for each category of one feedback:
-    values.forEach((value) => {
+    console.log("mappedCategories in mapByRole:", mappedCategories); //debugging
+
+    for (let value of values) {
+      // console.log("should print values", value); //debugging
+      console.log("should print feedback category id", value.category); //debugging
+
       mappedCategories?.forEach((category: any) => {
+        /*     console.log(
+          "checking category in mappedCategories loop",
+          category.categoryId, //prepared state object
+          value.category //feedback category
+        ); */
         //select where categoryId values correspond:
         if (category.categoryId === value.category) {
-          console.log("category chart data:", category.chartData); //debugging
           //for each question of the matching category:
 
-          if (value.questions && value.questions.length) {
+          if (value.questions && value.questions.length > 0) {
             value.questions.forEach((question) => {
               //first check if question already exists in mappedCategories:
 
+              console.log(
+                "checking value.quesions in question loop:",
+                value.questions
+              );
+
+              //this array is ititially empty
+              if (category.chartData.length === 0) {
+                console.log("chart data empty");
+                console.log("checking questionid:", question._id)
+              }
               let chartObj = category.chartData.forEach((datum: any) => {
+                console.log(
+                  "checking category.chartData in loop",
+                  category.chartData,
+                  datum
+                );
                 if (datum.questionId === question._id) {
                   chartObj = { ...datum };
                 } else {
@@ -201,10 +195,10 @@ const Report = () => {
                 return chartObj;
               });
 
-              chartObj.question = question.question as string;
+              //   chartObj.question = question.question as string;
               /** organise the data according to role of reviewer */
 
-              if (key[1] && key[1] === revieweeId) {
+              /*        if (key[1] && key[1] === revieweeId) {
                 console.log("self evaluation:", values); //array of feedback objects
                 if (question.type === "number" && question.answer) {
                   chartObj.self = +question?.answer as number;
@@ -216,9 +210,9 @@ const Report = () => {
                     self: question.answer,
                   };
                 }
-              }
+              } */
 
-              if (key[0] && +key[0] < 5) {
+              /*         if (key[0] && +key[0] < 5) {
                 console.log("CM evaluation: by ", key[1], values); //array of feedback objects
                 setCompMan((CM) => key[1] as string | undefined);
                 if (question.type === "number" && question.answer) {
@@ -240,23 +234,22 @@ const Report = () => {
                   category.comments = {
                     /*   ...category.comments,
                   colleagues: [...[colleagues], question.answer], */
-                  };
-                }
-              }
+              //   };
+              //   }
+              //   } */
 
               console.log(chartObj);
             });
           }
         }
       });
-    });
+    }
   }
 
+  /* onClick event handler for creating and downloading PDF of report */
   async function makePdf() {
     if (reportRoot.current) {
       const doc = new jsPDF("portrait", "px", "a4");
-
-      console.log(reportRoot.current);
       html2canvas(reportRoot.current).then((canvas) => {
         let pageImage = canvas.toDataURL("image/png");
         let imageDimensions = doc.getImageProperties(pageImage);
@@ -270,46 +263,32 @@ const Report = () => {
     }
   }
 
-  /*   async function mapSet() {
-    let mappedSet = await prepareFeedbacks(feedbacks);
-    mappedSet.forEach(mapByRole); //Map.prototype.forEach()
-  } */
-
   //// functions called on data loaded ////
-
+  /* 
   useEffect(() => {
-    console.log("report summary", reportSummary);
-  }, [reportSummary]);
+    console.log("report summary", reportSummary); //debugging
+  }, [reportSummary]); */
 
   /** get data for current template  (may be different to 'active template') */
   useEffect(() => {
     if (allTemplates !== undefined && getPick !== undefined) {
-      /*  console.log("template id in getpick", getPick.template);
-      console.log("all templates", allTemplates); //debugging */
-      /*       let currentTemplate: ITemplate | undefined = allTemplates.find(
-        (template) => {
-          console.log(template);
-          return template._id === getPick.template;
-        }
-      ); */
-      setTemplate(activeTemplate);
-      /*   console.log("current template:", currentTemplate); //debugging */
-      /*   currentTemplate
+      let currentTemplate: ITemplate = allTemplates.filter(
+        (template) => template._id === getPick.template
+      )[0];
+      currentTemplate
         ? setTemplate(currentTemplate)
         : setTemplate(activeTemplate); */
     }
   }, [getPick, allTemplates, activeTemplate]);
 
+  /** create a map from all feedbacks for this reviewee  */
   useEffect(() => {
     console.log("feedbacks:", feedbacks);
-    /** create a map from all feedbacks for this reviewee  */
-
     if (mappedCategories !== undefined && feedbacks !== undefined) {
-      prepareFeedbacks(feedbacks).forEach(testMap);
+      prepareFeedbacks(feedbacks).forEach(mapByRole);
     }
-    /*  mapSet();*/
     //eslint-disable-next-line
-  }, [feedbacks]);
+  }, [feedbacks, mappedCategories]);
 
   /** prepare objects for mapping chart data  */
   useEffect(() => {
@@ -321,7 +300,6 @@ const Report = () => {
         comments: [],
       };
     });
-    console.log("mapped catogories", mappedCategories);
     setMappedCategories(mappedCategories);
   }, [categories]);
 
