@@ -110,10 +110,10 @@ const Report = () => {
     revieweeId as any
   ).data;
 
-if (!feedbacks || (feedbacks && feedbacks?.length) === 0) {
+  if (!feedbacks || (feedbacks && feedbacks?.length) === 0) {
     feedbacks = testFeedbackData;
   }
- 
+
   //console.log("feedbacks", feedbacks); //debugging
   //let mappedCategories: any;
 
@@ -149,13 +149,12 @@ if (!feedbacks || (feedbacks && feedbacks?.length) === 0) {
         map
       );
       let catIndex = mappedCategories?.findIndex(
-        (category) => category.categoryId === value.category
+        (category: any) => category.categoryId === value
       );
       if (catIndex) {
         console.log(catIndex);
         console.log(mappedCategories[catIndex]); //debugging
       }
-      
     }
   }
 
@@ -275,7 +274,7 @@ if (!feedbacks || (feedbacks && feedbacks?.length) === 0) {
     /** create a map from all feedbacks for this reviewee  */
 
     if (mappedCategories !== undefined) {
-      prepareFeedbacks(feedbacks).forEach(testMap);
+      prepareFeedbacks(feedbacks!).forEach(testMap);
     }
     /*  mapSet();*/
     //eslint-disable-next-line

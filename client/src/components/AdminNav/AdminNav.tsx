@@ -26,18 +26,7 @@ const AdminNav = () => {
         >
           <li className={styles.li}>{t("dashboard")}</li>
         </NavLink>
-        <NavLink
-          className={({ isActive, isPending }) =>
-            isPending
-              ? `${styles.navlink} ${styles.pending}`
-              : isActive
-              ? `${styles.navlink} ${styles.active}`
-              : styles.navlink
-          }
-          to="/feedback"
-        >
-          <li className={styles.li}>{t("surveys")}</li>
-        </NavLink>
+
         <NavLink
           className={({ isActive, isPending }) =>
             isPending

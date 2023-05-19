@@ -15,6 +15,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import CustomSpinner from "../../components/CustomSpinner/CustomSpinner";
 import { toast } from "react-toastify";
+import { useGetAllUsersQuery } from "../../features/userApi";
+import ButtonFancy from "../UI/ButtonFancy/ButtonFancy";
 
 const FeedbackForm = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -29,7 +31,7 @@ const FeedbackForm = () => {
   const [unAnsweredQuestions, setUnAnsweredQuestions] = useState<number>();
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-
+  const usersData = useGetAllUsersQuery();
   const request: string | null = params.get("id");
   const feed: string | null = params.get("to");
   const role: string | null = params.get("role");
@@ -113,7 +115,6 @@ const FeedbackForm = () => {
       toast.error("Sorry ran into an error", {
         className: "toast-message",
       });
-
     }
   };
 
@@ -136,6 +137,8 @@ const FeedbackForm = () => {
     getUser();
   }, [navigate]);
 
+  if (usersData.isFetching || !usersData.data) return <CustomSpinner />;
+
   if (
     request === "null" ||
     feedbackTo === null ||
@@ -143,9 +146,9 @@ const FeedbackForm = () => {
     parseInt(role!) === 0
   ) {
     return (
-      <>
+      <div className={style.placeholder}>
         <h1>You don't have a feedback to submit.</h1>
-      </>
+      </div>
     );
   } else {
     requestpicksId = request!;
@@ -153,13 +156,62 @@ const FeedbackForm = () => {
     roleLevel = parseInt(role!);
   }
 
+  const getRoleTitle = (pickRoleLevel: number) => {
+    let title = "";
+    switch (pickRoleLevel) {
+      case 6:
+        title = "subordinate";
+        break;
+      case 5:
+        title = "colleague";
+        break;
+      case 4:
+        title = "project manager";
+        break;
+      case 3:
+        title = "competence manager";
+        break;
+      default:
+        title = "colleague";
+    }
+    return title;
+  };
+
+  const getMyRoleTitle = (pickRoleLevel: number) => {
+    let title = "";
+    switch (pickRoleLevel) {
+      case 6:
+        title = "manager";
+        break;
+      case 5:
+        title = "colleague";
+        break;
+      case 4:
+        title = "subordinate";
+        break;
+      case 3:
+        title = "subordinate";
+        break;
+      default:
+        title = "colleague";
+    }
+    return title;
+  };
+
+  const getFullName = (userId: string) => {
+    const userFound = usersData.data?.find((user) => user.ldapUid === userId);
+    if (!userFound) return userId;
+    return userFound.firstName + " " + userFound.surname;
+  };
+
   return (
     <div className={style.main}>
       <div className={style.user} style={{}}>
-        <h1 className={style.header}>{qTemplate?.templateTitle}</h1>
-        <h2 className={style.username}>
-          Moi {userInfo ? userInfo.displayName : "Guest"}
-        </h2>
+        <h1 className={style.header}>
+          You're giving feedback to your {getMyRoleTitle(roleLevel)}{" "}
+          <span className={style.username}> {getFullName(feedbackTo)}</span> as
+          their <span className={style.role}> {getRoleTitle(roleLevel)} </span>
+        </h1>
       </div>
 
       <>
@@ -168,7 +220,7 @@ const FeedbackForm = () => {
         ) : (
           <div className={style.questionContainer}>
             <div className={style.instructionsContainer}>
-              <h3 className={style.instructionsTitle}>Instruction</h3>
+              <h2 className={style.instructionsTitle}>Instructions</h2>
 
               <p className={style.instructions}>{qTemplate?.instructions}</p>
             </div>
@@ -178,7 +230,7 @@ const FeedbackForm = () => {
                   <h2>{cat.category.categoryName}</h2>
 
                   {cat.questions.map((quiz) => (
-                    <div key={quiz._id}>
+                    <div className={style.question_container} key={quiz._id}>
                       {quiz.type.toLowerCase() === "string" ? (
                         <>
                           <StringQuestions
@@ -217,13 +269,13 @@ const FeedbackForm = () => {
                 </div>
               ))}
             <div className={style.formElements}>
-              <button
-                className={[style.button, style.loginButton].join(" ")}
-                onClick={(e) => handleSubmitFeedBack(e)}
+              <ButtonFancy
+                type="submit"
+                color="green"
+                children="Submit"
+                clickHandler={(e) => handleSubmitFeedBack(e)}
                 disabled={unAnsweredQuestions !== 0}
-              >
-                Submit
-              </button>
+              />
             </div>
           </div>
         )}

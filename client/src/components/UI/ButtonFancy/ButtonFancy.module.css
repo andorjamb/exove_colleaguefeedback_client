@@ -38,6 +38,11 @@
   cursor: auto;
 }
 
+.fancyButton[disabled]:hover {
+  transform: translate(5px, 5px);
+  box-shadow: none;
+}
+
 .medGray {
   color: black;
   background-color: var(--medGray);

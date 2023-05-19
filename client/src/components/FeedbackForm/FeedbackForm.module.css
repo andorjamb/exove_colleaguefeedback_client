@@ -11,10 +11,18 @@
 .h4 {
 }
 
+.question_container {
+}
+
+.placeholder {
+  margin: 3rem 0;
+}
 /* main feedback component */
 
 .main {
   padding: 3rem;
+  max-width: 1200px;
+  font-size: 1.1rem;
 }
 
 .user {
@@ -24,15 +32,21 @@
 }
 
 .header {
+  text-align: left;
 }
 
 .username {
-  color: #6e12e7;
+  color: var(--exovePurple);
+}
+
+.role {
+  text-decoration: underline;
 }
 
 .instructionsTitle {
   display: flex;
   align-items: flex-start;
+  margin: 0 0 2rem;
 }
 
 .instructions {
@@ -40,25 +54,26 @@
   align-items: flex-start;
   text-align: left;
   word-spacing: 2.5px;
-  padding-top: 2rem;
+  line-height: 1.6;
 }
 
 .instructionsContainer {
-  margin: 2rem -3rem 0 -3rem;
-  padding: 1rem 3rem;
-  background-color: #f2f2f2;
+  margin: 3rem 0 1rem;
+  padding: 4rem;
+  background-color: var(--lightGray);
 }
+
 .questionContainer {
   text-align: left;
   display: flex;
-  gap: 2rem;
+  gap: 3rem;
   flex-direction: column;
 }
 
 .catQuest {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 3rem;
 }
 
 /* Bolean file css */
@@ -90,16 +105,16 @@
 }
 
 .bolInitial {
-  background: #f2f2f2;
+  background: var(--lightGray);
   padding-left: 40%;
 }
 
 .bolTrue {
-  background: #63ad7b;
+  background: var(--exoveGreen);
 }
 
 .bolFalse {
-  background: #f85b6bcf;
+  background: var(--exoveRed);
 }
 
 .bolCircle {
@@ -124,8 +139,8 @@
 
 .rLabel {
   cursor: pointer;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
 }
 
@@ -135,6 +150,7 @@
   justify-content: center;
   align-items: center;
   height: 100%;
+  font-size: 1rem;
 }
 
 .rMainDiv {
@@ -147,17 +163,17 @@
 }
 
 .rMainDiv > p {
-  width: 40%;
+  width: 55%;
 }
 
 .rAnswer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 50%;
+  width: 40%;
   border-radius: 100px;
   align-items: center;
-  max-height: 10px;
+  max-height: 5px;
 }
 
 /* String questions css */
@@ -170,6 +186,7 @@
 
 .sTextarea {
   width: 100%;
+  padding: 1rem;
 }
 
 /* Button */
@@ -202,7 +219,6 @@
 }
 
 .formElements {
-  display: block;
-  position: relative;
-  padding: 2rem;
+  display: flex;
+  justify-content: flex-end;
 }

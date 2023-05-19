@@ -31,44 +31,44 @@ const RangeQuestions = ({ questions, category }: question) => {
   const getGradientStyle = () => {
     if (value === -1) {
       return {
-        background: `var(--paleGray)`,
+        background: `var(--lightGray)`,
       };
     } else if (value === 0) {
       const percentage = (value / 4) * 100;
       return {
-        background: `linear-gradient(to right, #4bebdec3 ,#a76acdcc ${percentage}%, #F2F2F2 ${percentage}%)`,
+        background: `linear-gradient(to right, #4bebde ,#a76acd ${percentage}%, #e8e8e8 ${percentage}%)`,
       };
     } else if (value === 1) {
       const percentage = ((value - 1) / 4) * 100;
       return {
-        background: `linear-gradient(to right, #4bebdec3 , #a76acdcc ${percentage}%, #F2F2F2 ${percentage}%)`,
+        background: `linear-gradient(to right, #4bebde , #a76acd ${percentage}%, #e8e8e8 ${percentage}%)`,
       };
     } else if (value === 2) {
       const percentage = ((value - 1) / 4) * 100;
       return {
-        background: `linear-gradient(to right, #4bebdec3 , #a76acdcc ${percentage}%, #F2F2F2 ${percentage}%)`,
+        background: `linear-gradient(to right, #4bebde , #a76acd ${percentage}%, #e8e8e8 ${percentage}%)`,
       };
     } else if (value === 3) {
       const percentage = ((value - 1) / 4) * 100;
       return {
-        background: `linear-gradient(to right, #4bebdec3 , #a76acdcc ,#e130a3c1 ${percentage}%, #F2F2F2 ${percentage}%)`,
+        background: `linear-gradient(to right, #4bebde , #a76acd ,#e130a3 ${percentage}%, #e8e8e8 ${percentage}%)`,
       };
     } else if (value === 4) {
       const percentage = ((value - 1) / 4) * 100;
       return {
-        background: `linear-gradient(to right, #4bebdec3 , #a76acdcc ,#e130a3c1, #f85b6bcf ${percentage}%, #F2F2F2 ${percentage}%)`,
+        background: `linear-gradient(to right, #4bebde , #a76acd ,#e130a3, #f85b6b ${percentage}%, #e8e8e8 ${percentage}%)`,
       };
     } else if (value === 5) {
       const percentage = ((value - 1) / 4) * 100;
       return {
-        background: `linear-gradient(to right, #4bebdec3 , #a76acdcc ,#e130a3c1, #f85b6bcf , #fff94dc4  ${percentage}%)`,
+        background: `linear-gradient(to right, #4bebde , #a76acd ,#e130a3, #f85b6b , #ffc94d  ${percentage}%)`,
       };
     }
   };
   const renderRadio = (index: number) => {
-    const colors = ["#4BEBDD", "#A567CC", "#DF2C9F", "#F85B6B", "#FFF94D"];
+    const colors = ["#4BEBDD", "#A567CC", "#DF2C9F", "#F85B6B", "#FFC94D"];
 
-    let radioColor = "rgb(221, 221, 221)";
+    let radioColor = "#e8e8e8";
 
     if (index <= value) {
       radioColor = colors[index - 1];
@@ -102,7 +102,10 @@ const RangeQuestions = ({ questions, category }: question) => {
 
   return (
     <div className={styles.rMainDiv}>
-      <p>{questions.question} {!validateSelection() && <span style={{ color: "red" }}>*</span>}</p>
+      <p>
+        {questions.question}{" "}
+        {!validateSelection() && <span style={{ color: "red" }}>*</span>}
+      </p>
       <div className={styles.rAnswer} style={{ ...getGradientStyle() }}>
         {[1, 2, 3, 4, 5].map((index) => renderRadio(index))}
       </div>
