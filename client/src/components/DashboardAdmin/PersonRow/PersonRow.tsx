@@ -154,12 +154,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
 
   const getCountColour = (pickRoleLevel: number): string => {
     let colour = "numberBlack";
-    if (
-      userFeedbacks &&
-      userFeedbacks.length &&
-      userPicks &&
-      userPicks.SelectedList
-    ) {
+    if (userPicks && userPicks.submitted) {
       const feedbacksGiven = userFeedbacks.filter(
         (userFeedback) =>
           userFeedback.roleLevel === pickRoleLevel &&
@@ -362,7 +357,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
           </div>
         </td>
         <td className={styles[getCountColour(5)]} onClick={toggleExpand}>
-          {userFeedbacks && userFeedbacks.length > 0 && (
+          {userPicks && userPicks.submitted && (
             <>
               {
                 userFeedbacks.filter(
@@ -384,7 +379,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             ).length}
         </td>
         <td className={styles[getCountColour(6)]} onClick={toggleExpand}>
-          {userFeedbacks && userFeedbacks.length > 0 && (
+          {userPicks && userPicks.submitted && (
             <>
               {
                 userFeedbacks.filter(
@@ -403,7 +398,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             ).length}
         </td>
         <td className={styles[getCountColour(4)]} onClick={toggleExpand}>
-          {userFeedbacks && userFeedbacks.length > 0 && (
+          {userPicks && userPicks.submitted && (
             <>
               {
                 userFeedbacks.filter(
@@ -422,7 +417,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             ).length}
         </td>
         <td className={styles[getCountColour(3)]} onClick={toggleExpand}>
-          {userFeedbacks && userFeedbacks.length > 0 && (
+          {userPicks && userPicks.submitted && (
             <>
               {
                 userFeedbacks.filter(
