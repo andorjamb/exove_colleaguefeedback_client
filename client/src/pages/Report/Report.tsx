@@ -170,7 +170,7 @@ const Report = () => {
               //this array is ititially empty
               if (category.chartData.length === 0) {
                 console.log("chart data empty");
-                console.log("checking questionid:", question._id)
+                console.log("checking questionid:", question._id);
               }
 
               let chartObj = category.chartData.forEach((datum: any) => {
@@ -278,7 +278,7 @@ const Report = () => {
       )[0];
       currentTemplate
         ? setTemplate(currentTemplate)
-        : setTemplate(activeTemplate); */
+        : setTemplate(activeTemplate);
     }
   }, [getPick, allTemplates, activeTemplate]);
 
