@@ -284,15 +284,19 @@ const Report = () => {
   /** get data for current template  (may be different to 'active template') */
   useEffect(() => {
     if (allTemplates !== undefined && getPick !== undefined) {
-      console.log("template id in getpick", getPick.template);
-      console.log("all templates", allTemplates); //debugging
-      let currentTemplate: ITemplate = allTemplates.filter(
-        (template) => template._id === getPick.template
-      )[0];
-      console.log("current template:", currentTemplate); //debugging
-      currentTemplate
+      /*  console.log("template id in getpick", getPick.template);
+      console.log("all templates", allTemplates); //debugging */
+      /*       let currentTemplate: ITemplate | undefined = allTemplates.find(
+        (template) => {
+          console.log(template);
+          return template._id === getPick.template;
+        }
+      ); */
+      setTemplate(activeTemplate);
+      /*   console.log("current template:", currentTemplate); //debugging */
+      /*   currentTemplate
         ? setTemplate(currentTemplate)
-        : setTemplate(activeTemplate);
+        : setTemplate(activeTemplate); */
     }
   }, [getPick, allTemplates, activeTemplate]);
 
@@ -343,10 +347,10 @@ const Report = () => {
       <div className={styles.report} ref={reportRoot}>
         <div className={styles.reportHeader}></div>
         <section>
-          <h2>{date} Colleague Feedback Report</h2>
+          <h1>{date} Colleague Feedback Report</h1>
 
           <div className={styles.feedbackInfo}>
-            <h4>Template: {template?.templateTitle}</h4>
+            <h2>Template: {template?.templateTitle}</h2>
             <p>
               Competence Manager:{" "}
               {CompManData?.firstName + " " + CompManData?.surname}
