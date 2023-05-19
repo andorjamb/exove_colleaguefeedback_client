@@ -172,6 +172,7 @@ const Report = () => {
                 console.log("chart data empty");
                 console.log("checking questionid:", question._id)
               }
+
               let chartObj = category.chartData.forEach((datum: any) => {
                 console.log(
                   "checking category.chartData in loop",
