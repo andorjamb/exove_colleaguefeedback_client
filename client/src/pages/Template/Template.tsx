@@ -99,7 +99,6 @@ const Template = () => {
       getActiveTemplate.data !== undefined &&
       getActiveTemplate.data.categories.length
     ) {
-      console.log(getActiveTemplate.data.categories);
       let activeCategoryObject = getActiveTemplate.data.categories.reduce(
         (accumulator: any, currentValue: any) => {
           return {
@@ -109,7 +108,6 @@ const Template = () => {
         },
         {}
       );
-
       dispatch(updateTemplateSelection(activeCategoryObject));
       return activeCategoryObject;
     } else {
@@ -167,7 +165,6 @@ const Template = () => {
   /////** event handlers *///////
 
   function titleChangeHandler(e: any) {
-    //console.log(e.target.value);
     setTemplateTitle((title) => e.target.value);
   }
 
@@ -233,7 +230,6 @@ const Template = () => {
     questionId: string
   ) {
     let checkboxStateCopy = { ...activeCheckboxState };
-    console.log("cbs copy", checkboxStateCopy); //debugging
     Object.isExtensible(checkboxStateCopy);
 
     if (e.target.checked) {
@@ -253,12 +249,11 @@ const Template = () => {
       }
     } else {
       console.log(`question ${questionId} deselected`); //debugging
+      //TODO: error handler for case where this category does not exist in current active template
       if (checkboxStateCopy[categoryId]) {
-        console.log("checking for cateogry id, found");
+        console.log("checking for category id, found");
       }
       let questionArray = [...checkboxStateCopy[categoryId]];
-
-      //error handler for case where this category does not exist in current active template?
 
       console.log("question array before filtering", questionArray); //debugging
       let newQuestionArray = questionArray.filter((item) => {
@@ -272,8 +267,6 @@ const Template = () => {
       dispatch(updateTemplateSelection(checkboxStateCopy));
       console.log("active checkbox state after update:", activeCheckboxState); //debugging
     }
-
-    //dispatch(updateTemplateSelection(checkboxStateCopy));
   }
 
   //convert activeCheckboxState to db post form

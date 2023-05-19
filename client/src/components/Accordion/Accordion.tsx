@@ -39,17 +39,24 @@ const Accordion = ({
   createQuestion,
 }: Props) => {
   const { t } = useTranslation(["template"]);
-  const activeCategories = useSelector(
+  const activeCategoryObject = useSelector(
     (state: any) => state.template.templateSelection
   );
-  console.log("accordion category prop:", category);
- // console.log("id of accordion category prop:", category.id);
 
-
-/*  let answer = activeCategories[category.id].findIndex(
-    (el: any) => el.id === "746c6638-e3b3-41ee-8f5c-8dc09b3cff21"
-  );
-  console.log("test:", answer); //debugging */ 
+  let currentCategoryId = category.id;
+  let questionObjectArray = activeCategoryObject[currentCategoryId];
+  let questionIdArray = questionObjectArray?.map((item: any) => item._id);
+  const checkIndex = (id: string) => {
+    console.log("testing id inclusion", questionIdArray.includes(id));
+    if (
+      activeCategoryObject[currentCategoryId] &&
+      questionIdArray.includes(id)
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   return (
     <div>
@@ -79,11 +86,7 @@ const Accordion = ({
                             name="questions"
                             value={q.id}
                             id={q.id}
-                            defaultChecked={
-                              true
-                              /*  activeCategories[category.id] ? activeCategories[category.id].includes(q._id)
-                                : false */
-                            }
+                            defaultChecked={checkIndex(q.id)}
                             className={styles.input}
                           />
                           {q?.question + " (1-5)"}
@@ -98,11 +101,7 @@ const Accordion = ({
                             }
                             name="questions"
                             id={q.id}
-                            defaultChecked={
-                              activeCategories[category.id]
-                                ? activeCategories[category.id].includes(q.id)
-                                : false
-                            }
+                            defaultChecked={checkIndex(q.id)}
                             className={styles.input}
                           />
                           {q?.question + " (free form)"}

@@ -6,28 +6,6 @@ export enum QuestionType {
   truefalse = "Boolean",
 }
 
-/* 
-export interface IActiveTemplateCategories {
-  category: IActiveTemplateCategory;
-  questions: string[];
-}
-
-export interface IActiveTemplateCategory {
-  _id: string;
-  categoryName: string;
-  questions: IQuestionGet[];
-}
-
-export interface IActiveTemplateGet {
-  _id: string;
-  templateTitle: string;
-  instructions: string;
-  createdOn: Date;
-  createdBy: string;
-  categories: IActiveTemplateCategories[];
-  active: false;
-} */
-
 export interface IQuestion {
   _id: string;
   category: string; //category id
@@ -122,18 +100,13 @@ export interface ITemplate {
 
 export interface ICategory {
   category: IICategory;
-  questions:IQuiz[];
+  questions: IQuiz[];
   _id: string;
 }
 
-
-
 interface IICategory {
-  
   _id: string;
   categoryName: string;
-  
-  
 }
 
 /* 
