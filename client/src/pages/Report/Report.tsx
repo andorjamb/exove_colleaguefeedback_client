@@ -122,6 +122,9 @@ const Report = () => {
     feedbacks = testFeedbackData;
   }
 
+  //console.log("feedbacks", feedbacks); //debugging
+  //let mappedCategories: any;
+
   /** create a map from all feedbacks for this reviewee  */
   function prepareFeedbacks(feedbacks: IFeedback[]) {
     let mappedSet = new Map(
@@ -158,6 +161,7 @@ const Report = () => {
       if (catIndex) {
         console.log(catIndex);
         console.log(mappedCategories[catIndex]); //debugging
+      }
       } */
     }
   }

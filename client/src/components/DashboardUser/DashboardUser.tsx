@@ -70,6 +70,12 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
       return sum + pick.SelectedList.length;
     }, 0);
 
+  const getFullName = (userId: string) => {
+    const userFound = usersData.data?.find((user) => user.ldapUid === userId);
+    if (!userFound) return userId;
+    return userFound.firstName + " " + userFound.surname;
+  };
+
   const getRoleTitle = (pickRoleLevel: number) => {
     let title = "";
     switch (pickRoleLevel) {
@@ -112,7 +118,9 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
         <ul className={styles.feedbacks_needed_list}>
           {feedbacksNeededData.data
             .filter(
-              (firstPick) => firstPick.requestedTo === currentUserInfo.uid
+              (firstPick) =>
+                firstPick.requestedTo === currentUserInfo.uid &&
+                firstPick.submitted
             )
             .map((pick) => (
               <NavLink
@@ -134,7 +142,9 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
                     to={`/feedback?id=${pick._id}&to=${pick.requestedTo}&role=${feedbackNeeded.roleLevel}`}
                   >
                     Give feedback to{" "}
-                    <span className={styles.username}>{pick.requestedTo}</span>{" "}
+                    <span className={styles.username}>
+                      {getFullName(pick.requestedTo)}
+                    </span>{" "}
                     as a{" "}
                     <span className={styles.keyword}>
                       {getRoleTitle(feedbackNeeded.roleLevel)}

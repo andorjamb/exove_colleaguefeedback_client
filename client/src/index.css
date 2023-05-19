@@ -10,10 +10,10 @@
   --exoveGreen: #63ad7b; /*rgb(99,173,123) */
   --exoveOrange: #f19c5b; /**rgb(241,156,91) */
   --exoveRed: #f85b6b;
-  --darkGray: rgb(168, 168, 168);
-  --medGray: rgb(216, 216, 215);
-  --lightGray: rgb(232, 232, 232);
-  --paleGray: rgb(242, 242, 242);
+  --darkGray: #a8a8a8;
+  --medGray: #d8d8d7;
+  --lightGray: #e8e8e8;
+  --paleGray: #f2f2f2;
   /* gradient colors */
   --color1: #4bebdec3;
   --color2: #a76acdcc;
