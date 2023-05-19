@@ -11,6 +11,7 @@
   gap: 1rem;
   min-width: 80%;
   max-width: 1400px;
+  min-width: 1000px;
 }
 
 .search_buttons_container {
