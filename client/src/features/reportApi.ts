@@ -52,6 +52,7 @@ export const {
   useGetAllReportsQuery,
   useGetReportByDocIdQuery,
   useGetReportSummaryByIdQuery,
+  useGetReportSummaryByNameQuery,
   usePostReportMutation,
   useDeleteReportMutation,
 } = reportApi;
