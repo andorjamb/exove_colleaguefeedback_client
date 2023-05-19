@@ -86,15 +86,6 @@ const DashboardAdmin = () => {
   return (
     <div className={styles.dashboard_wrapper}>
       <div className={styles.dashboard_container}>
-        <button
-          onClick={() => {
-            toast.success("Email sent successfully", {
-              className: "toast-message",
-            });
-          }}
-        >
-          toast
-        </button>
         <h1>
           {activeTemplateData.data
             ? activeTemplateData.data.templateTitle
