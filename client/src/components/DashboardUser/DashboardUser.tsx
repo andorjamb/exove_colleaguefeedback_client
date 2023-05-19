@@ -106,13 +106,21 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
       <div className={styles.user_dashboard_block}>
         <h2>
           Please give {feedbacksNum}{" "}
-          <span className={styles.keyword}>feedbacks</span> to{" "}
+          <span className={styles.keyword}>
+            feedback{feedbacksNum === 1 ? "" : "s"}
+          </span>{" "}
+          to{" "}
           {
             feedbacksNeededData.data.filter(
               (feedbackNeeded) => feedbackNeeded.submitted
             ).length
           }{" "}
-          people:
+          {feedbacksNeededData.data.filter(
+            (feedbackNeeded) => feedbackNeeded.submitted
+          ).length === 1
+            ? "person"
+            : "people"}
+          :
         </h2>
         <p></p>
         <ul className={styles.feedbacks_needed_list}>
