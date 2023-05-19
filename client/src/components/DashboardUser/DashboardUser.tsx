@@ -65,7 +65,16 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
 
   const feedbacksNum = feedbacksNeededData.data
     .filter((feedbackNeeded) => feedbackNeeded.submitted)
-    .reduce((sum, pick) => sum + pick.SelectedList.length, 0);
+    .reduce((sum, pick) => {
+      console.log(pick.SelectedList);
+      return sum + pick.SelectedList.length;
+    }, 0);
+
+  const getFullName = (userId: string) => {
+    const userFound = usersData.data?.find((user) => user.ldapUid === userId);
+    if (!userFound) return userId;
+    return userFound.firstName + " " + userFound.surname;
+  };
 
   const getRoleTitle = (pickRoleLevel: number) => {
     let title = "";
@@ -97,19 +106,29 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
       <div className={styles.user_dashboard_block}>
         <h2>
           Please give {feedbacksNum}{" "}
-          <span className={styles.keyword}>feedbacks</span> to{" "}
+          <span className={styles.keyword}>
+            feedback{feedbacksNum === 1 ? "" : "s"}
+          </span>{" "}
+          to{" "}
           {
             feedbacksNeededData.data.filter(
               (feedbackNeeded) => feedbackNeeded.submitted
             ).length
           }{" "}
-          people:
+          {feedbacksNeededData.data.filter(
+            (feedbackNeeded) => feedbackNeeded.submitted
+          ).length === 1
+            ? "person"
+            : "people"}
+          :
         </h2>
         <p></p>
         <ul className={styles.feedbacks_needed_list}>
           {feedbacksNeededData.data
             .filter(
-              (firstPick) => firstPick.requestedTo === currentUserInfo.uid
+              (firstPick) =>
+                firstPick.requestedTo === currentUserInfo.uid &&
+                firstPick.submitted
             )
             .map((pick) => (
               <NavLink
@@ -131,7 +150,9 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
                     to={`/feedback?id=${pick._id}&to=${pick.requestedTo}&role=${feedbackNeeded.roleLevel}`}
                   >
                     Give feedback to{" "}
-                    <span className={styles.username}>{pick.requestedTo}</span>{" "}
+                    <span className={styles.username}>
+                      {getFullName(pick.requestedTo)}
+                    </span>{" "}
                     as a{" "}
                     <span className={styles.keyword}>
                       {getRoleTitle(feedbackNeeded.roleLevel)}

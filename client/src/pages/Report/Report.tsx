@@ -10,6 +10,7 @@ import styles from "./Report.module.css";
 //Types
 import { IReportData, IReportCategory, IChartData } from "../../types/report";
 import { IFeedback, IFCategory } from "../../types/feedback";
+import { ITemplate } from "../../types/template";
 //import { IUserDataGet } from "../../types/users";
 
 //Redux
@@ -17,7 +18,11 @@ import { useSelector } from "react-redux";
 import { useGetRequestPickByDocIdQuery } from "../../features/requestPicksApi";
 import { useGetFeedbacksByNameQuery } from "../../features/feedbackApi";
 import { useGetUserByLdapUidQuery } from "../../features/userApi";
-import { useGetActiveTemplateQuery } from "../../features/templateApi";
+import {
+  useGetActiveTemplateQuery,
+  useGetAllTemplatesQuery,
+} from "../../features/templateApi";
+import { useGetReportSummaryByNameQuery } from "../../features/reportApi";
 
 //Translations
 import "../../translations/i18next";
@@ -36,10 +41,8 @@ import { testFeedbackData } from "../../testdata/testFeedbackData";
 import { IQuestionLang } from "../../types/questions";
 
 //(manager and HR only view)
-//check user: if not correct role level, navigate to login
+//TODO: check user: if not correct role level or permissions not allocated, navigate to login
 
-/** jsPDF requires inline styles, doesn't support external css? (seems to be working though
- */
 const testing = [
   {
     question: "Question 1",
@@ -87,26 +90,32 @@ const Report = () => {
   const { t } = useTranslation(["report"]);
   const { revieweeId, pickId } = useParams();
   const reportRoot = useRef<HTMLDivElement>(null);
+  const date = new Date().getFullYear();
 
   //einstein pickId 421bbda0-fb06-4342-a493-2791b87550e3
-  //const [revieweeId, setRevieweeId] = useState<string | undefined>("");
-  const [CM, setCM] = useState<string | undefined>("");
-  const [mappedCategories, setMappedCategories] = useState<any>([]);
 
-  const getPick = useGetRequestPickByDocIdQuery(pickId as any).data;
+  const [CompMan, setCompMan] = useState<string | undefined>("");
+  const [mappedCategories, setMappedCategories] = useState<any>([]);
+  const [template, setTemplate] = useState<ITemplate>();
+
+  const getPick = useGetRequestPickByDocIdQuery(pickId as string).data;
   const activeTemplate = useGetActiveTemplateQuery().data;
-  const templateTitle = activeTemplate?.templateTitle;
-  const categories = activeTemplate?.categories;
-  const revieweeData = useGetUserByLdapUidQuery(revieweeId as any).data;
-  const CMData = useGetUserByLdapUidQuery(CM as any).data;
-  const date = new Date().getFullYear();
+  const allTemplates = useGetAllTemplatesQuery().data;
+  const templateTitle = template?.templateTitle;
+  const categories = template?.categories;
+  const revieweeData = useGetUserByLdapUidQuery(revieweeId as string).data;
+  const CompManData = useGetUserByLdapUidQuery(CompMan as string).data;
+  const reportSummary = useGetReportSummaryByNameQuery(
+    revieweeId as string
+  ).data;
+
   const { isLoading, isFetching } = useGetFeedbacksByNameQuery(
     revieweeId as any
   );
 
   //let feedbacks = testFeedbackData;
   let feedbacks: IFeedback[] | undefined = useGetFeedbacksByNameQuery(
-    revieweeId as any
+    revieweeId as string
   ).data;
 
   if (!feedbacks || (feedbacks && feedbacks?.length) === 0) {
@@ -117,18 +126,45 @@ const Report = () => {
   //let mappedCategories: any;
 
   /** create a map from all feedbacks for this reviewee  */
-  function prepareFeedbacks(feedbacks: IFeedback[] | undefined) {
+  function prepareFeedbacks(feedbacks: IFeedback[]) {
     let mappedSet = new Map(
-      feedbacks?.map((feedback) => {
+      feedbacks.map((feedback) => {
         let key = [feedback.roleLevel, feedback.userId];
         return [key, feedback.categories];
       })
     );
-    console.log("mappedSet", mappedSet);
+    console.log("mappedSet", mappedSet); //debugging
     return mappedSet;
   }
 
   /** iterated for each key/value pair of map */
+
+  function testMap(
+    values: IFCategory[],
+    key: (string | number | undefined)[],
+    map: Map<(string | number | undefined)[], IFCategory[]>
+  ) {
+    console.log("mappedCategories in testMap:", mappedCategories);
+    for (let [value] of map) {
+      console.log(
+        "value being looped over",
+        "key",
+        key,
+        "value",
+        value,
+        "map",
+        map
+      );
+      /*    let catIndex = mappedCategories?.findIndex(
+        (category) => category.categoryId === value.category
+      );
+      if (catIndex) {
+        console.log(catIndex);
+        console.log(mappedCategories[catIndex]); //debugging
+      }
+      } */
+    }
+  }
 
   function mapByRole(
     values: IFCategory[],
@@ -184,7 +220,7 @@ const Report = () => {
 
               if (key[0] && +key[0] < 5) {
                 console.log("CM evaluation: by ", key[1], values); //array of feedback objects
-                setCM((CM) => key[1] as string | undefined);
+                setCompMan((CM) => key[1] as string | undefined);
                 if (question.type === "number" && question.answer) {
                   chartObj.CM = +question.answer as number;
                 }
@@ -234,13 +270,44 @@ const Report = () => {
     }
   }
 
+  /*   async function mapSet() {
+    let mappedSet = await prepareFeedbacks(feedbacks);
+    mappedSet.forEach(mapByRole); //Map.prototype.forEach()
+  } */
+
+  //// functions called on data loaded ////
+
   useEffect(() => {
+    console.log("report summary", reportSummary);
+  }, [reportSummary]);
+
+  /** get data for current template  (may be different to 'active template') */
+  useEffect(() => {
+    if (allTemplates !== undefined && getPick !== undefined) {
+      console.log("template id in getpick", getPick.template);
+      console.log("all templates", allTemplates); //debugging
+      let currentTemplate: ITemplate = allTemplates.filter(
+        (template) => template._id === getPick.template
+      )[0];
+      console.log("current template:", currentTemplate); //debugging
+      currentTemplate
+        ? setTemplate(currentTemplate)
+        : setTemplate(activeTemplate);
+    }
+  }, [getPick, allTemplates, activeTemplate]);
+
+  useEffect(() => {
+    console.log("feedbacks:", feedbacks);
     /** create a map from all feedbacks for this reviewee  */
-    let mappedSet = prepareFeedbacks(feedbacks);
-    mappedSet.forEach(mapByRole);
+
+    if (mappedCategories !== undefined && feedbacks !== undefined) {
+      prepareFeedbacks(feedbacks).forEach(testMap);
+    }
+    /*  mapSet();*/
     //eslint-disable-next-line
   }, [feedbacks]);
 
+  /** prepare objects for mapping chart data  */
   useEffect(() => {
     let mappedCategories = categories?.map((category) => {
       return {
@@ -253,6 +320,14 @@ const Report = () => {
     console.log("mapped catogories", mappedCategories);
     setMappedCategories(mappedCategories);
   }, [categories]);
+
+  /** set name of competence manager */
+  useEffect(() => {
+    if (revieweeData !== undefined) {
+      let compman = revieweeData.workId[0].reportsTo;
+      setCompMan(compman);
+    }
+  }, [revieweeData]);
 
   if (isLoading || isFetching) {
     return (
@@ -271,21 +346,17 @@ const Report = () => {
           <h2>{date} Colleague Feedback Report</h2>
 
           <div className={styles.feedbackInfo}>
-            <h4>Template: {templateTitle}</h4>
+            <h4>Template: {template?.templateTitle}</h4>
             <p>
-              Competence Manager: {CMData?.firstName + " " + CMData?.surname}
+              Competence Manager:{" "}
+              {CompManData?.firstName + " " + CompManData?.surname}
             </p>
             <p>
               Reviewee: {revieweeData?.firstName + " " + revieweeData?.surname}
             </p>
           </div>
         </section>
-        <div className={styles.charts}>
-          <ChartBar barChartData={testing} />
-          <ChartRadar radarChartData={testing} />
-        </div>
-
-        {/*       {mappedCategories?.map((item: any) => (
+        {mappedCategories?.map((item: any) => (
           <section className={styles.section} key={item.categoryId}>
             <div>
               <h3>{item.categoryName}</h3>
@@ -307,7 +378,7 @@ const Report = () => {
               </p>
             </div>
           </section>
-        ))} */}
+        ))}
       </div>
       <div className={styles.buttonContainer}>
         <button className={styles.buttonOrange} onClick={makePdf}>

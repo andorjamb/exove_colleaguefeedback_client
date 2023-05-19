@@ -32,6 +32,7 @@ import { IUserDataGet, loggedInUser } from "../../types/users";
 import { IRequestPicks } from "../../types/picks";
 import Submitted from "./Submitted";
 import ButtonFancy from "../UI/ButtonFancy/ButtonFancy";
+import { useGetActiveTemplateQuery } from "../../features/templateApi";
 
 const PicksUser = () => {
   const navigate = useNavigate();
@@ -45,21 +46,36 @@ const PicksUser = () => {
   const [currentUserPick, setCurrentUserPick] = useState<IRequestPicks>();
   // replace with navigate later?
   const [submitted, setSubmitted] = useState(false);
+  const activeTemplateData = useGetActiveTemplateQuery();
 
   const getUserInfo = async () => {
     console.log("trying to get user info");
     console.log("picksData", picksData.data);
-    if (picksData.isFetching || !picksData.data) return;
+    if (
+      picksData.isFetching ||
+      !picksData.data ||
+      activeTemplateData.isFetching ||
+      !activeTemplateData.data
+    )
+      return;
     const userDetails: loggedInUser = await getSecureUserUid();
     console.log("userDetails awaited", userDetails);
     setCurrentUserInfo(userDetails);
     console.log("loggedInUser", userDetails);
     console.log(
       "Picks for this user found and set:",
-      picksData.data.find((pick) => pick.requestedTo === userDetails.uid)
+      picksData.data.find(
+        (pick) =>
+          pick.requestedTo === userDetails.uid &&
+          pick.template === activeTemplateData.data?._id
+      )
     );
     setCurrentUserPick(
-      picksData.data.find((pick) => pick.requestedTo === userDetails.uid)
+      picksData.data.find(
+        (pick) =>
+          pick.requestedTo === userDetails.uid &&
+          pick.template === activeTemplateData.data?._id
+      )
     );
   };
 
@@ -72,7 +88,13 @@ const PicksUser = () => {
   }, [picksData]);
 
   // Differenciate between loading and no pick found?
-  if (usersData.isFetching || !usersData.data || !currentUserInfo) {
+  if (
+    usersData.isFetching ||
+    !usersData.data ||
+    !currentUserInfo ||
+    activeTemplateData.isFetching ||
+    !activeTemplateData.data
+  ) {
     // Debugging loading
     if (usersData.isFetching || !usersData.data)
       console.log("usersData", usersData);

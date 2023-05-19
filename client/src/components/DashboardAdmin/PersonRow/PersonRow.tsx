@@ -1,6 +1,8 @@
 // React
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
+import { sendNotification } from "../../../functions/notification";
 // Axios
 import axios from "axios";
 
@@ -24,12 +26,27 @@ import Fade from "@mui/material/Fade";
 import { IRequestPicks, IRequestPicksPost } from "../../../types/picks";
 import { IFeedback } from "../../../types/feedback";
 import { IUserDataGet } from "../../../types/users";
+import { functionData } from "../../../types/notification";
+
+import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
+import { SerializedError } from "@reduxjs/toolkit";
 
 // Styles
 import styles from "./PersonRow.module.css";
 import { usePostReportMutation } from "../../../features/reportApi";
 import { IReport } from "../../../types/report";
 import { NavLink, useNavigate } from "react-router-dom";
+
+/* interface ICreatePickData {
+  data: string;
+}
+
+interface ICreatePickErr {
+  error: FetchBaseQueryError | SerializedError;
+}
+interface ICreatePickResponse {
+  res: ICreatePickData | ICreatePickErr;
+} */
 
 interface IPersonRowProps {
   userPicks: IRequestPicks | undefined;
@@ -63,6 +80,24 @@ const PersonRow: React.FC<IPersonRowProps> = ({
 
   console.log("user feedbacks for", user.displayName, userFeedbacks);
 
+  const sendPicksEmail = async (pickId: string) => {
+    const details: functionData = {
+      link: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQScA7p2q5GDil58X2C_xhJ9BrsRAR2YFt1O9MqAbJxPEr8hYi7",
+      emailTo: user.email,
+      from_name: "Exove HR Office",
+      messageBody: `Hi, ${user.displayName}! Please log in at http://localhost:3000/ and select a list of minimum 5 individuals who will access you`,
+      applicationid: pickId,
+      entityname: "RequestPicks",
+      subject: "Submit Reviewee",
+      reply_to: "lera.vagapova@gmail.com",
+    };
+    const sendemail = await sendNotification(details);
+    console.log("sendemail ****************", sendemail);
+    toast.success("Email sent successfully", {
+      className: "toast-message",
+    });
+  };
+
   const requestPicks = async () => {
     setIsLoading(true);
     const newPick = {
@@ -70,11 +105,20 @@ const PersonRow: React.FC<IPersonRowProps> = ({
       template: currentTemplateId,
     };
     console.log("creating new pick", newPick);
-    await createPick(newPick as IRequestPicksPost);
+    try {
+      const res = await createPick(newPick as IRequestPicksPost);
+      console.log("CREATE PICK RES", res);
+      /* await sendPicksEmail(res.data); */
+    } catch (err: any) {
+      console.log(err.message);
+    }
     setIsLoading(false);
   };
+
   const remindToPick = async () => {
-    console.log("reminding");
+    setIsLoading(true);
+    console.log("reminding about picks");
+    setIsLoading(false);
   };
 
   const approvePicks = async () => {
@@ -110,12 +154,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
 
   const getCountColour = (pickRoleLevel: number): string => {
     let colour = "numberBlack";
-    if (
-      userFeedbacks &&
-      userFeedbacks.length &&
-      userPicks &&
-      userPicks.SelectedList
-    ) {
+    if (userPicks && userPicks.submitted) {
       const feedbacksGiven = userFeedbacks.filter(
         (userFeedback) =>
           userFeedback.roleLevel === pickRoleLevel &&
@@ -238,7 +277,10 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     if (!userPicks) return;
     // Filter picks to only have active pick of needed level
     const levelPicks = userPicks.SelectedList.filter(
-      (pick) => pick.roleLevel === pickRoleLevel && pick.selectionStatus
+      (pick) =>
+        pick.roleLevel === pickRoleLevel &&
+        pick.selectionStatus &&
+        pick.userId !== user.ldapUid
     );
     const deletedPicks = levelPicks.filter(
       (pick) =>
@@ -250,6 +292,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     );
     console.log("deletedPicks", deletedPicks);
     console.log("addedPicks", addedPicks);
+    if (deletedPicks.length === 0 && addedPicks.length === 0) return;
     setIsLoading(true);
     for (const pick of deletedPicks) {
       await deactivatePick(pick.userId, pickRoleLevel);
@@ -314,7 +357,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
           </div>
         </td>
         <td className={styles[getCountColour(5)]} onClick={toggleExpand}>
-          {userFeedbacks && userFeedbacks.length > 0 && (
+          {userPicks && userPicks.submitted && (
             <>
               {
                 userFeedbacks.filter(
@@ -336,7 +379,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             ).length}
         </td>
         <td className={styles[getCountColour(6)]} onClick={toggleExpand}>
-          {userFeedbacks && userFeedbacks.length > 0 && (
+          {userPicks && userPicks.submitted && (
             <>
               {
                 userFeedbacks.filter(
@@ -355,7 +398,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             ).length}
         </td>
         <td className={styles[getCountColour(4)]} onClick={toggleExpand}>
-          {userFeedbacks && userFeedbacks.length > 0 && (
+          {userPicks && userPicks.submitted && (
             <>
               {
                 userFeedbacks.filter(
@@ -374,7 +417,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             ).length}
         </td>
         <td className={styles[getCountColour(3)]} onClick={toggleExpand}>
-          {userFeedbacks && userFeedbacks.length > 0 && (
+          {userPicks && userPicks.submitted && (
             <>
               {
                 userFeedbacks.filter(
@@ -456,7 +499,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         </td>
         <td>
           <div className={styles.buttons_container}>
-            {userPicks?.submitted && !userFeedbacks && (
+            {/*             {userPicks?.submitted && !userFeedbacks && (
               <Tooltip
                 TransitionComponent={Fade}
                 title={`Request feedbacks for ${user.displayName}`}
@@ -466,7 +509,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
                   <span className="material-symbols-outlined">send</span>
                 </button>
               </Tooltip>
-            )}
+            )} */}
             {userPicks &&
               userPicks?.submitted &&
               !userReport &&

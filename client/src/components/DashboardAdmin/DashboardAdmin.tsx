@@ -1,6 +1,7 @@
 // React
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
 
 // API, redux
 import { useGetAllFeedbacksQuery } from "../../features/feedbackApi";
@@ -21,6 +22,7 @@ import { IRequestPicks } from "../../types/picks";
 // Styles
 import styles from "./DashboardAdmin.module.css";
 import { useGetAllReportsQuery } from "../../features/reportApi";
+import { IFeedback } from "../../types/feedback";
 
 const DashboardAdmin = () => {
   const [searchInput, setSearchInput] = useState<string>("");
@@ -80,7 +82,7 @@ const DashboardAdmin = () => {
         <p>Loading...</p>
       </div>
     );
-
+  console.log("ALL REPORTS", reportsData.data);
   return (
     <div className={styles.dashboard_wrapper}>
       <div className={styles.dashboard_container}>
@@ -122,10 +124,13 @@ const DashboardAdmin = () => {
                   user={currUser}
                   userPicks={picksData.data!.find(
                     (pick: IRequestPicks) =>
-                      pick.requestedTo === currUser.ldapUid
+                      pick.requestedTo === currUser.ldapUid &&
+                      pick.template === activeTemplateData.data?._id
                   )}
                   userFeedbacks={feedbackData.data!.filter(
-                    (feedback) => feedback.feedbackTo === currUser.ldapUid
+                    (feedback: IFeedback) =>
+                      feedback.feedbackTo === currUser.ldapUid &&
+                      feedback.template === activeTemplateData.data?._id
                   )}
                   userReport={reportsData.data?.find(
                     (report) =>
