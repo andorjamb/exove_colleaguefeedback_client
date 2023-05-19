@@ -82,7 +82,7 @@ const DashboardAdmin = () => {
         <p>Loading...</p>
       </div>
     );
-
+  console.log("ALL REPORTS", reportsData.data);
   return (
     <div className={styles.dashboard_wrapper}>
       <div className={styles.dashboard_container}>
@@ -124,11 +124,13 @@ const DashboardAdmin = () => {
                   user={currUser}
                   userPicks={picksData.data!.find(
                     (pick: IRequestPicks) =>
-                      pick.requestedTo === currUser.ldapUid
+                      pick.requestedTo === currUser.ldapUid &&
+                      pick.template === activeTemplateData.data?._id
                   )}
                   userFeedbacks={feedbackData.data!.filter(
                     (feedback: IFeedback) =>
-                      feedback.feedbackTo === currUser.ldapUid
+                      feedback.feedbackTo === currUser.ldapUid &&
+                      feedback.template === activeTemplateData.data?._id
                   )}
                   userReport={reportsData.data?.find(
                     (report) =>
