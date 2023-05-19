@@ -51,7 +51,13 @@ const PicksUser = () => {
   const getUserInfo = async () => {
     console.log("trying to get user info");
     console.log("picksData", picksData.data);
-    if (picksData.isFetching || !picksData.data) return;
+    if (
+      picksData.isFetching ||
+      !picksData.data ||
+      activeTemplateData.isFetching ||
+      !activeTemplateData.data
+    )
+      return;
     const userDetails: loggedInUser = await getSecureUserUid();
     console.log("userDetails awaited", userDetails);
     setCurrentUserInfo(userDetails);
@@ -65,7 +71,11 @@ const PicksUser = () => {
       )
     );
     setCurrentUserPick(
-      picksData.data.find((pick) => pick.requestedTo === userDetails.uid)
+      picksData.data.find(
+        (pick) =>
+          pick.requestedTo === userDetails.uid &&
+          pick.template === activeTemplateData.data?._id
+      )
     );
   };
 
