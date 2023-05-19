@@ -10,6 +10,7 @@ import styles from "./Report.module.css";
 //Types
 import { IReportData, IReportCategory, IChartData } from "../../types/report";
 import { IFeedback, IFCategory } from "../../types/feedback";
+import { ITemplate } from "../../types/template";
 //import { IUserDataGet } from "../../types/users";
 
 //Redux
@@ -17,7 +18,11 @@ import { useSelector } from "react-redux";
 import { useGetRequestPickByDocIdQuery } from "../../features/requestPicksApi";
 import { useGetFeedbacksByNameQuery } from "../../features/feedbackApi";
 import { useGetUserByLdapUidQuery } from "../../features/userApi";
-import { useGetActiveTemplateQuery } from "../../features/templateApi";
+import {
+  useGetActiveTemplateQuery,
+  useGetAllTemplatesQuery,
+} from "../../features/templateApi";
+import { useGetReportSummaryByNameQuery } from "../../features/reportApi";
 
 //Translations
 import "../../translations/i18next";
@@ -36,10 +41,8 @@ import { testFeedbackData } from "../../testdata/testFeedbackData";
 import { IQuestionLang } from "../../types/questions";
 
 //(manager and HR only view)
-//TODO: check user: if not correct role level, navigate to login
+//TODO: check user: if not correct role level or permissions not allocated, navigate to login
 
-/** jsPDF requires inline styles, doesn't support external css? (seems to be working though
- */
 const testing = [
   {
     question: "Question 1",
@@ -87,35 +90,37 @@ const Report = () => {
   const { t } = useTranslation(["report"]);
   const { revieweeId, pickId } = useParams();
   const reportRoot = useRef<HTMLDivElement>(null);
+  const date = new Date().getFullYear();
 
   //einstein pickId 421bbda0-fb06-4342-a493-2791b87550e3
 
-  const [CM, setCM] = useState<string | undefined>("");
+  const [CompMan, setCompMan] = useState<string | undefined>("");
   const [mappedCategories, setMappedCategories] = useState<any>([]);
+  const [template, setTemplate] = useState<ITemplate>();
 
-  const getPick = useGetRequestPickByDocIdQuery(pickId as any).data;
+  const getPick = useGetRequestPickByDocIdQuery(pickId as string).data;
   const activeTemplate = useGetActiveTemplateQuery().data;
-  const templateTitle = activeTemplate?.templateTitle;
-  const categories = activeTemplate?.categories;
-  const revieweeData = useGetUserByLdapUidQuery(revieweeId as any).data;
-  const CMData = useGetUserByLdapUidQuery(CM as any).data;
-  const date = new Date().getFullYear();
+  const allTemplates = useGetAllTemplatesQuery().data;
+  const templateTitle = template?.templateTitle;
+  const categories = template?.categories;
+  const revieweeData = useGetUserByLdapUidQuery(revieweeId as string).data;
+  const CompManData = useGetUserByLdapUidQuery(CompMan as string).data;
+  const reportSummary = useGetReportSummaryByNameQuery(
+    revieweeId as string
+  ).data;
+
   const { isLoading, isFetching } = useGetFeedbacksByNameQuery(
     revieweeId as any
   );
-  //console.log("pick", getPick);  //debugging
 
   //let feedbacks = testFeedbackData;
   let feedbacks: IFeedback[] | undefined = useGetFeedbacksByNameQuery(
-    revieweeId as any
+    revieweeId as string
   ).data;
 
-if (!feedbacks || (feedbacks && feedbacks?.length) === 0) {
+  if (!feedbacks || (feedbacks && feedbacks?.length) === 0) {
     feedbacks = testFeedbackData;
   }
- 
-  //console.log("feedbacks", feedbacks); //debugging
-  //let mappedCategories: any;
 
   /** create a map from all feedbacks for this reviewee  */
   function prepareFeedbacks(feedbacks: IFeedback[]) {
@@ -125,8 +130,7 @@ if (!feedbacks || (feedbacks && feedbacks?.length) === 0) {
         return [key, feedback.categories];
       })
     );
-    console.log("mappedSet", mappedSet);
-
+    console.log("mappedSet", mappedSet); //debugging
     return mappedSet;
   }
 
@@ -148,14 +152,13 @@ if (!feedbacks || (feedbacks && feedbacks?.length) === 0) {
         "map",
         map
       );
-      let catIndex = mappedCategories?.findIndex(
+      /*    let catIndex = mappedCategories?.findIndex(
         (category) => category.categoryId === value.category
       );
       if (catIndex) {
         console.log(catIndex);
         console.log(mappedCategories[catIndex]); //debugging
-      }
-      
+      } */
     }
   }
 
@@ -213,7 +216,7 @@ if (!feedbacks || (feedbacks && feedbacks?.length) === 0) {
 
               if (key[0] && +key[0] < 5) {
                 console.log("CM evaluation: by ", key[1], values); //array of feedback objects
-                setCM((CM) => key[1] as string | undefined);
+                setCompMan((CM) => key[1] as string | undefined);
                 if (question.type === "number" && question.answer) {
                   chartObj.CM = +question.answer as number;
                 }
@@ -268,19 +271,39 @@ if (!feedbacks || (feedbacks && feedbacks?.length) === 0) {
     mappedSet.forEach(mapByRole); //Map.prototype.forEach()
   } */
 
-  useEffect(() => {}, []);
+  //// functions called on data loaded ////
+
+  useEffect(() => {
+    console.log("report summary", reportSummary);
+  }, [reportSummary]);
+
+  /** get data for current template  (may be different to 'active template') */
+  useEffect(() => {
+    if (allTemplates !== undefined && getPick !== undefined) {
+      console.log("template id in getpick", getPick.template);
+      console.log("all templates", allTemplates); //debugging
+      let currentTemplate: ITemplate = allTemplates.filter(
+        (template) => template._id === getPick.template
+      )[0];
+      console.log("current template:", currentTemplate); //debugging
+      currentTemplate
+        ? setTemplate(currentTemplate)
+        : setTemplate(activeTemplate);
+    }
+  }, [getPick, allTemplates, activeTemplate]);
 
   useEffect(() => {
     console.log("feedbacks:", feedbacks);
     /** create a map from all feedbacks for this reviewee  */
 
-    if (mappedCategories !== undefined) {
+    if (mappedCategories !== undefined && feedbacks !== undefined) {
       prepareFeedbacks(feedbacks).forEach(testMap);
     }
     /*  mapSet();*/
     //eslint-disable-next-line
   }, [feedbacks]);
 
+  /** prepare objects for mapping chart data  */
   useEffect(() => {
     let mappedCategories = categories?.map((category) => {
       return {
@@ -294,8 +317,12 @@ if (!feedbacks || (feedbacks && feedbacks?.length) === 0) {
     setMappedCategories(mappedCategories);
   }, [categories]);
 
+  /** set name of competence manager */
   useEffect(() => {
-    //get CM
+    if (revieweeData !== undefined) {
+      let compman = revieweeData.workId[0].reportsTo;
+      setCompMan(compman);
+    }
   }, [revieweeData]);
 
   if (isLoading || isFetching) {
@@ -315,9 +342,10 @@ if (!feedbacks || (feedbacks && feedbacks?.length) === 0) {
           <h2>{date} Colleague Feedback Report</h2>
 
           <div className={styles.feedbackInfo}>
-            <h4>Template: {templateTitle}</h4>
+            <h4>Template: {template?.templateTitle}</h4>
             <p>
-              Competence Manager: {CMData?.firstName + " " + CMData?.surname}
+              Competence Manager:{" "}
+              {CompManData?.firstName + " " + CompManData?.surname}
             </p>
             <p>
               Reviewee: {revieweeData?.firstName + " " + revieweeData?.surname}
