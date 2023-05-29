@@ -1,3 +1,6 @@
+//react
+import { NavLink } from "react-router-dom";
+
 // API, redux
 import { useGetAllFeedbacksQuery } from "../../features/feedbackApi";
 import {
@@ -8,12 +11,16 @@ import {
 import { useGetAllUsersQuery } from "../../features/userApi";
 import { useGetActiveTemplateQuery } from "../../features/templateApi";
 
+//components
 import CustomSpinner from "../CustomSpinner/CustomSpinner";
-import styles from "./DashboardUser.module.css";
-//
 import PicksUser from "./PicksUser";
+
+//styles
+import styles from "./DashboardUser.module.css";
+
+//types
 import { loggedInUser } from "../../types/users";
-import { NavLink } from "react-router-dom";
+
 
 const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
   currentUserInfo,
