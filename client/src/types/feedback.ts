@@ -1,9 +1,9 @@
 import { IQuestionLang } from "./questions";
 
 export interface IFeedback {
-  _id?: string; //Out generated
+  _id?: string; 
   template: string;
-  userId?: string; // get current user
+  userId?: string; // user completing feedback instance
   requestpicksId?: string;
   feedbackTo: string;
   progress: string;
@@ -23,7 +23,7 @@ export interface ITableEntry {
   _id: string;
   emp_id: string;
   emp_name: string;
-  res_coll: string; //a number as string respresent the number of responses received
+  res_coll: string; //a number as string, represents the number of responses received
   res_pm: string;
   res_cm: string;
   status_picks: {

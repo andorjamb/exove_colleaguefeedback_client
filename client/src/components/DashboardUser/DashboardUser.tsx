@@ -1,3 +1,6 @@
+//react
+import { NavLink } from "react-router-dom";
+
 // API, redux
 import { useGetAllFeedbacksQuery } from "../../features/feedbackApi";
 import {
@@ -8,12 +11,16 @@ import {
 import { useGetAllUsersQuery } from "../../features/userApi";
 import { useGetActiveTemplateQuery } from "../../features/templateApi";
 
+//components
 import CustomSpinner from "../CustomSpinner/CustomSpinner";
-import styles from "./DashboardUser.module.css";
-//
 import PicksUser from "./PicksUser";
+
+//styles
+import styles from "./DashboardUser.module.css";
+
+//types
 import { loggedInUser } from "../../types/users";
-import { NavLink } from "react-router-dom";
+
 
 const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
   currentUserInfo,
@@ -53,7 +60,7 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
       </h1>
     );
 
-  // Feedbacks from current user on current template
+  // Feedbacks completed by current user on current template
   const userFeedbacks = feedbackData.data.filter(
     (feedback) =>
       feedback.userId === currentUserInfo.uid &&
@@ -63,6 +70,7 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
   console.log("Feedbacks given by user:", userFeedbacks);
   console.log("feedbacksNeededData.data", feedbacksNeededData.data);
 
+  //  
   const feedbacksNum = feedbacksNeededData.data
     .filter((feedbackNeeded) => feedbackNeeded.submitted)
     .reduce((sum, pick) => {
