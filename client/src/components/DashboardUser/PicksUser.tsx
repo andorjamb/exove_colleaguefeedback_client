@@ -1,9 +1,8 @@
 //React
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-// Redux
+//Redux
 import { useSelector } from "react-redux";
 import { useGetAllUsersQuery } from "../../features/userApi";
 import {
@@ -13,12 +12,14 @@ import {
 } from "../../features/requestPicksApi";
 import { getSecureUserUid } from "../../functions/secureUser";
 import { useGetRequestPickByUserIdQuery } from "../../features/requestPicksApi";
+import { useGetActiveTemplateQuery } from "../../features/templateApi";
 
 //Pages and Components
-import Card from "../Card/Card";
 import SearchBar from "../DashboardAdmin/SearchBar/SearchBar";
 import UserPickBlock from "./UserPickBlock";
 import CustomSpinner from "../CustomSpinner/CustomSpinner";
+import Submitted from "./Submitted";
+import ButtonFancy from "../UI/ButtonFancy/ButtonFancy";
 
 //Styling
 import styles from "./PicksUser.module.css";
@@ -30,27 +31,23 @@ import { useTranslation } from "react-i18next";
 //Types
 import { IUserDataGet, loggedInUser } from "../../types/users";
 import { IRequestPicks } from "../../types/picks";
-import Submitted from "./Submitted";
-import ButtonFancy from "../UI/ButtonFancy/ButtonFancy";
-import { useGetActiveTemplateQuery } from "../../features/templateApi";
 
 const PicksUser = () => {
   const navigate = useNavigate();
   const { t } = useTranslation(["dashboardUser"]);
   const usersData = useGetAllUsersQuery();
   const picksData = useGetAllRequestPicksQuery();
+  const activeTemplateData = useGetActiveTemplateQuery();
   const [approvePick] = useApprovePickMutation();
   const [submitPick] = useSubmitPickMutation();
+
   const [selected, setSelected] = useState<IUserDataGet[]>([]);
   const [currentUserInfo, setCurrentUserInfo] = useState<loggedInUser>();
   const [currentUserPick, setCurrentUserPick] = useState<IRequestPicks>();
   // replace with navigate later?
   const [submitted, setSubmitted] = useState(false);
-  const activeTemplateData = useGetActiveTemplateQuery();
-
+  
   const getUserInfo = async () => {
-    console.log("trying to get user info");
-    console.log("picksData", picksData.data);
     if (
       picksData.isFetching ||
       !picksData.data ||
@@ -58,18 +55,9 @@ const PicksUser = () => {
       !activeTemplateData.data
     )
       return;
+      console.log("picksData", picksData.data); //Debugging
     const userDetails: loggedInUser = await getSecureUserUid();
-    console.log("userDetails awaited", userDetails);
     setCurrentUserInfo(userDetails);
-    console.log("loggedInUser", userDetails);
-    console.log(
-      "Picks for this user found and set:",
-      picksData.data.find(
-        (pick) =>
-          pick.requestedTo === userDetails.uid &&
-          pick.template === activeTemplateData.data?._id
-      )
-    );
     setCurrentUserPick(
       picksData.data.find(
         (pick) =>
@@ -85,9 +73,10 @@ const PicksUser = () => {
     } catch (err) {
       console.log("error getting user", err);
     }
+    //eslint-disable-next-line
   }, [picksData]);
 
-  // Differenciate between loading and no pick found?
+  // Differentiate between loading and no pick found?
   if (
     usersData.isFetching ||
     !usersData.data ||
@@ -99,7 +88,6 @@ const PicksUser = () => {
     if (usersData.isFetching || !usersData.data)
       console.log("usersData", usersData);
     if (!currentUserInfo) console.log("currentUserInfo", currentUserInfo);
-    console.log();
     return (
       <div className="loading_container">
         <CustomSpinner />
@@ -108,6 +96,7 @@ const PicksUser = () => {
     );
   }
 
+  //picksData object for this user will not exist if HR has not requested user picks yet
   if (!currentUserPick)
     return (
       <p>
@@ -128,9 +117,9 @@ const PicksUser = () => {
 
   if (picksDone())
     return (
-      <h2>
-        You have submitted your <span className={styles.keyword}>picks</span>{" "}
-        already, thank you!
+      <h2>{t('picksSubmitted')}
+        {/* You have submitted your <span className={styles.keyword}>picks</span>{" "}
+        already, thank you! */}
       </h2>
     );
 
@@ -197,16 +186,6 @@ const PicksUser = () => {
               children={t("submit")}
               color="green"
             />
-            {/* <button
-              type="button"
-              className={`${styles.submitButton} ${
-                selected.length < 5 && styles.inactive
-              }`}
-              disabled={selected.length < 5}
-              onClick={submitHandler}
-            >
-              {t("submit")}
-            </button> */}
           </div>
         </div>
       )}

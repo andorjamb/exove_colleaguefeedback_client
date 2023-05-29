@@ -1,7 +1,7 @@
 //React
 import React, { useEffect, useState } from "react";
 
-// Redux
+//Redux
 import { useSelector } from "react-redux";
 
 //Pages and Components

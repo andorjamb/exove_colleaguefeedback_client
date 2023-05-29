@@ -16,7 +16,6 @@ import { setIsAdmin, setLoggedIn } from "../../features/authSlice";
 import styles from "./Login.module.css";
 import { AppDispatch } from "../../app/store";
 import { secureUserUid } from "../../functions/secureUser";
-import ButtonFancy from "../UI/ButtonFancy/ButtonFancy";
 import ButtonFancySquare from "../UI/ButtonFancySquare/ButtonFancySquare";
 
 interface ILoginParams {
@@ -29,11 +28,9 @@ const Login = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const loggedIn = useSelector((state: any) => state.auth.loggedIn);
-  const isAdmin = useSelector((state: any) => state.auth.isAdmin);
   //const { error } = useSelector((state: any) => state.auth);
   const [isLoading, setIsLoading] = useState(false);
 
-  const devLoginEndpoint = "https://exove.vercel.app/api/";
   // `${process.env.REACT_APP_SERVER_URL}/api/login` as string;
   const prodLoginEndpoint = "https://exove.vercel.app/api/login";
 
@@ -42,17 +39,16 @@ const Login = () => {
     password: "",
   });
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoginParams({
       ...loginParams,
       [e.target.name]: e.target.value,
     });
   };
 
-  const userLogin = async (e: any) => {
+  const userLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     setIsLoading(true);
     e.preventDefault();
-    console.log({ loginParams }); //debugging
 
     try {
       console.log(prodLoginEndpoint, loginParams); //debugging
@@ -61,7 +57,7 @@ const Login = () => {
           withCredentials: true,
         })
         .then(async (res) => {
-          console.log("login res", res);
+          console.log("login res", res); //debugging
           await secureUserUid({
             uid: res.data?.uid,
             roleLevel: res.data?.rolesId?.roleLevel,
@@ -77,11 +73,11 @@ const Login = () => {
           sessionStorage.setItem("loggedIn", "true");
           dispatch(setLoggedIn(true));
           setIsLoading(false);
+          setLoginParams({...loginParams, username: "", password: "" });
         });
-      // setLoginParams({ username: "", password: "" });
     } catch (err) {
       console.log(err);
-      setLoginParams({ username: "", password: "" });
+      setLoginParams({...loginParams, username: "", password: "" });
       setIsLoading(false);
     }
   };
@@ -90,6 +86,7 @@ const Login = () => {
     if (loggedIn) {
       navigate("/dashboard");
     }
+    //eslint-disable-next-line
   }, [loggedIn]);
 
   return (

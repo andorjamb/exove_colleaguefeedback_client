@@ -60,7 +60,7 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
       </h1>
     );
 
-  // Feedbacks from current user on current template
+  // Feedbacks completed by current user on current template
   const userFeedbacks = feedbackData.data.filter(
     (feedback) =>
       feedback.userId === currentUserInfo.uid &&
@@ -70,6 +70,7 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
   console.log("Feedbacks given by user:", userFeedbacks);
   console.log("feedbacksNeededData.data", feedbacksNeededData.data);
 
+  //  
   const feedbacksNum = feedbacksNeededData.data
     .filter((feedbackNeeded) => feedbackNeeded.submitted)
     .reduce((sum, pick) => {
