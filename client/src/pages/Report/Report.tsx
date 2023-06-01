@@ -271,16 +271,7 @@ const Report = () => {
   }, [reportSummary]); */
 
   /** get data for current template  (may be different to 'active template') */
-  useEffect(() => {
-    if (allTemplates !== undefined && getPick !== undefined) {
-      let currentTemplate: ITemplate = allTemplates.filter(
-        (template) => template._id === getPick.template
-      )[0];
-      currentTemplate
-        ? setTemplate(currentTemplate)
-        : setTemplate(activeTemplate);
-    }
-  }, [getPick, allTemplates, activeTemplate]);
+  //may need to use report object as picks object harder to access without params
 
   /** create a map from all feedbacks for this reviewee  */
   useEffect(() => {

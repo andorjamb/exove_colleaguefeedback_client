@@ -7,7 +7,7 @@ import styles from "../../pages/Template/Template.module.css";
 import "../../pages/Template/Template.css";
 
 //Types
-import { ISection } from "../../types/template";
+import { ISection, ActiveCheckboxes } from "../../types/template";
 
 //Translations
 import "../../translations/i18next";
@@ -45,6 +45,7 @@ const Accordion = ({
 
   let currentCategoryId = category.id;
   let questionObjectArray = activeCategoryObject[currentCategoryId];
+  console.log('questionObjectArray', questionObjectArray);
   let questionIdArray = questionObjectArray?.map((item: any) => item._id);
   const checkIndex = (id: string) => {
     console.log("testing id inclusion", questionIdArray.includes(id));
