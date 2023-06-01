@@ -17,6 +17,7 @@ import {
   IQuestionPost,
   ISection,
   ICategoryPost,
+  ActiveCheckboxes,
 } from "../../types/template";
 
 //Redux
@@ -40,10 +41,6 @@ import CustomSpinner from "../../components/CustomSpinner/CustomSpinner";
 type accordion = {
   open: boolean;
 };
-
-interface ActiveCheckboxes {
-  [index: string]: string[];
-}
 
 class SectionClass {
   id: string;
@@ -118,8 +115,6 @@ const Template = () => {
   /** used to manipulate fetched template data into a form useful for rendering  */
   function dataParser() {
     let categoryArray: ISection[] = [];
-    //let questionArray: ITemplateQuestion[] = [];
-
     let arrayQuestion: ITemplateQuestion = {
       id: "",
       question: "",
@@ -198,11 +193,15 @@ const Template = () => {
   }
 
   /** validator for checking data before sending */
-  const validator = (obj: any) => {
+  const validator = (obj: {
+    categoryId: string;
+    value: string;
+    type: string;
+  }) => {
     let values = Object.values(obj);
-    //console.log(values); //debugging
+
     for (const v in values) {
-      if (v === "" || v === undefined) {
+      if (v === "" || v === undefined || v === null) {
         return false;
       } else return true;
     }
@@ -210,7 +209,6 @@ const Template = () => {
 
   /** submit function for creating new question  */
   function createQuestion() {
-    //console.log("adding question", newQuestionState); //debugging
     if (validator(newQuestionState)) {
       let newQuestion: IQuestionPost = {
         category: newQuestionState.categoryId,
@@ -218,14 +216,14 @@ const Template = () => {
         type: newQuestionState.type,
       };
       addQuestion(newQuestion).then((res) => {
-        console.log("Question sent successfully:", res);
+        console.log(res);
       });
     } else alert("Unable to send, incomplete data");
   }
 
   /* onChange event handler for selecting/deselecting questions to be added to template  */
   function checkboxChangeHandler(
-    e: any,
+    e: React.ChangeEvent<HTMLInputElement>,
     categoryId: string, //passed from mapped all-category values
     questionId: string
   ) {

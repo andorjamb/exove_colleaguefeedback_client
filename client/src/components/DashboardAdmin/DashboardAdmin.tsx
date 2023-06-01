@@ -31,7 +31,6 @@ const DashboardAdmin = () => {
   const picksData = useGetAllRequestPicksQuery();
   const activeTemplateData = useGetActiveTemplateQuery();
   const reportsData = useGetAllReportsQuery();
-  console.log("activeTemplateData", activeTemplateData.data);
   const [showModal, setShowModal] = useState(false);
 
   if (

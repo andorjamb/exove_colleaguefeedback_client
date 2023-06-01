@@ -19,7 +19,6 @@ import Layout from "./components/Layout/Layout";
 import Login from "./components/Login/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Template from "./pages/Template/Template";
-import DashboardUser from "./components/DashboardUser/DashboardUser";
 import Feedback from "./pages/Feedback/Feedback";
 import Profile from "./pages/Profile/Profile";
 import Report from "./pages/Report/Report";
@@ -60,7 +59,8 @@ const App = () => {
   const getUserInfo = async () => {
     const userDetails: loggedInUser = await getSecureUserUid();
     setCurrentUserInfo(userDetails);
-    console.log("loggedInUser", userDetails);
+    if (userDetails !== undefined || null){
+    console.log("loggedInUser", userDetails);}
   };
 
   useEffect(() => {

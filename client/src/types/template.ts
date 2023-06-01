@@ -35,7 +35,7 @@ export interface IQCategory {
   categoryStatus: boolean;
 }
 
-//Types for sending new question to db
+//Types for sending new QUESTION to db
 
 type QuestionLangPost = {
   lang: string;
@@ -48,7 +48,7 @@ export interface IQuestionPost {
   question: QuestionLangPost;
 }
 
-//Types for sending new template to db
+//Types for sending new TEMPLATE to db
 
 export interface ICategoryPost {
   category: string;
@@ -73,6 +73,10 @@ export interface ITemplateQuestion {
   id: string; //maps to database question doc id
   question: string;
   isFreeForm: boolean;
+}
+
+export interface ActiveCheckboxes {
+  [index: string]: string[];
 }
 
 //Latest type for getting active and all templates
