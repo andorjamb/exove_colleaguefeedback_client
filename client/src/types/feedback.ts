@@ -40,6 +40,7 @@ export interface ITableEntry {
   };
 }
 
+/** should this also have roleLevel:number ?  */
 export interface ISearchParams {
   id: string;
   feedbackTo: string;

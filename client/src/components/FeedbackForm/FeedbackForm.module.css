@@ -1,15 +1,4 @@
 /* globals */
-.h1 {
-}
-
-.h1 {
-}
-
-.h3 {
-}
-
-.h4 {
-}
 
 .question_container {
 }
@@ -17,6 +6,7 @@
 .placeholder {
   margin: 3rem 0;
 }
+
 /* main feedback component */
 
 .main {
@@ -76,7 +66,7 @@
   gap: 3rem;
 }
 
-/* Bolean file css */
+/* Boolean file css */
 
 .bolContainer {
   display: flex;

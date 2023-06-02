@@ -25,10 +25,10 @@ export const reportApi = createApi({
       query: (docId) => `report/${docId}`,
     }),
     getReportSummaryById: builder.query<IReport, string>({
-      query: (id) => `summary/${id}`,
+      query: (id) => `report/${id}`, 
     }),
     getReportSummaryByName: builder.query<IReport[], string>({
-      query: (userId) => `name/${userId}`,
+      query: (userId) => `summary/${userId}`,
     }),
     postReport: builder.mutation<void, { body: IReportPost }>({
       query: ({ body }) => ({
