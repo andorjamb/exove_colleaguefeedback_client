@@ -8,6 +8,7 @@ import { useGetAllFeedbacksQuery } from "../../features/feedbackApi";
 import { useGetAllRequestPicksQuery } from "../../features/requestPicksApi";
 import { useGetAllUsersQuery } from "../../features/userApi";
 import { useGetActiveTemplateQuery } from "../../features/templateApi";
+import { useGetAllReportsQuery } from "../../features/reportApi";
 
 // Components
 import BulkButtons from "./BulkButtons/BulkButtons";
@@ -17,12 +18,11 @@ import CustomSpinner from "../CustomSpinner/CustomSpinner";
 
 // Types
 import { IUserDataGet } from "../../types/users";
+import { IFeedback } from "../../types/feedback";
 import { IRequestPicks } from "../../types/picks";
 
 // Styles
 import styles from "./DashboardAdmin.module.css";
-import { useGetAllReportsQuery } from "../../features/reportApi";
-import { IFeedback } from "../../types/feedback";
 
 const DashboardAdmin = () => {
   const [searchInput, setSearchInput] = useState<string>("");

@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 
 // Redux
-import { Provider, useDispatch } from "react-redux";
+import { Provider} from "react-redux";
 import { store } from "./app/store";
 import { getSecureUserUid } from "./functions/secureUser";
 
@@ -53,14 +53,12 @@ const router = createBrowserRouter(
 );
 
 const App = () => {
-  const dispatch = useDispatch();
-  //dispatch(api.util.resetApiState());  //reset base api state to clear cache and refresh
   const [currentUserInfo, setCurrentUserInfo] = useState<loggedInUser>();
   const getUserInfo = async () => {
     const userDetails: loggedInUser = await getSecureUserUid();
     setCurrentUserInfo(userDetails);
-    if (userDetails !== undefined || null){
-    console.log("loggedInUser", userDetails);}
+    /* if (userDetails !== undefined || null){
+    console.log("loggedInUser", userDetails);} */
   };
 
   useEffect(() => {

@@ -65,7 +65,7 @@ export interface ITemplatePost {
 
 export interface ISection {
   id: string; //maps to database category doc id
-  name: string;
+  name: string; 
   questions: ITemplateQuestion[];
 }
 
@@ -81,17 +81,6 @@ export interface ActiveCheckboxes {
 
 //Latest type for getting active and all templates
 
-export interface SingleQuiz {
-  lang: string;
-  question: string;
-  _id: string;
-}
-
-interface IQuiz {
-  _id: string;
-  type: string;
-  question: SingleQuiz[];
-}
 export interface ITemplate {
   _id: string;
   templateTitle: string;
@@ -103,9 +92,21 @@ export interface ITemplate {
 }
 
 export interface ICategory {
-  category: IICategory;
-  questions: IQuiz[];
+  category: IICategory;   //object with properties category id and category name
+  questions: IQuiz[]; //
   _id: string;
+}
+
+export interface SingleQuiz {
+  lang: string;
+  question: string;
+  _id: string;
+}
+
+interface IQuiz {
+  _id: string;
+  type: string;
+  question: SingleQuiz[];
 }
 
 interface IICategory {

@@ -1,15 +1,20 @@
 import React from 'react';
+
+//Styling
 import styles from "./FeedbackForm.module.css";
+
+//Redux
 import { AppDispatch } from '../../app/store';
 import { useDispatch } from 'react-redux';
+import { addQuestion } from '../../features/feedBackSlice';
+
+//Types
 import { SingleQuiz } from '../../types/template';
 import { IQuestionLang } from '../../types/template';
-import { addQuestion } from '../../features/feedBackSlice';
-import { type } from '@testing-library/user-event/dist/types/setup/directApi';
 
 interface question {
     questions: SingleQuiz,
-    category:string,
+    category: string,
 
 }
 

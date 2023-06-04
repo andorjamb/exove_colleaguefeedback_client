@@ -240,8 +240,48 @@ _id: "6454aa0d971f4982fdd21b29"
   categories: IFCategory[];
   roleLevel?: number;
 }
+*/
 
-export interface IFCategory {
-  category: string;
-  questions: IQuestionLang[];
-} */
+
+export const testing = [
+  {
+    question: "Question 1",
+    questionId: "",
+    colleagueAverage: 4,
+    colleagues: 4,
+    CM: 4,
+    self: 3,
+  },
+  {
+    question: "Question 2",
+    questionId: "",
+    colleagueAverage: 4,
+    colleagues: 5,
+    CM: 4,
+    self: 2,
+  },
+  {
+    question: "Question 3",
+    questionId: "",
+    colleagueAverage: 4,
+    colleagues: 5,
+    CM: 4,
+    self: 2,
+  },
+  {
+    question: "Question 4",
+    questionId: "",
+    colleagueAverage: 3,
+    colleagues: 3,
+    CM: 4,
+    self: 2,
+  },
+  {
+    question: "Question 5",
+    questionId: "",
+    colleagueAverage: 2,
+    colleagues: 1,
+    CM: 2,
+    self: 4,
+  },
+];

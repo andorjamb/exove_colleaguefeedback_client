@@ -14,7 +14,7 @@ export interface IReport {
 
 export interface IReportPost {
   feedbacks: (string | undefined)[];
-  template: string;
+  template: string; //templateId
   userId: string;
   requestPicks: string;
 }
