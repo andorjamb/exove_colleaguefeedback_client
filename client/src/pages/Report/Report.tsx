@@ -7,20 +7,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./Report.module.css";
 
 //Types
-import { IReportData, IReportCategory, IChartData } from "../../types/report";
+import { IChartData } from "../../types/report";
 import { IFeedback, IFCategory } from "../../types/feedback";
 import { ITemplate } from "../../types/template";
 import { loggedInUser } from "../../types/users";
-import { IQuestionLang } from "../../types/questions";
-//import { IUserDataGet } from "../../types/users";
 
 //Redux
-import { useSelector } from "react-redux";
 import { useGetFeedbacksByNameQuery } from "../../features/feedbackApi";
 import { useGetUserByLdapUidQuery } from "../../features/userApi";
 import { useGetActiveTemplateQuery } from "../../features/templateApi";
-import { useGetReportSummaryByNameQuery } from "../../features/reportApi";
-import { useGetAllReportsQuery } from "../../features/reportApi";
 
 //Translations
 import "../../translations/i18next";
@@ -30,17 +25,14 @@ import { useTranslation } from "react-i18next";
 import CustomSpinner from "../../components/CustomSpinner/CustomSpinner";
 import ChartBar from "../../charts/ChartBar";
 import ChartRadar from "../../charts/ChartRadar";
-import { testFeedbackData } from "../../testdata/testFeedbackData";
 
 //Functions
-import { mapByRole } from "../../functions/reportFunctions";
+//import { mapByRole } from "../../functions/reportFunctions";
 import { printMultiPdf } from "../../functions/printPdf";
 import { testing } from "../../testdata/testFeedbackData"; //chart testing only
 import { getSecureUserUid } from "../../functions/secureUser";
-
-
-//(manager and HR only view)
-//TODO: check user: if not correct role level or permissions not allocated, navigate to login
+import { testFeedbackData } from "../../testdata/testFeedbackData";
+import { ChartDataClass } from "../../functions/reportFunctions";
 
 type MappedCategories = MappedCategory[];
 
@@ -61,30 +53,26 @@ const Report = () => {
   const { t } = useTranslation(["report"]);
   const { revieweeId } = useParams();
   //const reportRoot = useRef<HTMLDivElement>(null);
-  const elementArray = useRef<HTMLDivElement[]>([]);
+  const elementArray = useRef<HTMLDivElement[]>([]); //try to use this on mapped elements instead of converting entire page to one canvas
   const date = new Date().getFullYear();
   const navigate = useNavigate();
-  const location = useLocation();
+  const location = useLocation(); //convert path to queryParams later
 
   const [CompMan, setCompMan] = useState<string | undefined>("");
   const [mappedCategories, setMappedCategories] = useState<MappedCategories>();
-  const [mappedFeedbacks, setMappedFeedbacks] = useState<Map<(string | number | undefined)[],IFCategory[] >>();  //
+  const [mappedFeedbacks, setMappedFeedbacks] =
+    useState<Map<(string | number | undefined)[], IFCategory[]>>(); //
   const [template, setTemplate] = useState<ITemplate>();
   const [userInfo, setUserInfo] = useState<loggedInUser>();
-/*  MappedFeedbacks:
-  values: IFCategory[],
-  key: (string | number | undefined)[],
-  map: Map<(string | number | undefined)[], IFCategory[]> */
+  const [selfEval, setSelfEval] = useState<IFeedback>();
+  const [cmEval, setCmEval] = useState<IFeedback>();
+  const [colleagueEvals, setColleagueEvals] = useState<IFeedback[]>();
 
-  
   const activeTemplate = useGetActiveTemplateQuery().data;
   const revieweeData = useGetUserByLdapUidQuery(revieweeId as string).data;
   const CompManData = useGetUserByLdapUidQuery(CompMan as string).data;
-  const reportSummary = useGetReportSummaryByNameQuery(
-    revieweeId as string
-    ).data;
-  const reportsData = useGetAllReportsQuery().data;
   const categories = template?.categories;
+
 
   const { isLoading, isFetching } = useGetFeedbacksByNameQuery(
     revieweeId as string
@@ -94,48 +82,32 @@ const Report = () => {
     revieweeId as string
   ).data;
 
-  if (!feedbacks || (feedbacks && feedbacks?.length) === 0) {
-    feedbacks = testFeedbackData;
-  } /////** Data manipulation functions  *///////
-
-  /** create a map from all feedbacks for this reviewee  */
+  /** create a map from all feedbacks for this reviewee - invoked from useEffect()  */
   function prepareFeedbacks(feedbacks: IFeedback[]) {
     let mappedFeedbacks = new Map();
     feedbacks.forEach((feedback) => {
       let key = [feedback.roleLevel, feedback.userId];
       mappedFeedbacks.set(key, feedback.categories);
     });
-    //console.log("mappedFeedbacks", mappedFeedbacks); //debugging
     return mappedFeedbacks;
   }
 
- 
-  //// functions called on data loaded ////
 
-  /** get data for current template  (may be different to 'active template') */
-  //may need to use report object as picks object harder to access without params
-
-  /** create a map from all feedbacks for this reviewee  */
   useEffect(() => {
-    //console.log("feedbacks:", userInfo?.uid, feedbacks);
-    //console.log('flatmapped feedbacks:', feedbacks?.flatMap((item)=>{}))
     if (mappedCategories !== undefined && feedbacks !== undefined) {
+      //console.log('FEEDBACKS', feedbacks); // Debugging
       setMappedFeedbacks(prepareFeedbacks(feedbacks));
-      //forEach((feedback)=>mapByRole(mappedCategories, feedback.categories, ));
     }
     //eslint-disable-next-line
   }, [feedbacks, mappedCategories]);
 
-useEffect(()=>{
-  console.log('check mappedFeedback state from useEffect:', mappedFeedbacks)
-},[mappedFeedbacks])
 
   useEffect(() => {
     const getUser = async () => {
       try {
         const userDetails: loggedInUser = await getSecureUserUid();
         if (userDetails) {
-          console.log("user details", userDetails);
+          //console.log("user details", userDetails);  //Debugging
           setUserInfo(userDetails);
         } else {
           navigate("/login");
@@ -158,11 +130,12 @@ useEffect(()=>{
     //eslint-disable-next-line
   }, [CompMan]);
 
+  /** currently assumed that activeTemplate is the same as template._id in feedbacks */
   useEffect(() => {
     setTemplate(activeTemplate);
   }, [activeTemplate]);
 
-  /** prepare objects for mapping chart data  */
+  /** prepare chart data objects */
   useEffect(() => {
     let mappedCategories = categories?.map((category) => {
       return {
@@ -190,6 +163,52 @@ useEffect(()=>{
       }
     }
   }, [revieweeData]);
+
+  /** sort feedbacks by reviewer role  */
+  useEffect(()=>{
+    let colleagues:IFeedback[] = [];
+    if (feedbacks && feedbacks !== undefined){    
+      let feedbacksCopy = [...feedbacks];
+      feedbacksCopy.forEach((feedback)=>{
+        if(feedback.userId === revieweeId){
+          setSelfEval(feedback);
+        }
+        else if (feedback.userId === CompMan){
+          setCmEval(feedback);
+        }
+        else {
+          colleagues.push(feedback);
+
+        }
+      })
+      setColleagueEvals(colleagues);
+ }
+  },[feedbacks, CompMan, revieweeId]);
+
+  /* map feedback responses to chartData objects */
+  useEffect(()=>{
+    console.log('checking access to mappedCategories', mappedCategories);
+   cmEval?.categories.forEach((evalCategory)=>{
+    mappedCategories?.forEach((chartCategory)=>{
+      if (evalCategory.category === chartCategory.categoryId){
+        console.log('whats happening', evalCategory.questions);
+        console.log('chartCategory', chartCategory);
+        evalCategory.questions.forEach((question)=>{
+          
+        })
+         
+       }
+    }
+    )
+
+   })
+   
+console.log(selfEval);
+
+
+  },[cmEval, selfEval, colleagueEvals]);
+
+
 
   if (isLoading || isFetching) {
     return (

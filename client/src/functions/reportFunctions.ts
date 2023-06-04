@@ -44,32 +44,44 @@ export function scoreAverage(valueArray: number[]) {
 /** for Charts creation only  */
 export class ChartDataClass {
   categoryName: string | undefined;
+  categoryId: string | undefined;
   chartData: IChartData[] | undefined;
   comments: { self: string; CM: string; colleagues: string[] };
 
   constructor(
     categoryName: string | undefined,
+    categoryId: string | undefined,
     chartData: IChartData[] | undefined,
     comments: { self: string; CM: string; colleagues: string[] }
   ) {
     this.categoryName = categoryName;
+    this.categoryId = categoryId;
     this.chartData = chartData;
     this.comments = comments;
   }
 }
 
-/** iterated for each key/value pair of map */
-/** for testing of map iteration only  */
+
+export function sortData (  mappedCategories: MappedCategories | undefined,
+  mappedFeedbacks: Map<(string | number | undefined)[], IFCategory[]>) {
+    console.log("mappedCategories in mapByRole:", mappedCategories); //debugging
+    console.log("mappedFeedbacks in mapByRole:", mappedFeedbacks); //debugging
+    mappedFeedbacks.forEach(mapByRole);
+  
+  }
+
+
+/** This is Map.prototype.forEach()
+ * function (value, key, map){}
+iterated for each key/value pair of map */
 export function mapByRole(
-  mappedCategories: MappedCategories,
   values: IFCategory[],
   key: (string | number | undefined)[],
   map: Map<(string | number | undefined)[], IFCategory[]>
-) {
-  console.log("mappedCategories in mapByRole:", mappedCategories); //debugging
+  ) {
 
-  for (let value of values) {
-    // console.log("should print values", value); //debugging
+/*   for (let value of values) {
+    console.log("should print values", value); //debugging
     console.log("should print feedback category id", value.category); //debugging
 
     mappedCategories?.forEach((category) => {
@@ -77,18 +89,12 @@ export function mapByRole(
         //for each question of the matching category:
 
         if (value.questions && value.questions.length > 0) {
-          value.questions.forEach((question) => {
+          value.questions.forEach((question) => { */
             //first check if question already exists in mappedCategories:
-
-            //this array is ititially empty
-        /*    if (category.chartData.length === 0) {
-              console.log("chart data empty");
-              console.log("checking questionid:", question._id);
-            }*/
 
             ///////////////////////
           
-              let chartObj;
+       /*        let chartObj;
               category.chartData.forEach((item:IChartData) => {
                 console.log("checking category.chartData in loop",item);
                 if (item.questionId === question._id) {
@@ -106,18 +112,20 @@ export function mapByRole(
                 }
                 console.log("getting chartObj values_", chartObj);
                 return chartObj;
-              });
+              }); */
 
 
 
-            //////////////////
+            //////////////////  
 
             //   chartObj.question = question.question as string;
             /** organise the data according to role of reviewer */
 
             /*        if (key[1] && key[1] === revieweeId) {
                 console.log("self evaluation:", values); //array of feedback objects
+                
                 if (question.type === "number" && question.answer) {
+
                   chartObj.self = +question?.answer as number;
                 }
                 if (question.type === "string") {
@@ -154,14 +162,17 @@ export function mapByRole(
             //   };
             //   }
             //   } */
-
-            //console.log(chartObj);
+/* 
+            console.log(chartObj);
           });
         }
       }
     });
   }
-}
+
+
+
+} */
 
 /*Backup of modify data  function
   function mapByRole(values: IFCategory[], key: any) {
@@ -214,6 +225,5 @@ export function mapByRole(
     if (cat.categoryId === para) {
       return cat.categoryName;
     }
-  }
+  } */
 }
- */

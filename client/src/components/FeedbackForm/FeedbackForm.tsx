@@ -86,8 +86,8 @@ const FeedbackForm = () => {
   useEffect(() => {
     const validateNumber = () => {
       const stringQuestions =
-        activeTemplate?.categories?.flatMap((cat) =>
-          cat.questions.filter(
+        activeTemplate?.categories?.flatMap((category) =>
+          category.questions.filter(
             (quiz: { type: string }) => quiz.type.toLowerCase() === "number"  //This should be "string?"
           )
         ) || [];
@@ -95,9 +95,10 @@ const FeedbackForm = () => {
       const feedbacked: IFeedback = feedback;
       
       const stringQuestionsAnswers =
-        feedbacked?.categories?.flatMap((cat) =>
-          cat.questions.filter((quiz) => quiz.type.toLowerCase() === "number")
+        feedbacked?.categories?.flatMap((category) =>
+          category.questions.filter((quiz) => quiz.type.toLowerCase() === "number")
         ) || [];
+        console.log('filter stringQuestionsAnswers', stringQuestionsAnswers);
 
       setUnAnsweredQuestions(
         stringQuestions.length - stringQuestionsAnswers.length
