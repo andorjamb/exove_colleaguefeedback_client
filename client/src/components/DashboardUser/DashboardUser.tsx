@@ -69,6 +69,7 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
 
   console.log("Feedbacks given by user:", userFeedbacks);
   console.log("feedbacksNeededData.data", feedbacksNeededData.data);
+  console.log('activeTemplate id', activeTemplateData.data._id);
 
   //  
   const feedbacksNum = feedbacksNeededData.data

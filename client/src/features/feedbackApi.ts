@@ -30,9 +30,9 @@ export const feedbackApi = createApi({
     getUserTotalFeedbacks: builder.query<IFeedback[], string>({
       query: (name) => `feedback/feed/${name}`, //returns { ...userFeedback, feedbacksCount, requestPicksCount }
     }),
-    postFeedback: builder.mutation<void, { body: IFeedback; id: string }>({
-      query: ({ id, body }) => ({
-        url: `feedback/${id}`, //requestPick id
+    postFeedback: builder.mutation<void, { body: IFeedback; pickId: string }>({
+      query: ({ body, pickId }) => ({
+        url: `feedback/${pickId}`, //requestPick id
         method: "POST",
         body,
       }),
@@ -43,6 +43,7 @@ export const feedbackApi = createApi({
         url: `feedback/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["Feedbacks"],
     }),
     submitFeedback: builder.mutation<void, { body: IFeedback; id: string }>({
       query: ({ id, body }) => ({
@@ -50,6 +51,7 @@ export const feedbackApi = createApi({
         method: "PATCH",
         body,
       }),
+      invalidatesTags: ["Feedbacks"],
     }),
   }),
 });
@@ -66,3 +68,5 @@ export const {
 } = feedbackApi;
 
 export default feedbackApi.reducer;
+
+

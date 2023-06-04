@@ -187,12 +187,12 @@ const PersonRow: React.FC<IPersonRowProps> = ({
         pick.userId !== user.ldapUid &&
         pick.selectionStatus
     );
-    if (user.ldapUid === "euler") console.log("filteredPicks", filteredPicks);
+   
+    //hack for ldap server typos in ldapuid
     filteredPicks.forEach((pick) => {
-      console.log("pick.userId", pick.userId);
+      console.log("pick.userId and role", pick.roleLevel, pick.userId); //debugging
 
       let userFound = allUsersData.find((userData) => {
-        console.log("userData", userData);
         return userData.ldapUid === pick.userId;
       });
       if (pick.userId === "galileo")
@@ -212,12 +212,16 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     return res;
   };
 
-  // Deletes/deativates a pick
+
+/* 
+  //TODO: consider refactoring these two functions to one, with third boolean parameter
+  // Deletes/deactivates a pick
   const deactivatePick = async (userId: string, pickRoleLevel: number) => {
     if (!userPicks) return;
     const pickFound = userPicks.SelectedList.find(
       (pick) => pick.userId === userId && pick.roleLevel === pickRoleLevel
     );
+
     if (!pickFound || !pickFound.selectionStatus) return;
     const requestBody = {
       userId: userId,
@@ -226,9 +230,49 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     };
     // approvePick
     await approvePick({ body: requestBody, id: userPicks._id });
-  };
+  }; */
+  
 
-  // Adds/activates a pick
+  //unified function to replace separate functions 'activatePick' and 'deactivatePick'
+const changePick = async (userId: string, pickRoleLevel: number, status:boolean) => {
+  if (!userPicks) return;
+  const pickFound = userPicks.SelectedList.find(
+    (pick) => pick.userId === userId && pick.roleLevel === pickRoleLevel
+  );
+//case approving an already confirmed pick
+  if (pickFound) {
+    if (status && pickFound.selectionStatus) return;
+//case confirming or rejecting found pick
+    else {
+      const requestBody = {
+        userId: userId,
+        selectionStatus: status,
+        roleLevel: pickRoleLevel,
+      };
+      setIsLoading(true);
+      await approvePick({ body: requestBody, id: userPicks._id });
+      setIsLoading(false);
+    }
+
+    } 
+    // case pick not found, need to create new pick
+    else {
+      const requestBody = {
+        userId: userId,
+        selectionStatus: true,
+        roleLevel: pickRoleLevel,
+        
+      };
+      setIsLoading(true);
+      await submitPick({ body: requestBody, id: userPicks._id });
+      setIsLoading(false);
+    }
+
+  }
+
+
+  
+/*   // Adds/activates a pick
   const activatePick = async (userId: string, pickRoleLevel: number) => {
     if (!userPicks) return;
     const pickFound = userPicks.SelectedList.find(
@@ -249,15 +293,16 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     } else {
       const requestBody = {
         userId: userId,
-        roleLevel: pickRoleLevel,
         selectionStatus: true,
+        roleLevel: pickRoleLevel,
+        
       };
       setIsLoading(true);
       await submitPick({ body: requestBody, id: userPicks._id });
       setIsLoading(false);
     }
   };
-
+ */
   // Updates picks according to new selection
   const updateColleaguePicks = async (newSelection: IUserDataGet[]) => {
     await updatePicksByRoleLevel(newSelection, 5);
@@ -301,10 +346,10 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     if (deletedPicks.length === 0 && addedPicks.length === 0) return;
     setIsLoading(true);
     for (const pick of deletedPicks) {
-      await deactivatePick(pick.userId, pickRoleLevel);
+      await changePick(pick.userId, pickRoleLevel, false); //status:false (formerly deactivePick)
     }
     for (const pick of addedPicks) {
-      await activatePick(pick.ldapUid, pickRoleLevel);
+      await changePick(pick.ldapUid, pickRoleLevel, true); //status: true (formerly activePick)
     }
     setIsLoading(false);
   };
@@ -315,6 +360,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     return userFound.firstName + " " + userFound.surname;
   };
 
+  // creates new report doc in database
   const generateReport = async () => {
     if (!userPicks || !userFeedbacks || !currentTemplateId) return;
     setIsLoading(true);
@@ -329,16 +375,12 @@ const PersonRow: React.FC<IPersonRowProps> = ({
     setIsLoading(false);
   };
 
-  if (user.ldapUid === "einstein") {
-    console.log("EINSTEIN");
-    console.log("userReport", userReport);
-    console.log("userPicks", userPicks);
-  }
 
   if (isLoading)
     return (
       <tr className={styles.row_loading}>
         <td>Row is updating.....</td>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>
@@ -362,6 +404,30 @@ const PersonRow: React.FC<IPersonRowProps> = ({
             {user.firstName} {user.surname}
           </div>
         </td>
+              {/* SELF FEEDBACK COLUMN */}
+        <td className={styles[getCountColour(7)]} onClick={toggleExpand}>
+        {userPicks && userPicks.submitted && (
+            <>
+              {
+                userFeedbacks.filter(
+                  (userFeedback) =>
+                    userFeedback.roleLevel === 5 &&
+                    userFeedback.userId === user.ldapUid &&
+                    userFeedback.requestpicksId === userPicks._id
+                ).length
+              }
+              /
+            </>
+          )}   {userPicks &&
+            userPicks.SelectedList &&
+            userPicks.SelectedList.filter(
+              (pick) =>
+                pick.roleLevel === 5 &&
+                pick.userId === user.ldapUid &&
+                pick.selectionStatus
+            ).length}
+        </td>
+        {/* COLLEAGUES FEEDBACK COLUMN */}
         <td className={styles[getCountColour(5)]} onClick={toggleExpand}>
           {userPicks && userPicks.submitted && (
             <>
@@ -385,6 +451,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
                 pick.selectionStatus
             ).length}
         </td>
+               {/* SUBORDINATES FEEDBACK COLUMN */}
         <td className={styles[getCountColour(6)]} onClick={toggleExpand}>
           {userPicks && userPicks.submitted && (
             <>
@@ -405,6 +472,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
               (pick) => pick.roleLevel === 6 && pick.selectionStatus
             ).length}
         </td>
+          {/* PM FEEDBACK COLUMN */}
         <td className={styles[getCountColour(4)]} onClick={toggleExpand}>
           {userPicks && userPicks.submitted && (
             <>
@@ -425,6 +493,7 @@ const PersonRow: React.FC<IPersonRowProps> = ({
               (pick) => pick.roleLevel === 4 && pick.selectionStatus
             ).length}
         </td>
+          {/* CM FEEDBACK COLUMN */}
         <td className={styles[getCountColour(3)]} onClick={toggleExpand}>
           {userPicks && userPicks.submitted && (
             <>
