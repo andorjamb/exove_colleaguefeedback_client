@@ -20,12 +20,12 @@ export interface IReportPost {
 }
 
 export interface IChartData {
-  question: string;
+  question: string ;
   questionId: string;
   colleagueAverage: number;
-  colleagues: number[];
-  CM: number;
-  self: number;
+  colleagues: string | undefined[];
+  CM: string | undefined;
+  self: string | undefined;
 }
 
 export interface IReportData {
