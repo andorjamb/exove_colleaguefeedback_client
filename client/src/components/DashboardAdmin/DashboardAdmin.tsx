@@ -105,6 +105,7 @@ const DashboardAdmin = () => {
           <thead>
             <tr>
               <th>Employee name</th>
+              <th>Self</th>
               <th>Coll.</th>
               <th>Sub.</th>
               <th>PM</th>

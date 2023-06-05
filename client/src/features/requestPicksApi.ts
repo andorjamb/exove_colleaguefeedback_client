@@ -49,10 +49,7 @@ export const requestPicksApi = createApi({
       }),
       invalidatesTags: ["RequestPicks"],
     }),
-    submitPick: builder.mutation<
-      void,
-      { body: IRequestPicksPatch; id: string }
-    >({
+    submitPick: builder.mutation<void,{ body: IRequestPicksPatch; id: string }>({
       query: ({ body, id }) => ({
         url: `picks/${id}`,
         method: "PATCH",

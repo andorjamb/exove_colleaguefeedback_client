@@ -69,6 +69,7 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
 
   console.log("Feedbacks given by user:", userFeedbacks);
   console.log("feedbacksNeededData.data", feedbacksNeededData.data);
+  console.log('activeTemplate id', activeTemplateData.data._id);
 
   //  
   const feedbacksNum = feedbacksNeededData.data
@@ -87,6 +88,9 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
   const getRoleTitle = (pickRoleLevel: number) => {
     let title = "";
     switch (pickRoleLevel) {
+      case 7:
+        title = "self";
+        break;
       case 6:
         title = "subordinate";
         break;
@@ -118,11 +122,11 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
             feedback{feedbacksNum === 1 ? "" : "s"}
           </span>{" "}
           to{" "}
-          {
-            feedbacksNeededData.data.filter(
+          {feedbacksNeededData.data.filter(
               (feedbackNeeded) => feedbackNeeded.submitted
             ).length
           }{" "}
+
           {feedbacksNeededData.data.filter(
             (feedbackNeeded) => feedbackNeeded.submitted
           ).length === 1
@@ -140,7 +144,7 @@ const DashboardUser: React.FC<{ currentUserInfo: loggedInUser }> = ({
             )
             .map((pick) => (
               <NavLink
-                to={`/feedback?id=${pick._id}&to=${currentUserInfo.uid}&role=5`}
+                to={`/feedback?id=${pick._id}&to=${currentUserInfo.uid}&role=7`}
               >
                 <li>Evaluate your own performance</li>
               </NavLink>
