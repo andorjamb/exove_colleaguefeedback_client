@@ -130,7 +130,7 @@ const FeedbackForm = () => {
       ); */
       await postFeedback({ body: feedback, pickId: requestpicksId }).then(
         () => {
-          toast.success("posted", {
+          toast.success("feedback posted sucessfully", {
             className: "toast-message",
           });
         }
@@ -241,7 +241,7 @@ const FeedbackForm = () => {
       <div className={style.user} style={{}}>
         <h1 className={style.header}>
           You're giving feedback to your {getMyRoleTitle(roleLevel)}{" "}
-          <span className={style.username}> {getFullName(feedbackTo)}</span>
+          <span className={style.username}> {getFullName(feedbackTo)}{" "}</span>
           {roleLevel === 7 ? (
             <></>
           ) : (
